@@ -795,6 +795,74 @@
   #ivStart .gs { font-size: 12px; line-height: 1.6; }
   #ivStart, #lhStart { overflow-y: auto; justify-content: safe center; }
   @media (max-width: 420px) { .lhs { width: 40px; height: 40px; } .lhhp { width: 50px; } .lh-side { gap: 6px; } }
+
+  /* ---------- Дуэль ---------- */
+  .gcard.big.duelc { background: radial-gradient(120% 140% at 100% 0%, rgba(123,92,255,.3), transparent 55%), radial-gradient(120% 120% at 0% 100%, rgba(232,86,74,.25), transparent 60%), #15131c; }
+  .gcard.big.duelc b { font-family: var(--display); font-size: 22px; color: #fff; text-shadow: none; }
+  .dm { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .dmb { display: grid; justify-items: center; gap: 4px; padding: 16px 8px; border-radius: 16px; border: 1px solid var(--line); background: var(--bg-soft); color: var(--fg); font: inherit; cursor: pointer; text-align: center; transition: transform .25s, border-color .25s; }
+  .dmb:hover { transform: translateY(-3px); border-color: var(--t1); } .dmb span { font-size: 30px; } .dmb b { font-size: 14.5px; } .dmb small { color: var(--muted); font-size: 12px; }
+  .don { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 14px; padding: 14px; border-radius: 16px; background: var(--bg-soft); border: 1px solid var(--line); }
+  .dor { color: var(--muted-2); font-size: 13px; } .djoin { display: flex; gap: 8px; }
+  .djoin input { width: 110px; text-transform: uppercase; letter-spacing: 3px; font: inherit; font-weight: 800; font-size: 16px; text-align: center; padding: 10px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); }
+  .drules { margin-top: 14px; color: var(--muted); font-size: 13.5px; } .drules summary { cursor: pointer; color: var(--fg); font-weight: 700; } .drules li { margin: 4px 0; } .drules b { color: var(--fg); }
+  .dsheet.dplay .game { padding: 10px; } .dsheet.dplay .game > .close { top: 8px; right: 8px; z-index: 6; }
+  .duel { position: relative; display: grid; gap: 8px; padding-top: 4px; user-select: none; -webkit-user-select: none; }
+  .dl-side { display: flex; align-items: center; gap: 8px; padding-right: 44px; }
+  .dl-side.me { padding-right: 0; }
+  .dl-face { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 14px; border: 2px solid var(--line); background: var(--bg-soft); color: var(--fg); font: inherit; text-align: left; cursor: default; position: relative; }
+  .dl-av { font-size: 22px; } .dl-nm { flex: 1; min-width: 0; } .dl-nm b { display: block; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .dl-nm small { color: var(--muted); font-size: 11.5px; }
+  .dl-hp { font-family: var(--display); font-weight: 800; font-size: 18px; color: #ff6b6b; }
+  .dl-mana { display: flex; align-items: center; gap: 2px; flex-wrap: wrap; max-width: 120px; justify-content: flex-end; }
+  .dl-mana i { width: 9px; height: 9px; transform: rotate(45deg); background: #1b2a45; border: 1px solid #2f5d9a; } .dl-mana i.on { background: #4aa3ff; box-shadow: 0 0 6px #4aa3ff; }
+  .dl-mana b { margin-left: 6px; font-size: 13px; color: #8cc6ff; }
+  .dl-board { display: flex; justify-content: center; gap: 6px; min-height: 92px; padding: 8px 4px; border-radius: 16px; background: rgba(255,255,255,.025); border: 1px dashed rgba(255,255,255,.08); flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; align-items: center; }
+  .dl-board.me { background: color-mix(in srgb, var(--t1) 6%, transparent); }
+  .dl-empty { color: var(--muted-2); font-size: 12px; align-self: center; }
+  .du { position: relative; flex: none; width: 62px; height: 76px; border-radius: 14px; padding: 0; border: 2px solid rgba(255,255,255,.12); background: #15131c; cursor: pointer; overflow: visible; transition: transform .2s, box-shadow .2s; }
+  .du img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; display: block; }
+  .du.taunt { border: 3px solid #c9a86b; border-radius: 14px 14px 22px 22px; }
+  .du.shield { box-shadow: 0 0 0 2px #54e0ff, 0 0 14px rgba(84,224,255,.6); }
+  .du.ready { box-shadow: 0 0 0 2px #3bd16f, 0 0 14px rgba(59,209,111,.55); }
+  .du.sleep img { filter: saturate(.6) brightness(.8); }
+  .du.enter { animation: duIn .55s cubic-bezier(.2,1.3,.3,1); } @keyframes duIn { from { opacity: 0; transform: translateY(30px) scale(.6); } }
+  .du-st { position: absolute; left: -4px; right: -4px; bottom: -6px; display: flex; justify-content: space-between; pointer-events: none; }
+  .du-st em, .dc-st em { font-style: normal; font-family: var(--display); font-weight: 800; font-size: 13px; min-width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; border: 2px solid #000; }
+  .du-st .a, .dc-st .a { background: #f3c35a; color: #1a0d05; } .du-st .h, .dc-st .h { background: #d83a3a; color: #fff; } .du-st .h.hurt { background: #7a1010; }
+  .du-k { position: absolute; top: -6px; right: -6px; font-style: normal; font-size: 13px; } .du-k.l { right: auto; left: -6px; }
+  .du-z { position: absolute; top: 2px; left: 4px; font-style: normal; font-size: 12px; }
+  .du.tgt, .dl-face.tgt { box-shadow: 0 0 0 3px #ff4d4d, 0 0 18px rgba(255,77,77,.7) !important; animation: tgtP 1s ease-in-out infinite; cursor: crosshair; }
+  @keyframes tgtP { 50% { transform: scale(1.05); } }
+  .du.sel { transform: translateY(-6px) scale(1.06); box-shadow: 0 0 0 3px #ffd84a, 0 0 18px rgba(255,216,74,.6); }
+  .du.lunge { animation: lunge .45s cubic-bezier(.4,0,.2,1); } @keyframes lunge { 45% { transform: translate(var(--dx), var(--dy)) scale(1.1); z-index: 3; } }
+  .du.hit, .dl-face.hit { animation: shakeX .35s; } @keyframes shakeX { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+  .dl-pop { position: absolute; left: 50%; top: 20%; transform: translate(-50%, 0); font-family: var(--display); font-weight: 800; font-size: 20px; color: #ff4d4d; text-shadow: 0 2px 0 #000, 0 0 8px #000; pointer-events: none; animation: lhPop .9s ease-out forwards; z-index: 4; }
+  .dl-pop.heal { color: #5cf07f; }
+  .dl-mid { display: flex; align-items: center; gap: 10px; justify-content: space-between; }
+  #dlInfo { font-size: 12.5px; color: var(--muted); } .dl-timer { font-weight: 800; color: #ffb02e; }
+  .dl-end { padding: 10px 18px; font-size: 14px; } .dl-end:disabled { opacity: .55; cursor: default; transform: none; }
+  .dl-hint { padding: 8px 12px; border-radius: 12px; background: rgba(255,216,74,.08); border: 1px solid rgba(255,216,74,.3); font-size: 13px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .dl-hint .btn { padding: 7px 14px; font-size: 13px; } .dl-hint em { color: #ff8a80; font-style: normal; }
+  .dl-x { border: 0; background: rgba(255,255,255,.08); color: var(--fg); font: inherit; font-size: 12px; padding: 6px 10px; border-radius: 99px; cursor: pointer; margin-left: auto; }
+  .dl-hand { display: flex; gap: 8px; overflow-x: auto; padding: 14px 4px 6px; scrollbar-width: none; min-height: 150px; }
+  .dl-hand::-webkit-scrollbar { display: none; }
+  .dc { position: relative; flex: none; width: 92px; height: 132px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 5px 8px; border-radius: 12px; border: 2px solid #3a3550; background: linear-gradient(#24202f, #15131c); color: #fff; font: inherit; cursor: pointer; text-align: center; transition: transform .25s cubic-bezier(.22,.61,.36,1), box-shadow .25s; animation: inUp .5s both; }
+  .dc.sp { border-color: #4a3a7a; background: linear-gradient(#2a2140, #15131c); }
+  .dc.ok { border-color: #3bd16f; box-shadow: 0 0 10px rgba(59,209,111,.35); }
+  .dc.sel { transform: translateY(-12px) scale(1.05); border-color: #ffd84a; box-shadow: 0 0 16px rgba(255,216,74,.55); }
+  .dc img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 2px solid #000; }
+  .dc-ic { font-size: 34px; line-height: 52px; height: 52px; }
+  .dc b { font-size: 10.5px; line-height: 1.1; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dc small { font-size: 8.5px; line-height: 1.15; color: #cfc9dc; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+  .dc-cost { position: absolute; top: -8px; left: -8px; width: 26px; height: 26px; display: grid; place-items: center; font-style: normal; font-weight: 800; font-size: 14px; color: #fff; background: radial-gradient(circle at 35% 30%, #8cc6ff, #1f5fb8); border: 2px solid #000; border-radius: 50%; }
+  .dc-st { position: absolute; left: -6px; right: -6px; bottom: -8px; display: flex; justify-content: space-between; }
+  .dl-log { font-size: 12px; color: var(--muted-2); min-height: 16px; text-align: center; }
+  .dl-cover, .dl-wait { position: absolute; inset: -4px; z-index: 5; display: grid; place-items: center; background: rgba(10,10,14,.92); border-radius: 16px; text-align: center; padding: 20px; }
+  .dl-cv, .dw { display: grid; justify-items: center; gap: 10px; } .dl-cv span { font-size: 24px; } .dl-cv small, .dw small { color: var(--muted); max-width: 32ch; }
+  .dw-code { font-family: "Press Start 2P", monospace; font-size: 28px; letter-spacing: 6px; color: #ffd84a; text-shadow: 3px 3px 0 #000; }
+  .dw-spin { width: 28px; height: 28px; border-radius: 50%; border: 3px solid rgba(255,255,255,.15); border-top-color: var(--t1); animation: spin 1s linear infinite; }
+  @media (max-width: 600px) { .dm { grid-template-columns: 1fr; } .dmb { grid-template-columns: auto 1fr; justify-items: start; text-align: left; column-gap: 12px; } .dmb span { grid-row: span 2; }
+    .du { width: 52px; height: 66px; } .dl-board { min-height: 82px; gap: 5px; } .dc { width: 84px; height: 124px; } .dl-mana { max-width: 80px; } .dl-mana i { width: 7px; height: 7px; } }
   /* ---------- вход ---------- */
   .pcover.plain { height: 90px; background: radial-gradient(120% 140% at 20% 0%, color-mix(in srgb, var(--t1) 40%, transparent), transparent 60%), radial-gradient(120% 140% at 90% 100%, color-mix(in srgb, var(--t2) 80%, transparent), transparent 60%), var(--bg-soft); }
   .auth { padding: 0 24px 26px; margin-top: -34px; position: relative; z-index: 1; max-width: 440px; margin-inline: auto; text-align: center; }
@@ -1006,6 +1074,7 @@
       <div class="section-head"><h2>Мини-игры</h2><p>Играй героями из 1x6, открывай арканы и попадай в топ.</p></div>
       <div class="gcards">
         <button type="button" class="gcard big" data-g="arena"><span class="gc-ic">⚔️</span><b>Арена 1x6</b><small>Пиксельный выживач: способности героев, врождённые, Рошан и 54 арканы</small><em>Играть</em></button>
+        <button type="button" class="gcard big duelc" data-g="duel"><span class="gc-ic">🃏</span><b>Дуэль 1x6</b><small>Карточная битва героями Доты: против бота, против друга онлайн или вдвоём на одном телефоне</small><em>Играть</em></button>
         <button type="button" class="gcard new" data-g="lasthit"><span class="gc-ic">🗡️</span><b>Ластхит</b><small>Добивай крипов и денай своих — как на линии</small><em>Играть</em></button>
         <button type="button" class="gcard new" data-g="invoker"><span class="gc-ic">🔮</span><b>Инвокер</b><small>Собирай заклинания из сфер на скорость</small><em>Играть</em></button>
         <button type="button" class="gcard" data-g="quiz"><span class="gc-ic">🧠</span><b>Угадай героя</b><small>Узнай героя по сборке</small><em>Играть</em></button>
@@ -1054,6 +1123,7 @@
   <button type="button" class="mi" data-act="broll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg><span>Рулетка билдов</span></button>
   <button type="button" class="mi" data-act="quiz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.3 9a2.8 2.8 0 0 1 5.4 1c0 2-2.7 2.4-2.7 4"/><circle cx="12" cy="17.3" r=".6" fill="currentColor"/></svg><span>Угадай героя</span></button>
   <button type="button" class="mi" data-act="game"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="7" width="19" height="11" rx="4"/><path d="M7 10.5v4M5 12.5h4"/><circle cx="15.5" cy="11.5" r="1" fill="currentColor"/><circle cx="18" cy="14" r="1" fill="currentColor"/></svg><span>Мини-игра: арена</span><em>топ</em></button>
+  <button type="button" class="mi" data-act="duel"><span style="width:21px;text-align:center">🃏</span><span>Дуэль 1x6</span><em>new</em></button>
   <button type="button" class="mi" data-act="lasthit"><span style="width:21px;text-align:center">🗡️</span><span>Ластхит</span></button>
   <button type="button" class="mi" data-act="invoker"><span style="width:21px;text-align:center">🔮</span><span>Инвокер</span></button>
   <div class="menu-l">Ещё</div>
@@ -2178,7 +2248,7 @@ const PROF = (() => {
       return { rows: data || [] };
     } catch(e) { return { error: "Нет связи с сервером." }; }
   }
-  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf, feedOpen, feedMore, openUser, loadPlayers: q => { clearTimeout(plT); plT = setTimeout(() => loadPlayers(q), 250); } };
+  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf, feedOpen, feedMore, openUser, me: () => P ? P.nick : null, rt: () => sb, loadPlayers: q => { clearTimeout(plT); plT = setTimeout(() => loadPlayers(q), 250); } };
 })();
 window.__favSync = () => PROF.syncFavs();
 
@@ -3109,6 +3179,357 @@ const MINI = (() => {
   return { lasthit, invoker };
 })();
 
+/* ---------- «Дуэль 1x6»: карточная игра (движок) ---------- */
+const DUELX = (() => {
+  // юниты: [стоимость, атака, здоровье, свойства, текст]
+  const U = {
+    axe: [4, 3, 6, { taunt: 1, bcAoe: 1 }, "Провокация. Клич: 1 урон всем вражеским существам"],
+    pudge: [5, 4, 6, { bcDmg: 3, bcT: "unit" }, "Клич: Мясной крюк — 3 урона существу"],
+    juggernaut: [4, 5, 3, { charge: 1 }, "Рывок"],
+    lina: [4, 3, 3, { bcDmg: 4, bcT: "any" }, "Клич: 4 урона любой цели"],
+    sniper: [3, 3, 2, { bcDmg: 2, bcT: "any" }, "Клич: 2 урона любой цели"],
+    crystalmaiden: [2, 1, 3, { bcDraw: 1 }, "Клич: возьмите карту"],
+    phantomassassin: [3, 4, 2, { shield: 1 }, "Уклонение (блок первого урона)"],
+    zeus: [7, 4, 5, { bcAoe: 3, bcFace: 3 }, "Клич: 3 урона всем врагам и их трону"],
+    sven: [6, 6, 6, { bcAoe: 2 }, "Клич: 2 урона всем вражеским существам"],
+    lifestealer: [4, 4, 4, { ls: 1 }, "Вампиризм"],
+    bristleback: [3, 2, 5, { taunt: 1 }, "Провокация"],
+    wraithking: [5, 5, 4, { reborn: 1 }, "Перерождение"],
+    slark: [2, 2, 2, { grow: 1 }, "После атаки +1 к атаке"],
+    invoker: [7, 5, 5, { bcAoe: 2, bcDraw: 1 }, "Клич: 2 урона всем врагам, возьмите карту"],
+    enigma: [8, 6, 8, { bcAoe: 3 }, "Клич: Чёрная дыра — 3 урона всем вражеским существам"],
+    drowranger: [2, 2, 1, { charge: 1 }, "Рывок"],
+    abaddon: [3, 2, 4, { taunt: 1, shield: 1 }, "Провокация. Щит"],
+    tinker: [4, 2, 3, { bcDraw: 2 }, "Клич: возьмите 2 карты"],
+    witchdoctor: [3, 2, 3, { bcHealFace: 5 }, "Клич: восстановите 5 здоровья трону"],
+    monkeyking: [3, 3, 3, { charge: 1 }, "Рывок"],
+    bloodseeker: [2, 3, 2, { ls: 1 }, "Вампиризм"],
+    legioncommander: [5, 4, 5, { charge: 1, ls: 1 }, "Рывок. Вампиризм"],
+    centaur: [6, 5, 7, { taunt: 1 }, "Провокация"],
+    queenofpain: [3, 3, 2, { bcDmg: 1, bcT: "any", charge: 1 }, "Рывок. Клич: 1 урон любой цели"]
+  };
+  // заклинания: [стоимость, иконка, название, цель, эффект, текст]
+  const S = {
+    sunstrike: [2, "☀️", "Sun Strike", "any", { dmg: 3 }, "3 урона любой цели"],
+    salve: [1, "🧪", "Healing Salve", "friend", { heal: 4 }, "Восстановить 4 здоровья своему существу или трону"],
+    tome: [2, "📜", "Tome of Knowledge", null, { draw: 2 }, "Возьмите 2 карты"],
+    daedalus: [2, "🗡️", "Daedalus", "ally", { buffAtk: 3 }, "Своё существо: +3 к атаке"],
+    aegis: [3, "🛡️", "Aegis", "ally", { reborn: 1, buffHp: 2 }, "Своё существо: Перерождение и +2 к здоровью"],
+    blackhole: [6, "🌀", "Black Hole", null, { aoe: 4 }, "4 урона всем вражеским существам"],
+    blink: [1, "✨", "Blink Dagger", "ally", { ready: 1, buffAtk: 1 }, "Своё существо может атаковать сейчас, +1 к атаке"],
+    culling: [3, "🪓", "Culling Blade", "enemyUnit", { cull: 4 }, "Уничтожить вражеское существо с ≤4 здоровья, иначе 2 урона"],
+    midas: [0, "💰", "Hand of Midas", null, { mana: 1 }, "+1 мана в этом ходу"],
+    coin: [0, "🪙", "Монетка", null, { mana: 1 }, "+1 мана в этом ходу"]
+  };
+  const isUnit = id => !!U[id];
+  function info(id){
+    if (U[id]){ const u = U[id]; return { id, unit: 1, cost: u[0], atk: u[1], hp: u[2], o: u[3], text: u[4], name: (HEROES.find(h => h.slug === id) || { en: id }).en }; }
+    const s = S[id]; return { id, unit: 0, cost: s[0], ic: s[1], name: s[2], tgt: s[3], o: s[4], text: s[5] };
+  }
+  function rng(seed){ let x = seed >>> 0 || 1; return () => ((x = (x * 1664525 + 1013904223) >>> 0) / 4294967296); }
+  function makeDeck(r){
+    const us = Object.keys(U), ss = Object.keys(S).filter(k => k !== "coin"), d = [], cnt = {};
+    const add = (pool, n) => { let g = 0; while (n > 0 && g++ < 500){ const k = pool[Math.floor(r() * pool.length)]; if ((cnt[k] || 0) >= 2) continue; cnt[k] = (cnt[k] || 0) + 1; d.push(k); n--; } };
+    add(us, 15); add(ss, 7);
+    for (let i = d.length - 1; i > 0; i--){ const j = Math.floor(r() * (i + 1)); [d[i], d[j]] = [d[j], d[i]]; }
+    return d;
+  }
+  function newGame(names, seed){
+    const r = rng(seed || (Date.now() & 0xffffffff)); let uid = 1;
+    const pl = i => ({ name: names[i] || (i ? "Соперник" : "Ты"), hp: 30, mana: 0, max: 0, deck: makeDeck(r), hand: [], board: [], fat: 0 });
+    const s = { p: [pl(0), pl(1)], turn: 0, n: 0, winner: null, uid: 1, log: [], ev: [] };
+    const draw = (i, n) => { for (let k = 0; k < n; k++){ const c = s.p[i].deck.shift(); if (c) s.p[i].hand.push({ uid: s.uid++, id: c }); } };
+    draw(0, 3); draw(1, 4); s.p[1].hand.push({ uid: s.uid++, id: "coin" });
+    startTurn(s);
+    return s;
+  }
+  function log(s, t){ s.log.push(t); if (s.log.length > 30) s.log.shift(); }
+  function ev(s, e){ s.ev.push(e); }
+  function drawCard(s, i){
+    const P = s.p[i], c = P.deck.shift();
+    if (!c){ P.fat++; P.hp -= P.fat; ev(s, { k: "dmg", t: "face" + i, v: P.fat }); log(s, `${P.name}: колода пуста, усталость −${P.fat}`); checkWin(s); return; }
+    if (P.hand.length >= 9){ log(s, `${P.name}: рука полна, карта сгорела`); return; }
+    P.hand.push({ uid: s.uid++, id: c });
+  }
+  function startTurn(s){
+    const P = s.p[s.turn]; s.n++; P.max = Math.min(10, P.max + 1); P.mana = P.max;
+    P.board.forEach(u => { u.ready = true; u.sleep = false; });
+    drawCard(s, s.turn);
+  }
+  function findUnit(s, uid){ for (let i = 0; i < 2; i++){ const u = s.p[i].board.find(x => x.uid === uid); if (u) return { u, side: i }; } return null; }
+  function damage(s, tgt, v){
+    if (tgt === "face0" || tgt === "face1"){ const i = +tgt.slice(4); s.p[i].hp -= v; ev(s, { k: "dmg", t: tgt, v }); return v; }
+    const f = findUnit(s, tgt); if (!f) return 0; const u = f.u;
+    if (u.shield){ u.shield = 0; ev(s, { k: "block", t: u.uid }); return 0; }
+    u.hp -= v; ev(s, { k: "dmg", t: u.uid, v }); return v;
+  }
+  function heal(s, tgt, v){
+    if (tgt === "face0" || tgt === "face1"){ const i = +tgt.slice(4); s.p[i].hp = Math.min(30, s.p[i].hp + v); ev(s, { k: "heal", t: tgt, v }); return; }
+    const f = findUnit(s, tgt); if (!f) return; f.u.hp = Math.min(f.u.mhp, f.u.hp + v); ev(s, { k: "heal", t: tgt, v });
+  }
+  function cleanup(s){
+    for (let i = 0; i < 2; i++){ const B = s.p[i].board;
+      for (let k = B.length - 1; k >= 0; k--){ const u = B[k]; if (u.hp > 0) continue;
+        ev(s, { k: "die", t: u.uid });
+        if (u.reborn){ u.reborn = 0; u.hp = 1; u.mhp = Math.max(1, u.mhp); u.shield = 0; ev(s, { k: "reborn", t: u.uid }); log(s, `${info(u.id).name} перерождается!`); }
+        else B.splice(k, 1); } }
+    checkWin(s);
+  }
+  function checkWin(s){ if (s.winner != null) return; const a = s.p[0].hp <= 0, b = s.p[1].hp <= 0; if (a || b) s.winner = a && b ? -1 : a ? 1 : 0; }
+  const hasTaunt = (s, i) => s.p[i].board.some(u => u.taunt);
+  function validTargets(s, side, kind){
+    const me = s.p[side], op = s.p[1 - side], T = [];
+    if (kind === "any"){ T.push("face" + (1 - side), "face" + side); op.board.forEach(u => T.push(u.uid)); me.board.forEach(u => T.push(u.uid)); }
+    if (kind === "unit"){ op.board.forEach(u => T.push(u.uid)); me.board.forEach(u => T.push(u.uid)); }
+    if (kind === "enemyUnit") op.board.forEach(u => T.push(u.uid));
+    if (kind === "ally") me.board.forEach(u => T.push(u.uid));
+    if (kind === "friend"){ T.push("face" + side); me.board.forEach(u => T.push(u.uid)); }
+    return T;
+  }
+  function attackTargets(s, side, uid){
+    const f = findUnit(s, uid); if (!f || f.side !== side || !f.u.ready || f.u.atk <= 0) return [];
+    const op = s.p[1 - side]; if (hasTaunt(s, 1 - side)) return op.board.filter(u => u.taunt).map(u => u.uid);
+    return ["face" + (1 - side), ...op.board.map(u => u.uid)];
+  }
+  function needTarget(id){ const c = info(id); if (c.unit) return c.o.bcT || null; return c.tgt; }
+  // ---------- действия ----------
+  function act(s, side, a){
+    s.ev = [];
+    if (s.winner != null || side !== s.turn) return "not_your_turn";
+    const me = s.p[side], op = s.p[1 - side];
+    if (a.t === "end"){ log(s, `${me.name} завершает ход`); s.turn = 1 - s.turn; startTurn(s); return null; }
+    if (a.t === "play"){
+      const hi = me.hand.findIndex(h => h.uid === a.uid); if (hi < 0) return "no_card";
+      const card = me.hand[hi], c = info(card.id); if (c.cost > me.mana) return "no_mana";
+      const need = needTarget(card.id);
+      if (c.unit && me.board.length >= 6) return "board_full";
+      if (need && !c.unit){ const vt = validTargets(s, side, need); if (!vt.includes(a.target)) return "bad_target"; }
+      me.mana -= c.cost; me.hand.splice(hi, 1); ev(s, { k: "play", side, id: card.id });
+      if (c.unit){
+        const u = { uid: card.uid, id: card.id, atk: c.atk, hp: c.hp, mhp: c.hp, taunt: !!c.o.taunt, shield: !!c.o.shield, ls: !!c.o.ls, reborn: !!c.o.reborn, grow: !!c.o.grow, charge: !!c.o.charge, ready: !!c.o.charge, sleep: !c.o.charge };
+        const pos = Math.max(0, Math.min(me.board.length, a.pos == null ? me.board.length : a.pos)); me.board.splice(pos, 0, u);
+        log(s, `${me.name} призывает ${c.name}`);
+        const o = c.o;
+        if (o.bcDmg){ const vt = validTargets(s, side, o.bcT).filter(x => x !== u.uid); const tg = vt.includes(a.target) ? a.target : null; if (tg) damage(s, tg, o.bcDmg); }
+        if (o.bcAoe) op.board.forEach(x => damage(s, x.uid, o.bcAoe));
+        if (o.bcFace) damage(s, "face" + (1 - side), o.bcFace);
+        if (o.bcDraw) for (let i = 0; i < o.bcDraw; i++) drawCard(s, side);
+        if (o.bcHealFace) heal(s, "face" + side, o.bcHealFace);
+      } else {
+        const o = c.o; log(s, `${me.name}: ${c.ic} ${c.name}`);
+        if (o.dmg) damage(s, a.target, o.dmg);
+        if (o.heal) heal(s, a.target, o.heal);
+        if (o.draw) for (let i = 0; i < o.draw; i++) drawCard(s, side);
+        if (o.aoe) op.board.slice().forEach(x => damage(s, x.uid, o.aoe));
+        if (o.mana) me.mana = Math.min(10, me.mana + o.mana);
+        if (o.buffAtk || o.buffHp || o.reborn || o.ready){ const f = findUnit(s, a.target); if (f){ const u = f.u; if (o.buffAtk) u.atk += o.buffAtk; if (o.buffHp){ u.hp += o.buffHp; u.mhp += o.buffHp; } if (o.reborn) u.reborn = true; if (o.ready){ u.ready = true; u.sleep = false; } ev(s, { k: "buff", t: u.uid }); } }
+        if (o.cull){ const f = findUnit(s, a.target); if (f){ if (f.u.hp <= o.cull){ f.u.hp = 0; f.u.reborn = false; f.u.shield = false; ev(s, { k: "dmg", t: f.u.uid, v: "✖" }); } else damage(s, a.target, 2); } }
+      }
+      cleanup(s); return null;
+    }
+    if (a.t === "attack"){
+      const f = findUnit(s, a.uid); if (!f || f.side !== side) return "no_unit";
+      const vt = attackTargets(s, side, a.uid); if (!vt.includes(a.target)) return "bad_target";
+      const u = f.u; u.ready = false; ev(s, { k: "atk", from: u.uid, to: a.target });
+      const dealt = damage(s, a.target, u.atk);
+      if (a.target !== "face0" && a.target !== "face1"){ const t = findUnit(s, a.target); if (t) damage(s, u.uid, t.u.atk); }
+      if (u.ls && dealt > 0) heal(s, "face" + side, dealt);
+      if (u.grow) u.atk += 1;
+      log(s, `${info(u.id).name} атакует ${a.target.startsWith && a.target.startsWith("face") ? "трон" : info((findUnit(s, a.target) || { u: { id: "" } }).u.id).name || "существо"}`);
+      cleanup(s); return null;
+    }
+    return "bad_action";
+  }
+  // ---------- бот ----------
+  function botStep(s, side){
+    const me = s.p[side], op = s.p[1 - side];
+    // 1) разыграть карту
+    const playable = me.hand.map(h => ({ h, c: info(h.id) })).filter(x => x.c.cost <= me.mana && !(x.c.unit && me.board.length >= 6))
+      .sort((a, b) => b.c.cost - a.c.cost);
+    for (const { h, c } of playable){
+      const need = needTarget(h.id);
+      if (h.id === "coin" || h.id === "midas"){ const better = me.hand.some(x => { const ci = info(x.id); return x.uid !== h.uid && ci.cost === me.mana + 1; }); if (!better) continue; return { t: "play", uid: h.uid }; }
+      if (!need) { if (h.id === "blackhole" && op.board.length < 2) continue; return { t: "play", uid: h.uid }; }
+      const vt = validTargets(s, side, need).filter(x => x !== h.uid); let tg = null;
+      const dmgV = c.unit ? c.o.bcDmg : c.o.dmg;
+      if (dmgV){ const kill = op.board.filter(u => vt.includes(u.uid) && u.hp <= dmgV && !u.shield).sort((a, b) => b.atk - a.atk)[0];
+        tg = kill ? kill.uid : (vt.includes("face" + (1 - side)) ? "face" + (1 - side) : (op.board.find(u => vt.includes(u.uid)) || {}).uid); }
+      else if (c.o.heal){ const hurt = me.board.filter(u => u.hp < u.mhp).sort((a, b) => (b.mhp - b.hp) - (a.mhp - a.hp))[0]; tg = me.hp < 26 ? "face" + side : hurt ? hurt.uid : null; }
+      else if (c.o.cull){ const k = op.board.filter(u => u.hp <= 4).sort((a, b) => b.atk - a.atk)[0] || op.board[0]; tg = k ? k.uid : null; }
+      else if (c.o.ready){ const u = me.board.filter(u => !u.ready).sort((a, b) => b.atk - a.atk)[0]; tg = u ? u.uid : null; }
+      else { const u = me.board.slice().sort((a, b) => b.atk + b.hp - a.atk - a.hp)[0]; tg = u ? u.uid : null; }
+      if (c.unit && need && !tg) return { t: "play", uid: h.uid };
+      if (tg != null) return { t: "play", uid: h.uid, target: tg };
+    }
+    // 2) атаки
+    for (const u of me.board){
+      const vt = attackTargets(s, side, u.uid); if (!vt.length) continue;
+      const face = "face" + (1 - side);
+      const myPower = me.board.filter(x => x.ready).reduce((a, x) => a + x.atk, 0);
+      if (vt.includes(face) && myPower >= op.hp) return { t: "attack", uid: u.uid, target: face };
+      const trades = op.board.filter(e => vt.includes(e.uid) && (e.hp <= u.atk && !e.shield) && (u.hp > e.atk || e.atk + e.hp >= u.atk + u.hp)).sort((a, b) => b.atk - a.atk);
+      if (trades.length) return { t: "attack", uid: u.uid, target: trades[0].uid };
+      if (vt.includes(face)) return { t: "attack", uid: u.uid, target: face };
+      return { t: "attack", uid: u.uid, target: vt[0] };
+    }
+    return { t: "end" };
+  }
+  return { newGame, act, info, isUnit, validTargets, attackTargets, needTarget, botStep, findUnit };
+})();
+
+/* ---------- «Дуэль 1x6»: интерфейс, бот, онлайн ---------- */
+const DUEL = (() => {
+  const E = DUELX, esc = t => String(t == null ? "" : t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const W = { get(){ try { return JSON.parse(localStorage.getItem("ub-duel") || "{}"); } catch(e) { return {}; } }, add(k){ const w = this.get(); w[k] = (w[k] || 0) + 1; try { localStorage.setItem("ub-duel", JSON.stringify(w)); } catch(e) {} } };
+  function open(){
+    const w = W.get(), cloud = PROF.cloud;
+    const box = openPanel(`<h3>Дуэль 1x6</h3><p class="lead">Карточная битва героями Доты. Разрушь трон соперника (30 ❤). Мана растёт каждый ход, герои — существа, предметы — заклинания.</p>
+      <div class="dm">
+        <button type="button" class="dmb" data-m="bot"><span>🤖</span><b>Против бота</b><small>Побед: ${w.bot || 0}</small></button>
+        <button type="button" class="dmb" data-m="online"><span>🌐</span><b>Онлайн с другом</b><small>${cloud ? "По коду комнаты" : "Работает на сайте"}</small></button>
+        <button type="button" class="dmb" data-m="local"><span>👥</span><b>На одном экране</b><small>Передавайте телефон</small></button>
+      </div>
+      <div id="dmOnline" hidden></div>
+      <details class="drules"><summary>Как играть</summary><ul>
+        <li>Нажми карту в руке → «Разыграть». Если нужна цель — выбери её.</li>
+        <li>Существо атакует со следующего хода (кроме <b>Рывка</b>): нажми своё существо, потом цель.</li>
+        <li><b>Провокация</b> — пока она на столе, бить можно только её. <b>Щит</b> блокирует первый урон. <b>Вампиризм</b> лечит трон. <b>Перерождение</b> — возвращается с 1 ❤.</li>
+        <li>Колода закончилась — усталость бьёт по трону.</li></ul></details>`);
+    box.closest(".sheet").classList.add("gsheet", "dsheet");
+    box.querySelectorAll(".dmb").forEach(b => b.onclick = () => {
+      if (b.dataset.m === "bot") start({ mode: "bot" });
+      else if (b.dataset.m === "local") start({ mode: "local" });
+      else onlineMenu(box);
+    });
+  }
+  function onlineMenu(box){
+    const el = box.querySelector("#dmOnline"); el.hidden = false;
+    if (!PROF.cloud || !PROF.rt()){ el.innerHTML = `<div class="gempty">Онлайн-дуэли работают на сайте <b>1x6-eta.vercel.app</b>.</div>`; return; }
+    el.innerHTML = `<div class="don"><button type="button" class="btn btn-primary" id="dnNew">Создать комнату</button><span class="dor">или</span><div class="djoin"><input id="dnCode" maxlength="5" placeholder="КОД" autocomplete="off" autocapitalize="characters"><button type="button" class="btn btn-ghost" id="dnJoin">Войти</button></div></div>`;
+    el.querySelector("#dnNew").onclick = () => { const A = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let c = ""; for (let i = 0; i < 5; i++) c += A[Math.floor(Math.random() * A.length)]; start({ mode: "online", host: true, code: c }); };
+    el.querySelector("#dnJoin").onclick = () => { const c = el.querySelector("#dnCode").value.toUpperCase().replace(/[^A-Z0-9]/g, ""); if (c.length === 5) start({ mode: "online", host: false, code: c }); };
+  }
+
+  /* ---------- партия ---------- */
+  function start(cfg){
+    const myName = PROF.me() || (cfg.mode === "online" ? (cfg.host ? "Хозяин комнаты" : "Гость") : "Ты");
+    const box = openPanel(`<div class="duel" id="dl"><div class="dl-wait" id="dlWait" hidden></div>
+      <div class="dl-side opp" id="dlOpp"></div><div class="dl-board" id="dlOB"></div>
+      <div class="dl-mid"><span id="dlInfo"></span><span id="dlTimer" class="dl-timer"></span><button type="button" class="btn btn-primary dl-end" id="dlEnd">Конец хода</button></div>
+      <div class="dl-board me" id="dlMB"></div><div class="dl-side me" id="dlMe"></div>
+      <div class="dl-hint" id="dlHint" hidden></div>
+      <div class="dl-hand" id="dlHand"></div>
+      <div class="dl-cover" id="dlCover" hidden></div>
+      <div class="dl-log" id="dlLog"></div></div>`);
+    box.closest(".sheet").classList.add("gsheet", "dsheet", "dplay");
+    const $ = id => box.querySelector("#" + id);
+    let s = null, seat = 0, sel = null, targets = [], prevUids = new Set(), botT = 0, ch = null, alive = true, lastMsg = Date.now(), timerI = 0, remain = 0, deadline = 0, ended = false;
+    const view = () => cfg.mode === "local" ? (s ? s.turn : 0) : seat;
+    const myTurn = () => s && s.winner == null && s.turn === view() && (cfg.mode !== "online" || s.turn === seat);
+
+    function card(c, h, cls){ const i = E.info(h.id); const afford = s && i.cost <= s.p[view()].mana;
+      return `<button type="button" class="dc ${i.unit ? "u" : "sp"} ${cls || ""}${afford && myTurn() ? " ok" : ""}" data-h="${h.uid}"><i class="dc-cost">${i.cost}</i>
+        ${i.unit ? `<img alt="" src="face/${i.id}.webp">` : `<span class="dc-ic">${i.ic}</span>`}<b>${esc(i.name)}</b><small>${esc(i.text)}</small>${i.unit ? `<span class="dc-st"><em class="a">${i.atk}</em><em class="h">${i.hp}</em></span>` : ""}</button>`; }
+    function unit(u, side){ const i = E.info(u.id), mine = side === view();
+      const cls = [u.taunt ? "taunt" : "", u.shield ? "shield" : "", mine && u.ready && myTurn() ? "ready" : "", u.sleep ? "sleep" : "", prevUids.has(u.uid) ? "" : "enter"].join(" ");
+      return `<button type="button" class="du ${cls}" data-u="${u.uid}" aria-label="${esc(i.name)}"><img alt="" src="face/${u.id}.webp"><span class="du-st"><em class="a">${u.atk}</em><em class="h${u.hp < u.mhp ? " hurt" : ""}">${u.hp}</em></span>${u.reborn ? `<i class="du-k">💀</i>` : ""}${u.ls ? `<i class="du-k l">🩸</i>` : ""}${u.sleep ? `<i class="du-z">💤</i>` : ""}</button>`; }
+    function sideBar(i){ const P = s.p[i], me = i === view(), gems = Array.from({ length: P.max }, (_, k) => `<i class="${k < P.mana ? "on" : ""}"></i>`).join("");
+      return `<button type="button" class="dl-face" data-u="face${i}"><span class="dl-av">${me ? "🛡️" : "⚔️"}</span><span class="dl-nm"><b>${esc(P.name)}</b><small>🂠 ${P.hand.length} · колода ${P.deck.length}</small></span><span class="dl-hp">❤ ${Math.max(0, P.hp)}</span></button><span class="dl-mana">${gems}<b>${P.mana}/${P.max}</b></span>`; }
+    function render(){
+      if (!s) return; const v = view(), o = 1 - v;
+      $("dlOpp").innerHTML = sideBar(o); $("dlMe").innerHTML = sideBar(v);
+      $("dlOB").innerHTML = s.p[o].board.map(u => unit(u, o)).join("") || `<span class="dl-empty">пусто</span>`;
+      $("dlMB").innerHTML = s.p[v].board.map(u => unit(u, v)).join("") || `<span class="dl-empty">пусто</span>`;
+      $("dlHand").innerHTML = s.p[v].hand.map(h => card(null, h, sel && sel.kind === "hand" && sel.uid === h.uid ? "sel" : "")).join("");
+      const mt = myTurn(); $("dlEnd").disabled = !mt; $("dlEnd").textContent = mt ? "Конец хода" : "Ход соперника";
+      $("dlInfo").textContent = s.winner != null ? "" : `Ход ${Math.ceil(s.n / 2)}`;
+      targets.forEach(t => { const el = box.querySelector(`[data-u="${t}"]`); if (el) el.classList.add("tgt"); });
+      if (sel && sel.kind === "unit"){ const el = box.querySelector(`[data-u="${sel.uid}"]`); if (el) el.classList.add("sel"); }
+      $("dlLog").textContent = s.log.slice(-1)[0] || "";
+      prevUids = new Set([...s.p[0].board, ...s.p[1].board].map(u => u.uid));
+    }
+    function fxEvents(evs){
+      (evs || []).forEach((e, n) => setTimeout(() => {
+        if (e.k === "dmg" || e.k === "heal"){ const el = box.querySelector(`[data-u="${e.t}"]`); if (!el) return; const f = document.createElement("span"); f.className = "dl-pop " + e.k; f.textContent = (e.k === "dmg" ? "−" : "+") + e.v; el.appendChild(f); el.classList.remove("hit"); void el.offsetWidth; el.classList.add(e.k === "dmg" ? "hit" : "healed"); setTimeout(() => f.remove(), 900); }
+        if (e.k === "block"){ const el = box.querySelector(`[data-u="${e.t}"]`); if (el){ const f = document.createElement("span"); f.className = "dl-pop heal"; f.textContent = "БЛОК"; el.appendChild(f); setTimeout(() => f.remove(), 900); } }
+        if (e.k === "atk"){ const a = box.querySelector(`[data-u="${e.from}"]`), b = box.querySelector(`[data-u="${e.to}"]`); if (a && b){ const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect(); a.style.setProperty("--dx", (rb.left - ra.left) * .55 + "px"); a.style.setProperty("--dy", (rb.top - ra.top) * .55 + "px"); a.classList.remove("lunge"); void a.offsetWidth; a.classList.add("lunge"); } }
+      }, n * 90));
+    }
+    function setState(ns, evs){ s = ns; if (sel && !(sel.kind === "hand" ? s.p[view()].hand.some(h => h.uid === sel.uid) : E.findUnit(s, sel.uid))) { sel = null; targets = []; }
+      render(); fxEvents(evs || s.ev); hint(); checkEnd(); scheduleBot(); }
+    function hint(t){ const h = $("dlHint"); if (t){ h.hidden = false; h.innerHTML = t; return; }
+      if (sel && sel.kind === "hand"){ const i = E.info(s.p[view()].hand.find(x => x.uid === sel.uid).id), need = E.needTarget(i.id), afford = i.cost <= s.p[view()].mana;
+        h.hidden = false; h.innerHTML = targets.length ? `🎯 Выбери цель для <b>${esc(i.name)}</b> <button type="button" class="dl-x">Отмена</button>` : `<b>${esc(i.name)}</b> — ${esc(i.text)} ${myTurn() ? (afford ? `<button type="button" class="btn btn-primary dl-play">Разыграть (${i.cost} 💎)</button>` : `<em>Мало маны</em>`) : ""} <button type="button" class="dl-x">✕</button>`;
+        const pb = h.querySelector(".dl-play"); if (pb) pb.onclick = () => playSel(); const x = h.querySelector(".dl-x"); if (x) x.onclick = () => { sel = null; targets = []; render(); hint(); }; return; }
+      if (sel && sel.kind === "unit"){ h.hidden = false; h.innerHTML = `⚔️ Выбери, кого атаковать <button type="button" class="dl-x">Отмена</button>`; h.querySelector(".dl-x").onclick = () => { sel = null; targets = []; render(); hint(); }; return; }
+      h.hidden = true; }
+    function playSel(){
+      const h = s.p[view()].hand.find(x => x.uid === sel.uid); if (!h) return; const i = E.info(h.id), need = E.needTarget(h.id);
+      if (need){ const vt = E.validTargets(s, view(), need); if (vt.length){ targets = vt; render(); hint(); return; } if (!i.unit) { hint("Нет подходящих целей"); return; } }
+      send({ t: "play", uid: h.uid });
+    }
+    function send(a){ const was = sel; sel = null; targets = [];
+      if (cfg.mode === "online" && !cfg.host){ ch.send({ type: "broadcast", event: "m", payload: { k: "act", a } }); render(); hint(); return; }
+      const err = E.act(s, s.turn, a); if (err){ sel = was; hint(errText(err)); return; }
+      if (cfg.mode === "online") push(); setState(s);
+      if (a.t === "end" && cfg.mode === "local" && s.winner == null) cover(`Ход: <b>${esc(s.p[s.turn].name)}</b>`, "Передай телефон и нажми, когда готов");
+    }
+    const errText = e => ({ no_mana: "Не хватает маны", board_full: "Стол заполнен", bad_target: "Сюда нельзя", not_your_turn: "Сейчас не твой ход" })[e] || "Нельзя";
+    // клики
+    box.querySelector("#dl").addEventListener("click", e => {
+      if (!s || s.winner != null) return;
+      const hc = e.target.closest(".dc"), ub = e.target.closest("[data-u]");
+      if (targets.length && ub){ const t = isNaN(+ub.dataset.u) ? ub.dataset.u : +ub.dataset.u;
+        if (targets.includes(t)){ if (sel.kind === "hand") send({ t: "play", uid: sel.uid, target: t }); else send({ t: "attack", uid: sel.uid, target: t }); return; } }
+      if (hc){ const uid = +hc.dataset.h; sel = sel && sel.kind === "hand" && sel.uid === uid ? null : { kind: "hand", uid }; targets = []; render(); hint(); return; }
+      if (ub && myTurn()){ const uid = +ub.dataset.u; const f = E.findUnit(s, uid);
+        if (f && f.side === view()){ const vt = E.attackTargets(s, view(), uid); if (vt.length){ sel = { kind: "unit", uid }; targets = vt; render(); hint(); } else hint(f.u.sleep ? "💤 Существо атакует со следующего хода" : "Это существо уже атаковало"); return; } }
+    });
+    $("dlEnd").onclick = () => { if (myTurn()) send({ t: "end" }); };
+    // бот
+    function scheduleBot(){ clearTimeout(botT); if (cfg.mode !== "bot" || !s || s.winner != null || s.turn !== 1) return;
+      botT = setTimeout(() => { if (!alive) return; const a = E.botStep(s, 1); const err = E.act(s, 1, a); if (err) E.act(s, 1, { t: "end" }); setState(s); }, 750); }
+    // конец партии
+    function checkEnd(){ if (!s || s.winner == null || ended) return; ended = true; clearInterval(timerI);
+      const win = cfg.mode === "local" ? null : s.winner === seat;
+      if (win && cfg.mode === "bot") W.add("bot"); if (win && cfg.mode === "online") W.add("online"); if (win) PROF.grant("run");
+      setTimeout(() => cover(cfg.mode === "local" ? `🏆 Победил <b>${esc(s.p[s.winner].name)}</b>` : win ? "🏆 <b>ПОБЕДА!</b>" : "💀 <b>Поражение</b>", cfg.mode === "online" ? "Сыграть ещё — создайте новую комнату" : "Ещё партию?", () => { if (cfg.mode !== "online") start(cfg); }, cfg.mode === "online" ? "Закрыть" : "Ещё раз"), 900); }
+    function cover(title, sub, onOk, okText){ const c = $("dlCover"); c.hidden = false; c.innerHTML = `<div class="dl-cv"><span>${title}</span><small>${sub}</small><button type="button" class="btn btn-primary">${okText || "Готов"}</button></div>`;
+      c.querySelector("button").onclick = () => { c.hidden = true; if (onOk) onOk(); else if (cfg.mode === "online" && s && s.winner != null) closeModal(); render(); }; }
+    // ---------- онлайн ----------
+    function push(){ if (!ch || !cfg.host) return; deadline = Date.now() + 75000; ch.send({ type: "broadcast", event: "m", payload: { k: "state", s, rem: 75 } }); }
+    function waitBox(html){ const w = $("dlWait"); w.hidden = !html; w.innerHTML = html || ""; }
+    function online(){
+      const sb = PROF.rt(); seat = cfg.host ? 0 : 1;
+      ch = sb.channel("duel-" + cfg.code, { config: { broadcast: { self: false, ack: false } } });
+      ch.on("broadcast", { event: "m" }, ({ payload: m }) => { if (!alive || !m) return; lastMsg = Date.now();
+        if (cfg.host){
+          if (m.k === "join"){ if (!s){ s = E.newGame([myName, String(m.name || "Гость").slice(0, 20)], (Math.random() * 2 ** 31) | 0); waitBox(""); setState(s); }
+            push(); }
+          if (m.k === "act" && s){ if (s.turn === 1){ const err = E.act(s, 1, m.a); if (!err){ push(); setState(s); } else push(); } }
+          if (m.k === "sync" && s) push();
+        } else {
+          if (m.k === "state"){ waitBox(""); remain = m.rem || 75; deadline = Date.now() + remain * 1000; setState(m.s, m.s.ev); }
+        }
+        if (m.k === "bye"){ cover("Соперник вышел", "Партия прервана", () => closeModal(), "Закрыть"); }
+      });
+      ch.subscribe(st => { if (st !== "SUBSCRIBED") return;
+        if (cfg.host) waitBox(`<div class="dw"><b>Комната создана</b><span class="dw-code">${cfg.code}</span><small>Скинь этот код другу. Он открывает «Дуэль» → «Онлайн с другом» → вводит код.</small><button type="button" class="btn btn-ghost" id="dwCopy">Скопировать код</button><i class="dw-spin"></i><small>Ждём соперника…</small></div>`);
+        else { waitBox(`<div class="dw"><b>Подключаемся к ${cfg.code}…</b><i class="dw-spin"></i><small>Если долго — проверь код или попроси друга создать комнату заново.</small></div>`);
+          const j = () => { if (!alive || s) return; ch.send({ type: "broadcast", event: "m", payload: { k: "join", name: myName } }); setTimeout(j, 2000); }; j(); }
+        const cp = box.querySelector("#dwCopy"); if (cp) cp.onclick = () => { try { navigator.clipboard.writeText(cfg.code); cp.textContent = "Скопировано ✓"; } catch(e) {} };
+      });
+      timerI = setInterval(() => { if (!s || s.winner != null) return; const r = Math.max(0, Math.ceil((deadline - Date.now()) / 1000)); $("dlTimer").textContent = r <= 30 ? `⏳ ${r}` : "";
+        if (cfg.host && r <= 0 && deadline){ E.act(s, s.turn, { t: "end" }); push(); setState(s); }
+        if (!cfg.host && Date.now() - lastMsg > 12000){ ch.send({ type: "broadcast", event: "m", payload: { k: "sync" } }); lastMsg = Date.now(); } }, 500);
+    }
+    modal._cleanup = () => { alive = false; clearTimeout(botT); clearInterval(timerI); if (ch){ try { ch.send({ type: "broadcast", event: "m", payload: { k: "bye" } }); PROF.rt().removeChannel(ch); } catch(e) {} } };
+    if (cfg.mode === "online") online();
+    else { s = E.newGame(cfg.mode === "bot" ? [myName, "Бот 🤖"] : ["Игрок 1", "Игрок 2"]); setState(s); if (cfg.mode === "local") cover(`Ход: <b>${esc(s.p[0].name)}</b>`, "Начинает Игрок 1"); }
+  }
+  return { open };
+})();
+
 /* ---------- вкладки ---------- */
 const TABS = ["1x6", "games", "feed", "soon"];
 let curTab = "1x6";
@@ -3131,7 +3552,7 @@ addEventListener("resize", () => { const a = document.querySelector('.tab[aria-s
   el.addEventListener("touchstart", e => { if (e.target.closest(".recent-row, .tt-topics, input, .pick")){ x0 = null; return; } const t = e.touches[0]; x0 = t.clientX; y0 = t.clientY; t0 = Date.now(); }, { passive: true });
   el.addEventListener("touchend", e => { if (x0 === null) return; const t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0; x0 = null;
     if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 2 && Date.now() - t0 < 600 && !document.querySelector(".modal:not([hidden])")){ const i = TABS.indexOf(curTab) + (dx < 0 ? 1 : -1); if (i >= 0 && i < TABS.length) setTab(TABS[i]); } }, { passive: true }); }
-document.querySelectorAll(".gcard").forEach(c => c.onclick = () => ({ arena: () => GAME.open(), quiz: () => quiz(), roll: () => roulette(), broll: () => buildRoulette(), feed: () => openFeed(), top: () => GAME.open("top"), lasthit: () => MINI.lasthit(), invoker: () => MINI.invoker() })[c.dataset.g]());
+document.querySelectorAll(".gcard").forEach(c => c.onclick = () => ({ arena: () => GAME.open(), quiz: () => quiz(), roll: () => roulette(), broll: () => buildRoulette(), feed: () => openFeed(), top: () => GAME.open("top"), lasthit: () => MINI.lasthit(), duel: () => DUEL.open(), invoker: () => MINI.invoker() })[c.dataset.g]());
 document.getElementById("feedMore").onclick = () => PROF.feedMore();
 document.getElementById("plQ").addEventListener("input", e => PROF.loadPlayers(e.target.value));
 { const h = (location.hash || "").slice(1); setTab(TABS.includes(h) ? h : "1x6", { instant: true, keepHash: true, noScroll: true }); }
@@ -3157,7 +3578,7 @@ const ACTS = {
   search(){ goBuilds(); setTimeout(() => document.getElementById("q").focus({preventScroll: true}), 450); },
   fav(){ setFilter(true, false); goBuilds(); },
   arc(){ setFilter(false, true); goBuilds(); },
-  profile(){ PROF.open(); }, feed(){ openFeed(); }, roll(){ roulette(); }, broll(){ buildRoulette(); }, quiz(){ quiz(); }, game(){ GAME.open(); }, lasthit(){ MINI.lasthit(); }, invoker(){ MINI.invoker(); }
+  profile(){ PROF.open(); }, feed(){ openFeed(); }, roll(){ roulette(); }, broll(){ buildRoulette(); }, quiz(){ quiz(); }, game(){ GAME.open(); }, duel(){ DUEL.open(); }, lasthit(){ MINI.lasthit(); }, invoker(){ MINI.invoker(); }
 };
 menu.querySelectorAll(".mi[data-act]").forEach(b => b.onclick = () => closeMenu(ACTS[b.dataset.act]));
 menu.querySelector(".tgmi").addEventListener("click", () => closeMenu());
