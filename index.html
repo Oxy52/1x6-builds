@@ -5,9 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#08080b">
 <meta name="description" content="Сборки для кастомки Dota 1x6: 54 героя, предметы по этапам игры, арканы, рулетка и квиз.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preconnect" href="https://vsmjjlrgjyujaioknlkn.supabase.co" crossorigin>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.100.0/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.100.0/dist/umd/supabase.min.js"></script>
 <script>window.SB_CONF = { url: "https://vsmjjlrgjyujaioknlkn.supabase.co", key: "sb_publishable_tJy3dl_kfNZXP6PXMqsQVQ_RUXqoPmn" };</script>
 <title>1x6 Сборки</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -263,7 +265,7 @@
 
 
   /* обёртка карточки + избранное */
-  .cw { position: relative; min-width: 0; }
+  .cw { position: relative; min-width: 0; content-visibility: auto; contain-intrinsic-size: auto 280px; }
   .cw .card { width: 100%; }
   .fav { position: absolute; top: 10px; right: 10px; z-index: 5; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; border: 1px solid rgba(255,255,255,.18); background: rgba(0,0,0,.4); backdrop-filter: blur(6px); color: rgba(255,255,255,.85); transition: transform .15s ease, background .2s, color .2s; }
   .fav svg { width: 18px; height: 18px; }
@@ -554,17 +556,17 @@
   .thf[aria-pressed="true"] { border-color: var(--c1); box-shadow: 0 0 10px var(--c1); }
   .nofx body { transition: none; }
   /* ---------- заставка при входе ---------- */
-  :root { --ib: 1.55s; }
+  :root { --ib: 1.05s; }
   html.fast, html.introdone { --ib: 0s; }
   .splash { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; pointer-events: auto; cursor: pointer;
-    animation: spGone 0s linear 2.2s forwards; }
+    animation: spGone 0s linear 1.55s forwards; }
   .splash .sp-half { position: absolute; left: 0; right: 0; height: 50.5%; background: #08080b; }
-  .splash .sp-top { top: 0; animation: spUp .7s cubic-bezier(.7,0,.2,1) 1.45s forwards; }
-  .splash .sp-bot { bottom: 0; animation: spDown .7s cubic-bezier(.7,0,.2,1) 1.45s forwards; }
+  .splash .sp-top { top: 0; animation: spUp .55s cubic-bezier(.7,0,.2,1) .95s forwards; }
+  .splash .sp-bot { bottom: 0; animation: spDown .55s cubic-bezier(.7,0,.2,1) .95s forwards; }
   .splash .sp-top::after, .splash .sp-bot::before { content: ""; position: absolute; left: 0; right: 0; height: 2px; opacity: 0;
-    background: linear-gradient(90deg, transparent, #e8564a 30%, #f3c35a 50%, #7b5cff 70%, transparent); box-shadow: 0 0 18px rgba(232,86,74,.7); animation: spLine .5s ease 1.3s forwards; }
+    background: linear-gradient(90deg, transparent, #e8564a 30%, #f3c35a 50%, #7b5cff 70%, transparent); box-shadow: 0 0 18px rgba(232,86,74,.7); animation: spLine .4s ease .8s forwards; }
   .splash .sp-top::after { bottom: 0; } .splash .sp-bot::before { top: 0; }
-  .sp-c { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 18px; animation: spOut .35s ease 1.3s forwards; }
+  .sp-c { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 18px; animation: spOut .3s ease .8s forwards; }
   .sp-mark { position: relative; width: 92px; height: 92px; border-radius: 26px; display: grid; place-items: center; color: #fff;
     font-family: var(--display); font-weight: 800; font-size: 34px; letter-spacing: -1px; background: linear-gradient(140deg, #e8564a, #7b2d8f);
     animation: spMark .7s cubic-bezier(.2,1.4,.3,1) both; box-shadow: 0 20px 60px rgba(232,86,74,.35); }
@@ -574,7 +576,7 @@
   .sp-t span { display: block; animation: spWord .55s cubic-bezier(.2,.8,.2,1) both; }
   .sp-t span:nth-child(1) { animation-delay: .3s; } .sp-t span:nth-child(2) { animation-delay: .42s; color: var(--gold); }
   .sp-bar { width: 140px; height: 3px; border-radius: 3px; background: rgba(255,255,255,.08); overflow: hidden; }
-  .sp-bar i { display: block; height: 100%; width: 100%; border-radius: inherit; background: linear-gradient(90deg, #e8564a, #f3c35a); transform-origin: left; animation: spBar 1s cubic-bezier(.4,0,.2,1) .25s both; }
+  .sp-bar i { display: block; height: 100%; width: 100%; border-radius: inherit; background: linear-gradient(90deg, #e8564a, #f3c35a); transform-origin: left; animation: spBar .6s cubic-bezier(.4,0,.2,1) .15s both; }
   @keyframes spMark { from { opacity: 0; transform: scale(.3) rotate(-25deg); } }
   @keyframes spRing { 0% { transform: scale(.7); border-color: rgba(243,195,90,.9); opacity: 1; } 100% { transform: scale(1.6); border-color: rgba(243,195,90,0); opacity: 0; } }
   @keyframes spShine { to { background-position: -120% 0; } }
@@ -634,7 +636,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap">
 
 <div class="splash" id="splash" aria-hidden="true"><div class="sp-half sp-top"></div><div class="sp-half sp-bot"></div><div class="sp-c"><div class="sp-mark">1×6</div><div class="sp-t"><span>1x6</span><span>Билды</span></div><div class="sp-bar"><i></i></div></div></div>
-<script>try { if (sessionStorage.getItem("ub-intro")) document.documentElement.classList.add("fast"); else sessionStorage.setItem("ub-intro", "1"); } catch(e) {}</script>
+<script>try { if (localStorage.getItem("ub-intro") || sessionStorage.getItem("ub-intro")) document.documentElement.classList.add("fast"); else { localStorage.setItem("ub-intro", "1"); sessionStorage.setItem("ub-intro", "1"); } } catch(e) {}</script>
 <div class="wrap" id="top">
   <nav class="nav" id="topbar">
     <div class="thw">
@@ -804,6 +806,8 @@ const grid = document.getElementById("grid");
 const countEl = document.getElementById("count");
 const modal = document.getElementById("modal");
 const art = h => `hero/${h.slug}.webp`;
+const sm = h => `hero/sm/${h.slug}.webp`;
+const SMALL = matchMedia("(max-width: 600px)").matches;
 const anim = h => `anim/${h.slug}.webm`;
 const themeOf = h => THEME[h.slug] || ["arcane","#9aa","#222"];
 
@@ -872,14 +876,14 @@ function render(){
     card.className = "card" + (ARCANA[h.slug] ? " arc" : "");
     card.style.cssText = vars(h);
     card.setAttribute("aria-label", `${h.en} — открыть сборку`);
-    card.innerHTML = `${sceneHTML(h, 12)}
-      <div class="heroart"><img alt="" loading="lazy" src="${art(h)}" onerror="this.remove()"></div>
+    card.innerHTML = `${sceneHTML(h, SMALL ? 5 : 10)}
+      <div class="heroart"><img alt="" loading="lazy" decoding="async" src="${sm(h)}" onerror="this.remove()"></div>
       ${ARCANA[h.slug] ? `<div class="card-arc"><img alt="" loading="lazy" src="arcana/${h.slug}.webp"><div class="sweep"></div></div>` : ``}
       <div class="scrim"></div>
       <div class="badges">${ARCANA[h.slug] ? `<span class="badge arc">Аркана</span>` : ``}${h.note ? `<span class="badge warn">нюанс</span>` : ``}</div>
       <div class="meta"><div class="name">${h.en}</div><div class="ru">${h.ru}</div></div>`;
     card.onclick = () => openHero(h);
-    card._anim = attachAnim(card, h);
+    card._anim = SMALL ? null : attachAnim(card, h);
     if (io) io.observe(card); else { card.classList.add('on'); card._anim && card._anim.play(); }
     const wrap = document.createElement("div"); wrap.className = "cw"; wrap.style.setProperty("--i", Math.min(idx, 12));
     const fb = document.createElement("button"); fb.type = "button"; fb.className = "fav"; fb.dataset.s = h.slug;
@@ -995,7 +999,7 @@ function roulette(){
   const W = innerWidth <= 600 ? 92 : 110, GAP = 10, N = 46, WIN = 40;
   const seq = Array.from({length: N}, () => HEROES[rnd(HEROES.length)]);
   const win = seq[WIN];
-  strip.innerHTML = seq.map((h, i) => `<div class="rt" style="${vars(h)}"><img alt="" src="${art(h)}"></div>`).join("");
+  strip.innerHTML = seq.map((h, i) => `<div class="rt" style="${vars(h)}"><img alt="" src="${sm(h)}"></div>`).join("");
   const target = -(WIN * (W + GAP) + W / 2) + (Math.random() - .5) * (W * .6);
   strip.style.transform = "translateX(0)";
   requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -1067,7 +1071,7 @@ function openFeed(){
         <div class="tag">Билд <b class="bnum">${ks.indexOf(k) + 1}</b> из ${ks.length}${ARCANA[h.slug] ? ` · есть аркана` : ``}</div>
         <div class="mb">${miniBuild(h, k)}</div></div>
       <div class="acts-r">
-        <button class="ra" data-a="open" aria-label="Открыть сборку ${h.en}"><span class="av"><img alt="" src="${art(h)}"></span></button>
+        <button class="ra" data-a="open" aria-label="Открыть сборку ${h.en}"><span class="av"><img alt="" src="${sm(h)}"></span></button>
         <button class="ra${FAV.has(h.slug) ? ' faved' : ''}" data-a="fav" aria-label="В избранное"><i>${STAR}</i><span>${FAV.has(h.slug) ? 'В избр.' : 'Лайк'}</span></button>
         <button class="ra" data-a="next" aria-label="Другой билд"${ks.length < 2 ? ' disabled style="opacity:.4"' : ''}><i>⟳</i><span>Билд</span></button>
         <button class="ra" data-a="full" aria-label="Полная сборка"><i>☰</i><span>Сборка</span></button>
@@ -1117,7 +1121,7 @@ function quiz(){
   const g = openPanel(`<h3>Угадай героя по сборке</h3><p class="lead">Чей это билд? Выбери одного из четырёх.</p>
     <div class="qstats"><span class="qstat">Верно: <b>${QS.score}</b> из ${QS.total}</span><span class="qstat">Серия: <b>${QS.streak}</b></span><span class="qstat">Рекорд серии: <b>${QS.best}</b></span></div>
     <div class="qbuild"><div class="stages" style="--sp:url(build/${ans.slug}-${k}.webp)">${stages}</div></div>
-    <div class="opts" id="opts">${opts.map(h => `<button class="opt" data-s="${h.slug}" style="${vars(h)}"><img alt="" src="${art(h)}"><span>${h.en}</span></button>`).join("")}</div>
+    <div class="opts" id="opts">${opts.map(h => `<button class="opt" data-s="${h.slug}" style="${vars(h)}"><img alt="" src="${sm(h)}"><span>${h.en}</span></button>`).join("")}</div>
     <div class="qmsg" id="qmsg"></div>`);
   const box = g.querySelector("#opts"), msg = g.querySelector("#qmsg");
   box.onclick = e => {
@@ -1169,7 +1173,7 @@ document.getElementById("gameBtn").onclick = () => GAME.open();
 (() => { const sp = document.getElementById("splash"); if (!sp) return;
   const done = () => { document.documentElement.classList.add("introdone"); sp.remove(); };
   if (document.documentElement.classList.contains("fast")) { done(); return; }
-  const t = setTimeout(done, 2300);
+  const t = setTimeout(done, 1600);
   sp.addEventListener("click", () => { clearTimeout(t); sp.classList.add("skip"); done(); });
 })();
 
@@ -1807,7 +1811,7 @@ function drawRecent(){
   const box = document.getElementById("recent"), row = document.getElementById("recentRow");
   const hs = RECENT.map(s => HEROES.find(h => h.slug === s)).filter(Boolean);
   box.hidden = !hs.length;
-  row.innerHTML = hs.map(h => `<button class="rc" data-s="${h.slug}" style="${vars(h)}" aria-label="${h.en}" title="${h.en}"><img alt="" src="${art(h)}"></button>`).join("");
+  row.innerHTML = hs.map(h => `<button class="rc" data-s="${h.slug}" style="${vars(h)}" aria-label="${h.en}" title="${h.en}"><img alt="" src="${sm(h)}"></button>`).join("");
 }
 document.getElementById("recentRow").onclick = e => { const b = e.target.closest(".rc"); if (b) openHero(HEROES.find(h => h.slug === b.dataset.s)); };
 drawRecent();
