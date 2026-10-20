@@ -697,6 +697,51 @@
   .arcnew { font-family: "Press Start 2P", monospace; font-size: 11px; color: var(--ac); text-shadow: 0 0 10px var(--ac), 2px 2px 0 #000; animation: arcPop .8s cubic-bezier(.2,1.4,.3,1) both; display: grid; gap: 6px; justify-items: center; }
   .arcnew b { font-family: var(--display); font-size: 18px; color: #fff; text-shadow: 0 0 12px var(--ac); } .arcnew small { font-family: Inter, sans-serif; font-size: 12px; color: #fff; text-shadow: none; }
   @keyframes arcPop { from { opacity: 0; transform: scale(.4); } }
+
+  /* ---------- Ластхит ---------- */
+  .gcard.new::after { content: "NEW"; position: absolute; top: 12px; right: 12px; font-size: 10px; font-weight: 800; padding: 3px 7px; border-radius: 6px; background: #ff3b5c; color: #fff; }
+  .lh, .inv { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: linear-gradient(#1b2a1a, #12180f); min-height: 360px; user-select: none; -webkit-user-select: none; }
+  .lh-hud { display: flex; gap: 14px; flex-wrap: wrap; padding: 10px 12px; font-family: "Press Start 2P", monospace; font-size: 9px; color: #fff; background: rgba(0,0,0,.35); }
+  .lh-hud b { color: #ffd84a; }
+  .lh-field { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 6px; padding: 18px 10px; min-height: 250px; background: repeating-linear-gradient(90deg, #2f5d2b 0 14px, #2c572a 14px 28px); }
+  .lh-mid { font-size: 22px; opacity: .5; }
+  .lh-side { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .lhc { position: relative; display: grid; justify-items: center; gap: 6px; padding: 8px 4px; border: 2px solid transparent; border-radius: 10px; background: rgba(0,0,0,.18); cursor: crosshair; touch-action: manipulation; transition: transform .1s; }
+  .lhc:active { transform: scale(.94); }
+  .lhs { width: 48px; height: 48px; background-size: 100% 100%; image-rendering: pixelated; }
+  .lhc.ally .lhs { transform: scaleX(-1); }
+  .lhhp { position: relative; display: block; width: 60px; height: 8px; background: #200; border: 2px solid #000; }
+  .lhhp em { display: block; height: 100%; background: #ff3b3b; transition: width .12s; }
+  .lhc.ally .lhhp em { background: #3bd16f; }
+  .lhhp u { position: absolute; top: -3px; bottom: -3px; width: 2px; background: #ffd84a; box-shadow: 0 0 4px #ffd84a; }
+  .lhc.aim { border-color: #ffd84a; } .lhc.hit .lhs { animation: lhHit .15s steps(2); } @keyframes lhHit { 50% { filter: brightness(3); transform: translateX(2px); } }
+  .lhc.dead { animation: lhDie .45s forwards; pointer-events: none; } @keyframes lhDie { to { opacity: 0; transform: translateY(10px) scale(.6); } }
+  .lh.swing .lh-mid { animation: lhSw .3s; } @keyframes lhSw { 50% { transform: scale(1.6) rotate(-20deg); opacity: 1; } }
+  .lhpop { position: absolute; z-index: 4; transform: translate(-50%, -100%); font-family: "Press Start 2P", monospace; font-size: 11px; text-shadow: 2px 2px 0 #000; pointer-events: none; animation: lhPop .9s ease-out forwards; }
+  .lhpop.gold { color: #ffd84a; } .lhpop.deny { color: #7fd8ff; } .lhpop.miss { color: #ff7a7a; } .lhpop.dmg { color: #fff; font-size: 9px; }
+  @keyframes lhPop { to { opacity: 0; transform: translate(-50%, -190%); } }
+  .lh-bar { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 12px; font-size: 12.5px; color: #cfc9dc; background: rgba(0,0,0,.35); }
+  .lh-bar b { color: #ffd84a; } .lh-hint { display: inline-flex; gap: 6px; align-items: center; font-size: 12.5px; color: #cfc9dc; cursor: pointer; }
+  /* ---------- Инвокер ---------- */
+  .inv { background: radial-gradient(120% 90% at 50% 0%, #2a1f4a, #120f1d); display: grid; justify-items: center; gap: 14px; padding-bottom: 14px; }
+  .inv .lh-hud { width: 100%; }
+  .iv-target { display: grid; justify-items: center; gap: 6px; margin-top: 8px; padding: 14px 24px; border-radius: 16px; background: color-mix(in srgb, var(--sc, #fff) 14%, rgba(0,0,0,.4)); border: 2px solid color-mix(in srgb, var(--sc, #fff) 60%, transparent); box-shadow: 0 0 24px color-mix(in srgb, var(--sc, #fff) 35%, transparent); }
+  .iv-target.pop { animation: arcPop .45s cubic-bezier(.2,1.4,.3,1); }
+  .iv-ic { font-size: 40px; } .iv-target b { font-family: "Press Start 2P", monospace; font-size: 14px; color: var(--sc); text-shadow: 2px 2px 0 #000; }
+  .iv-target small { display: flex; gap: 6px; min-height: 16px; } .iv-target small i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #000; }
+  .iv-orbs { display: flex; gap: 14px; }
+  .iv-orbs i { width: 42px; height: 42px; border-radius: 50%; border: 3px solid #000; background: rgba(255,255,255,.06); box-shadow: inset 0 0 0 2px rgba(255,255,255,.08); transition: transform .2s; }
+  .iv-orbs i.on { box-shadow: 0 0 14px rgba(255,255,255,.35); animation: arcPop .3s; }
+  .iv-keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; width: 100%; max-width: 420px; padding: 0 12px; }
+  .ivk { display: grid; justify-items: center; gap: 2px; padding: 12px 4px; border: 3px solid #000; color: #fff; font: inherit; cursor: pointer; box-shadow: 0 4px 0 #000; touch-action: manipulation; }
+  .ivk b { font-family: "Press Start 2P", monospace; font-size: 16px; } .ivk small { font-size: 11px; opacity: .85; }
+  .ivk.q { background: #1f6fb8; } .ivk.w { background: #7a2fb8; } .ivk.e { background: #c0611a; } .ivk.r { background: #3a3550; }
+  .ivk.pr { animation: ivPr .15s; } @keyframes ivPr { 50% { transform: translateY(3px); box-shadow: 0 1px 0 #000; } }
+  .ivflash { position: absolute; top: 46%; left: 50%; transform: translate(-50%, -50%); font-family: "Press Start 2P", monospace; font-size: 13px; text-shadow: 2px 2px 0 #000; pointer-events: none; animation: lhPop .8s ease-out forwards; z-index: 3; }
+  .ivflash.ok { color: #7fff9f; } .ivflash.bad { color: #ff6b6b; }
+  #ivStart .gs { font-size: 12px; line-height: 1.6; }
+  #ivStart, #lhStart { overflow-y: auto; justify-content: safe center; }
+  @media (max-width: 420px) { .lhs { width: 40px; height: 40px; } .lhhp { width: 50px; } .lh-side { gap: 6px; } }
   /* ---------- вход ---------- */
   .pcover.plain { height: 90px; background: radial-gradient(120% 140% at 20% 0%, color-mix(in srgb, var(--t1) 40%, transparent), transparent 60%), radial-gradient(120% 140% at 90% 100%, color-mix(in srgb, var(--t2) 80%, transparent), transparent 60%), var(--bg-soft); }
   .auth { padding: 0 24px 26px; margin-top: -34px; position: relative; z-index: 1; max-width: 440px; margin-inline: auto; text-align: center; }
@@ -907,6 +952,8 @@
       <div class="section-head"><h2>Мини-игры</h2><p>Играй героями из 1x6, открывай арканы и попадай в топ.</p></div>
       <div class="gcards">
         <button type="button" class="gcard big" data-g="arena"><span class="gc-ic">⚔️</span><b>Арена 1x6</b><small>Пиксельный выживач: способности героев, врождённые, Рошан и 54 арканы</small><em>Играть</em></button>
+        <button type="button" class="gcard new" data-g="lasthit"><span class="gc-ic">🗡️</span><b>Ластхит</b><small>Добивай крипов и денай своих — как на линии</small><em>Играть</em></button>
+        <button type="button" class="gcard new" data-g="invoker"><span class="gc-ic">🔮</span><b>Инвокер</b><small>Собирай заклинания из сфер на скорость</small><em>Играть</em></button>
         <button type="button" class="gcard" data-g="quiz"><span class="gc-ic">🧠</span><b>Угадай героя</b><small>Узнай героя по сборке</small><em>Играть</em></button>
         <button type="button" class="gcard" data-g="roll"><span class="gc-ic">🎲</span><b>Рулетка героя</b><small>Кем играть сегодня?</small><em>Крутить</em></button>
         <button type="button" class="gcard" data-g="broll"><span class="gc-ic">🔄</span><b>Рулетка билдов</b><small>Случайный герой и сборка</small><em>Крутить</em></button>
@@ -944,6 +991,8 @@
   <button type="button" class="mi" data-act="broll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg><span>Рулетка билдов</span></button>
   <button type="button" class="mi" data-act="quiz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.3 9a2.8 2.8 0 0 1 5.4 1c0 2-2.7 2.4-2.7 4"/><circle cx="12" cy="17.3" r=".6" fill="currentColor"/></svg><span>Угадай героя</span></button>
   <button type="button" class="mi" data-act="game"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="7" width="19" height="11" rx="4"/><path d="M7 10.5v4M5 12.5h4"/><circle cx="15.5" cy="11.5" r="1" fill="currentColor"/><circle cx="18" cy="14" r="1" fill="currentColor"/></svg><span>Мини-игра: арена</span><em>топ</em></button>
+  <button type="button" class="mi" data-act="lasthit"><span style="width:21px;text-align:center">🗡️</span><span>Ластхит</span></button>
+  <button type="button" class="mi" data-act="invoker"><span style="width:21px;text-align:center">🔮</span><span>Инвокер</span></button>
   <div class="menu-l">Ещё</div>
   <a class="mi tgmi" href="https://t.me/+swCyihkKvwU4NTBi" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.9 4.3 18.8 19c-.2 1-.8 1.3-1.7.8l-4.7-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.8 8.8-7.9c.4-.3-.1-.5-.6-.2L6.8 13l-4.7-1.5c-1-.3-1-1 .2-1.5L20.6 3c.9-.3 1.6.2 1.3 1.3z"/></svg><span>Наш Telegram-канал</span><em>↗</em></a>
   <label class="mi mt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 12h3l3-7 6 14 3-7h3"/></svg><span>Живые анимации</span><input type="checkbox" id="fxToggle" checked><i class="sw"></i></label>
@@ -2734,6 +2783,129 @@ const GAME = (() => {
   setTimeout(() => { if (el.isConnected) requestAnimationFrame(() => el.classList.add("show")); }, delay);
 })();
 
+/* ---------- мини-игры: Ластхит и Инвокер ---------- */
+const MINI = (() => {
+  const best = k => { try { return +localStorage.getItem("ub-mg-" + k) || 0; } catch(e) { return 0; } };
+  const setBest = (k, v) => { try { localStorage.setItem("ub-mg-" + k, v); } catch(e) {} };
+  const rnd = (a, b) => a + Math.random() * (b - a);
+
+  /* ===== Ластхит ===== */
+  function lasthit(){
+    const box = openPanel(`
+      <h3>Ластхит</h3>
+      <p class="lead">Нажимай на вражеского крипа (красного), когда твой удар его добьёт — это ластхит и золото. Своих (зелёных) можно денаить, когда у них мало здоровья. Удар долетает не сразу — как в Доте.</p>
+      <div class="lh" id="lh">
+        <div class="lh-hud"><span>⏱ <b id="lhT">60</b></span><span>💰 <b id="lhG">0</b></span><span>LH <b id="lhL">0</b></span><span>DN <b id="lhD">0</b></span><span>Мимо <b id="lhM">0</b></span></div>
+        <div class="lh-field" id="lhF"><div class="lh-side ene" id="lhE"></div><div class="lh-mid">⚔</div><div class="lh-side ally" id="lhA"></div></div>
+        <div class="lh-bar"><label class="lh-hint"><input type="checkbox" id="lhHint" checked> Подсказка урона</label><span class="lh-dmg">Твой урон: <b>38–44</b></span></div>
+        <div class="gover" id="lhStart"><b class="gt px">ЛАСТХИТ</b><span class="gs">60 секунд на линии. Рекорд: <b>${best("lh")}</b> золота</span><button type="button" class="btn btn-primary" id="lhGo">На линию!</button></div>
+        <div class="gover" id="lhEnd" hidden></div>
+      </div>`);
+    box.closest(".sheet").classList.add("gsheet");
+    const $ = id => box.querySelector("#" + id);
+    const mk = (rows, pal) => { const c = document.createElement("canvas"); c.width = rows[0].length; c.height = rows.length; const x = c.getContext("2d");
+      rows.forEach((r, y) => [...r].forEach((ch, i) => { if (pal[ch]){ x.fillStyle = pal[ch]; x.fillRect(i, y, 1, 1); } })); return c.toDataURL(); };
+    const MEL = ["...RR...", "..RrrR..", ".RryrrR.", ".rrrrry.", "RrrRRrrR", ".KrrrrK.", ".k.KK.k.", ".k....k."], RNG = ["...RR...", "..RrrR..", ".RrcrcR.", "..rrrr..", ".RrrrrR.", "RRrwwrRR", ".R.rr.R.", ".k....k."];
+    const SPRITES = { ene: mk(MEL, { R: "#7d1c17", r: "#c8352b", y: "#ffd84a", K: "#3a2a2e", k: "#1b1418" }), eneR: mk(RNG, { R: "#432a7d", r: "#7a4bd6", c: "#ff6b6b", w: "#f4efe6", k: "#1b1418" }),
+      ally: mk(MEL, { R: "#1f5a2e", r: "#3bb35a", y: "#bfefff", K: "#2a3a2e", k: "#141b16" }), allyR: mk(RNG, { R: "#1f4a6b", r: "#3a8fd6", c: "#bfefff", w: "#f4efe6", k: "#141b16" }) };
+    let creeps = [], timers = [], t = 60, gold = 0, lh = 0, dn = 0, miss = 0, run = false, waveT = 0, tick = 0, raf = 0, last = 0, combo = 0;
+    const DMIN = 38, DMAX = 44;
+    function spawnWave(){
+      ["ene", "ally"].forEach(side => { const host = $(side === "ene" ? "lhE" : "lhA");
+        for (let i = 0; i < 4; i++){ const ranged = i === 3, hp = ranged ? 150 : 210;
+          const el = document.createElement("button"); el.type = "button"; el.className = `lhc ${side}${ranged ? " rng" : ""}`; el.innerHTML = `<span class="lhs" style="background-image:url(${SPRITES[side + (ranged ? "R" : "")]})"></span><i class="lhhp"><em></em><u></u></i>`;
+          const c = { el, side, hp, mhp: hp, next: rnd(.6, 2.2), dead: false, pend: 0 }; el.onclick = e => { e.stopPropagation(); attack(c); };
+          host.appendChild(el); creeps.push(c); draw(c); } });
+    }
+    function draw(c){ const pct = Math.max(0, c.hp / c.mhp * 100); c.el.querySelector("em").style.width = pct + "%";
+      const u = c.el.querySelector("u"); u.style.left = Math.min(100, DMIN / c.mhp * 100) + "%"; u.hidden = !$("lhHint").checked; }
+    function pop(c, txt, cls){ const r = c.el.getBoundingClientRect(), f = $("lh").getBoundingClientRect(), s = document.createElement("span"); s.className = "lhpop " + cls; s.textContent = txt;
+      s.style.left = (r.left - f.left + r.width / 2) + "px"; s.style.top = (r.top - f.top) + "px"; $("lh").appendChild(s); setTimeout(() => s.remove(), 900); }
+    function kill(c, by){ c.dead = true; c.el.classList.add("dead"); setTimeout(() => c.el.remove(), 450); creeps = creeps.filter(x => x !== c);
+      if (by === "me"){ if (c.side === "ene"){ const g = Math.round(rnd(36, 46)) + combo * 2; combo++; lh++; gold += g; pop(c, "+" + g, "gold"); } else { dn++; combo++; pop(c, "DENY!", "deny"); } }
+      else if (c.side === "ene"){ miss++; combo = 0; pop(c, "мимо", "miss"); } }
+    function attack(c){
+      if (!run || c.dead || c.pend) return;
+      if (c.side === "ally" && c.hp > c.mhp * .5){ pop(c, "нельзя", "miss"); return; }
+      c.pend = 1; c.el.classList.add("aim"); $("lh").classList.add("swing");
+      timers.push({ t: .32, f: () => { $("lh").classList.remove("swing"); c.el.classList.remove("aim"); c.pend = 0; if (c.dead) return;
+        const d = Math.round(rnd(DMIN, DMAX)); c.hp -= d; c.el.classList.remove("hit"); void c.el.offsetWidth; c.el.classList.add("hit");
+        if (c.hp <= 0) kill(c, "me"); else { draw(c); if (c.side === "ene"){ combo = 0; pop(c, "-" + d, "dmg"); } } } });
+    }
+    function step(dt){
+      t -= dt; waveT -= dt; if (waveT <= 0){ spawnWave(); waveT = 16; }
+      for (const tm of timers) tm.t -= dt; const due = timers.filter(x => x.t <= 0); timers = timers.filter(x => x.t > 0); due.forEach(x => x.f());
+      for (const c of creeps.slice()){ if (c.dead) continue; c.next -= dt;
+        if (c.next <= 0){ c.next = rnd(.7, 1.4); const opp = creeps.some(x => x.side !== c.side && !x.dead);
+          if (opp){ const d = Math.round(rnd(14, 26)); c.hp -= d; draw(c); c.el.classList.remove("hit"); void c.el.offsetWidth; c.el.classList.add("hit"); if (c.hp <= 0) kill(c, "creep"); } } }
+      $("lhT").textContent = Math.max(0, Math.ceil(t)); $("lhG").textContent = gold; $("lhL").textContent = lh; $("lhD").textContent = dn; $("lhM").textContent = miss;
+      if (t <= 0) end();
+    }
+    function loop(ts){ if (!box.isConnected){ run = false; return; } const dt = Math.min(.05, (ts - last) / 1000 || 0); last = ts; if (run) step(dt); if (run) raf = requestAnimationFrame(loop); }
+    function go(){ creeps.forEach(c => c.el.remove()); creeps = []; timers = []; t = 60; gold = 0; lh = 0; dn = 0; miss = 0; combo = 0; waveT = 0;
+      $("lhStart").hidden = true; $("lhEnd").hidden = true; run = true; last = performance.now(); raf = requestAnimationFrame(loop); }
+    function end(){ run = false; cancelAnimationFrame(raf); const b = best("lh"), rec = gold > b; if (rec) setBest("lh", gold);
+      const acc = lh + miss ? Math.round(lh / (lh + miss) * 100) : 0;
+      $("lhEnd").innerHTML = `<b class="gt px">${rec ? "НОВЫЙ РЕКОРД!" : "КОНЕЦ ЛИНИИ"}</b><span class="gbig px">${gold}</span><span class="gs">Ластхиты: ${lh} · Денаи: ${dn} · Точность: ${acc}%</span><span class="gs">${acc >= 85 ? "Мид держишь как про 🔥" : acc >= 60 ? "Неплохо, ещё чуть-чуть практики" : "Крипы уходят — следи за полоской здоровья"}</span><div class="gbtns"><button type="button" class="btn btn-primary" id="lhAgain">Ещё раз</button></div>`;
+      $("lhEnd").hidden = false; $("lhAgain").onclick = go; if (gold > 0) PROF.grant("run"); }
+    $("lhGo").onclick = go; $("lhHint").onchange = () => creeps.forEach(draw);
+    modal._cleanup = () => { run = false; cancelAnimationFrame(raf); };
+  }
+
+  /* ===== Инвокер ===== */
+  const SPELLS = [
+    { k: "QQQ", n: "Cold Snap", ic: "🧊", c: "#7fd3ff" }, { k: "QQW", n: "Ghost Walk", ic: "👻", c: "#9fc2ff" }, { k: "QQE", n: "Ice Wall", ic: "🧱", c: "#bfe9ff" },
+    { k: "WWW", n: "EMP", ic: "⚡", c: "#c98bff" }, { k: "QWW", n: "Tornado", ic: "🌪️", c: "#b7a8ff" }, { k: "EWW", n: "Alacrity", ic: "💨", c: "#ffb37a" },
+    { k: "EEE", n: "Sun Strike", ic: "☀️", c: "#ffcf45" }, { k: "EEQ", n: "Forge Spirit", ic: "🔥", c: "#ff8a3d" }, { k: "EEW", n: "Chaos Meteor", ic: "☄️", c: "#ff6a3a" },
+    { k: "EQW", n: "Deafening Blast", ic: "💥", c: "#e8e2ff" }
+  ];
+  const norm = s => [...s].sort().join("");
+  function invoker(){
+    const box = openPanel(`
+      <h3>Инвокер</h3>
+      <p class="lead">Собери заклинание из трёх сфер и нажми <b>Invoke</b>. Quas — лёд, Wex — молния, Exort — огонь. Порядок сфер не важен.</p>
+      <div class="inv" id="inv">
+        <div class="lh-hud"><span>⏱ <b id="ivT">45</b></span><span>✔ <b id="ivS">0</b></span><span>🔥 серия <b id="ivC">0</b></span><span>Рекорд <b>${best("inv")}</b></span></div>
+        <div class="iv-target" id="ivTarget"></div>
+        <div class="iv-orbs" id="ivOrbs"><i></i><i></i><i></i></div>
+        <div class="iv-keys"><button type="button" class="ivk q" data-o="Q"><b>Q</b><small>Quas</small></button><button type="button" class="ivk w" data-o="W"><b>W</b><small>Wex</small></button><button type="button" class="ivk e" data-o="E"><b>E</b><small>Exort</small></button><button type="button" class="ivk r" data-o="R"><b>R</b><small>Invoke</small></button></div>
+        <label class="lh-hint"><input type="checkbox" id="ivHint" checked> Показывать рецепт</label>
+        <div class="gover" id="ivStart"><b class="gt px">ИНВОКЕР</b><span class="gs">45 секунд. Компьютер: клавиши Q W E и R.</span><span class="gs">${SPELLS.map(s => `${s.ic} ${s.n} — <b>${s.k.replace(/Q/g, "🔵").replace(/W/g, "🟣").replace(/E/g, "🟠")}</b>`).join("<br>")}</span><button type="button" class="btn btn-primary" id="ivGo">Начать</button></div>
+        <div class="gover" id="ivEnd" hidden></div>
+      </div>`);
+    box.closest(".sheet").classList.add("gsheet");
+    const $ = id => box.querySelector("#" + id);
+    let orbs = [], target = null, t = 45, score = 0, combo = 0, run = false, tm = 0, last = 0;
+    const OC = { Q: "#3aa8ff", W: "#b14cff", E: "#ff8a1f" };
+    function drawOrbs(){ $("ivOrbs").querySelectorAll("i").forEach((el, i) => { const o = orbs[i]; el.style.background = o ? `radial-gradient(circle at 35% 30%, #fff, ${OC[o]} 45%, #000 120%)` : ""; el.className = o ? "on" : ""; }); }
+    function next(){ let s; do { s = SPELLS[Math.random() * SPELLS.length | 0]; } while (target && s === target); target = s;
+      $("ivTarget").style.setProperty("--sc", s.c);
+      $("ivTarget").innerHTML = `<span class="iv-ic">${s.ic}</span><b>${s.n}</b><small>${$("ivHint").checked ? s.k.split("").map(o => `<i style="background:${OC[o]}"></i>`).join("") : "&nbsp;"}</small>`;
+      $("ivTarget").classList.remove("pop"); void $("ivTarget").offsetWidth; $("ivTarget").classList.add("pop"); }
+    function press(o){
+      if (!run) return; const b = box.querySelector(`.ivk[data-o="${o}"]`); if (b){ b.classList.remove("pr"); void b.offsetWidth; b.classList.add("pr"); }
+      if (o !== "R"){ orbs.push(o); if (orbs.length > 3) orbs.shift(); drawOrbs(); return; }
+      if (orbs.length === 3 && norm(orbs.join("")) === norm(target.k)){ score++; combo++; t += combo % 5 === 0 ? 3 : 0; flash("ok", combo % 5 === 0 ? `+3 сек! серия ${combo}` : "✔ " + target.n); next(); }
+      else { combo = 0; t -= 2; flash("bad", "✖ −2 сек"); }
+      $("ivS").textContent = score; $("ivC").textContent = combo;
+    }
+    function flash(cls, txt){ const f = document.createElement("span"); f.className = "ivflash " + cls; f.textContent = txt; $("inv").appendChild(f); setTimeout(() => f.remove(), 800); }
+    function loop(ts){ if (!box.isConnected){ run = false; return; } const dt = Math.min(.05, (ts - last) / 1000 || 0); last = ts;
+      if (run){ t -= dt; $("ivT").textContent = Math.max(0, Math.ceil(t)); if (t <= 0) return end(); tm = requestAnimationFrame(loop); } }
+    function go(){ orbs = []; drawOrbs(); t = 45; score = 0; combo = 0; $("ivS").textContent = 0; $("ivC").textContent = 0; $("ivStart").hidden = true; $("ivEnd").hidden = true; run = true; next(); last = performance.now(); tm = requestAnimationFrame(loop); }
+    function end(){ run = false; const b = best("inv"), rec = score > b; if (rec) setBest("inv", score);
+      const rank = score >= 30 ? "Арсенал-магнус 🧙" : score >= 20 ? "Мастер сфер" : score >= 10 ? "Ученик Квас" : "Нужно больше практики";
+      $("ivEnd").innerHTML = `<b class="gt px">${rec ? "НОВЫЙ РЕКОРД!" : "ВРЕМЯ ВЫШЛО"}</b><span class="gbig px">${score}</span><span class="gs">${rank}</span><div class="gbtns"><button type="button" class="btn btn-primary" id="ivAgain">Ещё раз</button></div>`;
+      $("ivEnd").hidden = false; $("ivAgain").onclick = go; if (score > 0) PROF.grant("quiz"); }
+    box.querySelectorAll(".ivk").forEach(b => b.addEventListener("pointerdown", e => { e.preventDefault(); press(b.dataset.o); }));
+    const kd = e => { const k = e.code.replace("Key", ""); if (["Q", "W", "E", "R"].includes(k)){ e.preventDefault(); if (!e.repeat) press(k); } else if ((e.code === "Space" || e.code === "Enter") && !run){ e.preventDefault(); go(); } };
+    document.addEventListener("keydown", kd);
+    $("ivGo").onclick = go; $("ivHint").onchange = () => { if (target){ const t0 = target; target = null; target = t0; $("ivTarget").querySelector("small").innerHTML = $("ivHint").checked ? t0.k.split("").map(o => `<i style="background:${OC[o]}"></i>`).join("") : "&nbsp;"; } };
+    modal._cleanup = () => { run = false; cancelAnimationFrame(tm); document.removeEventListener("keydown", kd); };
+  }
+  return { lasthit, invoker };
+})();
+
 /* ---------- вкладки ---------- */
 const TABS = ["1x6", "games", "soon"];
 let curTab = "1x6";
@@ -2755,7 +2927,7 @@ addEventListener("resize", () => { const a = document.querySelector('.tab[aria-s
   el.addEventListener("touchstart", e => { if (e.target.closest(".recent-row, .tt-topics, input, .pick")){ x0 = null; return; } const t = e.touches[0]; x0 = t.clientX; y0 = t.clientY; t0 = Date.now(); }, { passive: true });
   el.addEventListener("touchend", e => { if (x0 === null) return; const t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0; x0 = null;
     if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 2 && Date.now() - t0 < 600 && !document.querySelector(".modal:not([hidden])")){ const i = TABS.indexOf(curTab) + (dx < 0 ? 1 : -1); if (i >= 0 && i < TABS.length) setTab(TABS[i]); } }, { passive: true }); }
-document.querySelectorAll(".gcard").forEach(c => c.onclick = () => ({ arena: () => GAME.open(), quiz: () => quiz(), roll: () => roulette(), broll: () => buildRoulette(), feed: () => openFeed(), top: () => GAME.open("top") })[c.dataset.g]());
+document.querySelectorAll(".gcard").forEach(c => c.onclick = () => ({ arena: () => GAME.open(), quiz: () => quiz(), roll: () => roulette(), broll: () => buildRoulette(), feed: () => openFeed(), top: () => GAME.open("top"), lasthit: () => MINI.lasthit(), invoker: () => MINI.invoker() })[c.dataset.g]());
 { const h = (location.hash || "").slice(1); setTab(TABS.includes(h) ? h : "1x6", { instant: true, keepHash: true, noScroll: true }); }
 addEventListener("hashchange", () => { const h = (location.hash || "").slice(1); if (TABS.includes(h) && h !== curTab) setTab(h, { keepHash: true }); });
 /* ---------- меню (бургер) ---------- */
@@ -2779,7 +2951,7 @@ const ACTS = {
   search(){ goBuilds(); setTimeout(() => document.getElementById("q").focus({preventScroll: true}), 450); },
   fav(){ setFilter(true, false); goBuilds(); },
   arc(){ setFilter(false, true); goBuilds(); },
-  profile(){ PROF.open(); }, feed(){ openFeed(); }, roll(){ roulette(); }, broll(){ buildRoulette(); }, quiz(){ quiz(); }, game(){ GAME.open(); }
+  profile(){ PROF.open(); }, feed(){ openFeed(); }, roll(){ roulette(); }, broll(){ buildRoulette(); }, quiz(){ quiz(); }, game(){ GAME.open(); }, lasthit(){ MINI.lasthit(); }, invoker(){ MINI.invoker(); }
 };
 menu.querySelectorAll(".mi[data-act]").forEach(b => b.onclick = () => closeMenu(ACTS[b.dataset.act]));
 menu.querySelector(".tgmi").addEventListener("click", () => closeMenu());
