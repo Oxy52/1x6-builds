@@ -796,6 +796,18 @@
   #ivStart, #lhStart { overflow-y: auto; justify-content: safe center; }
   @media (max-width: 420px) { .lhs { width: 40px; height: 40px; } .lhhp { width: 50px; } .lh-side { gap: 6px; } }
 
+
+  /* ---------- рейтинг ---------- */
+  .rkchips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+  .rkc { border: 1px solid var(--line); background: var(--bg-soft); color: var(--muted); font: inherit; font-weight: 700; font-size: 14px; padding: 10px 16px; border-radius: 99px; cursor: pointer; transition: all .3s; }
+  .rkc[aria-pressed="true"] { color: var(--fg); background: linear-gradient(135deg, color-mix(in srgb, var(--t1) 35%, var(--bg-soft)), var(--bg-soft)); border-color: color-mix(in srgb, var(--t1) 60%, transparent); }
+  .rkme { margin: 14px 0; }
+  .rk-mine { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 14px 16px; border-radius: 16px; background: radial-gradient(120% 120% at 0% 0%, rgba(243,195,90,.18), transparent 60%), var(--bg-soft); border: 1px solid rgba(243,195,90,.35); }
+  .rk-mine span { font-size: 15px; } .rk-mine b { font-family: var(--display); font-size: 20px; color: var(--gold); } .rk-mine small { color: var(--muted); }
+  .glist.rk li { cursor: pointer; transition: transform .2s; } .glist.rk li:hover { transform: translateX(4px); }
+  .glist.rk .gn { display: grid; } .rk-sub { font-weight: 400; font-size: 12px; color: var(--muted); display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .medal { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 99px; color: var(--mc); background: color-mix(in srgb, var(--mc) 15%, transparent); border: 1px solid color-mix(in srgb, var(--mc) 45%, transparent); }
+  .medals { line-height: 1.9; }
   /* ---------- Дуэль ---------- */
   .gcard.big.duelc { background: radial-gradient(120% 140% at 100% 0%, rgba(123,92,255,.3), transparent 55%), radial-gradient(120% 120% at 0% 100%, rgba(232,86,74,.25), transparent 60%), #15131c; }
   .gcard.big.duelc b { font-family: var(--display); font-size: 22px; color: #fff; text-shadow: none; }
@@ -1033,6 +1045,7 @@
     <button type="button" class="tab" role="tab" data-tab="1x6" aria-selected="true"><span class="tab-ic">1×6</span><span class="tl">Dota 1x6</span><span class="ts">Сборки</span></button>
     <button type="button" class="tab" role="tab" data-tab="games" aria-selected="false"><span class="tab-ic">🎮</span><span class="tl">Мини-игры</span><span class="ts">Игры</span></button>
     <button type="button" class="tab" role="tab" data-tab="feed" aria-selected="false"><span class="tab-ic">💬</span><span>Лента</span></button>
+    <button type="button" class="tab" role="tab" data-tab="rating" aria-selected="false"><span class="tab-ic">🏆</span><span class="tl">Рейтинг</span><span class="ts">Топ</span></button>
     <button type="button" class="tab" role="tab" data-tab="soon" aria-selected="false"><span class="tab-ic">＋</span><span class="tl">Скоро</span></button>
     <i class="tab-ink" id="tabInk"></i>
   </div>
@@ -1092,6 +1105,15 @@
       <div id="feedCmp"></div>
       <div class="feedlist" id="feedList"></div>
       <button type="button" class="btn btn-ghost feedmore" id="feedMore" hidden>Загрузить ещё</button>
+    </section>
+  </div>
+  <div class="tabpane" data-pane="rating" role="tabpanel" hidden>
+    <section class="section first">
+      <div class="section-head"><h2>Рейтинг игроков</h2><p>MMR за онлайн-дуэли, рекорды Арены и уровни. Нажми на игрока — откроется профиль.</p></div>
+      <div class="rkchips"><button type="button" class="rkc" data-k="duel" aria-pressed="true">🃏 Дуэль · MMR</button><button type="button" class="rkc" data-k="arena" aria-pressed="false">⚔️ Арена</button><button type="button" class="rkc" data-k="level" aria-pressed="false">⭐ Уровень</button></div>
+      <div id="rkMe" class="rkme"></div>
+      <div id="rkList"></div>
+      <details class="drules"><summary>Медали MMR</summary><p class="medals">🪖 Рекрут · 🛡️ Страж 900 · ⚔️ Рыцарь 1000 · 🦸 Герой 1100 · 🌟 Легенда 1200 · 👑 Властелин 1300 · ✨ Божество 1400 · 🏆 Титан 1550</p><p>Старт — 1000 MMR. За победу +5…45 в зависимости от силы соперника. Засчитывается, только если оба игрока вошли в аккаунт; не больше 5 рейтинговых игр с одним соперником в день.</p></details>
     </section>
   </div>
   <div class="tabpane" data-pane="soon" role="tabpanel" hidden>
@@ -2201,10 +2223,12 @@ const PROF = (() => {
       sb.from("user_stats").select("xp,streak,best_streak").eq("user_id", uid).maybeSingle(),
       sb.from("runner_scores").select("best,games").eq("user_id", uid).maybeSingle()]);
     if (!pr){ toast(`<span class="tic">🤷</span><span><b>Профиль не найден</b></span>`, "", 2500); return; }
+    const dm = await duelMMR(uid);
     const q = fromRow(pr), xp = st ? st.xp : 0, lv = lvlOf(xp), mine = U && uid === U.id, favs = Array.isArray(pr.favs) ? pr.favs.slice(0, 12) : [];
     const box = shell(bnSrc(q.bn), `
       <div class="phead"><div class="pav${frameCls(q.frame)}"><img alt="" src="${esc(avSrc(q.av))}"></div><div class="pname"><h3>${esc(q.nick)} <em class="glv">${lv} ур.</em></h3>${q.st ? `<div class="pst">${esc(q.st)}</div>` : ""}</div></div>
-      <div class="pstats"><div class="pstat"><b>${lv}</b><span>уровень</span></div><div class="pstat"><b>${rs ? rs.best : 0}</b><span>рекорд арены</span></div><div class="pstat"><b>${st ? st.best_streak : 0}</b><span>лучшая серия</span></div></div>
+      <div class="pstats"><div class="pstat"><b>${lv}</b><span>уровень</span></div><div class="pstat"><b>${rs ? rs.best : 0}</b><span>рекорд арены</span></div><div class="pstat"><b>${dm ? dm.mmr : "—"}</b><span>MMR дуэлей</span></div></div>
+      ${dm && dm.wins + dm.losses > 0 ? `<div class="psec">${medalHTML(dm.mmr)} <small class="pnone">${dm.wins} побед · ${dm.losses} поражений</small></div>` : ""}
       ${favs.length ? `<div class="psec"><h4>Любимые герои</h4>${faces(favs)}</div>` : ""}
       ${mine ? `<div class="pacts"><button type="button" class="btn btn-ghost" id="upEdit">Редактировать профиль</button></div>` : ""}
       <div class="psec"><h4>Посты</h4><div id="upPosts"></div></div>`, "Профиль игрока");
@@ -2214,6 +2238,47 @@ const PROF = (() => {
     await loadPosts(list, sb.from("post_feed").select("*").eq("user_id", uid).is("reply_to", null).order("created_at", { ascending: false }).limit(30));
     if (!list.querySelector(".post")) list.innerHTML = `<div class="pnone">Постов пока нет</div>`;
   }
+
+  /* ---------- рейтинг ---------- */
+  const MEDALS = [[0, "Рекрут", "🪖", "#8b8f99"], [900, "Страж", "🛡️", "#7fb07f"], [1000, "Рыцарь", "⚔️", "#5aa8ff"], [1100, "Герой", "🦸", "#4fe8d8"], [1200, "Легенда", "🌟", "#f3c35a"], [1300, "Властелин", "👑", "#ff9a3d"], [1400, "Божество", "✨", "#c97bff"], [1550, "Титан", "🏆", "#ff4d6d"]];
+  const medal = mmr => { let m = MEDALS[0]; for (const x of MEDALS) if (mmr >= x[0]) m = x; return { name: m[1], ic: m[2], c: m[3] }; };
+  const medalHTML = mmr => { const m = medal(mmr); return `<span class="medal" style="--mc:${m.c}">${m.ic} ${m.name}</span>`; };
+  async function duelReport(mid, opp, winner){
+    if (!CLOUD || !U || !opp || !mid) return { status: "unrated" };
+    for (let i = 0; i < 6; i++){
+      const { data, error } = await sb.rpc("duel_report", { p_match: mid, p_opp: opp, p_winner: winner });
+      if (error) return { status: /function|schema cache|does not exist/i.test(error.message) ? "nosetup" : "error" };
+      if (data && data.status !== "pending") return data;
+      await new Promise(r => setTimeout(r, 2500));
+    }
+    return { status: "pending" };
+  }
+  let rkKind = "duel";
+  async function ratingOpen(kind){
+    rkKind = kind || rkKind;
+    const list = document.getElementById("rkList"), me = document.getElementById("rkMe"); if (!list) return;
+    document.querySelectorAll(".rkc").forEach(b => b.setAttribute("aria-pressed", b.dataset.k === rkKind));
+    if (!CLOUD){ list.innerHTML = `<div class="gempty">Рейтинг игроков работает на сайте <b>1x6-eta.vercel.app</b>.</div>`; me.innerHTML = ""; return; }
+    list.innerHTML = `<div class="feed-sk"></div><div class="feed-sk"></div><div class="feed-sk"></div>`;
+    const cfg = { duel: ["duel_top", "user_id,mmr,wins,losses,nick,avatar,frame", "mmr", r => `<b class="gp">${r.mmr}</b>`, r => `${medalHTML(r.mmr)} <small>✔ ${r.wins} · ✖ ${r.losses}</small>`],
+      arena: ["runner_top", "user_id,best,nick,avatar,frame,xp", "best", r => `<b class="gp">${r.best}</b>`, r => `<small>рекорд арены</small>`],
+      level: ["level_top", "user_id,xp,best_streak,nick,avatar,frame", "xp", r => `<b class="gp">${lvlOf(r.xp)} ур.</b>`, r => `<small>${r.xp} опыта · серия ${r.best_streak} 🔥</small>`] }[rkKind];
+    const { data, error } = await sb.from(cfg[0]).select(cfg[1]).order(cfg[2], { ascending: false }).limit(50);
+    if (error){ list.innerHTML = `<div class="gempty">${/relation|does not exist|schema cache/i.test(error.message) ? "Рейтинг ещё не настроен на сервере." : "Не удалось загрузить рейтинг."}</div>`; me.innerHTML = ""; return; }
+    const rows = data || [];
+    list.innerHTML = rows.length ? `<ol class="glist rk">${rows.map((r, i) => `<li class="${U && r.user_id === U.id ? "me" : ""}" data-user="${esc(r.user_id)}"><span class="gr">${i < 3 ? ["🥇","🥈","🥉"][i] : i + 1}</span><span class="ga${frameCls(r.frame)}"><img alt="" loading="lazy" src="${esc(avatarOf(r.avatar))}"></span><span class="gn">${esc(r.nick)}<span class="rk-sub">${cfg[4](r)}</span></span>${cfg[3](r)}</li>`).join("")}</ol>`
+      : `<div class="gempty">${rkKind === "duel" ? "Пока никто не сыграл рейтинговую дуэль. Сыграй онлайн с другом!" : "Пока пусто — будь первым!"}</div>`;
+    list.querySelectorAll("li[data-user]").forEach(li => li.onclick = () => openUser(li.dataset.user));
+    // моё место
+    me.innerHTML = "";
+    if (!U){ me.innerHTML = `<button type="button" class="btn btn-ghost" id="rkIn">Войди, чтобы попасть в рейтинг</button>`; me.querySelector("#rkIn").onclick = () => open(); return; }
+    let val = null, tbl = { duel: ["duel_ratings", "mmr", "user_id"], arena: ["runner_scores", "best", "user_id"], level: ["user_stats", "xp", "user_id"] }[rkKind];
+    try { const { data: d } = await sb.from(tbl[0]).select(tbl[1]).eq(tbl[2], U.id).maybeSingle(); val = d ? d[tbl[1]] : null; } catch(e) {}
+    if (val == null){ me.innerHTML = `<div class="rk-mine"><span>Тебя пока нет в этом рейтинге</span><small>${rkKind === "duel" ? "Сыграй онлайн-дуэль с другом" : rkKind === "arena" ? "Сыграй в Арену" : "Заходи каждый день и играй"}</small></div>`; return; }
+    let place = "—"; try { const { count } = await sb.from(tbl[0]).select(tbl[2], { count: "exact", head: true }).gt(tbl[1], val); place = (count || 0) + 1; } catch(e) {}
+    me.innerHTML = `<div class="rk-mine"><span>Твоё место: <b>#${place}</b></span><small>${rkKind === "duel" ? `${medalHTML(val)} · ${val} MMR` : rkKind === "arena" ? `рекорд ${val}` : `${lvlOf(val)} уровень · ${val} опыта`}</small></div>`;
+  }
+  async function duelMMR(uid){ try { const { data } = await sb.from("duel_ratings").select("mmr,wins,losses").eq("user_id", uid).maybeSingle(); return data; } catch(e) { return null; } }
 
   topbar();
   if (CLOUD){
@@ -2248,7 +2313,7 @@ const PROF = (() => {
       return { rows: data || [] };
     } catch(e) { return { error: "Нет связи с сервером." }; }
   }
-  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf, feedOpen, feedMore, openUser, me: () => P ? P.nick : null, rt: () => sb, loadPlayers: q => { clearTimeout(plT); plT = setTimeout(() => loadPlayers(q), 250); } };
+  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf, feedOpen, feedMore, openUser, me: () => P ? P.nick : null, rt: () => sb, duelReport, ratingOpen, medalHTML, loadPlayers: q => { clearTimeout(plT); plT = setTimeout(() => loadPlayers(q), 250); } };
 })();
 window.__favSync = () => PROF.syncFavs();
 
@@ -3492,8 +3557,13 @@ const DUEL = (() => {
     // конец партии
     function checkEnd(){ if (!s || s.winner == null || ended) return; ended = true; clearInterval(timerI);
       const win = cfg.mode === "local" ? null : s.winner === seat;
+      let ratedP = null;
+      if (cfg.mode === "online" && s.uids && s.uids[0] && s.uids[1] && s.winner >= 0){ const meU = PROF.user(); if (meU && s.uids[seat] === meU.id) ratedP = PROF.duelReport(s.mid, s.uids[1 - seat], s.uids[s.winner]); }
       if (win && cfg.mode === "bot") W.add("bot"); if (win && cfg.mode === "online") W.add("online"); if (win) PROF.grant("run");
-      setTimeout(() => cover(cfg.mode === "local" ? `🏆 Победил <b>${esc(s.p[s.winner].name)}</b>` : win ? "🏆 <b>ПОБЕДА!</b>" : "💀 <b>Поражение</b>", cfg.mode === "online" ? "Сыграть ещё — создайте новую комнату" : "Ещё партию?", () => { if (cfg.mode !== "online") start(cfg); }, cfg.mode === "online" ? "Закрыть" : "Ещё раз"), 900); }
+      setTimeout(() => { cover(cfg.mode === "local" ? `🏆 Победил <b>${esc(s.p[s.winner].name)}</b>` : win ? "🏆 <b>ПОБЕДА!</b>" : "💀 <b>Поражение</b>", cfg.mode === "online" ? (ratedP ? "Считаем MMR…" : "Нерейтинговая игра — для MMR оба должны войти в аккаунт") : "Ещё партию?", () => { if (cfg.mode !== "online") start(cfg); }, cfg.mode === "online" ? "Закрыть" : "Ещё раз");
+        if (ratedP) ratedP.then(r => { const sm = box.querySelector(".dl-cv small"); if (!sm) return;
+          sm.innerHTML = r.status === "done" ? `<b style="font-size:20px;color:${r.delta > 0 ? "#5cf07f" : "#ff6b6b"}">${r.delta > 0 ? "+" : ""}${r.delta} MMR</b><br>${PROF.medalHTML(r.mmr)} · ${r.mmr} MMR`
+            : r.status === "pending" ? "Ждём подтверждения результата от соперника — MMR начислится позже" : r.status === "limit" ? "Лимит рейтинговых игр с этим соперником на сегодня" : r.status === "dispute" ? "Результаты не совпали — игра не засчитана" : r.status === "nosetup" ? "Рейтинг ещё не настроен на сервере" : "Игра не засчитана в рейтинг"; }); }, 900); }
     function cover(title, sub, onOk, okText){ const c = $("dlCover"); c.hidden = false; c.innerHTML = `<div class="dl-cv"><span>${title}</span><small>${sub}</small><button type="button" class="btn btn-primary">${okText || "Готов"}</button></div>`;
       c.querySelector("button").onclick = () => { c.hidden = true; if (onOk) onOk(); else if (cfg.mode === "online" && s && s.winner != null) closeModal(); render(); }; }
     // ---------- онлайн ----------
@@ -3504,7 +3574,8 @@ const DUEL = (() => {
       ch = sb.channel("duel-" + cfg.code, { config: { broadcast: { self: false, ack: false } } });
       ch.on("broadcast", { event: "m" }, ({ payload: m }) => { if (!alive || !m) return; lastMsg = Date.now();
         if (cfg.host){
-          if (m.k === "join"){ if (!s){ s = E.newGame([myName, String(m.name || "Гость").slice(0, 20)], (Math.random() * 2 ** 31) | 0); waitBox(""); setState(s); }
+          if (m.k === "join"){ if (!s){ s = E.newGame([myName, String(m.name || "Гость").slice(0, 20)], (Math.random() * 2 ** 31) | 0); const me = PROF.user();
+              s.uids = [me ? me.id : null, typeof m.uid === "string" && /^[0-9a-f-]{36}$/.test(m.uid) ? m.uid : null]; s.mid = cfg.code + "-" + Date.now().toString(36); waitBox(""); setState(s); }
             push(); }
           if (m.k === "act" && s){ if (s.turn === 1){ const err = E.act(s, 1, m.a); if (!err){ push(); setState(s); } else push(); } }
           if (m.k === "sync" && s) push();
@@ -3516,7 +3587,7 @@ const DUEL = (() => {
       ch.subscribe(st => { if (st !== "SUBSCRIBED") return;
         if (cfg.host) waitBox(`<div class="dw"><b>Комната создана</b><span class="dw-code">${cfg.code}</span><small>Скинь этот код другу. Он открывает «Дуэль» → «Онлайн с другом» → вводит код.</small><button type="button" class="btn btn-ghost" id="dwCopy">Скопировать код</button><i class="dw-spin"></i><small>Ждём соперника…</small></div>`);
         else { waitBox(`<div class="dw"><b>Подключаемся к ${cfg.code}…</b><i class="dw-spin"></i><small>Если долго — проверь код или попроси друга создать комнату заново.</small></div>`);
-          const j = () => { if (!alive || s) return; ch.send({ type: "broadcast", event: "m", payload: { k: "join", name: myName } }); setTimeout(j, 2000); }; j(); }
+          const j = () => { if (!alive || s) return; ch.send({ type: "broadcast", event: "m", payload: { k: "join", name: myName, uid: (PROF.user() || {}).id || null } }); setTimeout(j, 2000); }; j(); }
         const cp = box.querySelector("#dwCopy"); if (cp) cp.onclick = () => { try { navigator.clipboard.writeText(cfg.code); cp.textContent = "Скопировано ✓"; } catch(e) {} };
       });
       timerI = setInterval(() => { if (!s || s.winner != null) return; const r = Math.max(0, Math.ceil((deadline - Date.now()) / 1000)); $("dlTimer").textContent = r <= 30 ? `⏳ ${r}` : "";
@@ -3531,7 +3602,7 @@ const DUEL = (() => {
 })();
 
 /* ---------- вкладки ---------- */
-const TABS = ["1x6", "games", "feed", "soon"];
+const TABS = ["1x6", "games", "feed", "rating", "soon"];
 let curTab = "1x6";
 function inkTo(btn, instant){ const ink = document.getElementById("tabInk"), bar = btn.parentElement; if (!ink) return;
   if (instant){ ink.style.transition = "none"; requestAnimationFrame(() => ink.style.transition = ""); }
@@ -3543,6 +3614,7 @@ function setTab(name, opts){
   document.querySelectorAll(".tabpane").forEach(p => { const on = p.dataset.pane === name; p.hidden = !on; p.classList.remove("in-l", "in-r");
     if (on && prev !== name && !opts.instant && !REDUCED){ void p.offsetWidth; p.classList.add(dir > 0 ? "in-l" : "in-r"); } });
   if (name === "feed") PROF.feedOpen();
+  if (name === "rating") PROF.ratingOpen();
   if (!opts.keepHash){ try { history.replaceState(null, "", name === "1x6" ? location.pathname + location.search : "#" + name); } catch(e) {} }
   if (prev !== name && !opts.noScroll){ const tb = document.querySelector(".tabs"); const y = tb.getBoundingClientRect().top + scrollY - 70; if (scrollY > y) window.scrollTo({ top: y, behavior: REDUCED ? "auto" : "smooth" }); }
 }
@@ -3554,6 +3626,7 @@ addEventListener("resize", () => { const a = document.querySelector('.tab[aria-s
     if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 2 && Date.now() - t0 < 600 && !document.querySelector(".modal:not([hidden])")){ const i = TABS.indexOf(curTab) + (dx < 0 ? 1 : -1); if (i >= 0 && i < TABS.length) setTab(TABS[i]); } }, { passive: true }); }
 document.querySelectorAll(".gcard").forEach(c => c.onclick = () => ({ arena: () => GAME.open(), quiz: () => quiz(), roll: () => roulette(), broll: () => buildRoulette(), feed: () => openFeed(), top: () => GAME.open("top"), lasthit: () => MINI.lasthit(), duel: () => DUEL.open(), invoker: () => MINI.invoker() })[c.dataset.g]());
 document.getElementById("feedMore").onclick = () => PROF.feedMore();
+document.querySelectorAll(".rkc").forEach(b => b.onclick = () => PROF.ratingOpen(b.dataset.k));
 document.getElementById("plQ").addEventListener("input", e => PROF.loadPlayers(e.target.value));
 { const h = (location.hash || "").slice(1); setTab(TABS.includes(h) ? h : "1x6", { instant: true, keepHash: true, noScroll: true }); }
 addEventListener("hashchange", () => { const h = (location.hash || "").slice(1); if (TABS.includes(h) && h !== curTab) setTab(h, { keepHash: true }); });
