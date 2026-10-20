@@ -464,6 +464,7 @@
   .ob.telegram { background: #229ed9; color: #fff; border-color: transparent; opacity: .55; cursor: not-allowed; }
   .ob em { position: absolute; right: 12px; font-style: normal; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 99px; background: rgba(0,0,0,.25); }
   .ob:disabled { cursor: default; }
+  .ob.off { opacity: .45; cursor: not-allowed; }
   .or { display: flex; align-items: center; gap: 12px; margin: 18px 0; color: var(--muted-2); font-size: 12.5px; }
   .or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--line); }
   .aform { display: grid; gap: 10px; text-align: left; }
@@ -1175,6 +1176,13 @@ const PROF = (() => {
     discord: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M19.6 5.3A16.5 16.5 0 0 0 15.5 4l-.5 1a15.4 15.4 0 0 0-6 0l-.5-1a16.5 16.5 0 0 0-4.1 1.3C1.8 9.2 1.1 13 1.4 16.7a16.6 16.6 0 0 0 5 2.5l1.1-1.7a10.8 10.8 0 0 1-1.7-.8l.4-.3a11.8 11.8 0 0 0 11.6 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.7a16.5 16.5 0 0 0 5-2.5c.4-4.3-.7-8-3-11.4zM8.7 14.5c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm6.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></svg>',
     telegram: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M21.9 4.3 18.8 19c-.2 1-.8 1.3-1.7.8l-4.7-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.8 8.8-7.9c.4-.3-.1-.5-.6-.2L6.8 13l-4.7-1.5c-1-.3-1-1 .2-1.5L20.6 3c.9-.3 1.6.2 1.3 1.3z"/></svg>'
   };
+  let PROV = null;
+  function providers(){
+    if (PROV) return PROV;
+    PROV = fetch(window.SB_CONF.url + "/auth/v1/settings", { headers: { apikey: window.SB_CONF.key } })
+      .then(r => r.ok ? r.json() : null).then(j => (j && j.external) || null).catch(() => null);
+    return PROV;
+  }
   const ERR = m => {
     m = String(m || "");
     if (/Invalid login credentials/i.test(m)) return "Неверная почта или пароль.";
@@ -1212,10 +1220,13 @@ const PROF = (() => {
       </div>`, "Вход");
     const msg = box.querySelector("#aMsg"), ok = box.querySelector(".aok");
     const say = (t, good) => { msg.hidden = false; msg.textContent = t; msg.classList.toggle("good", !!good); };
-    const busy = on => { ok.disabled = on; box.querySelectorAll(".ob:not(.telegram)").forEach(b => b.disabled = on); };
+    const busy = on => { ok.disabled = on; box.querySelectorAll(".ob:not(.telegram):not(.off)").forEach(b => b.disabled = on); };
     box.querySelectorAll(".alinks [data-m]").forEach(b => b.onclick = () => auth(b.dataset.m));
+    providers().then(ex => { if (!ex) return; box.querySelectorAll(".ob[data-p]").forEach(b => { if (!ex[b.dataset.p]){ b.disabled = true; b.classList.add("off"); if (!b.querySelector("em")) b.insertAdjacentHTML("beforeend", "<em>скоро</em>"); } }); });
     const eye = box.querySelector("#aEye"); if (eye) eye.onclick = () => { const i = box.querySelector("#aPass"); i.type = i.type === "password" ? "text" : "password"; };
     box.querySelectorAll(".ob[data-p]").forEach(b => b.onclick = async () => {
+      if (b.classList.contains("off")) return;
+      const ex = await providers(); if (ex && !ex[b.dataset.p]){ say("Этот способ входа ещё не включён на сайте."); return; }
       busy(true); say("Перенаправляем…", true);
       try { sessionStorage.setItem("ub-auth-pending", "1"); } catch(e) {}
       const { error } = await sb.auth.signInWithOAuth({ provider: b.dataset.p, options: { redirectTo: location.origin + location.pathname } });
