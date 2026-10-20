@@ -508,6 +508,66 @@
   .cw { animation-name: cardUp !important; animation-duration: .9s !important; animation-timing-function: cubic-bezier(.22,.61,.36,1) !important; }
   .heroart img, .thf img, .pfaces img, .pick img, .rc img, .opt img, .glist img, .rt img, .pav img, .pcover img, .gface img { transition: opacity .8s ease, transform 1s cubic-bezier(.22,.61,.36,1); }
   @media (prefers-reduced-motion: reduce) { html.menu-on .wrap { transform: none; opacity: 1; filter: none; } .modal .sheet, .stage, .banner .heroart img { animation: none !important; } }
+
+  /* ---------- уровни, рамки, достижения, оценки, всплывашки ---------- */
+  .pbtn.has { position: relative; overflow: visible; }
+  .pbtn.has img { border-radius: 50%; }
+  .lvb { position: absolute; right: -5px; bottom: -5px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 99px; display: grid; place-items: center; font-size: 11px; font-weight: 800; color: #1a0d05; background: linear-gradient(135deg, #ffe7a1, #f3c35a); border: 2px solid var(--bg); font-variant-numeric: tabular-nums; }
+  @property --fa { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+  @keyframes frSpin { to { --fa: 360deg; } }
+  .fr { border: 3px solid transparent !important; }
+  .fr-bronze { background: linear-gradient(var(--panel), var(--panel)) padding-box, linear-gradient(135deg, #f0b27a, #8a4b20) border-box !important; }
+  .fr-silver { background: linear-gradient(var(--panel), var(--panel)) padding-box, linear-gradient(135deg, #ffffff, #8d97a6, #e9eef5) border-box !important; box-shadow: 0 0 12px rgba(200,215,235,.35) !important; }
+  .fr-gold { background: linear-gradient(var(--panel), var(--panel)) padding-box, linear-gradient(135deg, #fff1b8, #f3c35a, #b8780f) border-box !important; box-shadow: 0 0 16px rgba(243,195,90,.5) !important; }
+  .fr-fire { background: linear-gradient(var(--panel), var(--panel)) padding-box, conic-gradient(from var(--fa), #ff3b1f, #ffb02e, #ff3b1f, #ffd36b, #ff3b1f) border-box !important; animation: frSpin 2.5s linear infinite; box-shadow: 0 0 16px rgba(255,90,30,.55) !important; }
+  .fr-arcana { background: linear-gradient(var(--panel), var(--panel)) padding-box, conic-gradient(from var(--fa), #7b5cff, #25f4ee, #f3c35a, #e8564a, #7b5cff) border-box !important; animation: frSpin 4s linear infinite; box-shadow: 0 0 20px rgba(123,92,255,.6) !important; }
+  .plvl { margin: 18px 22px 0; padding: 14px; border-radius: 16px; background: var(--bg-soft); border: 1px solid var(--line); }
+  .plvl-top { display: flex; align-items: center; gap: 12px; }
+  .plvl-top b { display: block; font-family: var(--display); font-size: 16px; }
+  .plvl-top small { color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+  .lvbig { width: 44px; height: 44px; flex: none; border-radius: 12px; display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 20px; color: #1a0d05; background: linear-gradient(135deg, #ffe7a1, #f3c35a 50%, #c98a1c); }
+  .pstreak { margin-left: auto; font-weight: 800; font-size: 15px; padding: 6px 10px; border-radius: 99px; background: rgba(255,120,40,.14); color: #ffb37a; }
+  .xpbar { height: 8px; border-radius: 99px; background: rgba(255,255,255,.08); margin-top: 12px; overflow: hidden; }
+  .xpbar i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #f3c35a, var(--t1)); transition: width 1s cubic-bezier(.22,.61,.36,1); }
+  .achs { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
+  .ach { padding: 10px 12px; border-radius: 12px; background: var(--bg-soft); border: 1px solid var(--line); opacity: .5; }
+  .ach.on { opacity: 1; border-color: rgba(243,195,90,.45); background: linear-gradient(135deg, rgba(243,195,90,.1), var(--bg-soft)); }
+  .ach .ai { font-size: 20px; display: block; }
+  .ach b { display: block; font-size: 13.5px; margin-top: 4px; }
+  .ach small { color: var(--muted); font-size: 11.5px; line-height: 1.3; display: block; }
+  .frames { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 4px 2px 6px; }
+  .frames::-webkit-scrollbar { display: none; }
+  .frames button { flex: none; width: 92px; padding: 10px 6px; border-radius: 14px; border: 2px solid transparent; background: var(--bg-soft); color: var(--fg); font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .frames button[aria-pressed="true"] { border-color: var(--t1); }
+  .frames button:disabled { opacity: .45; cursor: not-allowed; }
+  .frames b { font-size: 12.5px; } .frames small { font-size: 10.5px; color: var(--muted); text-align: center; line-height: 1.2; }
+  .fprev { width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 3px solid rgba(255,255,255,.1); display: block; }
+  .fprev img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
+  .fr img { border-radius: 50%; }
+  .glv { font-style: normal; font-size: 11px; font-weight: 700; color: var(--gold); margin-left: 4px; }
+  .perks { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: -6px 0 18px; }
+  .perks span { font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 99px; background: rgba(255,255,255,.06); border: 1px solid var(--line); }
+  .votes { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 14px 20px 0; padding: 12px 14px; border-radius: 14px; background: var(--bg-soft); border: 1px solid var(--line); }
+  .votes .vq { font-weight: 700; font-size: 14px; margin-right: auto; }
+  .vb { border: 1px solid var(--line); background: var(--panel); color: var(--fg); font: inherit; font-size: 15px; padding: 7px 12px; border-radius: 99px; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; transition: background .2s, border-color .2s, transform .15s; }
+  .vb b { font-size: 13px; font-variant-numeric: tabular-nums; }
+  .vb.up[aria-pressed="true"] { background: rgba(80,200,120,.18); border-color: rgba(80,200,120,.6); }
+  .vb.down[aria-pressed="true"] { background: rgba(232,86,74,.18); border-color: rgba(232,86,74,.6); }
+  .vb.pop { animation: pop .35s ease; }
+  .vpct { width: 100%; font-size: 12px; color: var(--muted); }
+  .toasts { position: fixed; left: 12px; right: 12px; top: max(70px, calc(env(safe-area-inset-top, 0px) + 64px)); z-index: 90; display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none; }
+  .toast { pointer-events: auto; max-width: 420px; width: 100%; display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border-radius: 16px; background: rgba(22,22,28,.97); border: 1px solid rgba(255,255,255,.1); box-shadow: 0 16px 44px rgba(0,0,0,.55); opacity: 0; transform: translateY(-16px) scale(.97); transition: opacity .5s ease, transform .6s cubic-bezier(.22,.61,.36,1); }
+  .toast.show { opacity: 1; transform: none; }
+  .toast .tic { font-size: 22px; line-height: 1.2; flex: none; }
+  .toast b { display: block; font-size: 14.5px; }
+  .toast small { display: block; color: var(--muted); font-size: 12.5px; margin-top: 2px; line-height: 1.4; }
+  .toast.xp { max-width: 200px; padding: 8px 14px; align-items: center; } .toast.xp .tic { font-size: 16px; }
+  .toast.lvl { border-color: rgba(243,195,90,.55); box-shadow: 0 0 30px rgba(243,195,90,.3), 0 16px 44px rgba(0,0,0,.55); }
+  .toast.gift { border-color: rgba(255,140,60,.5); }
+  .toast.nudge { border-color: color-mix(in srgb, var(--t1) 50%, transparent); }
+  .tbtn { display: flex; gap: 8px; margin-top: 10px; } .tbtn .btn { padding: 9px 16px; font-size: 13.5px; }
+  .tperks { display: block; font-size: 11.5px; color: var(--muted-2); margin-top: 8px; }
+  @media (max-width: 600px) { .plvl { margin: 16px 16px 0; } .votes { margin: 14px 16px 0; } }
   /* ---------- предупреждение для телефонов ---------- */
   .mwarn { position: fixed; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom, 0px)); z-index: 65; max-width: 460px; margin: 0 auto;
     display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; padding: 14px 14px 12px; border-radius: 18px; background: rgba(20,20,26,.97); border: 1px solid rgba(255,255,255,.1);
@@ -865,7 +925,8 @@ let FAV = new Set();
 try { FAV = new Set(JSON.parse(localStorage.getItem("ub-fav") || "[]")); } catch(e) {}
 function saveFav(){ try { localStorage.setItem("ub-fav", JSON.stringify([...FAV])); } catch(e) {} updFavN(); if (window.__favSync) window.__favSync(); }
 function updFavN(){ const n = document.getElementById("favN"); if (n) n.textContent = FAV.size ? `(${FAV.size})` : ""; const m = document.getElementById("menuFavN"); if (m) m.textContent = FAV.size || ""; }
-function toggleFav(slug, btn){ FAV.has(slug) ? FAV.delete(slug) : FAV.add(slug); saveFav();
+function toggleFav(slug, btn){ const adding = !FAV.has(slug); FAV.has(slug) ? FAV.delete(slug) : FAV.add(slug); saveFav();
+  if (adding && typeof PROF !== "undefined"){ PROF.grant("fav"); if (FAV.size >= 3) PROF.nudge("fav"); }
   document.querySelectorAll(`.fav[data-s="${slug}"]`).forEach(b => { b.setAttribute("aria-pressed", FAV.has(slug)); b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop"); });
   if (favOnly && !btn.classList.contains("mfav")) render(); }
 let LIST = HEROES;
@@ -1023,7 +1084,8 @@ function renderVariants(h, startK){
             ? `<div class="slot it" style="background-position:${(j/7*100).toFixed(3)}% ${(i*108/434*100).toFixed(3)}%"></div>`
             : `<div class="slot none" aria-label="Пусто"></div>`).join("")}</div>
         </div>`).join("")}</div>`;
-    box.innerHTML = html;
+    box.innerHTML = html + (b && !b.e ? `<div class="votes" hidden></div>` : "");
+    PROF.mountVotes(box.querySelector(".votes"), h.slug, k);
     const st = box.querySelector(".stages");
     if (st){
       st.querySelectorAll(".stage").forEach(sg => sg.querySelectorAll(".slot").forEach((sl, j) => sl.style.setProperty("--j", j)));
@@ -1218,7 +1280,7 @@ function quiz(){
     box.classList.add("done"); QS.total++;
     const ok = o.dataset.s === ans.slug;
     box.querySelector(`[data-s="${ans.slug}"]`).classList.add("ok");
-    if (ok){ QS.score++; QS.streak++; if (QS.streak > QS.best){ QS.best = QS.streak; try { localStorage.setItem("ub-best", QS.best); } catch(e) {} } }
+    if (ok){ PROF.grant("quiz"); if (QS.streak + 1 === 3) PROF.nudge("quiz"); QS.score++; QS.streak++; if (QS.streak > QS.best){ QS.best = QS.streak; try { localStorage.setItem("ub-best", QS.best); } catch(e) {} } }
     else { o.classList.add("bad"); QS.streak = 0; }
     msg.innerHTML = `<p style="color:${ok ? '#4ade80' : '#f87171'}">${ok ? 'Верно!' : 'Мимо — это ' + ans.en + ' (' + ans.ru + ')'}</p>
       <div class="acts" style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-ghost" id="qopen">Открыть сборку</button><button class="btn btn-primary" id="qnext">Следующий</button></div>`;
@@ -1283,17 +1345,17 @@ const PROF = (() => {
   const enc = o => !o ? "" : o.t === "grad" ? "grad" : `${o.t === "img" ? "url" : o.t}:${o.v}`;
   const dec = s => { if (!s) return null; if (s === "grad") return { t: "grad", v: "" }; const i = s.indexOf(":"); const t = s.slice(0, i), v = s.slice(i + 1);
     if (t === "url" && !/^https:\/\//.test(v)) return null; return { t, v }; };
-  const fromRow = r => ({ nick: r.nick, st: r.status || "", av: dec(r.avatar) || { t: "hero", v: "pudge" }, bn: dec(r.banner) || { t: "grad", v: "" } });
+  const fromRow = r => ({ nick: r.nick, st: r.status || "", av: dec(r.avatar) || { t: "hero", v: "pudge" }, bn: dec(r.banner) || { t: "grad", v: "" }, frame: r.frame || "" });
   function seen(){ try { return JSON.parse(localStorage.getItem("ub-seen") || "[]"); } catch(e) { return []; } }
   const provName = u => { if (u && u.user_metadata && u.user_metadata.provider === "telegram") return "Telegram"; const p = u && u.app_metadata && u.app_metadata.provider; return p === "google" ? "Google" : p === "discord" ? "Discord" : p === "email" ? "почта" : p || ""; };
 
   /* ---------- верхняя панель и меню ---------- */
   function topbar(){
     const b = document.getElementById("pBtn"), ma = document.getElementById("mpAv"), mn = document.getElementById("mpName");
-    if (P){ b.classList.add("has"); b.innerHTML = `<img alt="" src="${esc(avSrc(P.av))}">`; b.setAttribute("aria-label", `Профиль ${P.nick}`);
+    if (P){ b.className = "pbtn has" + frameCls(P.frame); b.innerHTML = `<img alt="" src="${esc(avSrc(P.av))}">${CLOUD && ST ? `<span class="lvb">${lvlOf(ST.xp)}</span>` : ""}`; b.setAttribute("aria-label", `Профиль ${P.nick}`);
       ma.innerHTML = `<img alt="" src="${esc(avSrc(P.av))}">`; mn.textContent = P.nick; }
-    else if (CLOUD && U){ b.classList.remove("has"); b.innerHTML = "<span>Профиль</span>"; b.setAttribute("aria-label", "Заполнить профиль"); ma.textContent = "👤"; mn.textContent = "Заполнить профиль"; }
-    else { b.classList.remove("has"); b.innerHTML = "<span>Войти</span>"; b.setAttribute("aria-label", "Войти"); ma.textContent = "👤"; mn.textContent = CLOUD ? "Войти" : "Создать профиль"; }
+    else if (CLOUD && U){ b.className = "pbtn"; b.innerHTML = "<span>Профиль</span>"; b.setAttribute("aria-label", "Заполнить профиль"); ma.textContent = "👤"; mn.textContent = "Заполнить профиль"; }
+    else { b.className = "pbtn"; b.innerHTML = "<span>Войти</span>"; b.setAttribute("aria-label", "Войти"); ma.textContent = "👤"; mn.textContent = CLOUD ? "Войти" : "Создать профиль"; }
   }
   function shell(cover, body, label){
     modal.innerHTML = `<div class="sheet prof" role="dialog" aria-modal="true" aria-label="${label || "Профиль"}"><div class="pcover${cover ? "" : " plain"}">${cover ? `<img alt="" src="${esc(cover)}">` : ""}<button class="close" aria-label="Закрыть">✕</button></div>${body}</div>`;
@@ -1343,7 +1405,7 @@ const PROF = (() => {
       <div class="auth">
         <div class="auth-logo"><span class="mark">1×6</span></div>
         <h3>${mode === "up" ? "Регистрация" : mode === "reset" ? "Восстановление пароля" : "Вход в 1x6 Билды"}</h3>
-        <p class="auth-sub">${mode === "reset" ? "Пришлём ссылку для нового пароля на почту." : "Профиль, аватарка и избранное сохранятся в аккаунте и будут на всех устройствах."}</p>
+        <p class="auth-sub">${mode === "reset" ? "Пришлём ссылку для нового пароля на почту." : "Профиль, аватарка и избранное сохранятся в аккаунте и будут на всех устройствах."}</p>${mode === "reset" ? "" : `<div class="perks"><span>🎁 Бонус каждый день</span><span>⭐ Уровни и рамки</span><span>🏆 Топ игроков</span><span>👍 Оценки билдов</span></div>`}<p hidden>${""}</p>
         ${mode === "reset" ? "" : `<div class="oauth">
           <button type="button" class="ob google" data-p="google">${IC.google}<span>Войти через Google</span></button>
           <button type="button" class="ob discord" data-p="discord">${IC.discord}<span>Войти через Discord</span></button>
@@ -1440,15 +1502,18 @@ const PROF = (() => {
     let best = 0; try { best = +localStorage.getItem("ub-best") || 0; } catch(e) {}
     const fav = [...FAV], rec = (typeof RECENT !== "undefined" ? RECENT : []).slice(0, 8);
     const box = shell(bnSrc(P.bn), `
-      <div class="phead"><div class="pav"><img alt="" src="${esc(avSrc(P.av))}"></div><div class="pname"><h3>${esc(P.nick)}</h3>${P.st ? `<div class="pst">${esc(P.st)}</div>` : ""}${CLOUD && U ? `<div class="pvia">Вход: ${esc(provName(U))}${U.email && !/@1x6-eta\.vercel\.app$/.test(U.email) ? " · " + esc(U.email) : (U.user_metadata && U.user_metadata.user_name ? " · @" + esc(U.user_metadata.user_name) : "")}</div>` : ""}</div></div>
+      <div class="phead"><div class="pav${frameCls(P.frame)}"><img alt="" src="${esc(avSrc(P.av))}"></div><div class="pname"><h3>${esc(P.nick)}</h3>${P.st ? `<div class="pst">${esc(P.st)}</div>` : ""}${CLOUD && U ? `<div class="pvia">Вход: ${esc(provName(U))}${U.email && !/@1x6-eta\.vercel\.app$/.test(U.email) ? " · " + esc(U.email) : (U.user_metadata && U.user_metadata.user_name ? " · @" + esc(U.user_metadata.user_name) : "")}</div>` : ""}</div></div>
       <div class="pstats"><div class="pstat"><b>${fav.length}</b><span>в избранном</span></div><div class="pstat"><b>${seen().length}</b><span>героев изучено</span></div><div class="pstat"><b>${best}</b><span>рекорд в квизе</span></div></div>
+      ${CLOUD && U ? lvlBlock() : ""}
       <div class="psec"><h4>Избранные герои</h4>${faces(fav) || `<div class="pnone">Пока пусто — жми ★ на карточке героя.</div>`}</div>
+      ${CLOUD && U ? `<div class="psec" id="pAch"><h4>Достижения</h4><div class="pnone">Загружаем…</div></div>` : ""}
       ${rec.length ? `<div class="psec"><h4>Недавно смотрел</h4>${faces(rec)}</div>` : ""}
       <div class="pacts"><button type="button" class="btn btn-primary" id="pEdit">Редактировать</button><button type="button" class="btn btn-danger" id="pOut">Выйти</button></div>
       ${CLOUD ? "" : `<p class="pnote">Профиль сохранён только на этом устройстве.</p>`}
       <div id="pConf"></div>`);
     box.querySelectorAll(".pfaces button").forEach(b => b.onclick = () => openHero(H(b.dataset.s)));
     box.querySelector("#pEdit").onclick = () => edit(false);
+    if (CLOUD && U) fillAch(box);
     box.querySelector("#pOut").onclick = () => {
       if (CLOUD){ sb.auth.signOut().finally(() => { U = null; P = null; topbar(); closeModal(); }); return; }
       box.querySelector("#pConf").innerHTML = `<div class="confirm">Выйти и удалить профиль с этого устройства? Избранное останется.<div><button type="button" class="btn btn-danger" id="pYes">Да, выйти</button><button type="button" class="btn btn-ghost" id="pNo">Отмена</button></div></div>`;
@@ -1485,7 +1550,7 @@ const PROF = (() => {
     const arcs = Object.keys(ARCANA);
     const lb = t => `<span class="lb">${t}</span>`;
     const box = shell(bnSrc(d.bn), `
-      <div class="phead"><div class="pav" id="fAvPrev"><img alt="" src="${esc(avSrc(d.av))}"></div><div class="pname"><h3>${isNew ? "Новый профиль" : "Редактирование"}</h3><div class="pst">${CLOUD ? "Профиль сохранится в твоём аккаунте" : "Профиль хранится на этом устройстве"}</div></div></div>
+      <div class="phead"><div class="pav${frameCls(d.frame)}" id="fAvPrev"><img alt="" src="${esc(avSrc(d.av))}"></div><div class="pname"><h3>${isNew ? "Новый профиль" : "Редактирование"}</h3><div class="pst">${CLOUD ? "Профиль сохранится в твоём аккаунте" : "Профиль хранится на этом устройстве"}</div></div></div>
       <form class="pform" id="pForm" novalidate>
         <div class="pf"><label class="lb" for="fNick">Ник</label><input type="text" id="fNick" maxlength="20" autocomplete="nickname" placeholder="Например, Mirox" value="${esc(d.nick)}"><div class="hint" id="fNickH">От 2 до 20 символов</div></div>
         <div class="pf"><label class="lb" for="fSt">Статус</label><input type="text" id="fSt" maxlength="40" placeholder="Например, мейню Пуджа" value="${esc(d.st)}"></div>
@@ -1495,6 +1560,7 @@ const PROF = (() => {
         <div class="pf">${lb("Баннер сзади")}
           <div class="pick bn" id="fBn"><label class="up" title="Своя картинка">＋<input type="file" accept="image/*" id="fBnUp"></label>${(d.bn.t === "img" || d.bn.t === "url") ? `<button type="button" data-t="${d.bn.t}" aria-pressed="true"><img alt="" src="${esc(d.bn.v)}"></button>` : ""}<button type="button" data-t="grad" aria-pressed="${d.bn.t === "grad"}" aria-label="Цвет темы" style="background:linear-gradient(135deg,var(--t1),var(--t2))"></button>${arcs.map(a => `<button type="button" data-t="arc" data-v="${a}" aria-pressed="${d.bn.t === "arc" && d.bn.v === a}" title="${ARCANA[a]}"><img alt="" loading="lazy" src="arcana/${a}.webp"></button>`).join("")}${HEROES.map(h => `<button type="button" data-t="hero" data-v="${h.slug}" aria-pressed="${d.bn.t === "hero" && d.bn.v === h.slug}" style="${vars(h)};background:radial-gradient(circle at 50% 30%,var(--c1),var(--c2))" title="${h.en}"><img alt="" loading="lazy" src="hero/${h.slug}.webp" style="object-fit:cover;object-position:center 22%"></button>`).join("")}</div>
           <div class="hint">Аркана, герой или своя картинка (＋)</div></div>
+        ${CLOUD && U ? `<div class="pf"><span class="lb">Рамка аватарки</span><div class="frames" id="fFr">${FRAMES.map(f => { const ok = f.need(sInfo()); return `<button type="button" data-f="${f.id}" ${ok ? "" : "disabled"} aria-pressed="${(d.frame || "") === f.id}"><span class="fprev${frameCls(f.id)}"><img alt="" src="${esc(avSrc(d.av))}"></span><b>${f.name}</b><small>${ok ? "открыта" : "🔒 " + f.req}</small></button>`; }).join("")}</div><div class="hint">Рамки открываются с уровнем — получай опыт каждый день</div></div>` : ""}
         <div class="pf err" id="fErr" hidden></div>
         <div class="pacts" style="padding:0"><button type="submit" class="btn btn-primary" id="fSave">${isNew ? "Создать профиль" : "Сохранить"}</button><button type="button" class="btn btn-ghost" id="fCancel">Отмена</button></div>
       </form>`);
@@ -1507,7 +1573,9 @@ const PROF = (() => {
         d[key] = (b.dataset.t === "img" || b.dataset.t === "url") ? { t: b.dataset.t, v: b.querySelector("img").src } : { t: b.dataset.t, v: b.dataset.v || "" }; onSet(); });
       return pk;
     }
-    const avPk = wire("#fAv", "av", () => { avPrev.src = avSrc(d.av); });
+    const avPk = wire("#fAv", "av", () => { avPrev.src = avSrc(d.av); box.querySelectorAll(".fprev img").forEach(x => x.src = avSrc(d.av)); });
+    const frEl = box.querySelector("#fFr");
+    if (frEl) frEl.onclick = e => { const b = e.target.closest("button"); if (!b || b.disabled) return; d.frame = b.dataset.f; frEl.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); box.querySelector("#fAvPrev").className = "pav" + frameCls(d.frame); };
     const bnPk = wire("#fBn", "bn", () => setCover(bnSrc(d.bn)));
     const err = box.querySelector("#fErr");
     const showErr = t => { err.hidden = false; err.textContent = t; };
@@ -1529,7 +1597,7 @@ const PROF = (() => {
       const nick = box.querySelector("#fNick").value.trim().replace(/\s+/g, " "), st = box.querySelector("#fSt").value.trim();
       const nh = box.querySelector("#fNickH");
       if (nick.length < 2){ nh.textContent = "Ник должен быть от 2 до 20 символов"; nh.classList.add("err"); box.querySelector("#fNick").focus(); return; }
-      const np = { nick, st, av: d.av, bn: d.bn, created: (P && P.created) || Date.now() };
+      const np = { nick, st, av: d.av, bn: d.bn, frame: d.frame || "", created: (P && P.created) || Date.now() };
       if (!CLOUD){
         try { localStorage.setItem(LKEY, JSON.stringify(np)); } catch(_) { return showErr("Картинка слишком большая для памяти браузера — выбери другую или героя."); }
         P = np; LOCAL = np; topbar(); return view();
@@ -1539,9 +1607,10 @@ const PROF = (() => {
         if (np.av.t === "img" && /^data:/.test(np.av.v)) np.av = { t: "url", v: await uploadData(np.av.v, "avatar") };
         if (np.bn.t === "img" && /^data:/.test(np.bn.v)) np.bn = { t: "url", v: await uploadData(np.bn.v, "banner") };
         if (np.av.t === "img") np.av.t = "url"; if (np.bn.t === "img") np.bn.t = "url";
-        const { error } = await sb.from("profiles").upsert({ id: U.id, nick, status: st, avatar: enc(np.av), banner: enc(np.bn), favs: [...FAV], updated_at: new Date().toISOString() });
+        let { error } = await sb.from("profiles").upsert({ id: U.id, nick, status: st, avatar: enc(np.av), banner: enc(np.bn), frame: np.frame, favs: [...FAV], updated_at: new Date().toISOString() });
+        if (error && /frame/.test(error.message || "")) ({ error } = await sb.from("profiles").upsert({ id: U.id, nick, status: st, avatar: enc(np.av), banner: enc(np.bn), favs: [...FAV], updated_at: new Date().toISOString() }));
         if (error){ if (error.code === "23505") { nh.textContent = "Этот ник уже занят — придумай другой"; nh.classList.add("err"); } else showErr(/relation|does not exist|schema cache/i.test(error.message) ? "База профилей ещё не настроена на сервере." : ERR(error.message)); return; }
-        P = { nick, st, av: np.av, bn: np.bn }; topbar(); view();
+        const wasNew = !P; P = { nick, st, av: np.av, bn: np.bn, frame: np.frame }; topbar(); view(); if (wasNew) claimDaily();
       } catch(ex) { showErr(/Bucket not found|bucket/i.test(ex && ex.message || "") ? "Хранилище картинок ещё не настроено на сервере." : ERR(ex && ex.message)); }
       finally { if (btn.isConnected){ btn.disabled = false; btn.textContent = isNew ? "Создать профиль" : "Сохранить"; } }
     };
@@ -1555,7 +1624,7 @@ const PROF = (() => {
 
   async function loadUser(u){
     U = u || null;
-    if (!U){ P = null; topbar(); return; }
+    if (!U){ P = null; ST = null; claimedFor = null; topbar(); return; }
     const { data, error } = await sb.from("profiles").select("*").eq("id", U.id).maybeSingle();
     if (error){ P = null; topbar(); return; }
     if (data){
@@ -1566,8 +1635,146 @@ const PROF = (() => {
       if (FAV.size !== server.length) syncFavs();
     } else P = null;
     topbar();
+    if (P) claimDaily(); else { try { const r0 = await sb.from("user_stats").select("xp,streak,best_streak").eq("user_id", U.id).maybeSingle(); if (r0.data) ST = r0.data; } catch(e) {} }
     let pending = false; try { pending = sessionStorage.getItem("ub-auth-pending") === "1"; sessionStorage.removeItem("ub-auth-pending"); } catch(e) {}
     if (!P && !autoOpened && (pending || HAD_CODE)){ autoOpened = true; edit(true); }
+  }
+
+  /* ---------- уровни, бонусы, рамки, достижения, оценки, подсказки ---------- */
+  let ST = null, claimedFor = null;
+  const lvlOf = xp => Math.floor(Math.sqrt((xp || 0) / 25)) + 1;
+  const lvlStart = l => 25 * (l - 1) * (l - 1);
+  const FRAMES = [
+    { id: "", name: "Без рамки", need: () => true, req: "" },
+    { id: "bronze", name: "Бронза", need: s => s.lvl >= 3, req: "3 уровень" },
+    { id: "silver", name: "Серебро", need: s => s.lvl >= 5, req: "5 уровень" },
+    { id: "fire", name: "Огонь", need: s => s.best_streak >= 7, req: "серия 7 дней" },
+    { id: "gold", name: "Золото", need: s => s.lvl >= 10, req: "10 уровень" },
+    { id: "arcana", name: "Аркана", need: s => s.lvl >= 15, req: "15 уровень" }
+  ];
+  const frameCls = f => f && FRAMES.some(x => x.id === f && x.id) ? " fr fr-" + f : "";
+  const sInfo = () => { const xp = ST ? ST.xp : 0, lvl = lvlOf(xp); return { xp, lvl, streak: ST ? ST.streak : 0, best_streak: ST ? ST.best_streak : 0 }; };
+
+  /* всплывашки */
+  let toastBox = null;
+  function toast(html, cls, ms){
+    if (!toastBox){ toastBox = document.createElement("div"); toastBox.className = "toasts"; document.body.appendChild(toastBox); }
+    const t = document.createElement("div"); t.className = "toast " + (cls || ""); t.innerHTML = html; toastBox.appendChild(t);
+    requestAnimationFrame(() => t.classList.add("show"));
+    setTimeout(() => { t.classList.remove("show"); setTimeout(() => t.remove(), 600); }, ms || 3600);
+    return t;
+  }
+  function levelUp(l){
+    toast(`<span class="tic">⭐</span><span><b>Новый уровень: ${l}!</b><small>${(FRAMES.find(f => f.id && f.need({ lvl: l, best_streak: 0 }) && !f.need({ lvl: l - 1, best_streak: 0 })) || {}).name ? "Открыта новая рамка для аватарки 🎉" : "Так держать!"}</small></span>`, "lvl", 4500);
+    topbar();
+  }
+  function applyStats(j){
+    if (!j) return; const before = ST ? lvlOf(ST.xp) : null;
+    ST = Object.assign(ST || { streak: 0, best_streak: 0 }, j);
+    const after = lvlOf(ST.xp); if (before !== null && after > before) levelUp(after); else topbar();
+    const pl = document.querySelector(".plvl"); if (pl) pl.outerHTML = lvlBlock();
+  }
+  async function claimDaily(){
+    if (!CLOUD || !U || claimedFor === U.id) return; claimedFor = U.id;
+    try { const { data, error } = await sb.rpc("claim_daily"); if (error || !data) return;
+      const first = ST === null; applyStats(data);
+      if (data.gained > 0) setTimeout(() => toast(`<span class="tic">🎁</span><span><b>Ежедневный бонус +${data.gained} опыта</b><small>Серия: ${data.streak} ${data.streak === 1 ? "день" : data.streak < 5 ? "дня" : "дней"} 🔥 Заходи завтра — бонус больше</small></span>`, "gift", 5000), first ? 900 : 0);
+    } catch(e) {}
+  }
+  const grantQ = {};
+  function grant(kind){
+    if (!CLOUD || !U) return; const now = Date.now(); if (grantQ[kind] && now - grantQ[kind] < 1500) return; grantQ[kind] = now;
+    sb.rpc("grant_xp", { p_kind: kind }).then(({ data, error }) => {
+      if (error || !data) return; applyStats({ xp: data.xp });
+      if (data.gained > 0) toast(`<span class="tic">✨</span><span><b>+${data.gained} опыта</b></span>`, "xp", 1600);
+    }).catch(() => {});
+  }
+
+  /* достижения */
+  const ACH = [
+    { id: "start", ic: "🚀", t: "Первый шаг", d: "Создать профиль", ok: c => !!P },
+    { id: "seen10", ic: "🧭", t: "Исследователь", d: "Открыть 10 героев", ok: c => c.seen >= 10 },
+    { id: "seen54", ic: "📚", t: "Знаток", d: "Открыть всех 54 героев", ok: c => c.seen >= 54 },
+    { id: "fav5", ic: "⭐", t: "Коллекционер", d: "5 героев в избранном", ok: c => c.fav >= 5 },
+    { id: "run200", ic: "🏃", t: "Бегун", d: "200 очков в раннере", ok: c => c.run >= 200 },
+    { id: "run1000", ic: "⚡", t: "Легенда линии", d: "1000 очков в раннере", ok: c => c.run >= 1000 },
+    { id: "quiz5", ic: "🧠", t: "Эрудит", d: "Серия 5 в «Угадай героя»", ok: c => c.quiz >= 5 },
+    { id: "day3", ic: "🔥", t: "Постоянный", d: "Заходить 3 дня подряд", ok: c => c.bstreak >= 3 },
+    { id: "day7", ic: "🌋", t: "Ветеран", d: "Заходить 7 дней подряд", ok: c => c.bstreak >= 7 },
+    { id: "vote5", ic: "👍", t: "Критик", d: "Оценить 5 билдов", ok: c => c.votes >= 5 },
+    { id: "lvl5", ic: "🥈", t: "Опытный", d: "Достичь 5 уровня", ok: c => c.lvl >= 5 },
+    { id: "lvl10", ic: "🥇", t: "Мастер", d: "Достичь 10 уровня", ok: c => c.lvl >= 10 }
+  ];
+  async function achCtx(){
+    const s = sInfo(); let run = 0, votes = 0;
+    try { const r1 = await sb.from("runner_scores").select("best").eq("user_id", U.id).maybeSingle(); run = (r1.data && r1.data.best) || 0; } catch(e) {}
+    try { const r2 = await sb.from("build_votes").select("k", { count: "exact", head: true }).eq("user_id", U.id); votes = r2.count || 0; } catch(e) {}
+    let quiz = 0; try { quiz = +localStorage.getItem("ub-best") || 0; } catch(e) {}
+    return { seen: seen().length, fav: FAV.size, run, quiz, votes, lvl: s.lvl, bstreak: s.best_streak };
+  }
+  function lvlBlock(){
+    const s = sInfo(), a = lvlStart(s.lvl), b = lvlStart(s.lvl + 1), pct = Math.max(2, Math.min(100, (s.xp - a) / (b - a) * 100));
+    return `<div class="plvl"><div class="plvl-top"><span class="lvbig">${s.lvl}</span><div><b>Уровень ${s.lvl}</b><small>${s.xp - a} / ${b - a} опыта до ${s.lvl + 1} уровня</small></div><span class="pstreak" title="Серия заходов">🔥 ${s.streak}</span></div><div class="xpbar"><i style="width:${pct.toFixed(1)}%"></i></div></div>`;
+  }
+  async function fillAch(box){
+    const el = box.querySelector("#pAch"); if (!el) return;
+    const c = await achCtx(); if (!el.isConnected) return;
+    const got = ACH.filter(a => a.ok(c)).length;
+    el.innerHTML = `<h4>Достижения · ${got} из ${ACH.length}</h4><div class="achs">${ACH.map(a => { const ok = a.ok(c); return `<div class="ach${ok ? " on" : ""}" title="${a.d}"><span class="ai">${ok ? a.ic : "🔒"}</span><b>${a.t}</b><small>${a.d}</small></div>`; }).join("")}</div>`;
+  }
+
+  /* оценки билдов */
+  const VC = {}, MYV = {};
+  async function loadVotes(slug){
+    if (VC[slug]) return VC[slug];
+    VC[slug] = (async () => {
+      const m = {}; try { const { data } = await sb.from("build_scores").select("k,up,down").eq("hero", slug); (data || []).forEach(r => m[r.k] = { up: +r.up, down: +r.down }); } catch(e) {}
+      if (U){ try { const { data } = await sb.from("build_votes").select("k,vote").eq("hero", slug).eq("user_id", U.id); (data || []).forEach(r => MYV[slug + ":" + r.k] = r.vote); } catch(e) {} }
+      return m; })();
+    return VC[slug];
+  }
+  async function mountVotes(el, slug, k){
+    if (!CLOUD || !el) return;
+    el.innerHTML = `<span class="vq">Этот билд работает?</span><button type="button" class="vb up" data-v="1">👍 <b>·</b></button><button type="button" class="vb down" data-v="-1">👎 <b>·</b></button><span class="vpct"></span>`;
+    el.hidden = false;
+    const m = await loadVotes(slug); if (!el.isConnected) return;
+    const draw = () => { const c = m[k] || { up: 0, down: 0 }, my = MYV[slug + ":" + k] || 0, tot = c.up + c.down;
+      el.querySelector(".up b").textContent = c.up; el.querySelector(".down b").textContent = c.down;
+      el.querySelector(".up").setAttribute("aria-pressed", my === 1); el.querySelector(".down").setAttribute("aria-pressed", my === -1);
+      el.querySelector(".vpct").textContent = tot ? `${Math.round(c.up / tot * 100)}% за · ${tot} ${tot % 10 === 1 && tot % 100 !== 11 ? "оценка" : (tot % 10 >= 2 && tot % 10 <= 4 && (tot % 100 < 10 || tot % 100 >= 20)) ? "оценки" : "оценок"}` : "Будь первым, кто оценит"; };
+    draw();
+    el.querySelectorAll(".vb").forEach(b => b.onclick = async () => {
+      if (!U){ nudge("vote", true); return; }
+      const v = +b.dataset.v, key = slug + ":" + k, prev = MYV[key] || 0, c = m[k] || (m[k] = { up: 0, down: 0 });
+      const next = prev === v ? 0 : v;
+      if (prev === 1) c.up--; if (prev === -1) c.down--; if (next === 1) c.up++; if (next === -1) c.down++;
+      MYV[key] = next; draw(); b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop");
+      let error;
+      if (next === 0) ({ error } = await sb.from("build_votes").delete().eq("user_id", U.id).eq("hero", slug).eq("k", k));
+      else ({ error } = await sb.from("build_votes").upsert({ user_id: U.id, hero: slug, k, vote: next }));
+      if (error){ if (prev === 1) c.up++; if (prev === -1) c.down++; if (next === 1) c.up--; if (next === -1) c.down--; MYV[key] = prev; draw(); toast(`<span class="tic">⚠️</span><span><b>Не получилось сохранить оценку</b></span>`, "", 2500); return; }
+      if (!prev && next) grant("vote");
+    });
+  }
+
+  /* подсказки «сохрани прогресс» для гостей */
+  const NUDGE = {
+    fav: ["⭐ Сохрани избранное", "Войди — избранные герои будут на всех твоих устройствах."],
+    seen: ["🧭 Ты уже изучил 5 героев", "Войди, чтобы получать опыт, уровни и рамки для аватарки."],
+    quiz: ["🧠 Серия 3 в квизе!", "Войди — получай опыт за верные ответы и открывай достижения."],
+    run: ["🏆 Новый рекорд!", "Войди, чтобы попасть в топ игроков раннера."],
+    vote: ["👍 Оценки — для своих", "Войди, чтобы оценивать билды и помогать другим игрокам."]
+  };
+  let lastNudge = 0;
+  function nudge(reason, force){
+    if (!CLOUD || U) return;
+    let off = false; try { off = localStorage.getItem("ub-nudge-off") === "1" || sessionStorage.getItem("ub-nudge-" + reason) === "1"; } catch(e) {}
+    if (!force && (off || Date.now() - lastNudge < 90000)) return;
+    lastNudge = Date.now(); try { sessionStorage.setItem("ub-nudge-" + reason, "1"); } catch(e) {}
+    const [t, d] = NUDGE[reason] || NUDGE.seen;
+    const el = toast(`<span class="tic">${t.split(" ")[0]}</span><span><b>${t.slice(t.indexOf(" ") + 1)}</b><small>${d}</small><span class="tbtn"><button type="button" class="btn btn-primary" data-a="in">Войти</button><button type="button" class="btn btn-ghost" data-a="later">Не сейчас</button></span><span class="tperks">🎁 бонус каждый день · ⭐ уровни · 🖼 рамки · 🏆 топ</span></span>`, "nudge", 9000);
+    el.querySelector('[data-a="in"]').onclick = () => { el.classList.remove("show"); auth("in"); };
+    el.querySelector('[data-a="later"]').onclick = () => { el.classList.remove("show"); };
   }
 
   topbar();
@@ -1597,12 +1804,13 @@ const PROF = (() => {
   }
   async function topScores(n){
     try {
-      const { data, error } = await sb.from("runner_top").select("user_id,best,nick,avatar").order("best", { ascending: false }).limit(n);
+      let { data, error } = await sb.from("runner_top").select("user_id,best,nick,avatar,frame,xp").order("best", { ascending: false }).limit(n);
+      if (error && /frame|xp/.test(error.message || "")) ({ data, error } = await sb.from("runner_top").select("user_id,best,nick,avatar").order("best", { ascending: false }).limit(n));
       if (error) return { error: /relation|does not exist|schema cache/i.test(error.message) ? "Рейтинг ещё не настроен на сервере." : "Не удалось загрузить топ." };
       return { rows: data || [] };
     } catch(e) { return { error: "Нет связи с сервером." }; }
   }
-  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores };
+  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf };
 })();
 window.__favSync = () => PROF.syncFavs();
 
@@ -1809,6 +2017,7 @@ const GAME = (() => {
       cancelAnimationFrame(raf); last = performance.now(); raf = requestAnimationFrame(loop);
       const sc = score(), ms = Math.round(performance.now() - t0), rec = sc > best;
       if (rec){ best = sc; try { localStorage.setItem(LBEST, best); } catch(e) {} elBest.textContent = best; }
+      if (!silent && sc > 0){ PROF.grant("run"); if (rec && sc >= 30) PROF.nudge("run"); }
       if (silent) return;
       const u = PROF.user();
       end.innerHTML = `<b class="gt">${rec ? "Новый рекорд! 🏆" : "Герой пал"}</b><span class="gbig">${sc}</span><span class="gs">Золото: ${gold} · рекорд: ${best}</span><span class="gs" id="gSend">${PROF.cloud ? (u ? "Отправляем в рейтинг…" : "") : ""}</span><div class="gbtns"><button type="button" class="btn btn-primary" id="gAgain">Ещё раз</button><button type="button" class="btn btn-ghost" id="gToTop">Топ игроков</button></div>${PROF.cloud && !u ? `<button type="button" class="gchg" id="gLogin">Войди, чтобы попасть в топ</button>` : ""}`;
@@ -1850,7 +2059,7 @@ const GAME = (() => {
       if (r.error){ el.innerHTML = `<div class="gempty">${esc(r.error)}</div>`; return; }
       const me = PROF.user(), rows = r.rows || [];
       if (!rows.length){ el.innerHTML = `<div class="gempty">Пока никого нет — стань первым!</div>`; return; }
-      el.innerHTML = `<ol class="glist">${rows.map((x, i) => `<li class="${me && x.user_id === me.id ? "me" : ""}"><span class="gr">${i < 3 ? ["🥇","🥈","🥉"][i] : i + 1}</span><span class="ga"><img alt="" loading="lazy" src="${esc(PROF.avatarOf(x.avatar))}"></span><span class="gn">${esc(x.nick)}</span><b class="gp">${x.best}</b></li>`).join("")}</ol>
+      el.innerHTML = `<ol class="glist">${rows.map((x, i) => `<li class="${me && x.user_id === me.id ? "me" : ""}"><span class="gr">${i < 3 ? ["🥇","🥈","🥉"][i] : i + 1}</span><span class="ga${PROF.frameCls(x.frame)}"><img alt="" loading="lazy" src="${esc(PROF.avatarOf(x.avatar))}"></span><span class="gn">${esc(x.nick)}${x.xp != null ? ` <em class="glv">${PROF.lvlOf(x.xp)} ур.</em>` : ""}</span><b class="gp">${x.best}</b></li>`).join("")}</ol>
         ${me ? "" : `<button type="button" class="gchg" id="gLogin2">Войди, чтобы попасть в топ</button>`}`;
       const l2 = el.querySelector("#gLogin2"); if (l2) l2.onclick = () => PROF.open();
     }
@@ -1914,7 +2123,7 @@ addEventListener("scroll", () => { const s = scrollY > 8; if (s !== tbS) { tbS =
 /* ---------- недавно смотрели ---------- */
 let RECENT = [];
 try { RECENT = JSON.parse(localStorage.getItem("ub-recent") || "[]"); } catch(e) {}
-function pushRecent(slug){ try { const sn = new Set(JSON.parse(localStorage.getItem("ub-seen") || "[]")); sn.add(slug); localStorage.setItem("ub-seen", JSON.stringify([...sn])); } catch(e) {} RECENT = [slug, ...RECENT.filter(s => s !== slug)].slice(0, 10); try { localStorage.setItem("ub-recent", JSON.stringify(RECENT)); } catch(e) {} drawRecent(); }
+function pushRecent(slug){ try { const sn = new Set(JSON.parse(localStorage.getItem("ub-seen") || "[]")); const isNew = !sn.has(slug); sn.add(slug); localStorage.setItem("ub-seen", JSON.stringify([...sn])); if (typeof PROF !== "undefined"){ PROF.grant("hero"); if (isNew && sn.size >= 5) PROF.nudge("seen"); } } catch(e) {} RECENT = [slug, ...RECENT.filter(s => s !== slug)].slice(0, 10); try { localStorage.setItem("ub-recent", JSON.stringify(RECENT)); } catch(e) {} drawRecent(); }
 function drawRecent(){
   const box = document.getElementById("recent"), row = document.getElementById("recentRow");
   const hs = RECENT.map(s => HEROES.find(h => h.slug === s)).filter(Boolean);
