@@ -473,6 +473,34 @@
   .stages.ready .stage:nth-child(3) .slot { animation-delay: calc(var(--j, 0) * 30ms + 140ms); }
   .stages.ready .stage:nth-child(4) .slot { animation-delay: calc(var(--j, 0) * 30ms + 210ms); }
   @media (prefers-reduced-motion: reduce) { .menu > * { transition: none !important; opacity: 1; transform: none; } .stages .slot { animation: none !important; } }
+
+  /* ---------- заметные движения: меню вбок, герой и билды снизу вверх ---------- */
+  .wrap { transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .45s ease, filter .45s ease; }
+  html.menu-on .wrap { transform: translateX(-84px); opacity: .55; filter: blur(1px); }
+  .menu { transition: transform .45s cubic-bezier(.2,.8,.2,1), visibility 0s .45s !important; }
+  .menu.open { transition: transform .45s cubic-bezier(.2,.8,.2,1) !important; }
+  .menu-ov { transition: opacity .45s ease !important; }
+  @keyframes sheetUp { from { transform: translateY(100%); } }
+  @keyframes sheetDown { to { transform: translateY(100%); } }
+  @keyframes sheetUpD { from { opacity: 0; transform: translateY(120px); } }
+  @keyframes sheetDownD { to { opacity: 0; transform: translateY(120px); } }
+  .modal .sheet { animation: sheetUpD .5s cubic-bezier(.2,.8,.2,1); }
+  .modal.closing { animation: fadeOut .36s ease forwards; }
+  .modal.closing .sheet { animation: sheetDownD .36s cubic-bezier(.5,0,.75,0) forwards; }
+  @media (max-width: 600px) {
+    .modal .sheet { animation: sheetUp .5s cubic-bezier(.2,.8,.2,1); }
+    .modal.closing .sheet { animation: sheetDown .36s cubic-bezier(.5,0,.75,0) forwards; }
+  }
+  .modal.swap .sheet, .modal.swap { animation: none; }
+  @keyframes heroUp { from { opacity: 0; transform: translateY(70px) scale(1.12); } to { opacity: 1; transform: translateY(0) scale(1.12); } }
+  .banner .heroart img, .banner .heroart video { animation: heroUp .8s cubic-bezier(.2,.8,.2,1) .12s both; }
+  .banner .top, .banner .skin { animation: inUp .6s cubic-bezier(.2,.8,.2,1) .3s both; }
+  @keyframes stageUp { from { opacity: 0; transform: translateY(46px); } }
+  .stage { animation: stageUp .6s cubic-bezier(.2,.8,.2,1) both !important; animation-delay: calc(var(--d) * 90ms + .2s) !important; }
+  .variants { animation: inUp .55s cubic-bezier(.2,.8,.2,1) .15s both; }
+  @keyframes cardUp { from { opacity: 0; transform: translateY(40px); } }
+  .cw { animation-name: cardUp !important; animation-duration: .6s !important; }
+  @media (prefers-reduced-motion: reduce) { html.menu-on .wrap { transform: none; opacity: 1; filter: none; } .modal .sheet, .stage, .banner .heroart img { animation: none !important; } }
   /* ---------- предупреждение для телефонов ---------- */
   .mwarn { position: fixed; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom, 0px)); z-index: 65; max-width: 460px; margin: 0 auto;
     display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; padding: 14px 14px 12px; border-radius: 18px; background: rgba(20,20,26,.97); border: 1px solid rgba(255,255,255,.1);
@@ -1016,7 +1044,7 @@ function closeModal(){
   const fin = () => { modal.classList.remove("closing", "swap"); modal.hidden = true; modal.innerHTML = ""; closingEl = null; unlockScroll(); };
   if (REDUCED){ fin(); return; }
   closingEl = modal.firstElementChild; modal.classList.add("closing");
-  closeT = setTimeout(fin, 230);
+  closeT = setTimeout(fin, 360);
 }
 new MutationObserver(() => { if (modal.classList.contains("closing") && modal.firstElementChild !== closingEl){ clearTimeout(closeT); modal.classList.remove("closing"); closingEl = null; } }).observe(modal, { childList: true });
 let lockY = 0, locked = false;
@@ -1846,12 +1874,12 @@ const GAME = (() => {
 /* ---------- меню (бургер) ---------- */
 const menu = document.getElementById("menu"), menuOv = document.getElementById("menuOv"), burger = document.getElementById("burger");
 let menuOpen = false;
-function openMenu(){ if (menuOpen) return; menuOpen = true; [...menu.children].forEach((c, i) => c.style.setProperty("--k", i)); menuOv.hidden = false; requestAnimationFrame(() => { menuOv.classList.add("show"); menu.classList.add("open"); });
+function openMenu(){ if (menuOpen) return; menuOpen = true; document.documentElement.classList.add("menu-on"); [...menu.children].forEach((c, i) => c.style.setProperty("--k", i)); menuOv.hidden = false; requestAnimationFrame(() => { menuOv.classList.add("show"); menu.classList.add("open"); });
   menu.removeAttribute("inert"); menu.setAttribute("aria-hidden", "false"); burger.setAttribute("aria-expanded", "true"); lockScroll();
   setTimeout(() => menu.querySelector(".mi").focus({preventScroll: true}), 60); }
-function closeMenu(then){ if (!menuOpen) return; menuOpen = false; menu.classList.remove("open"); menuOv.classList.remove("show");
+function closeMenu(then){ if (!menuOpen) return; menuOpen = false; document.documentElement.classList.remove("menu-on"); menu.classList.remove("open"); menuOv.classList.remove("show");
   menu.setAttribute("inert", ""); menu.setAttribute("aria-hidden", "true"); burger.setAttribute("aria-expanded", "false");
-  setTimeout(() => { menuOv.hidden = true; }, 300); if (modal.hidden) unlockScroll(); if (typeof then === "function") setTimeout(then, REDUCED ? 0 : 240); }
+  setTimeout(() => { menuOv.hidden = true; }, 300); if (modal.hidden) unlockScroll(); if (typeof then === "function") setTimeout(then, REDUCED ? 0 : 380); }
 burger.onclick = () => menuOpen ? closeMenu() : openMenu();
 document.getElementById("menuX").onclick = () => closeMenu();
 menuOv.onclick = () => closeMenu();
