@@ -454,6 +454,25 @@
 
 
 
+
+  /* ---------- плавные появления и уходы ---------- */
+  @keyframes fadeOut { to { opacity: 0; } }
+  @keyframes sheetOut { to { opacity: 0; transform: translateY(28px) scale(.985); } }
+  .modal.closing { animation: fadeOut .23s ease forwards; pointer-events: none; }
+  .modal.closing .sheet { animation: sheetOut .23s cubic-bezier(.4,0,1,1) forwards; }
+  .menu > * { opacity: 0; transform: translateX(18px); transition: opacity .2s ease, transform .25s ease; }
+  .menu.open > * { opacity: 1; transform: none; transition: opacity .35s ease, transform .45s cubic-bezier(.2,.8,.2,1); transition-delay: calc(var(--k, 0) * 22ms + 80ms); }
+  .heroart img:not(.ok), .thf img:not(.ok), .pfaces img:not(.ok), .pick img:not(.ok), .rc img:not(.ok), .opt img:not(.ok), .glist img:not(.ok), .rt img:not(.ok), .pav img:not(.ok), .pcover img:not(.ok), .gface img:not(.ok), .arcana-art img:not(.ok) { opacity: 0; }
+  .heroart img, .thf img, .pfaces img, .pick img, .rc img, .opt img, .glist img, .rt img, .pav img, .pcover img, .gface img { transition: opacity .45s ease, transform .6s cubic-bezier(.2,.8,.2,1); }
+  .card .heroart img:not(.ok) { transform: scale(1.2) translateY(10px); }
+  @keyframes shimmer { to { background-position: -150% 0; } }
+  @keyframes slotIn { from { opacity: 0; transform: translateY(8px) scale(.9); } }
+  .stages.loading .slot.it { background-image: linear-gradient(100deg, #14151b 30%, #262832 50%, #14151b 70%); background-size: 250% 100%; background-position: 100% 0; animation: shimmer 1.1s linear infinite; }
+  .stages.ready .slot { animation: slotIn .42s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--j, 0) * 30ms); }
+  .stages.ready .stage:nth-child(2) .slot { animation-delay: calc(var(--j, 0) * 30ms + 70ms); }
+  .stages.ready .stage:nth-child(3) .slot { animation-delay: calc(var(--j, 0) * 30ms + 140ms); }
+  .stages.ready .stage:nth-child(4) .slot { animation-delay: calc(var(--j, 0) * 30ms + 210ms); }
+  @media (prefers-reduced-motion: reduce) { .menu > * { transition: none !important; opacity: 1; transform: none; } .stages .slot { animation: none !important; } }
   /* ---------- предупреждение для телефонов ---------- */
   .mwarn { position: fixed; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom, 0px)); z-index: 65; max-width: 460px; margin: 0 auto;
     display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; padding: 14px 14px 12px; border-radius: 18px; background: rgba(20,20,26,.97); border: 1px solid rgba(255,255,255,.1);
@@ -818,6 +837,8 @@ let LIST = HEROES;
 const grid = document.getElementById("grid");
 const countEl = document.getElementById("count");
 const modal = document.getElementById("modal");
+document.addEventListener("load", e => { const t = e.target; if (t && t.tagName === "IMG") t.classList.add("ok"); }, true);
+document.addEventListener("error", e => { const t = e.target; if (t && t.tagName === "IMG") t.classList.add("ok"); }, true);
 const art = h => `hero/${h.slug}.webp`;
 const sm = h => `hero/sm/${h.slug}.webp`;
 const SMALL = matchMedia("(max-width: 600px)").matches;
@@ -948,6 +969,7 @@ function openHero(h, startK){
 }
 const STAGES = [["Начало игры","~4 мин"],["Ранняя игра","~12 мин"],["Середина игры","~25 мин"],["Поздняя игра","31+ мин"]];
 function vbtnIcon(h, k, s){ return `<span class="fi" style="background-image:url(build/${h.slug}-${k}.webp);background-position:${(s*110/(1184-110)*100).toFixed(3)}% 100%"></span>`; }
+const LOADED = new Set();
 function renderVariants(h, startK){
   const B = BUILDS[h.slug] || {}; const keys = Object.keys(B).sort((x,y)=>x-y);
   const vb = document.getElementById("variants"), box = document.getElementById("buildbox");
@@ -967,6 +989,15 @@ function renderVariants(h, startK){
             : `<div class="slot none" aria-label="Пусто"></div>`).join("")}</div>
         </div>`).join("")}</div>`;
     box.innerHTML = html;
+    const st = box.querySelector(".stages");
+    if (st){
+      st.querySelectorAll(".stage").forEach(sg => sg.querySelectorAll(".slot").forEach((sl, j) => sl.style.setProperty("--j", j)));
+      const src = `build/${h.slug}-${k}.webp`;
+      if (LOADED.has(src)) st.classList.add("ready");
+      else { st.classList.add("loading"); const im = new Image();
+        im.onload = im.onerror = () => { LOADED.add(src); if (st.isConnected){ st.classList.remove("loading"); st.classList.add("ready"); } };
+        im.src = src; }
+    }
   };
   vb.onclick = e => { const t = e.target.closest(".vbtn"); if (t) show(t.dataset.k); };
   let cur = startK && keys.includes(String(startK)) ? String(startK) : keys[0];
@@ -977,7 +1008,17 @@ function renderVariants(h, startK){
 
   if (keys.length) show(cur); else box.innerHTML = `<div class="nobuild">Сборка ещё не добавлена.</div>`;
 }
-function closeModal(){ if (modal._cleanup){ try { modal._cleanup(); } catch(e) {} modal._cleanup = null; } if (feedIO) feedIO.disconnect(); modal._feed = false; modal.classList.remove("swap"); modal.hidden = true; modal.innerHTML = ""; unlockScroll(); }
+let closeT = 0, closingEl = null;
+function closeModal(){
+  if (modal.hidden || modal.classList.contains("closing")) return;
+  if (modal._cleanup){ try { modal._cleanup(); } catch(e) {} modal._cleanup = null; }
+  if (feedIO) feedIO.disconnect(); modal._feed = false;
+  const fin = () => { modal.classList.remove("closing", "swap"); modal.hidden = true; modal.innerHTML = ""; closingEl = null; unlockScroll(); };
+  if (REDUCED){ fin(); return; }
+  closingEl = modal.firstElementChild; modal.classList.add("closing");
+  closeT = setTimeout(fin, 230);
+}
+new MutationObserver(() => { if (modal.classList.contains("closing") && modal.firstElementChild !== closingEl){ clearTimeout(closeT); modal.classList.remove("closing"); closingEl = null; } }).observe(modal, { childList: true });
 let lockY = 0, locked = false;
 function lockScroll(){ if (locked) return; locked = true; lockY = window.scrollY; document.body.style.top = `-${lockY}px`; document.body.classList.add("locked"); }
 function unlockScroll(){ if (!locked) return; locked = false; document.body.classList.remove("locked"); document.body.style.top = ""; window.scrollTo(0, lockY); }
@@ -1805,12 +1846,12 @@ const GAME = (() => {
 /* ---------- меню (бургер) ---------- */
 const menu = document.getElementById("menu"), menuOv = document.getElementById("menuOv"), burger = document.getElementById("burger");
 let menuOpen = false;
-function openMenu(){ if (menuOpen) return; menuOpen = true; menuOv.hidden = false; requestAnimationFrame(() => { menuOv.classList.add("show"); menu.classList.add("open"); });
+function openMenu(){ if (menuOpen) return; menuOpen = true; [...menu.children].forEach((c, i) => c.style.setProperty("--k", i)); menuOv.hidden = false; requestAnimationFrame(() => { menuOv.classList.add("show"); menu.classList.add("open"); });
   menu.removeAttribute("inert"); menu.setAttribute("aria-hidden", "false"); burger.setAttribute("aria-expanded", "true"); lockScroll();
   setTimeout(() => menu.querySelector(".mi").focus({preventScroll: true}), 60); }
 function closeMenu(then){ if (!menuOpen) return; menuOpen = false; menu.classList.remove("open"); menuOv.classList.remove("show");
   menu.setAttribute("inert", ""); menu.setAttribute("aria-hidden", "true"); burger.setAttribute("aria-expanded", "false");
-  setTimeout(() => { menuOv.hidden = true; }, 300); if (modal.hidden) unlockScroll(); if (typeof then === "function") setTimeout(then, 60); }
+  setTimeout(() => { menuOv.hidden = true; }, 300); if (modal.hidden) unlockScroll(); if (typeof then === "function") setTimeout(then, REDUCED ? 0 : 240); }
 burger.onclick = () => menuOpen ? closeMenu() : openMenu();
 document.getElementById("menuX").onclick = () => closeMenu();
 menuOv.onclick = () => closeMenu();
