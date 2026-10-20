@@ -594,6 +594,59 @@
   .soonc.cta { border-style: solid; border-color: rgba(34,158,217,.4); background: radial-gradient(120% 120% at 0% 0%, rgba(34,158,217,.2), transparent 60%), var(--bg-soft); }
   .tab .ts { display: none; }
   @media (max-width: 600px) { .tabs { overflow: hidden; } .tab { flex: 1 1 0; min-width: 0; padding: 0 6px; gap: 6px; font-size: 13.5px; } .tab .tl { display: none; } .tab .ts { display: inline; } .tab-ic { min-width: 22px; font-size: 10px; } .gcards { grid-template-columns: 1fr 1fr; } .gcard { min-height: 140px; padding: 14px; } .gcard b { font-size: 15.5px; } .gcard.big b { font-size: 14px; } }
+
+  /* ---------- лента ---------- */
+  .plbox { margin-top: 18px; display: grid; gap: 10px; }
+  .plq { max-width: 420px; }
+  .plrow { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; padding: 4px 2px 6px; }
+  .plrow::-webkit-scrollbar { display: none; }
+  .plc { flex: none; width: 74px; display: grid; justify-items: center; gap: 6px; border: 0; background: transparent; color: var(--fg); font: inherit; cursor: pointer; }
+  .plc .ava, .ava { width: 52px; height: 52px; border-radius: 50%; overflow: hidden; padding: 0; border: 2px solid var(--line); background: var(--bg-soft); display: block; flex: none; cursor: pointer; transition: transform .2s; }
+  .plc .ava img, .ava img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
+  .plc:hover .ava, .ava:hover { transform: scale(1.06); }
+  .plc b { font-size: 12px; font-weight: 600; max-width: 74px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #feedCmp { margin-top: 14px; }
+  .cmp { display: flex; gap: 12px; padding: 14px; border-radius: 18px; background: var(--bg-soft); border: 1px solid var(--line); }
+  .cmp .ava { width: 44px; height: 44px; }
+  .cmp-b { flex: 1; min-width: 0; display: grid; gap: 10px; }
+  .cmp textarea { width: 100%; resize: vertical; min-height: 64px; background: transparent; border: 0; outline: none; color: var(--fg); font: inherit; font-size: 16px; line-height: 1.45; }
+  .cmp-f { display: flex; align-items: center; gap: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+  .cmp-att { font-size: 20px; cursor: pointer; padding: 4px 6px; border-radius: 8px; } .cmp-att:hover { background: rgba(255,255,255,.06); }
+  .cmp-n { margin-left: auto; font-size: 12.5px; color: var(--muted-2); font-variant-numeric: tabular-nums; } .cmp-n.low { color: #ff8a80; }
+  .cmp-go { padding: 9px 18px; font-size: 14px; } .cmp-go:disabled { opacity: .5; cursor: default; transform: none; }
+  .cmp-img { position: relative; max-width: 260px; } .cmp-img img { width: 100%; border-radius: 12px; display: block; }
+  .cmp-x { position: absolute; top: 6px; right: 6px; width: 28px; height: 28px; border-radius: 50%; border: 0; background: rgba(0,0,0,.6); color: #fff; cursor: pointer; }
+  .cmp-err { color: #ff8a80; font-size: 13px; }
+  .cmp-guest { display: grid; justify-items: start; gap: 6px; padding: 16px; border-radius: 18px; background: radial-gradient(120% 120% at 0% 0%, color-mix(in srgb, var(--t1) 18%, transparent), transparent 60%), var(--bg-soft); border: 1px solid var(--line); }
+  .cmp-guest small { color: var(--muted); } .cmp-guest .btn { margin-top: 6px; padding: 10px 18px; font-size: 14px; }
+  .feedlist { margin-top: 14px; display: grid; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); }
+  .feedlist:empty { display: none; }
+  .post { display: flex; gap: 12px; padding: 14px; background: var(--bg-soft); border-bottom: 1px solid var(--line); animation: inUp .6s cubic-bezier(.22,.61,.36,1) both; transition: opacity .4s, transform .4s; }
+  .post:last-child { border-bottom: 0; }
+  .post.gone { opacity: 0; transform: translateX(-30px); }
+  .post .ava { width: 44px; height: 44px; }
+  .pb { flex: 1; min-width: 0; }
+  .phd { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+  .pnick { border: 0; background: transparent; color: var(--fg); font: inherit; font-weight: 700; font-size: 15px; padding: 0; cursor: pointer; max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pnick:hover { text-decoration: underline; }
+  .ptime { color: var(--muted-2); font-size: 13px; }
+  .pdel { margin-left: auto; border: 0; background: transparent; color: var(--muted-2); cursor: pointer; font: inherit; font-size: 13px; padding: 2px 6px; border-radius: 8px; }
+  .pdel.sure { color: #ff8a80; background: rgba(232,86,74,.12); }
+  .ptext { margin-top: 4px; font-size: 15px; line-height: 1.5; overflow-wrap: anywhere; white-space: normal; }
+  .pimg { display: block; margin-top: 10px; max-width: 100%; max-height: 420px; border-radius: 14px; border: 1px solid var(--line); cursor: zoom-in; object-fit: cover; }
+  .pact { display: flex; gap: 18px; margin-top: 10px; }
+  .pa { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 14px; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; padding: 4px 8px; margin-left: -8px; border-radius: 99px; transition: background .2s, color .2s; }
+  .pa:hover { background: rgba(255,255,255,.06); color: var(--fg); }
+  .pa.like[aria-pressed="true"] { color: #ff6b8b; } .pa.pop { animation: pop .35s ease; }
+  .pa b { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .feedmore { display: block; margin: 14px auto 0; padding: 11px 22px; font-size: 14px; }
+  .feed-sk { height: 92px; background: linear-gradient(100deg, var(--bg-soft) 30%, #1c1c24 50%, var(--bg-soft) 70%); background-size: 250% 100%; animation: shimmer 1.2s linear infinite; border-bottom: 1px solid var(--line); }
+  .thr { padding: 0 20px 24px; margin-top: -30px; position: relative; z-index: 1; }
+  .thr h3 { font-family: var(--display); margin: 0 0 12px; }
+  .thr #thrMain .post, .thr-list .post { border: 1px solid var(--line); border-radius: 16px; margin-bottom: 8px; }
+  .thr-cmp { margin: 10px 0 14px; }
+  #upPosts .post { border: 1px solid var(--line); border-radius: 16px; margin-bottom: 8px; }
+  @media (max-width: 600px) { .post { padding: 12px; gap: 10px; } .post .ava { width: 40px; height: 40px; } .thr { padding: 0 14px 20px; } }
   /* ---------- предупреждение для телефонов ---------- */
   .mwarn { position: fixed; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom, 0px)); z-index: 65; max-width: 460px; margin: 0 auto;
     display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; padding: 14px 14px 12px; border-radius: 18px; background: rgba(20,20,26,.97); border: 1px solid rgba(255,255,255,.1);
@@ -909,9 +962,10 @@
   </nav>
 
   <div class="tabs" role="tablist" aria-label="Разделы">
-    <button type="button" class="tab" role="tab" data-tab="1x6" aria-selected="true"><span class="tab-ic">1×6</span><span>Dota 1x6</span></button>
+    <button type="button" class="tab" role="tab" data-tab="1x6" aria-selected="true"><span class="tab-ic">1×6</span><span class="tl">Dota 1x6</span><span class="ts">Сборки</span></button>
     <button type="button" class="tab" role="tab" data-tab="games" aria-selected="false"><span class="tab-ic">🎮</span><span class="tl">Мини-игры</span><span class="ts">Игры</span></button>
-    <button type="button" class="tab" role="tab" data-tab="soon" aria-selected="false"><span class="tab-ic">＋</span><span>Скоро</span></button>
+    <button type="button" class="tab" role="tab" data-tab="feed" aria-selected="false"><span class="tab-ic">💬</span><span>Лента</span></button>
+    <button type="button" class="tab" role="tab" data-tab="soon" aria-selected="false"><span class="tab-ic">＋</span><span class="tl">Скоро</span></button>
     <i class="tab-ink" id="tabInk"></i>
   </div>
   <div class="panes" id="panes">
@@ -960,6 +1014,15 @@
         <button type="button" class="gcard" data-g="feed"><span class="gc-ic">📱</span><b>Лента героев</b><small>Листай героев как в TikTok</small><em>Смотреть</em></button>
         <button type="button" class="gcard" data-g="top"><span class="gc-ic">🏆</span><b>Топ арены</b><small>Лучшие игроки сайта</small><em>Открыть</em></button>
       </div>
+    </section>
+  </div>
+  <div class="tabpane" data-pane="feed" role="tabpanel" hidden id="feedPane">
+    <section class="section first">
+      <div class="section-head"><h2>Лента игроков</h2><p>Делись сборками, рекордами и мемами. Нажми на игрока, чтобы открыть его профиль.</p></div>
+      <div class="plbox"><div class="search plq"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="plQ" type="search" placeholder="Найти игрока по нику" autocomplete="off"></div><div class="plrow" id="plRow"></div></div>
+      <div id="feedCmp"></div>
+      <div class="feedlist" id="feedList"></div>
+      <button type="button" class="btn btn-ghost feedmore" id="feedMore" hidden>Загрузить ещё</button>
     </section>
   </div>
   <div class="tabpane" data-pane="soon" role="tabpanel" hidden>
@@ -1674,11 +1737,12 @@ const PROF = (() => {
       <div class="psec"><h4>Избранные герои</h4>${faces(fav) || `<div class="pnone">Пока пусто — жми ★ на карточке героя.</div>`}</div>
       ${CLOUD && U ? `<div class="psec" id="pAch"><h4>Достижения</h4><div class="pnone">Загружаем…</div></div>` : ""}
       ${rec.length ? `<div class="psec"><h4>Недавно смотрел</h4>${faces(rec)}</div>` : ""}
-      <div class="pacts"><button type="button" class="btn btn-primary" id="pEdit">Редактировать</button><button type="button" class="btn btn-danger" id="pOut">Выйти</button></div>
+      <div class="pacts"><button type="button" class="btn btn-primary" id="pEdit">Редактировать</button>${CLOUD && U ? `<button type="button" class="btn btn-ghost" id="pPub">Мой публичный профиль</button>` : ""}<button type="button" class="btn btn-danger" id="pOut">Выйти</button></div>
       ${CLOUD ? "" : `<p class="pnote">Профиль сохранён только на этом устройстве.</p>`}
       <div id="pConf"></div>`);
     box.querySelectorAll(".pfaces button").forEach(b => b.onclick = () => openHero(H(b.dataset.s)));
     box.querySelector("#pEdit").onclick = () => edit(false);
+    { const pb = box.querySelector("#pPub"); if (pb) pb.onclick = () => openUser(U.id); }
     if (CLOUD && U) fillAch(box);
     box.querySelector("#pOut").onclick = () => {
       if (CLOUD){ sb.auth.signOut().finally(() => { U = null; P = null; topbar(); closeModal(); }); return; }
@@ -1777,6 +1841,7 @@ const PROF = (() => {
         if (error && /frame/.test(error.message || "")) ({ error } = await sb.from("profiles").upsert({ id: U.id, nick, status: st, avatar: enc(np.av), banner: enc(np.bn), favs: [...FAV], updated_at: new Date().toISOString() }));
         if (error){ if (error.code === "23505") { nh.textContent = "Этот ник уже занят — придумай другой"; nh.classList.add("err"); } else showErr(/relation|does not exist|schema cache/i.test(error.message) ? "База профилей ещё не настроена на сервере." : ERR(error.message)); return; }
         const wasNew = !P; P = { nick, st, av: np.av, bn: np.bn, frame: np.frame }; topbar(); view(); if (wasNew) claimDaily();
+        if (typeof curTab !== "undefined" && curTab === "feed"){ const c = document.getElementById("feedCmp"); if (c) composer(c, null, () => feedOpen(true)); }
       } catch(ex) { showErr(/Bucket not found|bucket/i.test(ex && ex.message || "") ? "Хранилище картинок ещё не настроено на сервере." : ERR(ex && ex.message)); }
       finally { if (btn.isConnected){ btn.disabled = false; btn.textContent = isNew ? "Создать профиль" : "Сохранить"; } }
     };
@@ -1790,7 +1855,7 @@ const PROF = (() => {
 
   async function loadUser(u){
     U = u || null;
-    if (!U){ P = null; ST = null; claimedFor = null; topbar(); return; }
+    if (!U){ P = null; ST = null; claimedFor = null; IS_ADMIN = false; topbar(); feedLoaded = false; if (typeof curTab !== "undefined" && curTab === "feed") setTimeout(() => feedOpen(true), 0); return; }
     const { data, error } = await sb.from("profiles").select("*").eq("id", U.id).maybeSingle();
     if (error){ P = null; topbar(); return; }
     if (data){
@@ -1801,6 +1866,7 @@ const PROF = (() => {
       if (FAV.size !== server.length) syncFavs();
     } else P = null;
     topbar();
+    checkAdmin(); feedLoaded = false; if (typeof curTab !== "undefined" && curTab === "feed") setTimeout(() => feedOpen(true), 0);
     if (P) claimDaily(); else { try { const r0 = await sb.from("user_stats").select("xp,streak,best_streak").eq("user_id", U.id).maybeSingle(); if (r0.data) ST = r0.data; } catch(e) {} }
     let pending = false; try { pending = sessionStorage.getItem("ub-auth-pending") === "1"; sessionStorage.removeItem("ub-auth-pending"); } catch(e) {}
     if (!P && !autoOpened && (pending || HAD_CODE)){ autoOpened = true; edit(true); }
@@ -1943,6 +2009,142 @@ const PROF = (() => {
     el.querySelector('[data-a="later"]').onclick = () => { el.classList.remove("show"); };
   }
 
+  /* ---------- соцсеть: посты, лайки, ответы, публичные профили ---------- */
+  const PAGE = 15; let feedOff = 0, feedBusy = false, feedLoaded = false;
+  const ago = iso => { const s = Math.max(1, (Date.now() - new Date(iso).getTime()) / 1000);
+    if (s < 60) return "только что"; if (s < 3600) return Math.floor(s / 60) + " мин"; if (s < 86400) return Math.floor(s / 3600) + " ч";
+    if (s < 604800) return Math.floor(s / 86400) + " д"; return new Date(iso).toLocaleDateString("ru-RU", { day: "numeric", month: "short" }); };
+  const okImg = u => typeof u === "string" && u.indexOf(window.SB_CONF ? window.SB_CONF.url + "/storage/v1/object/public/media/" : "#") === 0;
+  const avaHTML = (av, frame, uid, cls) => `<button type="button" class="ava ${cls || ""}${frameCls(frame)}" data-user="${esc(uid)}" aria-label="Профиль"><img alt="" loading="lazy" src="${esc(avatarOf(av))}"></button>`;
+  function postHTML(r, liked){
+    const mine = U && r.user_id === U.id;
+    return `<article class="post" data-id="${r.id}" data-uid="${esc(r.user_id)}">${avaHTML(r.avatar, r.frame, r.user_id)}
+      <div class="pb"><div class="phd"><button type="button" class="pnick" data-user="${esc(r.user_id)}">${esc(r.nick)}</button><em class="glv">${lvlOf(r.xp)} ур.</em><span class="ptime">· ${ago(r.created_at)}</span>${mine || IS_ADMIN ? `<button type="button" class="pdel" aria-label="Удалить">🗑</button>` : ""}</div>
+      <div class="ptext">${esc(r.body).replace(/\n/g, "<br>")}</div>
+      ${okImg(r.image) ? `<img class="pimg" alt="" loading="lazy" src="${esc(r.image)}">` : ""}
+      <div class="pact"><button type="button" class="pa like" aria-pressed="${!!liked}">${liked ? "❤️" : "🤍"} <b>${r.likes || 0}</b></button><button type="button" class="pa rep">💬 <b>${r.replies || 0}</b></button></div></div></article>`;
+  }
+  async function myLikes(ids){ if (!U || !ids.length) return new Set(); try { const { data } = await sb.from("post_likes").select("post_id").eq("user_id", U.id).in("post_id", ids); return new Set((data || []).map(x => x.post_id)); } catch(e) { return new Set(); } }
+  let IS_ADMIN = false;
+  async function checkAdmin(){ IS_ADMIN = false; if (!U) return; try { const { data } = await sb.from("admins").select("user_id").eq("user_id", U.id).maybeSingle(); IS_ADMIN = !!data; } catch(e) {} }
+  function wirePosts(root, onChange){
+    if (root._wired) return; root._wired = true;
+    root.addEventListener("click", async e => {
+      const u = e.target.closest("[data-user]"); if (u){ openUser(u.dataset.user); return; }
+      const art = e.target.closest(".post"); if (!art) return; const id = +art.dataset.id;
+      if (e.target.closest(".like")){
+        if (!U){ nudge("vote", true); return; }
+        const b = e.target.closest(".like"), on = b.getAttribute("aria-pressed") === "true", n = b.querySelector("b");
+        b.setAttribute("aria-pressed", !on); b.firstChild.textContent = !on ? "❤️ " : "🤍 "; n.textContent = Math.max(0, +n.textContent + (on ? -1 : 1)); b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop");
+        const { error } = on ? await sb.from("post_likes").delete().eq("post_id", id).eq("user_id", U.id) : await sb.from("post_likes").insert({ post_id: id });
+        if (error){ b.setAttribute("aria-pressed", on); b.firstChild.textContent = on ? "❤️ " : "🤍 "; n.textContent = Math.max(0, +n.textContent + (on ? 1 : -1)); }
+        return;
+      }
+      if (e.target.closest(".rep")){ openThread(id); return; }
+      const del = e.target.closest(".pdel");
+      if (del){ if (!del.classList.contains("sure")){ del.classList.add("sure"); del.textContent = "Удалить?"; setTimeout(() => { if (del.isConnected){ del.classList.remove("sure"); del.textContent = "🗑"; } }, 3000); return; }
+        const { error } = await sb.from("posts").delete().eq("id", id);
+        if (!error){ art.classList.add("gone"); setTimeout(() => { art.remove(); if (onChange) onChange(); }, 400); } else toast(`<span class="tic">⚠️</span><span><b>Не удалось удалить</b></span>`, "", 2500);
+        return;
+      }
+      if (e.target.closest(".pimg")){ window.open(e.target.closest(".pimg").src, "_blank", "noopener"); }
+    });
+  }
+  function fitShrink(file, max, cb){ const r = new FileReader(); r.onload = () => { const img = new Image(); img.onload = () => {
+      const k = Math.min(1, max / Math.max(img.width, img.height)), w = Math.round(img.width * k), h = Math.round(img.height * k), c = document.createElement("canvas"); c.width = w; c.height = h;
+      c.getContext("2d").drawImage(img, 0, 0, w, h); cb(c.toDataURL("image/jpeg", .82)); }; img.onerror = () => cb(null); img.src = r.result; }; r.onerror = () => cb(null); r.readAsDataURL(file); }
+  function composer(el, replyTo, onPosted){
+    if (!CLOUD){ el.innerHTML = ""; return; }
+    if (!U || !P){ el.innerHTML = `<div class="cmp-guest"><b>${replyTo ? "Хочешь ответить?" : "Пиши посты, ставь лайки, отвечай игрокам"}</b><small>Войди и создай профиль — это бесплатно</small><button type="button" class="btn btn-primary" id="cmpIn">${U ? "Создать профиль" : "Войти"}</button></div>`;
+      el.querySelector("#cmpIn").onclick = () => open(); return; }
+    el.innerHTML = `<div class="cmp">${avaHTML(enc(P.av), P.frame, U.id, "me")}<div class="cmp-b"><textarea maxlength="280" rows="${replyTo ? 2 : 3}" placeholder="${replyTo ? "Твой ответ…" : "Что нового в 1x6? Поделись сборкой, рекордом или мемом…"}"></textarea>
+      <div class="cmp-img" hidden><img alt=""><button type="button" class="cmp-x" aria-label="Убрать картинку">✕</button></div>
+      <div class="cmp-f"><label class="cmp-att" title="Картинка">🖼<input type="file" accept="image/*" hidden></label><span class="cmp-n">280</span><button type="button" class="btn btn-primary cmp-go" disabled>${replyTo ? "Ответить" : "Опубликовать"}</button></div><div class="cmp-err" hidden></div></div></div>`;
+    const ta = el.querySelector("textarea"), go = el.querySelector(".cmp-go"), n = el.querySelector(".cmp-n"), err = el.querySelector(".cmp-err"), imW = el.querySelector(".cmp-img"), inp = el.querySelector("input[type=file]"); let img = null;
+    const upd = () => { const l = ta.value.trim().length; n.textContent = 280 - ta.value.length; n.classList.toggle("low", 280 - ta.value.length < 20); go.disabled = l < 1; };
+    ta.oninput = upd; ta.addEventListener("keydown", e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey) && !go.disabled) go.click(); });
+    inp.onchange = () => { const f = inp.files && inp.files[0]; inp.value = ""; if (!f || !/^image\//.test(f.type)) return; fitShrink(f, 1100, url => { if (!url) return; img = url; imW.hidden = false; imW.querySelector("img").src = url; }); };
+    el.querySelector(".cmp-x").onclick = () => { img = null; imW.hidden = true; };
+    go.onclick = async () => {
+      const body = ta.value.trim(); if (!body) return; go.disabled = true; go.textContent = "…"; err.hidden = true;
+      try {
+        let url = null; if (img) url = await uploadData(img, "post");
+        const { error } = await sb.from("posts").insert({ body, image: url, reply_to: replyTo || null });
+        if (error){ err.hidden = false; err.textContent = /rate_limit_minute/.test(error.message) ? "Слишком часто — подожди минуту." : /rate_limit_day/.test(error.message) ? "На сегодня лимит постов исчерпан." : /relation|does not exist|schema cache/i.test(error.message) ? "Лента ещё не настроена на сервере." : /row-level|policy/i.test(error.message) ? "Сначала создай профиль." : "Не получилось опубликовать."; return; }
+        ta.value = ""; img = null; imW.hidden = true; upd(); toast(`<span class="tic">✅</span><span><b>${replyTo ? "Ответ отправлен" : "Пост опубликован"}</b></span>`, "xp", 1800);
+        if (onPosted) onPosted();
+      } catch(ex) { err.hidden = false; err.textContent = "Не получилось загрузить картинку."; }
+      finally { go.textContent = replyTo ? "Ответить" : "Опубликовать"; upd(); }
+    };
+  }
+  async function loadPosts(listEl, q, append){
+    if (!append) listEl.innerHTML = `<div class="feed-sk"></div><div class="feed-sk"></div><div class="feed-sk"></div>`;
+    const { data, error } = await q;
+    if (error){ listEl.innerHTML = `<div class="gempty">${/relation|does not exist|schema cache/i.test(error.message) ? "Лента ещё не настроена на сервере." : "Не удалось загрузить посты."}</div>`; return []; }
+    const rows = data || [], lk = await myLikes(rows.map(r => r.id));
+    const html = rows.map(r => postHTML(r, lk.has(r.id))).join("");
+    if (append) listEl.insertAdjacentHTML("beforeend", html); else listEl.innerHTML = html || `<div class="gempty">Пока тут пусто. Напиши первый пост! ✍️</div>`;
+    return rows;
+  }
+  async function feedOpen(force){
+    const root = document.getElementById("feedPane"); if (!root) return;
+    const list = document.getElementById("feedList"), more = document.getElementById("feedMore"), cmp = document.getElementById("feedCmp");
+    if (!CLOUD){ list.innerHTML = `<div class="gempty">Лента игроков работает на сайте <b>1x6-eta.vercel.app</b> после входа.</div>`; more.hidden = true; cmp.innerHTML = ""; return; }
+    composer(cmp, null, () => feedOpen(true));
+    wirePosts(list);
+    if (feedLoaded && !force) return; feedLoaded = true; feedOff = 0;
+    const rows = await loadPosts(list, sb.from("post_feed").select("*").is("reply_to", null).order("created_at", { ascending: false }).range(0, PAGE - 1));
+    feedOff = rows.length; more.hidden = rows.length < PAGE;
+    loadPlayers("");
+  }
+  async function feedMore(){
+    if (feedBusy) return; feedBusy = true; const list = document.getElementById("feedList"), more = document.getElementById("feedMore");
+    const rows = await loadPosts(list, sb.from("post_feed").select("*").is("reply_to", null).order("created_at", { ascending: false }).range(feedOff, feedOff + PAGE - 1), true);
+    feedOff += rows.length; more.hidden = rows.length < PAGE; feedBusy = false;
+  }
+  let plT = 0;
+  async function loadPlayers(q){
+    const row = document.getElementById("plRow"); if (!row || !CLOUD) return;
+    let req = sb.from("profiles").select("id,nick,avatar,frame,status").order("updated_at", { ascending: false }).limit(24);
+    const qq = (q || "").replace(/[%_\\,()]/g, "").trim(); if (qq) req = sb.from("profiles").select("id,nick,avatar,frame,status").ilike("nick", `%${qq}%`).limit(24);
+    const { data, error } = await req; if (error){ row.innerHTML = ""; return; }
+    row.innerHTML = (data || []).map(x => `<button type="button" class="plc" data-user="${esc(x.id)}"><span class="ava${frameCls(x.frame)}"><img alt="" loading="lazy" src="${esc(avatarOf(x.avatar))}"></span><b>${esc(x.nick)}</b></button>`).join("") || `<span class="pnone">Никого не нашли</span>`;
+    row.onclick = e => { const b = e.target.closest("[data-user]"); if (b) openUser(b.dataset.user); };
+  }
+  async function openThread(id){
+    const box = shell("", `<div class="thr"><h3>Пост и ответы</h3><div id="thrMain"></div><div id="thrCmp" class="thr-cmp"></div><div id="thrList" class="thr-list"></div></div>`, "Ответы");
+    const main = box.querySelector("#thrMain"), list = box.querySelector("#thrList"); wirePosts(main); wirePosts(list);
+    const reload = async () => {
+      const { data } = await sb.from("post_feed").select("*").eq("id", id).maybeSingle();
+      if (!data){ main.innerHTML = `<div class="gempty">Пост удалён</div>`; return; }
+      const lk = await myLikes([id]); main.innerHTML = postHTML(data, lk.has(id));
+      await loadPosts(list, sb.from("post_feed").select("*").eq("reply_to", id).order("created_at", { ascending: true }).limit(100));
+      if (!list.querySelector(".post")) list.innerHTML = `<div class="pnone">Ответов пока нет</div>`;
+    };
+    composer(box.querySelector("#thrCmp"), id, () => { reload(); feedLoaded = false; });
+    reload();
+  }
+  async function openUser(uid){
+    if (!CLOUD) return;
+    const [{ data: pr }, { data: st }, { data: rs }] = await Promise.all([
+      sb.from("profiles").select("*").eq("id", uid).maybeSingle(),
+      sb.from("user_stats").select("xp,streak,best_streak").eq("user_id", uid).maybeSingle(),
+      sb.from("runner_scores").select("best,games").eq("user_id", uid).maybeSingle()]);
+    if (!pr){ toast(`<span class="tic">🤷</span><span><b>Профиль не найден</b></span>`, "", 2500); return; }
+    const q = fromRow(pr), xp = st ? st.xp : 0, lv = lvlOf(xp), mine = U && uid === U.id, favs = Array.isArray(pr.favs) ? pr.favs.slice(0, 12) : [];
+    const box = shell(bnSrc(q.bn), `
+      <div class="phead"><div class="pav${frameCls(q.frame)}"><img alt="" src="${esc(avSrc(q.av))}"></div><div class="pname"><h3>${esc(q.nick)} <em class="glv">${lv} ур.</em></h3>${q.st ? `<div class="pst">${esc(q.st)}</div>` : ""}</div></div>
+      <div class="pstats"><div class="pstat"><b>${lv}</b><span>уровень</span></div><div class="pstat"><b>${rs ? rs.best : 0}</b><span>рекорд арены</span></div><div class="pstat"><b>${st ? st.best_streak : 0}</b><span>лучшая серия</span></div></div>
+      ${favs.length ? `<div class="psec"><h4>Любимые герои</h4>${faces(favs)}</div>` : ""}
+      ${mine ? `<div class="pacts"><button type="button" class="btn btn-ghost" id="upEdit">Редактировать профиль</button></div>` : ""}
+      <div class="psec"><h4>Посты</h4><div id="upPosts"></div></div>`, "Профиль игрока");
+    box.querySelectorAll(".pfaces button").forEach(b => b.onclick = () => openHero(H(b.dataset.s)));
+    const ed = box.querySelector("#upEdit"); if (ed) ed.onclick = () => view();
+    const list = box.querySelector("#upPosts"); wirePosts(list);
+    await loadPosts(list, sb.from("post_feed").select("*").eq("user_id", uid).is("reply_to", null).order("created_at", { ascending: false }).limit(30));
+    if (!list.querySelector(".post")) list.innerHTML = `<div class="pnone">Постов пока нет</div>`;
+  }
+
   topbar();
   if (CLOUD){
     sb.auth.onAuthStateChange((ev, session) => {
@@ -1976,7 +2178,7 @@ const PROF = (() => {
       return { rows: data || [] };
     } catch(e) { return { error: "Нет связи с сервером." }; }
   }
-  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf };
+  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf, feedOpen, feedMore, openUser, loadPlayers: q => { clearTimeout(plT); plT = setTimeout(() => loadPlayers(q), 250); } };
 })();
 window.__favSync = () => PROF.syncFavs();
 
@@ -2757,6 +2959,7 @@ const GAME = (() => {
       el.innerHTML = `<ol class="glist">${rows.map((x, i) => `<li class="${me && x.user_id === me.id ? "me" : ""}"><span class="gr">${i < 3 ? ["🥇","🥈","🥉"][i] : i + 1}</span><span class="ga${PROF.frameCls(x.frame)}"><img alt="" loading="lazy" src="${esc(PROF.avatarOf(x.avatar))}"></span><span class="gn">${esc(x.nick)}${x.xp != null ? ` <em class="glv">${PROF.lvlOf(x.xp)} ур.</em>` : ""}</span><b class="gp">${x.best}</b></li>`).join("")}</ol>
         ${me ? "" : `<button type="button" class="gchg" id="gLogin2">Войди, чтобы попасть в топ</button>`}`;
       const l2 = el.querySelector("#gLogin2"); if (l2) l2.onclick = () => PROF.open();
+      el.querySelectorAll(".glist li").forEach((li, i) => { li.style.cursor = "pointer"; li.onclick = () => PROF.openUser(rows[i].user_id); });
     }
     if (tab === "top") box.querySelector('.gtab[data-t="top"]').click();
   }
@@ -2907,7 +3110,7 @@ const MINI = (() => {
 })();
 
 /* ---------- вкладки ---------- */
-const TABS = ["1x6", "games", "soon"];
+const TABS = ["1x6", "games", "feed", "soon"];
 let curTab = "1x6";
 function inkTo(btn, instant){ const ink = document.getElementById("tabInk"), bar = btn.parentElement; if (!ink) return;
   if (instant){ ink.style.transition = "none"; requestAnimationFrame(() => ink.style.transition = ""); }
@@ -2918,6 +3121,7 @@ function setTab(name, opts){
   document.querySelectorAll(".tab").forEach(b => { const on = b.dataset.tab === name; b.setAttribute("aria-selected", on); if (on){ inkTo(b, opts.instant); b.scrollIntoView({ inline: "nearest", block: "nearest" }); } });
   document.querySelectorAll(".tabpane").forEach(p => { const on = p.dataset.pane === name; p.hidden = !on; p.classList.remove("in-l", "in-r");
     if (on && prev !== name && !opts.instant && !REDUCED){ void p.offsetWidth; p.classList.add(dir > 0 ? "in-l" : "in-r"); } });
+  if (name === "feed") PROF.feedOpen();
   if (!opts.keepHash){ try { history.replaceState(null, "", name === "1x6" ? location.pathname + location.search : "#" + name); } catch(e) {} }
   if (prev !== name && !opts.noScroll){ const tb = document.querySelector(".tabs"); const y = tb.getBoundingClientRect().top + scrollY - 70; if (scrollY > y) window.scrollTo({ top: y, behavior: REDUCED ? "auto" : "smooth" }); }
 }
@@ -2928,6 +3132,8 @@ addEventListener("resize", () => { const a = document.querySelector('.tab[aria-s
   el.addEventListener("touchend", e => { if (x0 === null) return; const t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0; x0 = null;
     if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 2 && Date.now() - t0 < 600 && !document.querySelector(".modal:not([hidden])")){ const i = TABS.indexOf(curTab) + (dx < 0 ? 1 : -1); if (i >= 0 && i < TABS.length) setTab(TABS[i]); } }, { passive: true }); }
 document.querySelectorAll(".gcard").forEach(c => c.onclick = () => ({ arena: () => GAME.open(), quiz: () => quiz(), roll: () => roulette(), broll: () => buildRoulette(), feed: () => openFeed(), top: () => GAME.open("top"), lasthit: () => MINI.lasthit(), invoker: () => MINI.invoker() })[c.dataset.g]());
+document.getElementById("feedMore").onclick = () => PROF.feedMore();
+document.getElementById("plQ").addEventListener("input", e => PROF.loadPlayers(e.target.value));
 { const h = (location.hash || "").slice(1); setTab(TABS.includes(h) ? h : "1x6", { instant: true, keepHash: true, noScroll: true }); }
 addEventListener("hashchange", () => { const h = (location.hash || "").slice(1); if (TABS.includes(h) && h !== curTab) setTab(h, { keepHash: true }); });
 /* ---------- меню (бургер) ---------- */
