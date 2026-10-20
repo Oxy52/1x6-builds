@@ -38,7 +38,8 @@
   html { scroll-padding-top: 80px; }
   .nav { position: sticky; top: 0; z-index: 40; display: flex; align-items: center; gap: 14px; margin-inline: -10px; padding: max(12px, env(safe-area-inset-top, 0px)) 10px 12px; background: rgba(8,8,11,0); transition: background .25s, box-shadow .25s; }
   .nav.scrolled { background: rgba(8,8,11,.95); box-shadow: 0 1px 0 var(--line), 0 10px 30px rgba(0,0,0,.35); }
-  .logo { color: var(--fg); text-decoration: none; }
+  .logo { color: var(--fg); text-decoration: none; white-space: nowrap; min-width: 0; }
+  @media (max-width: 400px) { .logo .lt { display: none; } }
   .burger { margin-left: 0; width: 46px; height: 46px; flex: none; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); cursor: pointer; display: grid; place-content: center; gap: 5px; padding: 0; transition: border-color .2s; }
   .burger span { display: block; width: 20px; height: 2px; border-radius: 2px; background: var(--fg); transition: transform .3s cubic-bezier(.2,.8,.2,1), opacity .2s; }
   .burger:hover { border-color: rgba(255,255,255,.25); }
@@ -452,6 +453,18 @@
   @media (max-width: 600px) { .pcover .close { top: max(14px, env(safe-area-inset-top, 0px)); } .pav { width: 88px; height: 88px; } .phead { margin-top: -44px; padding: 0 16px; } .pstats, .psec, .pacts, .pform { padding-left: 16px; padding-right: 16px; } .pbtn:not(.has) { padding: 0 13px; font-size: 13px; } }
 
 
+
+  /* ---------- предупреждение для телефонов ---------- */
+  .mwarn { position: fixed; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom, 0px)); z-index: 65; max-width: 460px; margin: 0 auto;
+    display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; padding: 14px 14px 12px; border-radius: 18px; background: rgba(20,20,26,.97); border: 1px solid rgba(255,255,255,.1);
+    box-shadow: 0 18px 50px rgba(0,0,0,.6), 0 0 0 1px color-mix(in srgb, var(--t1) 25%, transparent) inset; transform: translateY(140%); transition: transform .45s cubic-bezier(.2,.9,.2,1); }
+  .mwarn.show { transform: none; }
+  .mwarn .mi-ic { grid-row: 1 / span 2; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font-size: 20px; background: color-mix(in srgb, var(--t1) 22%, transparent); }
+  .mwarn b { font-family: var(--display); font-size: 15px; line-height: 1.3; }
+  .mwarn p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+  .mwarn .mw-b { grid-column: 1 / -1; display: flex; gap: 8px; margin-top: 10px; }
+  .mwarn .mw-b .btn { flex: 1; padding: 11px 10px; font-size: 13.5px; }
+  .mwarn .mw-x { position: absolute; top: 6px; right: 6px; width: 32px; height: 32px; border: 0; background: transparent; color: var(--muted-2); font-size: 15px; cursor: pointer; border-radius: 8px; }
   /* ---------- мини-игра ---------- */
   .btn-game { background: linear-gradient(135deg, #f3c35a, #e8564a); color: #1a0d05; font-weight: 700; }
   .btn-game:hover { transform: translateY(-2px); }
@@ -646,7 +659,7 @@
         <div class="thgrid" id="thGrid"></div>
       </div>
     </div>
-    <a class="logo" href="#top" id="logoBtn"><span class="mark">1×6</span> 1x6 Билды</a>
+    <a class="logo" href="#top" id="logoBtn"><span class="mark">1×6</span><span class="lt">1x6 Билды</span></a>
     <button type="button" class="pbtn" id="pBtn" aria-label="Профиль"><span>Войти</span></button>
     <button type="button" class="burger" id="burger" aria-label="Меню" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
   </nav>
@@ -1770,6 +1783,25 @@ const GAME = (() => {
   return { open };
 })();
 
+
+/* ---------- предупреждение для телефонов (один раз) ---------- */
+(() => {
+  const phone = matchMedia("(max-width: 820px) and (pointer: coarse)").matches || /iPhone|Android.+Mobile/i.test(navigator.userAgent);
+  if (!phone) return;
+  let seen = false; try { seen = localStorage.getItem("ub-mwarn") === "1"; } catch(e) {}
+  if (seen) return;
+  const el = document.createElement("div"); el.className = "mwarn"; el.setAttribute("role", "status");
+  el.innerHTML = `<span class="mi-ic">📱</span><b>Ты зашёл с телефона</b>
+    <p>Сайт полностью работает, но анимаций много — на некоторых телефонах может подлагивать. С компьютера смотрится лучше всего.</p>
+    <div class="mw-b"><button type="button" class="btn btn-primary" id="mwLite">Лёгкий режим</button><button type="button" class="btn btn-ghost" id="mwOk">Понятно</button></div>
+    <button type="button" class="mw-x" aria-label="Закрыть">✕</button>`;
+  document.body.appendChild(el);
+  const hide = () => { try { localStorage.setItem("ub-mwarn", "1"); } catch(e) {} el.classList.remove("show"); setTimeout(() => el.remove(), 500); };
+  el.querySelector("#mwOk").onclick = hide; el.querySelector(".mw-x").onclick = hide;
+  el.querySelector("#mwLite").onclick = () => { const t = document.getElementById("fxToggle"); if (t && t.checked){ t.checked = false; t.dispatchEvent(new Event("change")); } hide(); };
+  const delay = document.documentElement.classList.contains("fast") ? 900 : 2200;
+  setTimeout(() => { if (el.isConnected) requestAnimationFrame(() => el.classList.add("show")); }, delay);
+})();
 /* ---------- меню (бургер) ---------- */
 const menu = document.getElementById("menu"), menuOv = document.getElementById("menuOv"), burger = document.getElementById("burger");
 let menuOpen = false;
