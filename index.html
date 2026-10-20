@@ -462,7 +462,7 @@
   .ob:hover:not(:disabled) { filter: brightness(1.08); }
   .ob.google { background: #fff; color: #1f1f1f; }
   .ob.discord { background: #5865f2; color: #fff; border-color: transparent; }
-  .ob.telegram { background: #229ed9; color: #fff; border-color: transparent; opacity: .55; cursor: not-allowed; }
+  .ob.telegram { background: #229ed9; color: #fff; border-color: transparent; }
   .ob em { position: absolute; right: 12px; font-style: normal; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 99px; background: rgba(0,0,0,.25); }
   .ob:disabled { cursor: default; }
   .ob.off { opacity: .45; cursor: not-allowed; }
@@ -1154,7 +1154,7 @@ const PROF = (() => {
     if (t === "url" && !/^https:\/\//.test(v)) return null; return { t, v }; };
   const fromRow = r => ({ nick: r.nick, st: r.status || "", av: dec(r.avatar) || { t: "hero", v: "pudge" }, bn: dec(r.banner) || { t: "grad", v: "" } });
   function seen(){ try { return JSON.parse(localStorage.getItem("ub-seen") || "[]"); } catch(e) { return []; } }
-  const provName = u => { const p = u && u.app_metadata && u.app_metadata.provider; return p === "google" ? "Google" : p === "discord" ? "Discord" : p === "email" ? "почта" : p || ""; };
+  const provName = u => { if (u && u.user_metadata && u.user_metadata.provider === "telegram") return "Telegram"; const p = u && u.app_metadata && u.app_metadata.provider; return p === "google" ? "Google" : p === "discord" ? "Discord" : p === "email" ? "почта" : p || ""; };
 
   /* ---------- верхняя панель и меню ---------- */
   function topbar(){
@@ -1177,7 +1177,17 @@ const PROF = (() => {
     discord: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M19.6 5.3A16.5 16.5 0 0 0 15.5 4l-.5 1a15.4 15.4 0 0 0-6 0l-.5-1a16.5 16.5 0 0 0-4.1 1.3C1.8 9.2 1.1 13 1.4 16.7a16.6 16.6 0 0 0 5 2.5l1.1-1.7a10.8 10.8 0 0 1-1.7-.8l.4-.3a11.8 11.8 0 0 0 11.6 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.7a16.5 16.5 0 0 0 5-2.5c.4-4.3-.7-8-3-11.4zM8.7 14.5c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm6.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></svg>',
     telegram: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M21.9 4.3 18.8 19c-.2 1-.8 1.3-1.7.8l-4.7-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.8 8.8-7.9c.4-.3-.1-.5-.6-.2L6.8 13l-4.7-1.5c-1-.3-1-1 .2-1.5L20.6 3c.9-.3 1.6.2 1.3 1.3z"/></svg>'
   };
-  let PROV = null;
+  let PROV = null, TGC = null;
+  function tgConf(){
+    if (TGC) return TGC;
+    TGC = fetch("/api/telegram", { headers: { accept: "application/json" } }).then(r => r.ok ? r.json() : null)
+      .then(c => { if (c && c.enabled) loadTgScript(); return c; }).catch(() => null);
+    return TGC;
+  }
+  function loadTgScript(){
+    if (window.Telegram && Telegram.Login) return; if (document.getElementById("tgw")) return;
+    const sc = document.createElement("script"); sc.id = "tgw"; sc.async = true; sc.src = "https://telegram.org/js/telegram-widget.js?22"; document.head.appendChild(sc);
+  }
   function providers(){
     if (PROV) return PROV;
     PROV = fetch(window.SB_CONF.url + "/auth/v1/settings", { headers: { apikey: window.SB_CONF.key } })
@@ -1206,7 +1216,7 @@ const PROF = (() => {
         ${mode === "reset" ? "" : `<div class="oauth">
           <button type="button" class="ob google" data-p="google">${IC.google}<span>Войти через Google</span></button>
           <button type="button" class="ob discord" data-p="discord">${IC.discord}<span>Войти через Discord</span></button>
-          <button type="button" class="ob telegram" disabled title="Скоро">${IC.telegram}<span>Telegram</span><em>скоро</em></button>
+          <button type="button" class="ob telegram off" id="tgBtn" disabled>${IC.telegram}<span>Войти через Telegram</span><em>скоро</em></button>
         </div>
         <div class="or"><span>или по почте</span></div>`}
         <form class="aform" id="aForm" novalidate>
@@ -1221,10 +1231,32 @@ const PROF = (() => {
       </div>`, "Вход");
     const msg = box.querySelector("#aMsg"), ok = box.querySelector(".aok");
     const say = (t, good) => { msg.hidden = false; msg.textContent = t; msg.classList.toggle("good", !!good); };
-    const busy = on => { ok.disabled = on; box.querySelectorAll(".ob:not(.telegram):not(.off)").forEach(b => b.disabled = on); };
+    const busy = on => { ok.disabled = on; box.querySelectorAll(".ob:not(.off)").forEach(b => b.disabled = on); };
     box.querySelectorAll(".alinks [data-m]").forEach(b => b.onclick = () => auth(b.dataset.m));
     providers().then(ex => { if (!ex) return; box.querySelectorAll(".ob[data-p]").forEach(b => { if (!ex[b.dataset.p]){ b.disabled = true; b.classList.add("off"); if (!b.querySelector("em")) b.insertAdjacentHTML("beforeend", "<em>скоро</em>"); } }); });
     const eye = box.querySelector("#aEye"); if (eye) eye.onclick = () => { const i = box.querySelector("#aPass"); i.type = i.type === "password" ? "text" : "password"; };
+    const tg = box.querySelector("#tgBtn");
+    if (tg) tgConf().then(c => { if (!c || !c.enabled || !tg.isConnected) return;
+      tg.classList.remove("off"); tg.disabled = false; const em = tg.querySelector("em"); if (em) em.remove();
+      tg.onclick = () => {
+        if (!window.Telegram || !Telegram.Login){ say("Telegram ещё загружается — нажми ещё раз через секунду."); loadTgScript(); return; }
+        say("Подтверди вход в окне Telegram…", true);
+        Telegram.Login.auth({ bot_id: c.bot_id, request_access: "write", lang: "ru" }, async data => {
+          if (!data){ say("Вход через Telegram отменён."); return; }
+          busy(true); say("Входим…", true);
+          try {
+            const r = await fetch("/api/telegram", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ user: data }) });
+            const j = await r.json().catch(() => ({}));
+            if (!r.ok || !j.token_hash){ say(j.error === "expired" ? "Подтверждение устарело, попробуй ещё раз." : "Не получилось войти через Telegram. Попробуй ещё раз."); return; }
+            try { sessionStorage.setItem("ub-auth-pending", "1"); } catch(_) {}
+            const { error } = await sb.auth.verifyOtp({ type: "magiclink", token_hash: j.token_hash });
+            if (error){ say(ERR(error.message)); return; }
+            closeModal();
+          } catch(ex) { say(ERR(ex && ex.message)); }
+          finally { busy(false); }
+        });
+      };
+    });
     box.querySelectorAll(".ob[data-p]").forEach(b => b.onclick = async () => {
       if (b.classList.contains("off")) return;
       const ex = await providers(); if (ex && !ex[b.dataset.p]){ say("Этот способ входа ещё не включён на сайте."); return; }
@@ -1277,7 +1309,7 @@ const PROF = (() => {
     let best = 0; try { best = +localStorage.getItem("ub-best") || 0; } catch(e) {}
     const fav = [...FAV], rec = (typeof RECENT !== "undefined" ? RECENT : []).slice(0, 8);
     const box = shell(bnSrc(P.bn), `
-      <div class="phead"><div class="pav"><img alt="" src="${esc(avSrc(P.av))}"></div><div class="pname"><h3>${esc(P.nick)}</h3>${P.st ? `<div class="pst">${esc(P.st)}</div>` : ""}${CLOUD && U ? `<div class="pvia">Вход: ${esc(provName(U))}${U.email ? " · " + esc(U.email) : ""}</div>` : ""}</div></div>
+      <div class="phead"><div class="pav"><img alt="" src="${esc(avSrc(P.av))}"></div><div class="pname"><h3>${esc(P.nick)}</h3>${P.st ? `<div class="pst">${esc(P.st)}</div>` : ""}${CLOUD && U ? `<div class="pvia">Вход: ${esc(provName(U))}${U.email && !/@1x6-eta\.vercel\.app$/.test(U.email) ? " · " + esc(U.email) : (U.user_metadata && U.user_metadata.user_name ? " · @" + esc(U.user_metadata.user_name) : "")}</div>` : ""}</div></div>
       <div class="pstats"><div class="pstat"><b>${fav.length}</b><span>в избранном</span></div><div class="pstat"><b>${seen().length}</b><span>героев изучено</span></div><div class="pstat"><b>${best}</b><span>рекорд в квизе</span></div></div>
       <div class="psec"><h4>Избранные герои</h4>${faces(fav) || `<div class="pnone">Пока пусто — жми ★ на карточке героя.</div>`}</div>
       ${rec.length ? `<div class="psec"><h4>Недавно смотрел</h4>${faces(rec)}</div>` : ""}
@@ -1317,6 +1349,7 @@ const PROF = (() => {
     if (CLOUD && !U) return auth("in");
     const base = P || (CLOUD ? LOCAL : null);
     const d = base ? JSON.parse(JSON.stringify(base)) : { nick: "", st: "", av: { t: "hero", v: HEROES[rnd(HEROES.length)].slug }, bn: { t: "arc", v: Object.keys(ARCANA)[rnd(11)] } };
+    if (!base && CLOUD && U){ const md = U.user_metadata || {}; const au = md.avatar_url || md.picture; if (au && /^https:\/\//.test(au)) d.av = { t: "url", v: au }; }
     if (!d.nick && CLOUD && U){ const md = U.user_metadata || {}; d.nick = String(md.full_name || md.name || md.user_name || (U.email || "").split("@")[0] || "").replace(/[^\p{L}\p{N}_\-. ]/gu, "").slice(0, 20); }
     const arcs = Object.keys(ARCANA);
     const lb = t => `<span class="lb">${t}</span>`;
