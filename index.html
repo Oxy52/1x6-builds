@@ -1765,7 +1765,7 @@ const PROF = (() => {
   async function uploadData(dataUrl, kind){
     const blob = await (await fetch(dataUrl)).blob();
     const path = `${U.id}/${kind}-${Date.now()}.jpg`;
-    const { error } = await sb.storage.from("media").upload(path, blob, { contentType: "image/jpeg", upsert: true, cacheControl: "604800" });
+    const { error } = await sb.storage.from("media").upload(path, blob, { contentType: "image/jpeg", upsert: false, cacheControl: "604800" });
     if (error) throw error;
     return sb.storage.from("media").getPublicUrl(path).data.publicUrl;
   }
@@ -1842,7 +1842,7 @@ const PROF = (() => {
         if (error){ if (error.code === "23505") { nh.textContent = "Этот ник уже занят — придумай другой"; nh.classList.add("err"); } else showErr(/relation|does not exist|schema cache/i.test(error.message) ? "База профилей ещё не настроена на сервере." : ERR(error.message)); return; }
         const wasNew = !P; P = { nick, st, av: np.av, bn: np.bn, frame: np.frame }; topbar(); view(); if (wasNew) claimDaily();
         if (typeof curTab !== "undefined" && curTab === "feed"){ const c = document.getElementById("feedCmp"); if (c) composer(c, null, () => feedOpen(true)); }
-      } catch(ex) { showErr(/Bucket not found|bucket/i.test(ex && ex.message || "") ? "Хранилище картинок ещё не настроено на сервере." : ERR(ex && ex.message)); }
+      } catch(ex) { const m = ex && ex.message || ""; showErr(/Bucket not found|bucket/i.test(m) ? "Хранилище картинок ещё не настроено на сервере." : /row-level security/i.test(m) ? "Не удалось загрузить картинку — попробуй другую или выбери героя." : ERR(m)); }
       finally { if (btn.isConnected){ btn.disabled = false; btn.textContent = isNew ? "Создать профиль" : "Сохранить"; } }
     };
     if (isNew) setTimeout(() => { const i = box.querySelector("#fNick"); if (!i.value) i.focus({preventScroll: true}); }, 350);
