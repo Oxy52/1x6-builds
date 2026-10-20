@@ -801,6 +801,68 @@
   .rkchips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
   .rkc { border: 1px solid var(--line); background: var(--bg-soft); color: var(--muted); font: inherit; font-weight: 700; font-size: 14px; padding: 10px 16px; border-radius: 99px; cursor: pointer; transition: all .3s; }
   .rkc[aria-pressed="true"] { color: var(--fg); background: linear-gradient(135deg, color-mix(in srgb, var(--t1) 35%, var(--bg-soft)), var(--bg-soft)); border-color: color-mix(in srgb, var(--t1) 60%, transparent); }
+  /* ---- статистика (Dotabuff) ---- */
+  .rkchips.sub { margin-top: 0; gap: 6px; }
+  .rkchips.sub .rkc { font-size: 13px; padding: 8px 13px; }
+  .db-my { border: 1px solid color-mix(in srgb, var(--t1) 55%, transparent); background: color-mix(in srgb, var(--t1) 14%, transparent); color: var(--fg); font: inherit; font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 99px; cursor: pointer; margin-left: 6px; vertical-align: middle; }
+  .db-note { font-size: 13px; color: var(--muted); margin: 14px 0 10px; line-height: 1.5; }
+  .db-tw { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--bg-soft); -webkit-overflow-scrolling: touch; }
+  .db-t { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .db-t th { position: sticky; top: 0; text-align: left; font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--muted-2, var(--muted)); padding: 10px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; cursor: pointer; user-select: none; background: var(--bg-soft); }
+  .db-t th.asc::after { content: " ▲"; color: var(--t1); } .db-t th.desc::after { content: " ▼"; color: var(--t1); }
+  .db-t td { padding: 8px 10px; border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent); white-space: nowrap; }
+  .db-t tbody tr { cursor: pointer; transition: background .25s; } .db-t tbody tr:hover { background: color-mix(in srgb, var(--t1) 8%, transparent); }
+  .db-t tbody tr:last-child td { border-bottom: 0; }
+  .db-hc { display: flex; align-items: center; gap: 10px; font-weight: 700; min-width: 150px; }
+  .db-hf { width: 34px; height: 34px; border-radius: 9px; overflow: hidden; flex: none; background: radial-gradient(circle at 50% 30%, var(--c1, #444), var(--c2, #111)); }
+  .db-hf img { width: 100%; height: 100%; object-fit: cover; }
+  .db-bar { display: block; height: 4px; border-radius: 4px; background: color-mix(in srgb, var(--fg) 10%, transparent); margin-top: 4px; min-width: 56px; overflow: hidden; }
+  .db-bar > i { display: block; height: 100%; border-radius: inherit; background: var(--t1); }
+  .db-wr.up { color: #5cf07f; } .db-wr.dn { color: #ff6b6b; }
+  .db-wr.up .db-bar > i { background: #5cf07f; } .db-wr.dn .db-bar > i { background: #ff6b6b; }
+  .db-arc { color: #c97bff; font-style: normal; }
+  .db-ml { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .db-m { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 12px; background: var(--bg-soft); border: 1px solid var(--line); cursor: pointer; transition: border-color .25s, transform .25s; min-width: 0; }
+  .db-m:hover { border-color: color-mix(in srgb, var(--t1) 50%, var(--line)); }
+  .db-m .ga { width: 30px; height: 30px; border-radius: 50%; overflow: hidden; flex: none; display: inline-block; vertical-align: middle; }
+  .db-m .ga img { width: 100%; height: 100%; object-fit: cover; }
+  .db-res { flex: none; width: 92px; font-size: 13px; font-weight: 800; }
+  .db-res.w { color: #5cf07f; } .db-res.l { color: #ff6b6b; } .db-res.nr { color: var(--muted); }
+  .db-op { flex: 1; display: flex; align-items: center; gap: 8px; min-width: 0; font-weight: 700; }
+  .db-op > span:last-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .db-op small, .db-md small { display: block; font-size: 11px; font-weight: 500; color: var(--muted); }
+  .db-d { font-variant-numeric: tabular-nums; font-weight: 800; font-style: normal; }
+  .db-d.w { color: #5cf07f; } .db-d.l { color: #ff6b6b; } .db-d.nr { color: var(--muted); }
+  .db-vs { flex: 1; display: flex; align-items: center; gap: 8px; min-width: 0; flex-wrap: wrap; font-weight: 600; color: var(--muted); }
+  .db-vs > span { display: inline-flex; align-items: center; gap: 6px; } .db-vs > span.win { color: var(--fg); font-weight: 800; }
+  .db-vs > span.win::after { content: "🏆"; font-size: 12px; }
+  .db-vs em { font-style: normal; font-size: 11px; opacity: .7; }
+  .db-md { text-align: right; font-weight: 800; flex: none; font-variant-numeric: tabular-nums; }
+  .db-head { padding: 22px 22px 0; } .db-head h3 { margin: 0; font-family: var(--display); font-size: 24px; } .db-head small { color: var(--muted); }
+  .db-sum { grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 480px){ .db-sum { grid-template-columns: repeat(2, 1fr); } .db-res { width: 78px; font-size: 12px; } .db-hc { min-width: 118px; gap: 8px; } .db-t td, .db-t th { padding-left: 8px; padding-right: 8px; } .db-hf { width: 30px; height: 30px; } }
+  .db-streak { display: inline-block; margin-left: 4px; color: var(--muted); }
+  .db-wl { display: flex; height: 22px; border-radius: 8px; overflow: hidden; font-size: 11px; font-weight: 800; }
+  .db-wl span { display: flex; align-items: center; padding: 0 8px; white-space: nowrap; overflow: hidden; min-width: 0; }
+  .db-wl .w { background: color-mix(in srgb, #5cf07f 30%, transparent); color: #b8ffc8; } .db-wl .l { background: color-mix(in srgb, #ff6b6b 30%, transparent); color: #ffc4c4; justify-content: flex-end; }
+  .db-chart { position: relative; height: 120px; border: 1px solid var(--line); border-radius: 14px; background: var(--bg-soft); padding: 6px; }
+  .db-chart.up { color: #5cf07f; } .db-chart.dn { color: #ff6b6b; }
+  .db-chart svg { width: 100%; height: 100%; display: block; }
+  .db-ax { position: absolute; right: 10px; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; } .db-ax.hi { top: 6px; } .db-ax.lo { bottom: 6px; }
+  .db-tabs { margin-bottom: 10px; }
+  .db-match { display: grid; gap: 10px; }
+  .db-side { border: 1px solid var(--line); border-radius: 14px; padding: 12px; background: var(--bg-soft); }
+  .db-side.win { border-color: color-mix(in srgb, #5cf07f 55%, var(--line)); box-shadow: 0 0 24px -10px #5cf07f; }
+  .db-side h4 { margin: 12px 0 8px; }
+  .db-pl { display: flex; align-items: center; gap: 10px; width: 100%; background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; padding: 0; }
+  .db-pl .ga { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; flex: none; } .db-pl .ga img { width: 100%; height: 100%; object-fit: cover; }
+  .db-pl > span:nth-child(2) { flex: 1; min-width: 0; } .db-pl small { display: block; color: var(--muted); font-size: 12px; }
+  .db-pl em { font-size: 18px; }
+  .db-vsb { text-align: center; font-family: var(--display); font-weight: 800; color: var(--muted); letter-spacing: 2px; }
+  .db-cards { display: flex; flex-wrap: wrap; gap: 8px; }
+  .db-cards button { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 64px; background: none; border: 0; color: inherit; font: inherit; cursor: pointer; padding: 0; }
+  .db-cards .db-hf { width: 48px; height: 48px; border-radius: 12px; }
+  .db-cards small { font-size: 10px; color: var(--muted); text-align: center; line-height: 1.2; max-width: 64px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .rkme { margin: 14px 0; }
   .rk-mine { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 14px 16px; border-radius: 16px; background: radial-gradient(120% 120% at 0% 0%, rgba(243,195,90,.18), transparent 60%), var(--bg-soft); border: 1px solid rgba(243,195,90,.35); }
   .rk-mine span { font-size: 15px; } .rk-mine b { font-family: var(--display); font-size: 20px; color: var(--gold); } .rk-mine small { color: var(--muted); }
@@ -1109,8 +1171,8 @@
   </div>
   <div class="tabpane" data-pane="rating" role="tabpanel" hidden>
     <section class="section first">
-      <div class="section-head"><h2>Рейтинг игроков</h2><p>MMR за онлайн-дуэли, рекорды Арены и уровни. Нажми на игрока — откроется профиль.</p></div>
-      <div class="rkchips"><button type="button" class="rkc" data-k="duel" aria-pressed="true">🃏 Дуэль · MMR</button><button type="button" class="rkc" data-k="arena" aria-pressed="false">⚔️ Арена</button><button type="button" class="rkc" data-k="level" aria-pressed="false">⭐ Уровень</button></div>
+      <div class="section-head"><h2>Рейтинг игроков</h2><p>MMR за онлайн-дуэли, рекорды Арены, уровни, статистика героев и история матчей — как на Dotabuff. Нажми на игрока — откроется профиль.</p></div>
+      <div class="rkchips"><button type="button" class="rkc" data-k="duel" aria-pressed="true">🃏 Дуэль · MMR</button><button type="button" class="rkc" data-k="arena" aria-pressed="false">⚔️ Арена</button><button type="button" class="rkc" data-k="level" aria-pressed="false">⭐ Уровень</button><button type="button" class="rkc" data-k="heroes" aria-pressed="false">📊 Герои</button><button type="button" class="rkc" data-k="matches" aria-pressed="false">🕓 Матчи</button></div>
       <div id="rkMe" class="rkme"></div>
       <div id="rkList"></div>
       <details class="drules"><summary>Медали MMR</summary><p class="medals">🪖 Рекрут · 🛡️ Страж 900 · ⚔️ Рыцарь 1000 · 🦸 Герой 1100 · 🌟 Легенда 1200 · 👑 Властелин 1300 · ✨ Божество 1400 · 🏆 Титан 1550</p><p>Старт — 1000 MMR. За победу +5…45 в зависимости от силы соперника. Засчитывается, только если оба игрока вошли в аккаунт; не больше 5 рейтинговых игр с одним соперником в день.</p></details>
@@ -2230,10 +2292,11 @@ const PROF = (() => {
       <div class="pstats"><div class="pstat"><b>${lv}</b><span>уровень</span></div><div class="pstat"><b>${rs ? rs.best : 0}</b><span>рекорд арены</span></div><div class="pstat"><b>${dm ? dm.mmr : "—"}</b><span>MMR дуэлей</span></div></div>
       ${dm && dm.wins + dm.losses > 0 ? `<div class="psec">${medalHTML(dm.mmr)} <small class="pnone">${dm.wins} побед · ${dm.losses} поражений</small></div>` : ""}
       ${favs.length ? `<div class="psec"><h4>Любимые герои</h4>${faces(favs)}</div>` : ""}
-      ${mine ? `<div class="pacts"><button type="button" class="btn btn-ghost" id="upEdit">Редактировать профиль</button></div>` : ""}
+      <div class="pacts"><button type="button" class="btn btn-primary" id="upStats">📊 Статистика</button>${mine ? `<button type="button" class="btn btn-ghost" id="upEdit">Редактировать профиль</button>` : ""}</div>
       <div class="psec"><h4>Посты</h4><div id="upPosts"></div></div>`, "Профиль игрока");
     box.querySelectorAll(".pfaces button").forEach(b => b.onclick = () => openHero(H(b.dataset.s)));
     const ed = box.querySelector("#upEdit"); if (ed) ed.onclick = () => view();
+    box.querySelector("#upStats").onclick = () => statsOpen(uid);
     const list = box.querySelector("#upPosts"); wirePosts(list);
     await loadPosts(list, sb.from("post_feed").select("*").eq("user_id", uid).is("reply_to", null).order("created_at", { ascending: false }).limit(30));
     if (!list.querySelector(".post")) list.innerHTML = `<div class="pnone">Постов пока нет</div>`;
@@ -2243,10 +2306,12 @@ const PROF = (() => {
   const MEDALS = [[0, "Рекрут", "🪖", "#8b8f99"], [900, "Страж", "🛡️", "#7fb07f"], [1000, "Рыцарь", "⚔️", "#5aa8ff"], [1100, "Герой", "🦸", "#4fe8d8"], [1200, "Легенда", "🌟", "#f3c35a"], [1300, "Властелин", "👑", "#ff9a3d"], [1400, "Божество", "✨", "#c97bff"], [1550, "Титан", "🏆", "#ff4d6d"]];
   const medal = mmr => { let m = MEDALS[0]; for (const x of MEDALS) if (mmr >= x[0]) m = x; return { name: m[1], ic: m[2], c: m[3] }; };
   const medalHTML = mmr => { const m = medal(mmr); return `<span class="medal" style="--mc:${m.c}">${m.ic} ${m.name}</span>`; };
-  async function duelReport(mid, opp, winner){
+  async function duelReport(mid, opp, winner, turns, cards){
     if (!CLOUD || !U || !opp || !mid) return { status: "unrated" };
+    let ext = { p_turns: turns || null, p_cards: Array.isArray(cards) ? [...new Set(cards)].slice(0, 30) : null };
     for (let i = 0; i < 6; i++){
-      const { data, error } = await sb.rpc("duel_report", { p_match: mid, p_opp: opp, p_winner: winner });
+      let { data, error } = await sb.rpc("duel_report", { p_match: mid, p_opp: opp, p_winner: winner, ...ext });
+      if (error && ext.p_turns !== undefined && /function|schema cache/i.test(error.message)){ ext = {}; ({ data, error } = await sb.rpc("duel_report", { p_match: mid, p_opp: opp, p_winner: winner })); }
       if (error) return { status: /function|schema cache|does not exist/i.test(error.message) ? "nosetup" : "error" };
       if (data && data.status !== "pending") return data;
       await new Promise(r => setTimeout(r, 2500));
@@ -2259,6 +2324,8 @@ const PROF = (() => {
     const list = document.getElementById("rkList"), me = document.getElementById("rkMe"); if (!list) return;
     document.querySelectorAll(".rkc").forEach(b => b.setAttribute("aria-pressed", b.dataset.k === rkKind));
     if (!CLOUD){ list.innerHTML = `<div class="gempty">Рейтинг игроков работает на сайте <b>1x6-eta.vercel.app</b>.</div>`; me.innerHTML = ""; return; }
+    if (rkKind === "heroes") return metaOpen(list, me);
+    if (rkKind === "matches") return matchesOpen(list, me);
     list.innerHTML = `<div class="feed-sk"></div><div class="feed-sk"></div><div class="feed-sk"></div>`;
     const cfg = { duel: ["duel_top", "user_id,mmr,wins,losses,nick,avatar,frame", "mmr", r => `<b class="gp">${r.mmr}</b>`, r => `${medalHTML(r.mmr)} <small>✔ ${r.wins} · ✖ ${r.losses}</small>`],
       arena: ["runner_top", "user_id,best,nick,avatar,frame,xp", "best", r => `<b class="gp">${r.best}</b>`, r => `<small>рекорд арены</small>`],
@@ -2274,11 +2341,137 @@ const PROF = (() => {
     if (!U){ me.innerHTML = `<button type="button" class="btn btn-ghost" id="rkIn">Войди, чтобы попасть в рейтинг</button>`; me.querySelector("#rkIn").onclick = () => open(); return; }
     let val = null, tbl = { duel: ["duel_ratings", "mmr", "user_id"], arena: ["runner_scores", "best", "user_id"], level: ["user_stats", "xp", "user_id"] }[rkKind];
     try { const { data: d } = await sb.from(tbl[0]).select(tbl[1]).eq(tbl[2], U.id).maybeSingle(); val = d ? d[tbl[1]] : null; } catch(e) {}
-    if (val == null){ me.innerHTML = `<div class="rk-mine"><span>Тебя пока нет в этом рейтинге</span><small>${rkKind === "duel" ? "Сыграй онлайн-дуэль с другом" : rkKind === "arena" ? "Сыграй в Арену" : "Заходи каждый день и играй"}</small></div>`; return; }
+    if (val == null){ me.innerHTML = `<div class="rk-mine"><span>Тебя пока нет в этом рейтинге <button type="button" class="db-my" id="rkStats">📊 Моя статистика</button></span><small>${rkKind === "duel" ? "Сыграй онлайн-дуэль с другом" : rkKind === "arena" ? "Сыграй в Арену" : "Заходи каждый день и играй"}</small></div>`; me.querySelector("#rkStats").onclick = () => statsOpen(U.id); return; }
     let place = "—"; try { const { count } = await sb.from(tbl[0]).select(tbl[2], { count: "exact", head: true }).gt(tbl[1], val); place = (count || 0) + 1; } catch(e) {}
-    me.innerHTML = `<div class="rk-mine"><span>Твоё место: <b>#${place}</b></span><small>${rkKind === "duel" ? `${medalHTML(val)} · ${val} MMR` : rkKind === "arena" ? `рекорд ${val}` : `${lvlOf(val)} уровень · ${val} опыта`}</small></div>`;
+    me.innerHTML = `<div class="rk-mine"><span>Твоё место: <b>#${place}</b> <button type="button" class="db-my" id="rkStats">📊 Моя статистика</button></span><small>${rkKind === "duel" ? `${medalHTML(val)} · ${val} MMR` : rkKind === "arena" ? `рекорд ${val}` : `${lvlOf(val)} уровень · ${val} опыта`}</small></div>`;
+    const rs = me.querySelector("#rkStats"); if (rs) rs.onclick = () => statsOpen(U.id);
   }
   async function duelMMR(uid){ try { const { data } = await sb.from("duel_ratings").select("mmr,wins,losses").eq("user_id", uid).maybeSingle(); return data; } catch(e) { return null; } }
+
+  /* ---------- статистика в духе Dotabuff ---------- */
+  const hName = sl => { const h = H(sl); return h ? h.en : sl; };
+  const hFace = (sl, cls) => { const h = H(sl); return `<span class="db-hf${cls ? " " + cls : ""}"${h ? ` style="${vars(h)}"` : ""}><img alt="" loading="lazy" src="face/${esc(sl)}.webp"></span>`; };
+  const pct = (a, b) => b ? Math.round(a * 100 / b) : 0;
+  const wrCls = p => p >= 53 ? "up" : p <= 47 ? "dn" : "";
+  const noSetup = e => /relation|does not exist|schema cache|column/i.test((e && e.message) || "");
+  const DBL = { arena: null, duel: null, sort: { arena: ["games", -1], duel: ["games", -1] }, sub: "duel" };
+  function sortRows(rows, key, dir){ return rows.slice().sort((a, b) => ((a[key] > b[key]) - (a[key] < b[key])) * dir || b.games - a.games); }
+  function tableHTML(kind, rows){
+    const tot = rows.reduce((s, r) => s + r.games, 0) || 1, [sk, sd] = DBL.sort[kind];
+    const cols = kind === "arena"
+      ? [["hero", "Герой"], ["games", "Игр"], ["pick", "Пик %"], ["avg_score", "Средний"], ["best", "Рекорд"], ["arc_pct", "Аркана"]]
+      : [["hero", "Герой"], ["games", "Игр"], ["wr", "Винрейт"], ["pick", "Пик %"]];
+    rows = rows.map(r => ({ ...r, pick: pct(r.games, tot), wr: r.wins != null ? pct(r.wins, r.games) : null }));
+    const maxG = Math.max(...rows.map(r => r.games), 1);
+    rows = sortRows(rows, sk, sd);
+    return `<div class="db-tw"><table class="db-t"><thead><tr>${cols.map(([k, t]) => `<th data-k="${k}" class="${k === sk ? (sd > 0 ? "asc" : "desc") : ""}">${t}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr data-s="${esc(r.hero)}">
+      <td class="db-hc">${hFace(r.hero)}<span>${esc(hName(r.hero))}</span></td>
+      <td><b>${r.games}</b><i class="db-bar"><i style="width:${Math.round(r.games * 100 / maxG)}%"></i></i></td>
+      ${kind === "arena" ? `<td>${r.pick}%</td><td>${r.avg_score}</td><td><b>${r.best}</b></td><td>${r.arc_pct}%</td>`
+        : `<td class="db-wr ${wrCls(r.wr)}"><b>${r.wr}%</b><i class="db-bar"><i style="width:${r.wr}%"></i></i></td><td>${r.pick}%</td>`}
+    </tr>`).join("")}</tbody></table></div>`;
+  }
+  function wireTable(el, kind, rows, redraw){
+    el.querySelectorAll("th[data-k]").forEach(th => th.onclick = () => { const k = th.dataset.k, cur = DBL.sort[kind]; DBL.sort[kind] = [k, cur[0] === k ? -cur[1] : (k === "hero" ? 1 : -1)]; redraw(); });
+    el.querySelectorAll("tr[data-s]").forEach(tr => tr.onclick = () => { const h = H(tr.dataset.s); if (h) openHero(h); });
+  }
+  async function metaOpen(list, me){
+    me.innerHTML = `<div class="rkchips sub"><button type="button" class="rkc" data-sub="duel" aria-pressed="${DBL.sub === "duel"}">🃏 Герои в дуэлях</button><button type="button" class="rkc" data-sub="arena" aria-pressed="${DBL.sub === "arena"}">⚔️ Герои Арены</button></div>`;
+    me.querySelectorAll("[data-sub]").forEach(b => b.onclick = () => { DBL.sub = b.dataset.sub; metaOpen(list, me); });
+    const kind = DBL.sub;
+    list.innerHTML = `<div class="feed-sk"></div><div class="feed-sk"></div>`;
+    const { data, error } = await sb.from(kind === "arena" ? "arena_hero_stats" : "duel_card_stats").select("*");
+    if (rkKind !== "heroes") return;
+    if (error){ list.innerHTML = `<div class="gempty">${noSetup(error) ? "Статистика ещё не настроена на сервере." : "Не удалось загрузить статистику."}</div>`; return; }
+    const rows = (data || []).map(r => kind === "arena" ? r : { hero: r.card, games: r.games, wins: r.wins }).filter(r => H(r.hero));
+    if (!rows.length){ list.innerHTML = `<div class="gempty">${kind === "arena" ? "Пока нет забегов. Сыграй в Арену — твой герой попадёт в статистику." : "Пока нет рейтинговых дуэлей. Сыграй онлайн с другом — карты, которые вы разыграли, попадут в статистику."}</div>`; return; }
+    const draw = () => { list.innerHTML = `<p class="db-note">${kind === "arena" ? "Забеги Арены за 30 дней. Пик % — как часто героя выбирают." : "Карты-герои, разыгранные в рейтинговых дуэлях за 30 дней. Винрейт — как часто побеждает тот, кто их сыграл."} Нажми на заголовок, чтобы отсортировать.</p>${tableHTML(kind, rows)}`; wireTable(list, kind, rows, draw); };
+    draw();
+  }
+  function matchRow(m, uid){
+    const side = uid ? (m.p0 === uid ? 0 : 1) : -1, opp = side === 0 ? 1 : 0;
+    const res = !m.winner ? "nr" : side < 0 ? "" : m.winner === (side === 0 ? m.p0 : m.p1) ? "w" : "l";
+    const d = m.delta || 0, nick = i => esc(m["nick" + i] || "Игрок"), av = i => esc(avatarOf(m["av" + i]));
+    if (side < 0) return `<li class="db-m" data-m="${esc(m.id)}"><span class="db-vs"><span class="${m.winner === m.p0 ? "win" : ""}"><span class="ga${frameCls(m.fr0)}"><img alt="" loading="lazy" src="${av(0)}"></span>${nick(0)}</span><em>vs</em><span class="${m.winner === m.p1 ? "win" : ""}"><span class="ga${frameCls(m.fr1)}"><img alt="" loading="lazy" src="${av(1)}"></span>${nick(1)}</span></span><span class="db-md">${d ? `±${d}` : "—"}<small>${ago(m.created_at)}</small></span></li>`;
+    return `<li class="db-m" data-m="${esc(m.id)}"><span class="db-res ${res}">${res === "w" ? "Победа" : res === "l" ? "Поражение" : "Не засчитан"}</span><span class="db-op"><span class="ga${frameCls(m["fr" + opp])}"><img alt="" loading="lazy" src="${av(opp)}"></span><span>${nick(opp)}<small>${m.turns ? `${Math.ceil(m.turns / 2)} раундов · ` : ""}${ago(m.created_at)}</small></span></span><b class="db-d ${res}">${!d ? "0" : res === "w" ? "+" + d : "−" + d}</b></li>`;
+  }
+  function wireMatches(el, rows, back){ el.querySelectorAll("[data-m]").forEach(li => li.onclick = () => { const m = rows.find(r => r.id === li.dataset.m); if (m) matchOpen(m, back); }); }
+  async function matchesOpen(list, me){
+    me.innerHTML = `<p class="db-note">Последние онлайн-дуэли всех игроков. Нажми на матч — увидишь, какими героями играли.</p>`;
+    list.innerHTML = `<div class="feed-sk"></div><div class="feed-sk"></div>`;
+    const { data, error } = await sb.from("duel_history").select("*").order("created_at", { ascending: false }).limit(40);
+    if (rkKind !== "matches") return;
+    if (error){ list.innerHTML = `<div class="gempty">${noSetup(error) ? "История матчей ещё не настроена на сервере." : "Не удалось загрузить матчи."}</div>`; return; }
+    const rows = data || [];
+    list.innerHTML = rows.length ? `<ul class="db-ml">${rows.map(m => matchRow(m)).join("")}</ul>` : `<div class="gempty">Матчей пока нет. Сыграй онлайн-дуэль с другом — она появится здесь.</div>`;
+    wireMatches(list, rows, null);
+  }
+  function matchOpen(m, back){
+    const side = i => { const cards = (m["cards" + i] || []).filter(c => H(c)), won = m.winner && m.winner === m["p" + i], mmr = m["mmr" + i];
+      return `<div class="db-side${won ? " win" : ""}"><button type="button" class="db-pl" data-user="${esc(m["p" + i])}"><span class="ga${frameCls(m["fr" + i])}"><img alt="" src="${esc(avatarOf(m["av" + i]))}"></span><span><b>${esc(m["nick" + i] || "Игрок")}</b><small>${won ? "🏆 Победа" : m.winner ? "Поражение" : "Не засчитан"}${mmr != null ? ` · ${mmr} MMR` : ""}</small></span>${m.delta ? `<em class="db-d ${won ? "w" : "l"}">${won ? "+" : "−"}${m.delta}</em>` : ""}</button>
+        <h4>Разыгранные герои</h4>${cards.length ? `<div class="db-cards">${cards.map(c => `<button type="button" data-s="${esc(c)}" title="${esc(hName(c))}">${hFace(c)}<small>${esc(hName(c))}</small></button>`).join("")}</div>` : `<div class="pnone">Нет данных</div>`}</div>`; };
+    const box = shell("", `<div class="db-head"><h3>Матч</h3><small>${new Date(m.created_at).toLocaleString("ru-RU", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })}${m.turns ? ` · ${Math.ceil(m.turns / 2)} раундов` : ""}${m.delta ? ` · ставка ${m.delta} MMR` : " · без рейтинга"}</small></div>
+      <div class="psec db-match">${side(0)}<div class="db-vsb">VS</div>${side(1)}</div>
+      ${back ? `<div class="pacts"><button type="button" class="btn btn-ghost" id="dbBack">← Назад к статистике</button></div>` : ""}`, "Матч");
+    box.querySelectorAll("[data-user]").forEach(b => b.onclick = () => statsOpen(b.dataset.user));
+    box.querySelectorAll(".db-cards [data-s]").forEach(b => b.onclick = () => { const h = H(b.dataset.s); if (h) openHero(h); });
+    const bk = box.querySelector("#dbBack"); if (bk) bk.onclick = back;
+  }
+  function mmrChart(pts){
+    if (pts.length < 2) return `<div class="pnone">График появится после пары рейтинговых матчей</div>`;
+    const W = 320, Hh = 110, pad = 8, lo = Math.min(...pts) - 10, hi = Math.max(...pts) + 10;
+    const x = i => pad + i * (W - pad * 2) / (pts.length - 1), y = v => Hh - pad - (v - lo) * (Hh - pad * 2) / (hi - lo || 1);
+    const line = pts.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+    const up = pts[pts.length - 1] >= pts[0];
+    return `<div class="db-chart ${up ? "up" : "dn"}"><svg viewBox="0 0 ${W} ${Hh}" preserveAspectRatio="none" aria-label="График MMR"><defs><linearGradient id="dbG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="currentColor" stop-opacity=".35"/><stop offset="1" stop-color="currentColor" stop-opacity="0"/></linearGradient></defs>
+      <polygon points="${x(0)},${Hh} ${line} ${x(pts.length - 1)},${Hh}" fill="url(#dbG)"/><polyline points="${line}" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+      <circle cx="${x(pts.length - 1)}" cy="${y(pts[pts.length - 1])}" r="4" fill="currentColor"/></svg>
+      <span class="db-ax hi">${Math.max(...pts)}</span><span class="db-ax lo">${Math.min(...pts)}</span></div>`;
+  }
+  async function statsOpen(uid){
+    if (!CLOUD || !uid) return;
+    const box0 = shell("", `<div class="db-head"><h3>Статистика</h3><small>Загружаем…</small></div><div class="psec"><div class="feed-sk"></div><div class="feed-sk"></div></div>`, "Статистика игрока");
+    const [{ data: pr }, { data: dr }, mh, ar] = await Promise.all([
+      sb.from("profiles").select("id,nick,avatar,banner,frame").eq("id", uid).maybeSingle(),
+      sb.from("duel_ratings").select("mmr,wins,losses").eq("user_id", uid).maybeSingle(),
+      sb.from("duel_history").select("*").or(`p0.eq.${uid},p1.eq.${uid}`).order("created_at", { ascending: false }).limit(60),
+      sb.from("arena_runs").select("hero,score,kills,arcana,created_at").eq("user_id", uid).order("created_at", { ascending: false }).limit(400)]);
+    if (!box0.isConnected) return;
+    if (!pr){ box0.querySelector(".db-head small").textContent = "Профиль не найден"; return; }
+    const q = fromRow(pr), matches = mh.data || [], runs = ar.data || [], setupMissing = noSetup(mh.error) || noSetup(ar.error);
+    const W = dr ? dr.wins : 0, L = dr ? dr.losses : 0, mmr = dr ? dr.mmr : 1000, wr = pct(W, W + L);
+    // MMR по матчам (от старых к новым)
+    const rated = matches.slice().reverse().filter(m => (m.p0 === uid ? m.mmr0 : m.mmr1) != null);
+    const pts = rated.map(m => m.p0 === uid ? m.mmr0 : m.mmr1);
+    if (rated.length){ const f = rated[0], d = f.delta || 0; pts.unshift(pts[0] - (f.winner === uid ? d : f.winner ? -d : 0)); }
+    // герои Арены
+    const ah = {}; runs.forEach(r => { const o = ah[r.hero] || (ah[r.hero] = { hero: r.hero, games: 0, best: 0, sum: 0, kills: 0, arc: 0 }); o.games++; o.best = Math.max(o.best, r.score); o.sum += r.score; o.kills += r.kills; if (r.arcana) o.arc++; });
+    const arena = Object.values(ah).filter(o => H(o.hero)).sort((a, b) => b.games - a.games);
+    // карты дуэлей
+    const ch = {}; matches.forEach(m => { if (!m.winner) return; const i = m.p0 === uid ? 0 : 1, won = m.winner === uid; (m["cards" + i] || []).forEach(c => { const o = ch[c] || (ch[c] = { hero: c, games: 0, wins: 0 }); o.games++; if (won) o.wins++; }); });
+    const cards = Object.values(ch).filter(o => H(o.hero)).sort((a, b) => b.games - a.games);
+    const best = runs.reduce((s, r) => Math.max(s, r.score), 0), mine = U && U.id === uid;
+    const streak = (() => { let n = 0, k = null; for (const m of matches){ if (!m.winner) continue; const w = m.winner === uid; if (k == null) k = w; if (w !== k) break; n++; } const pl = (n, a, b, c) => n % 10 === 1 && n % 100 !== 11 ? a : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? b : c; return n > 1 ? (k ? `🔥 ${n} ${pl(n, "победа", "победы", "побед")} подряд` : `🧊 ${n} ${pl(n, "поражение", "поражения", "поражений")} подряд`) : ""; })();
+    const box = shell(bnSrc(q.bn), `
+      <div class="phead"><div class="pav${frameCls(q.frame)}"><img alt="" src="${esc(avSrc(q.av))}"></div><div class="pname"><h3>${esc(q.nick)}</h3><div class="pst">${W + L ? medalHTML(mmr) : "Ещё не играл рейтинговых дуэлей"}${streak ? ` <small class="db-streak">${streak}</small>` : ""}</div></div></div>
+      <div class="pstats db-sum"><div class="pstat"><b>${W + L ? mmr : "—"}</b><span>MMR</span></div><div class="pstat"><b class="db-wr ${wrCls(wr)}">${W + L ? wr + "%" : "—"}</b><span>винрейт</span></div><div class="pstat"><b>${W + L}</b><span>матчей</span></div><div class="pstat"><b>${best || "—"}</b><span>рекорд арены</span></div></div>
+      ${W + L ? `<div class="psec"><div class="db-wl"><span style="flex:${W || .001}" class="w">${W} побед</span><span style="flex:${L || .001}" class="l">${L} поражений</span></div></div>` : ""}
+      ${setupMissing ? `<div class="psec"><div class="pnone">Подробная статистика ещё не настроена на сервере.</div></div>` : ""}
+      <div class="psec"><h4>MMR</h4>${mmrChart(pts)}</div>
+      <div class="psec"><div class="rkchips sub db-tabs"><button type="button" class="rkc" data-t="m" aria-pressed="true">🕓 Матчи</button><button type="button" class="rkc" data-t="c" aria-pressed="false">🃏 Герои в дуэлях</button><button type="button" class="rkc" data-t="a" aria-pressed="false">⚔️ Герои Арены</button></div><div id="dbPane"></div></div>
+      <div class="pacts">${mine ? "" : `<button type="button" class="btn btn-ghost" id="dbProf">Профиль и посты</button>`}</div>`, "Статистика игрока");
+    const pane = box.querySelector("#dbPane");
+    const show = t => {
+      box.querySelectorAll(".db-tabs .rkc").forEach(b => b.setAttribute("aria-pressed", b.dataset.t === t));
+      if (t === "m"){ pane.innerHTML = matches.length ? `<ul class="db-ml">${matches.slice(0, 30).map(m => matchRow(m, uid)).join("")}</ul>` : `<div class="pnone">Онлайн-дуэлей пока нет</div>`; wireMatches(pane, matches, () => statsOpen(uid)); }
+      if (t === "a"){ pane.innerHTML = arena.length ? `<div class="db-tw"><table class="db-t"><thead><tr><th>Герой</th><th>Игр</th><th>Рекорд</th><th>Средний</th><th>Убийств</th></tr></thead><tbody>${arena.map(o => `<tr data-s="${esc(o.hero)}"><td class="db-hc">${hFace(o.hero)}<span>${esc(hName(o.hero))}${o.arc ? ` <em class="db-arc" title="Играл в аркане">✦</em>` : ""}</span></td><td><b>${o.games}</b></td><td><b>${o.best}</b></td><td>${Math.round(o.sum / o.games)}</td><td>${Math.round(o.kills / o.games)}</td></tr>`).join("")}</tbody></table></div>` : `<div class="pnone">Забегов в Арене пока нет</div>`; }
+      if (t === "c"){ pane.innerHTML = cards.length ? `<div class="db-tw"><table class="db-t"><thead><tr><th>Герой</th><th>Игр</th><th>Винрейт</th></tr></thead><tbody>${cards.map(o => { const p = pct(o.wins, o.games); return `<tr data-s="${esc(o.hero)}"><td class="db-hc">${hFace(o.hero)}<span>${esc(hName(o.hero))}</span></td><td><b>${o.games}</b></td><td class="db-wr ${wrCls(p)}"><b>${p}%</b><i class="db-bar"><i style="width:${p}%"></i></i></td></tr>`; }).join("")}</tbody></table></div>` : `<div class="pnone">Пока нет данных о героях в дуэлях</div>`; }
+      pane.querySelectorAll("tr[data-s]").forEach(tr => tr.onclick = () => { const h = H(tr.dataset.s); if (h) openHero(h); });
+    };
+    box.querySelectorAll(".db-tabs .rkc").forEach(b => b.onclick = () => show(b.dataset.t));
+    show("m");
+    const pf = box.querySelector("#dbProf"); if (pf) pf.onclick = () => openUser(uid);
+  }
 
   topbar();
   if (CLOUD){
@@ -2297,10 +2490,13 @@ const PROF = (() => {
   function open(){ if (CLOUD) return U ? (P ? view() : edit(true)) : auth("in"); return P ? view() : edit(true); }
   function user(){ return CLOUD ? U : null; }
   function avatarOf(str){ const a = dec(str); return a ? avSrc(a) : "face/pudge.webp"; }
-  async function submitScore(score, ms){
+  async function submitScore(score, ms, run){
     if (!CLOUD || !U) return { error: "Войди, чтобы попасть в рейтинг." };
     try {
-      const { data, error } = await sb.rpc("submit_runner_score", { p_score: score, p_ms: ms });
+      let data, error;
+      if (run && run.hero){ ({ data, error } = await sb.rpc("submit_arena_run", { p_hero: run.hero, p_arc: !!run.arc, p_score: score, p_ms: ms, p_kills: run.kills | 0, p_lvl: run.lvl | 0, p_rosh: run.rosh | 0 }));
+        if (error && /function|schema cache|rate_limit|bad_hero/i.test(error.message)) ({ data, error } = await sb.rpc("submit_runner_score", { p_score: score, p_ms: ms })); }
+      else ({ data, error } = await sb.rpc("submit_runner_score", { p_score: score, p_ms: ms }));
       if (error) return { error: /function|schema cache|does not exist/i.test(error.message) ? "Рейтинг ещё не настроен на сервере." : /invalid_score/i.test(error.message) ? "Результат не засчитан." : "Не удалось отправить результат." };
       return { best: data, hasProfile: !!P };
     } catch(e) { return { error: "Нет связи с сервером." }; }
@@ -2313,7 +2509,7 @@ const PROF = (() => {
       return { rows: data || [] };
     } catch(e) { return { error: "Нет связи с сервером." }; }
   }
-  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf, feedOpen, feedMore, openUser, me: () => P ? P.nick : null, rt: () => sb, duelReport, ratingOpen, medalHTML, loadPlayers: q => { clearTimeout(plT); plT = setTimeout(() => loadPlayers(q), 250); } };
+  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf, feedOpen, feedMore, openUser, me: () => P ? P.nick : null, rt: () => sb, duelReport, ratingOpen, medalHTML, statsOpen, loadPlayers: q => { clearTimeout(plT); plT = setTimeout(() => loadPlayers(q), 250); } };
 })();
 window.__favSync = () => PROF.syncFavs();
 
@@ -3040,7 +3236,7 @@ const GAME = (() => {
     async function gameOver(){
       if (!running) return; running = false; burst(p.x, p.y, C1, 30); burst(p.x, p.y, "#fff", 12); shake = .4;
       const sc = score(), ms = Math.round(performance.now() - t0), rec = sc > best;
-      const ast = arcState(); ast.best[hero] = Math.max(ast.best[hero] || 0, sc); let newArc = false;
+      const ast = arcState(), arcUsed = !!(ast.own[hero] && arcOn[hero]); ast.best[hero] = Math.max(ast.best[hero] || 0, sc); let newArc = false;
       if (!ast.own[hero] && (sc >= ARC_NEED(hero) || bossKills > 0)){ ast.own[hero] = 1; newArc = true; arcOn[hero] = true; try { localStorage.setItem("ub-arc-on", JSON.stringify(arcOn)); } catch(_) {} }
       arcSave(ast);
       if (rec){ best = sc; try { localStorage.setItem(LBEST, best); } catch(e) {} }
@@ -3057,7 +3253,7 @@ const GAME = (() => {
       arcInfo(); arcCount(); drawPrev();
       end.querySelector("#gToTop").onclick = e => { e.stopPropagation(); box.querySelector('.gtab[data-t="top"]').click(); };
       const lg = end.querySelector("#gLogin"); if (lg) lg.onclick = e => { e.stopPropagation(); PROF.open(); };
-      if (PROF.cloud && u){ const r = await PROF.submitScore(sc, ms); const s = end.querySelector("#gSend"); if (s) s.textContent = r.error ? r.error : (r.best > sc ? `Твой лучший в топе: ${r.best}` : "Результат в топе ✓"); }
+      if (PROF.cloud && u){ const r = await PROF.submitScore(sc, ms, { hero, arc: arcUsed, kills, lvl, rosh: bossKills }); const s = end.querySelector("#gSend"); if (s) s.textContent = r.error ? r.error : (r.best > sc ? `Твой лучший в топе: ${r.best}` : "Результат в топе ✓"); }
     }
 
     /* ---------- управление ---------- */
@@ -3370,6 +3566,7 @@ const DUELX = (() => {
       if (c.unit && me.board.length >= 6) return "board_full";
       if (need && !c.unit){ const vt = validTargets(s, side, need); if (!vt.includes(a.target)) return "bad_target"; }
       me.mana -= c.cost; me.hand.splice(hi, 1); ev(s, { k: "play", side, id: card.id });
+      if (c.unit){ const pl = s.pl || (s.pl = [[], []]); if (!pl[side].includes(card.id)) pl[side].push(card.id); }
       if (c.unit){
         const u = { uid: card.uid, id: card.id, atk: c.atk, hp: c.hp, mhp: c.hp, taunt: !!c.o.taunt, shield: !!c.o.shield, ls: !!c.o.ls, reborn: !!c.o.reborn, grow: !!c.o.grow, charge: !!c.o.charge, ready: !!c.o.charge, sleep: !c.o.charge };
         const pos = Math.max(0, Math.min(me.board.length, a.pos == null ? me.board.length : a.pos)); me.board.splice(pos, 0, u);
@@ -3558,7 +3755,7 @@ const DUEL = (() => {
     function checkEnd(){ if (!s || s.winner == null || ended) return; ended = true; clearInterval(timerI);
       const win = cfg.mode === "local" ? null : s.winner === seat;
       let ratedP = null;
-      if (cfg.mode === "online" && s.uids && s.uids[0] && s.uids[1] && s.winner >= 0){ const meU = PROF.user(); if (meU && s.uids[seat] === meU.id) ratedP = PROF.duelReport(s.mid, s.uids[1 - seat], s.uids[s.winner]); }
+      if (cfg.mode === "online" && s.uids && s.uids[0] && s.uids[1] && s.winner >= 0){ const meU = PROF.user(); if (meU && s.uids[seat] === meU.id) ratedP = PROF.duelReport(s.mid, s.uids[1 - seat], s.uids[s.winner], s.n, s.pl ? s.pl[seat] : []); }
       if (win && cfg.mode === "bot") W.add("bot"); if (win && cfg.mode === "online") W.add("online"); if (win) PROF.grant("run");
       setTimeout(() => { cover(cfg.mode === "local" ? `🏆 Победил <b>${esc(s.p[s.winner].name)}</b>` : win ? "🏆 <b>ПОБЕДА!</b>" : "💀 <b>Поражение</b>", cfg.mode === "online" ? (ratedP ? "Считаем MMR…" : "Нерейтинговая игра — для MMR оба должны войти в аккаунт") : "Ещё партию?", () => { if (cfg.mode !== "online") start(cfg); }, cfg.mode === "online" ? "Закрыть" : "Ещё раз");
         if (ratedP) ratedP.then(r => { const sm = box.querySelector(".dl-cv small"); if (!sm) return;
