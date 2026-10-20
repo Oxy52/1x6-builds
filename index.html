@@ -801,6 +801,47 @@
   .rkchips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
   .rkc { border: 1px solid var(--line); background: var(--bg-soft); color: var(--muted); font: inherit; font-weight: 700; font-size: 14px; padding: 10px 16px; border-radius: 99px; cursor: pointer; transition: all .3s; }
   .rkc[aria-pressed="true"] { color: var(--fg); background: linear-gradient(135deg, color-mix(in srgb, var(--t1) 35%, var(--bg-soft)), var(--bg-soft)); border-color: color-mix(in srgb, var(--t1) 60%, transparent); }
+  /* ---- подписка 1x6+ ---- */
+  .pbadge { display: inline-block; margin-left: 4px; font-size: .85em; filter: drop-shadow(0 0 6px rgba(243,195,90,.7)); vertical-align: 1px; }
+  .gn .pbadge { margin: 0 4px 0 0; }
+  .pnick.gold, h3.gold, .gn.gold { background: linear-gradient(90deg, #fff1b8, #f3c35a 45%, #ffb02e); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .gn.gold .rk-sub, h3.gold .glv, h3.gold .pbadge, .gn.gold .pbadge { -webkit-text-fill-color: initial; }
+  .gn.gold .rk-sub { color: var(--muted); }
+  .fr-crown { background: linear-gradient(var(--panel), var(--panel)) padding-box, conic-gradient(from var(--fa), #fff1b8, #f3c35a, #b8780f, #ffe08a, #fff1b8) border-box !important; animation: frSpin 3s linear infinite; box-shadow: 0 0 22px rgba(243,195,90,.75) !important; }
+  .fr-aegis { background: linear-gradient(var(--panel), var(--panel)) padding-box, conic-gradient(from var(--fa), #e8fbff, #5edcff, #2a6cff, #b8f3ff, #e8fbff) border-box !important; animation: frSpin 5s linear infinite, aegisP 2.4s ease-in-out infinite; }
+  @keyframes aegisP { 50% { box-shadow: 0 0 26px rgba(94,220,255,.85); } }
+  .fr-radiant { background: linear-gradient(var(--panel), var(--panel)) padding-box, conic-gradient(from var(--fa), #fff, #ffe39a, #7dffb3, #8fd3ff, #ffb3f0, #fff) border-box !important; animation: frSpin 2.2s linear infinite; box-shadow: 0 0 26px rgba(255,255,255,.55) !important; }
+  .mprem span:nth-child(2) { background: linear-gradient(90deg, #fff1b8, #f3c35a); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
+  .pm-btn { background: linear-gradient(135deg, #f3c35a, #b8780f); color: #1a1205; border: 0; font-weight: 800; }
+  .prof.pm .pcover.plain { height: 40px; }
+  .pm-hero { position: relative; text-align: center; padding: 6px 22px 4px; }
+  .pm-hero::before { content: ""; position: absolute; left: 50%; top: -40px; width: 320px; height: 220px; transform: translateX(-50%); background: radial-gradient(closest-side, rgba(243,195,90,.35), transparent); pointer-events: none; }
+  .pm-crown { position: relative; font-size: 54px; line-height: 1; animation: pmFloat 3.2s ease-in-out infinite; filter: drop-shadow(0 6px 18px rgba(243,195,90,.6)); }
+  @keyframes pmFloat { 50% { transform: translateY(-6px) rotate(-4deg); } }
+  .pm-hero h3 { position: relative; margin: 8px 0 6px; font-family: var(--display); font-size: 40px; font-weight: 800; letter-spacing: -1px; }
+  .pm-hero h3 span { background: linear-gradient(135deg, #fff1b8, #f3c35a, #ff9a3d); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .pm-hero p { position: relative; margin: 0 auto; max-width: 420px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+  .pm-on { position: relative; margin: 14px auto 0; max-width: 420px; padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(243,195,90,.5); background: rgba(243,195,90,.1); font-size: 14px; }
+  .pm-perks { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .pm-perk { display: grid; grid-template-columns: auto 1fr; column-gap: 10px; align-items: start; padding: 12px; border-radius: 14px; background: var(--bg-soft); border: 1px solid var(--line); }
+  .pm-perk span { grid-row: span 2; font-size: 22px; line-height: 1.1; } .pm-perk b { font-size: 14px; } .pm-perk small { color: var(--muted); font-size: 12px; line-height: 1.4; }
+  @media (max-width: 480px){ .pm-perk { grid-template-columns: 1fr; padding: 10px; } .pm-perk span { grid-row: auto; font-size: 20px; margin-bottom: 4px; } .pm-perk b { font-size: 13px; } .pm-perk small { font-size: 11px; } .pm-hero h3 { font-size: 34px; } .pm-crown { font-size: 44px; } }
+  .pm-plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .pm-plan { position: relative; display: grid; gap: 2px; justify-items: center; padding: 16px 6px 12px; border-radius: 16px; border: 1.5px solid var(--line); background: var(--bg-soft); color: inherit; font: inherit; cursor: pointer; transition: border-color .3s, transform .3s, box-shadow .3s; }
+  .pm-plan[aria-pressed="true"] { border-color: #f3c35a; box-shadow: 0 0 24px -8px rgba(243,195,90,.8); transform: translateY(-2px); background: linear-gradient(180deg, rgba(243,195,90,.12), var(--bg-soft)); }
+  .pm-plan b { font-size: 13px; color: var(--muted); } .pm-rub { font-family: var(--display); font-size: 24px; font-weight: 800; }
+  .pm-plan small { font-size: 11px; color: var(--muted); } .pm-plan small i { font-style: normal; color: #5cf07f; font-weight: 800; }
+  .pm-plan em { position: absolute; top: -9px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-style: normal; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 99px; background: linear-gradient(135deg, #f3c35a, #ff9a3d); color: #1a1205; }
+  .pm-ways { display: grid; gap: 8px; }
+  .pm-way { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg-soft); color: inherit; font: inherit; cursor: pointer; text-align: left; transition: border-color .3s, transform .2s; }
+  .pm-way:not(:disabled):hover { border-color: #f3c35a; } .pm-way:not(:disabled):active { transform: scale(.98); }
+  .pm-way:disabled { opacity: .5; cursor: default; }
+  .pm-wi { font-size: 22px; width: 28px; text-align: center; } .pm-wt { flex: 1; font-weight: 700; font-size: 14px; } .pm-wt small { display: block; font-weight: 500; color: var(--muted); font-size: 12px; }
+  .pm-way > b { font-family: var(--display); font-size: 17px; white-space: nowrap; }
+  .pm-in { width: 100%; }
+  .pm-msg { margin-top: 10px; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--t1) 12%, transparent); font-size: 13px; line-height: 1.45; } .pm-msg.err { background: rgba(255,107,107,.14); color: #ffc4c4; }
+  .pm-note { font-size: 12px; color: var(--muted); line-height: 1.5; margin: 12px 0 22px; }
+  .db-more { display: block; width: 100%; margin-top: 8px; padding: 12px; border-radius: 12px; border: 1px dashed rgba(243,195,90,.6); background: rgba(243,195,90,.08); color: #f3c35a; font: inherit; font-weight: 700; font-size: 13px; cursor: pointer; }
   /* ---- статистика (Dotabuff) ---- */
   .rkchips.sub { margin-top: 0; gap: 6px; }
   .rkchips.sub .rkc { font-size: 13px; padding: 8px 13px; }
@@ -1211,6 +1252,7 @@
   <button type="button" class="mi" data-act="lasthit"><span style="width:21px;text-align:center">🗡️</span><span>Ластхит</span></button>
   <button type="button" class="mi" data-act="invoker"><span style="width:21px;text-align:center">🔮</span><span>Инвокер</span></button>
   <div class="menu-l">Ещё</div>
+  <button type="button" class="mi mprem" data-act="premium"><span style="width:21px;text-align:center">👑</span><span>Подписка 1x6+</span><em>new</em></button>
   <a class="mi tgmi" href="https://t.me/+swCyihkKvwU4NTBi" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.9 4.3 18.8 19c-.2 1-.8 1.3-1.7.8l-4.7-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.8 8.8-7.9c.4-.3-.1-.5-.6-.2L6.8 13l-4.7-1.5c-1-.3-1-1 .2-1.5L20.6 3c.9-.3 1.6.2 1.3 1.3z"/></svg><span>Наш Telegram-канал</span><em>↗</em></a>
   <label class="mi mt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 12h3l3-7 6 14 3-7h3"/></svg><span>Живые анимации</span><input type="checkbox" id="fxToggle" checked><i class="sw"></i></label>
   <p class="menu-f">Выключи анимации, если сайт тормозит на телефоне.</p>
@@ -1891,11 +1933,12 @@ const PROF = (() => {
       <div class="psec"><h4>Избранные герои</h4>${faces(fav) || `<div class="pnone">Пока пусто — жми ★ на карточке героя.</div>`}</div>
       ${CLOUD && U ? `<div class="psec" id="pAch"><h4>Достижения</h4><div class="pnone">Загружаем…</div></div>` : ""}
       ${rec.length ? `<div class="psec"><h4>Недавно смотрел</h4>${faces(rec)}</div>` : ""}
-      <div class="pacts"><button type="button" class="btn btn-primary" id="pEdit">Редактировать</button>${CLOUD && U ? `<button type="button" class="btn btn-ghost" id="pPub">Мой публичный профиль</button>` : ""}<button type="button" class="btn btn-danger" id="pOut">Выйти</button></div>
+      <div class="pacts">${CLOUD ? `<button type="button" class="btn pm-btn" id="pPrem">${isPrem(U && U.id) ? "👑 1x6+ активна" : "👑 1x6+"}</button>` : ""}<button type="button" class="btn btn-primary" id="pEdit">Редактировать</button>${CLOUD && U ? `<button type="button" class="btn btn-ghost" id="pPub">Мой публичный профиль</button>` : ""}<button type="button" class="btn btn-danger" id="pOut">Выйти</button></div>
       ${CLOUD ? "" : `<p class="pnote">Профиль сохранён только на этом устройстве.</p>`}
       <div id="pConf"></div>`);
     box.querySelectorAll(".pfaces button").forEach(b => b.onclick = () => openHero(H(b.dataset.s)));
     box.querySelector("#pEdit").onclick = () => edit(false);
+    { const pp = box.querySelector("#pPrem"); if (pp) pp.onclick = () => premium(); }
     { const pb = box.querySelector("#pPub"); if (pb) pb.onclick = () => openUser(U.id); }
     if (CLOUD && U) fillAch(box);
     box.querySelector("#pOut").onclick = () => {
@@ -2036,7 +2079,10 @@ const PROF = (() => {
     { id: "silver", name: "Серебро", need: s => s.lvl >= 5, req: "5 уровень" },
     { id: "fire", name: "Огонь", need: s => s.best_streak >= 7, req: "серия 7 дней" },
     { id: "gold", name: "Золото", need: s => s.lvl >= 10, req: "10 уровень" },
-    { id: "arcana", name: "Аркана", need: s => s.lvl >= 15, req: "15 уровень" }
+    { id: "arcana", name: "Аркана", need: s => s.lvl >= 15, req: "15 уровень" },
+    { id: "crown", name: "👑 Корона", need: () => isPrem(U && U.id), req: "подписка 1x6+" },
+    { id: "aegis", name: "👑 Аегис", need: () => isPrem(U && U.id), req: "подписка 1x6+" },
+    { id: "radiant", name: "👑 Сияние", need: () => isPrem(U && U.id), req: "подписка 1x6+" }
   ];
   const frameCls = f => f && FRAMES.some(x => x.id === f && x.id) ? " fr fr-" + f : "";
   const sInfo = () => { const xp = ST ? ST.xp : 0, lvl = lvlOf(xp); return { xp, lvl, streak: ST ? ST.streak : 0, best_streak: ST ? ST.best_streak : 0 }; };
@@ -2173,7 +2219,7 @@ const PROF = (() => {
   function postHTML(r, liked){
     const mine = U && r.user_id === U.id;
     return `<article class="post" data-id="${r.id}" data-uid="${esc(r.user_id)}">${avaHTML(r.avatar, r.frame, r.user_id)}
-      <div class="pb"><div class="phd"><button type="button" class="pnick" data-user="${esc(r.user_id)}">${esc(r.nick)}</button><em class="glv">${lvlOf(r.xp)} ур.</em><span class="ptime">· ${ago(r.created_at)}</span>${mine || IS_ADMIN ? `<button type="button" class="pdel" aria-label="Удалить">🗑</button>` : ""}</div>
+      <div class="pb"><div class="phd"><button type="button" class="pnick${isPrem(r.user_id) ? " gold" : ""}" data-user="${esc(r.user_id)}">${esc(r.nick)}</button>${premBadge(r.user_id)}<em class="glv">${lvlOf(r.xp)} ур.</em><span class="ptime">· ${ago(r.created_at)}</span>${mine || IS_ADMIN ? `<button type="button" class="pdel" aria-label="Удалить">🗑</button>` : ""}</div>
       <div class="ptext">${esc(r.body).replace(/\n/g, "<br>")}</div>
       ${okImg(r.image) ? `<img class="pimg" alt="" loading="lazy" src="${esc(r.image)}">` : ""}
       <div class="pact"><button type="button" class="pa like" aria-pressed="${!!liked}">${liked ? "❤️" : "🤍"} <b>${r.likes || 0}</b></button><button type="button" class="pa rep">💬 <b>${r.replies || 0}</b></button></div></div></article>`;
@@ -2211,11 +2257,11 @@ const PROF = (() => {
     if (!CLOUD){ el.innerHTML = ""; return; }
     if (!U || !P){ el.innerHTML = `<div class="cmp-guest"><b>${replyTo ? "Хочешь ответить?" : "Пиши посты, ставь лайки, отвечай игрокам"}</b><small>Войди и создай профиль — это бесплатно</small><button type="button" class="btn btn-primary" id="cmpIn">${U ? "Создать профиль" : "Войти"}</button></div>`;
       el.querySelector("#cmpIn").onclick = () => open(); return; }
-    el.innerHTML = `<div class="cmp">${avaHTML(enc(P.av), P.frame, U.id, "me")}<div class="cmp-b"><textarea maxlength="280" rows="${replyTo ? 2 : 3}" placeholder="${replyTo ? "Твой ответ…" : "Что нового в 1x6? Поделись сборкой, рекордом или мемом…"}"></textarea>
+    el.innerHTML = `<div class="cmp">${avaHTML(enc(P.av), P.frame, U.id, "me")}<div class="cmp-b"><textarea maxlength="${isPrem(U.id) ? 1000 : 280}" rows="${replyTo ? 2 : 3}" placeholder="${replyTo ? "Твой ответ…" : "Что нового в 1x6? Поделись сборкой, рекордом или мемом…"}"></textarea>
       <div class="cmp-img" hidden><img alt=""><button type="button" class="cmp-x" aria-label="Убрать картинку">✕</button></div>
-      <div class="cmp-f"><label class="cmp-att" title="Картинка">🖼<input type="file" accept="image/*" hidden></label><span class="cmp-n">280</span><button type="button" class="btn btn-primary cmp-go" disabled>${replyTo ? "Ответить" : "Опубликовать"}</button></div><div class="cmp-err" hidden></div></div></div>`;
+      <div class="cmp-f"><label class="cmp-att" title="Картинка">🖼<input type="file" accept="image/*" hidden></label><span class="cmp-n">${isPrem(U.id) ? 1000 : 280}</span><button type="button" class="btn btn-primary cmp-go" disabled>${replyTo ? "Ответить" : "Опубликовать"}</button></div><div class="cmp-err" hidden></div></div></div>`;
     const ta = el.querySelector("textarea"), go = el.querySelector(".cmp-go"), n = el.querySelector(".cmp-n"), err = el.querySelector(".cmp-err"), imW = el.querySelector(".cmp-img"), inp = el.querySelector("input[type=file]"); let img = null;
-    const upd = () => { const l = ta.value.trim().length; n.textContent = 280 - ta.value.length; n.classList.toggle("low", 280 - ta.value.length < 20); go.disabled = l < 1; };
+    const MX = isPrem(U.id) ? 1000 : 280, upd = () => { const l = ta.value.trim().length; n.textContent = MX - ta.value.length; n.classList.toggle("low", MX - ta.value.length < 20); go.disabled = l < 1; };
     ta.oninput = upd; ta.addEventListener("keydown", e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey) && !go.disabled) go.click(); });
     inp.onchange = () => { const f = inp.files && inp.files[0]; inp.value = ""; if (!f || !/^image\//.test(f.type)) return; fitShrink(f, 1100, url => { if (!url) return; img = url; imW.hidden = false; imW.querySelector("img").src = url; }); };
     el.querySelector(".cmp-x").onclick = () => { img = null; imW.hidden = true; };
@@ -2224,7 +2270,7 @@ const PROF = (() => {
       try {
         let url = null; if (img) url = await uploadData(img, "post");
         const { error } = await sb.from("posts").insert({ body, image: url, reply_to: replyTo || null });
-        if (error){ err.hidden = false; err.textContent = /rate_limit_minute/.test(error.message) ? "Слишком часто — подожди минуту." : /rate_limit_day/.test(error.message) ? "На сегодня лимит постов исчерпан." : /relation|does not exist|schema cache/i.test(error.message) ? "Лента ещё не настроена на сервере." : /row-level|policy/i.test(error.message) ? "Сначала создай профиль." : "Не получилось опубликовать."; return; }
+        if (error){ err.hidden = false; err.textContent = /rate_limit_minute/.test(error.message) ? "Слишком часто — подожди минуту." : /rate_limit_day/.test(error.message) ? (isPrem(U.id) ? "На сегодня лимит постов исчерпан." : "На сегодня лимит постов исчерпан. С 1x6+ — 120 постов в день.") : /too_long/.test(error.message) ? "Слишком длинный пост. С 1x6+ можно до 1000 символов." : /relation|does not exist|schema cache/i.test(error.message) ? "Лента ещё не настроена на сервере." : /row-level|policy/i.test(error.message) ? "Сначала создай профиль." : "Не получилось опубликовать."; return; }
         ta.value = ""; img = null; imW.hidden = true; upd(); toast(`<span class="tic">✅</span><span><b>${replyTo ? "Ответ отправлен" : "Пост опубликован"}</b></span>`, "xp", 1800);
         if (onPosted) onPosted();
       } catch(ex) { err.hidden = false; err.textContent = "Не получилось загрузить картинку."; }
@@ -2288,7 +2334,7 @@ const PROF = (() => {
     const dm = await duelMMR(uid);
     const q = fromRow(pr), xp = st ? st.xp : 0, lv = lvlOf(xp), mine = U && uid === U.id, favs = Array.isArray(pr.favs) ? pr.favs.slice(0, 12) : [];
     const box = shell(bnSrc(q.bn), `
-      <div class="phead"><div class="pav${frameCls(q.frame)}"><img alt="" src="${esc(avSrc(q.av))}"></div><div class="pname"><h3>${esc(q.nick)} <em class="glv">${lv} ур.</em></h3>${q.st ? `<div class="pst">${esc(q.st)}</div>` : ""}</div></div>
+      <div class="phead"><div class="pav${frameCls(q.frame)}"><img alt="" src="${esc(avSrc(q.av))}"></div><div class="pname"><h3 class="${isPrem(uid) ? "gold" : ""}">${esc(q.nick)}${premBadge(uid)} <em class="glv">${lv} ур.</em></h3>${q.st ? `<div class="pst">${esc(q.st)}</div>` : ""}</div></div>
       <div class="pstats"><div class="pstat"><b>${lv}</b><span>уровень</span></div><div class="pstat"><b>${rs ? rs.best : 0}</b><span>рекорд арены</span></div><div class="pstat"><b>${dm ? dm.mmr : "—"}</b><span>MMR дуэлей</span></div></div>
       ${dm && dm.wins + dm.losses > 0 ? `<div class="psec">${medalHTML(dm.mmr)} <small class="pnone">${dm.wins} побед · ${dm.losses} поражений</small></div>` : ""}
       ${favs.length ? `<div class="psec"><h4>Любимые герои</h4>${faces(favs)}</div>` : ""}
@@ -2333,7 +2379,7 @@ const PROF = (() => {
     const { data, error } = await sb.from(cfg[0]).select(cfg[1]).order(cfg[2], { ascending: false }).limit(50);
     if (error){ list.innerHTML = `<div class="gempty">${/relation|does not exist|schema cache/i.test(error.message) ? "Рейтинг ещё не настроен на сервере." : "Не удалось загрузить рейтинг."}</div>`; me.innerHTML = ""; return; }
     const rows = data || [];
-    list.innerHTML = rows.length ? `<ol class="glist rk">${rows.map((r, i) => `<li class="${U && r.user_id === U.id ? "me" : ""}" data-user="${esc(r.user_id)}"><span class="gr">${i < 3 ? ["🥇","🥈","🥉"][i] : i + 1}</span><span class="ga${frameCls(r.frame)}"><img alt="" loading="lazy" src="${esc(avatarOf(r.avatar))}"></span><span class="gn">${esc(r.nick)}<span class="rk-sub">${cfg[4](r)}</span></span>${cfg[3](r)}</li>`).join("")}</ol>`
+    list.innerHTML = rows.length ? `<ol class="glist rk">${rows.map((r, i) => `<li class="${U && r.user_id === U.id ? "me" : ""}" data-user="${esc(r.user_id)}"><span class="gr">${i < 3 ? ["🥇","🥈","🥉"][i] : i + 1}</span><span class="ga${frameCls(r.frame)}"><img alt="" loading="lazy" src="${esc(avatarOf(r.avatar))}"></span><span class="gn${isPrem(r.user_id) ? " gold" : ""}">${premBadge(r.user_id)}${esc(r.nick)}<span class="rk-sub">${cfg[4](r)}</span></span>${cfg[3](r)}</li>`).join("")}</ol>`
       : `<div class="gempty">${rkKind === "duel" ? "Пока никто не сыграл рейтинговую дуэль. Сыграй онлайн с другом!" : "Пока пусто — будь первым!"}</div>`;
     list.querySelectorAll("li[data-user]").forEach(li => li.onclick = () => openUser(li.dataset.user));
     // моё место
@@ -2434,7 +2480,7 @@ const PROF = (() => {
     const [{ data: pr }, { data: dr }, mh, ar] = await Promise.all([
       sb.from("profiles").select("id,nick,avatar,banner,frame").eq("id", uid).maybeSingle(),
       sb.from("duel_ratings").select("mmr,wins,losses").eq("user_id", uid).maybeSingle(),
-      sb.from("duel_history").select("*").or(`p0.eq.${uid},p1.eq.${uid}`).order("created_at", { ascending: false }).limit(60),
+      sb.from("duel_history").select("*").or(`p0.eq.${uid},p1.eq.${uid}`).order("created_at", { ascending: false }).limit(isPrem(U && U.id) ? 1000 : 30),
       sb.from("arena_runs").select("hero,score,kills,arcana,created_at").eq("user_id", uid).order("created_at", { ascending: false }).limit(400)]);
     if (!box0.isConnected) return;
     if (!pr){ box0.querySelector(".db-head small").textContent = "Профиль не найден"; return; }
@@ -2453,7 +2499,7 @@ const PROF = (() => {
     const best = runs.reduce((s, r) => Math.max(s, r.score), 0), mine = U && U.id === uid;
     const streak = (() => { let n = 0, k = null; for (const m of matches){ if (!m.winner) continue; const w = m.winner === uid; if (k == null) k = w; if (w !== k) break; n++; } const pl = (n, a, b, c) => n % 10 === 1 && n % 100 !== 11 ? a : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? b : c; return n > 1 ? (k ? `🔥 ${n} ${pl(n, "победа", "победы", "побед")} подряд` : `🧊 ${n} ${pl(n, "поражение", "поражения", "поражений")} подряд`) : ""; })();
     const box = shell(bnSrc(q.bn), `
-      <div class="phead"><div class="pav${frameCls(q.frame)}"><img alt="" src="${esc(avSrc(q.av))}"></div><div class="pname"><h3>${esc(q.nick)}</h3><div class="pst">${W + L ? medalHTML(mmr) : "Ещё не играл рейтинговых дуэлей"}${streak ? ` <small class="db-streak">${streak}</small>` : ""}</div></div></div>
+      <div class="phead"><div class="pav${frameCls(q.frame)}"><img alt="" src="${esc(avSrc(q.av))}"></div><div class="pname"><h3 class="${isPrem(uid) ? "gold" : ""}">${esc(q.nick)}${premBadge(uid)}</h3><div class="pst">${W + L ? medalHTML(mmr) : "Ещё не играл рейтинговых дуэлей"}${streak ? ` <small class="db-streak">${streak}</small>` : ""}</div></div></div>
       <div class="pstats db-sum"><div class="pstat"><b>${W + L ? mmr : "—"}</b><span>MMR</span></div><div class="pstat"><b class="db-wr ${wrCls(wr)}">${W + L ? wr + "%" : "—"}</b><span>винрейт</span></div><div class="pstat"><b>${W + L}</b><span>матчей</span></div><div class="pstat"><b>${best || "—"}</b><span>рекорд арены</span></div></div>
       ${W + L ? `<div class="psec"><div class="db-wl"><span style="flex:${W || .001}" class="w">${W} побед</span><span style="flex:${L || .001}" class="l">${L} поражений</span></div></div>` : ""}
       ${setupMissing ? `<div class="psec"><div class="pnone">Подробная статистика ещё не настроена на сервере.</div></div>` : ""}
@@ -2463,7 +2509,7 @@ const PROF = (() => {
     const pane = box.querySelector("#dbPane");
     const show = t => {
       box.querySelectorAll(".db-tabs .rkc").forEach(b => b.setAttribute("aria-pressed", b.dataset.t === t));
-      if (t === "m"){ pane.innerHTML = matches.length ? `<ul class="db-ml">${matches.slice(0, 30).map(m => matchRow(m, uid)).join("")}</ul>` : `<div class="pnone">Онлайн-дуэлей пока нет</div>`; wireMatches(pane, matches, () => statsOpen(uid)); }
+      if (t === "m"){ pane.innerHTML = matches.length ? `<ul class="db-ml">${matches.map(m => matchRow(m, uid)).join("")}</ul>${!isPrem(U && U.id) && matches.length >= 30 ? `<button type="button" class="db-more" id="dbMore">👑 Вся история матчей и график за всё время — с 1x6+</button>` : ""}` : `<div class="pnone">Онлайн-дуэлей пока нет</div>`; { const mb = pane.querySelector("#dbMore"); if (mb) mb.onclick = () => premium(); } wireMatches(pane, matches, () => statsOpen(uid)); }
       if (t === "a"){ pane.innerHTML = arena.length ? `<div class="db-tw"><table class="db-t"><thead><tr><th>Герой</th><th>Игр</th><th>Рекорд</th><th>Средний</th><th>Убийств</th></tr></thead><tbody>${arena.map(o => `<tr data-s="${esc(o.hero)}"><td class="db-hc">${hFace(o.hero)}<span>${esc(hName(o.hero))}${o.arc ? ` <em class="db-arc" title="Играл в аркане">✦</em>` : ""}</span></td><td><b>${o.games}</b></td><td><b>${o.best}</b></td><td>${Math.round(o.sum / o.games)}</td><td>${Math.round(o.kills / o.games)}</td></tr>`).join("")}</tbody></table></div>` : `<div class="pnone">Забегов в Арене пока нет</div>`; }
       if (t === "c"){ pane.innerHTML = cards.length ? `<div class="db-tw"><table class="db-t"><thead><tr><th>Герой</th><th>Игр</th><th>Винрейт</th></tr></thead><tbody>${cards.map(o => { const p = pct(o.wins, o.games); return `<tr data-s="${esc(o.hero)}"><td class="db-hc">${hFace(o.hero)}<span>${esc(hName(o.hero))}</span></td><td><b>${o.games}</b></td><td class="db-wr ${wrCls(p)}"><b>${p}%</b><i class="db-bar"><i style="width:${p}%"></i></i></td></tr>`; }).join("")}</tbody></table></div>` : `<div class="pnone">Пока нет данных о героях в дуэлях</div>`; }
       pane.querySelectorAll("tr[data-s]").forEach(tr => tr.onclick = () => { const h = H(tr.dataset.s); if (h) openHero(h); });
@@ -2473,8 +2519,82 @@ const PROF = (() => {
     const pf = box.querySelector("#dbProf"); if (pf) pf.onclick = () => openUser(uid);
   }
 
+  /* ---------- подписка 1x6+ ---------- */
+  const PREM = new Map();
+  const isPrem = uid => !!uid && (PREM.get(uid) || 0) > Date.now();
+  const premBadge = uid => isPrem(uid) ? `<span class="pbadge" title="Подписка 1x6+">👑</span>` : "";
+  let premT = 0;
+  async function loadPrem(){
+    if (!CLOUD) return;
+    try {
+      const { data, error } = await sb.from("subscriptions").select("user_id,until").gt("until", new Date().toISOString()).limit(2000);
+      if (error) return;
+      PREM.clear(); (data || []).forEach(r => PREM.set(r.user_id, new Date(r.until).getTime()));
+      decoratePrem(document); topbar();
+    } catch(e) {}
+  }
+  function decoratePrem(root){
+    root.querySelectorAll(".pnick[data-user]").forEach(b => { const on = isPrem(b.dataset.user); b.classList.toggle("gold", on); const nx = b.nextElementSibling;
+      if (on && !(nx && nx.classList.contains("pbadge"))) b.insertAdjacentHTML("afterend", premBadge(b.dataset.user)); });
+    root.querySelectorAll(".glist.rk li[data-user] .gn").forEach(g => { const uid = g.closest("li").dataset.user;
+      if (isPrem(uid) && !g.querySelector(".pbadge")){ g.classList.add("gold"); g.insertAdjacentHTML("afterbegin", premBadge(uid)); } });
+  }
+  const PLANS = [{ k: "m1", t: "1 месяц", rub: 99, stars: 59, usd: 1.25, per: "" }, { k: "m6", t: "6 месяцев", rub: 499, stars: 299, usd: 6.25, per: "83 ₽ в месяц", off: "−16%" }, { k: "y1", t: "1 год", rub: 799, stars: 499, usd: 9.99, per: "67 ₽ в месяц", off: "−33%", best: 1 }];
+  const PERKS = [["👑", "Значок и золотой ник", "Везде: в ленте, рейтинге, профиле и статистике"], ["💠", "3 эксклюзивные рамки", "Корона, Аегис и Сияние — только для 1x6+"], ["⚡", "Опыт ×1.5 и бонус ×2", "Уровни и награды открываются быстрее"], ["✍️", "Длинные посты", "До 1000 символов и 120 постов в день вместо 280 и 40"], ["📊", "Полная статистика", "Вся история матчей и график MMR за всё время"], ["🚀", "Раньше всех", "Новые мини-игры и сборки — сначала подписчикам"]];
+  let payInfo = null, premPlan = "y1", premPoll = 0;
+  const untilTxt = uid => new Date(PREM.get(uid)).toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
+  async function premium(opts){
+    clearInterval(premPoll);
+    const me = U && U.id, on = isPrem(me);
+    const box = shell("", `<div class="pm-hero"><div class="pm-crown">👑</div><h3>1x6<span>+</span></h3><p>Поддержи сайт и получи плюшки. Без преимуществ в MMR — рейтинг остаётся честным.</p>
+        ${on ? `<div class="pm-on">Подписка активна до <b>${untilTxt(me)}</b>. Продлить можно заранее — дни добавятся к сроку</div>` : ""}</div>
+      <div class="psec"><div class="pm-perks">${PERKS.map(p => `<div class="pm-perk"><span>${p[0]}</span><b>${p[1]}</b><small>${p[2]}</small></div>`).join("")}</div></div>
+      <div class="psec"><h4>Срок</h4><div class="pm-plans">${PLANS.map(p => `<button type="button" class="pm-plan${p.best ? " best" : ""}" data-k="${p.k}" aria-pressed="${p.k === premPlan}">${p.best ? `<em>Выгоднее всего</em>` : ""}<b>${p.t}</b><span class="pm-rub">${p.rub} ₽</span><small>${p.per || "&nbsp;"}${p.off ? ` <i>${p.off}</i>` : ""}</small></button>`).join("")}</div></div>
+      <div class="psec"><h4>Оплата</h4><div id="pmPay"></div><div class="pm-msg" id="pmMsg" hidden></div>
+        <p class="pm-note">Рубли указаны примерно: звёзды покупаются в Telegram, карта и крипта списываются в долларах. Подписка сама не продлевается — никаких автосписаний.</p></div>`, "Подписка 1x6+");
+    box.classList.add("pm");
+    const payEl = box.querySelector("#pmPay"), msg = box.querySelector("#pmMsg");
+    const say = (t, cls) => { msg.hidden = !t; msg.className = "pm-msg" + (cls ? " " + cls : ""); msg.innerHTML = t || ""; };
+    const drawPay = () => {
+      const p = PLANS.find(x => x.k === premPlan), en = (payInfo && payInfo.enabled) || {};
+      if (!CLOUD){ payEl.innerHTML = `<div class="pnone">Оплата работает на сайте 1x6-eta.vercel.app</div>`; return; }
+      if (!U){ payEl.innerHTML = `<button type="button" class="btn btn-primary pm-in" id="pmIn">Войди, чтобы оформить</button>`; payEl.querySelector("#pmIn").onclick = () => auth("in"); return; }
+      const m = [["stars", "⭐", "Telegram Stars", `${p.stars} ⭐`], ["card", "💳", "Карта · Google Pay · Apple Pay · PayPal", `$${p.usd}`], ["crypto", "₿", "Криптовалюта · USDT, BTC, TON…", `$${p.usd}`]];
+      payEl.innerHTML = `<div class="pm-ways">${m.map(w => `<button type="button" class="pm-way" data-p="${w[0]}"${payInfo && !en[w[0]] ? " disabled" : ""}><span class="pm-wi">${w[1]}</span><span class="pm-wt">${w[2]}${payInfo && !en[w[0]] ? "<small>скоро</small>" : ""}</span><b>${w[3]}</b></button>`).join("")}</div>`;
+      payEl.querySelectorAll(".pm-way").forEach(b => b.onclick = () => pay(b.dataset.p, b));
+    };
+    box.querySelectorAll(".pm-plan").forEach(b => b.onclick = () => { premPlan = b.dataset.k; box.querySelectorAll(".pm-plan").forEach(x => x.setAttribute("aria-pressed", x === b)); drawPay(); });
+    drawPay();
+    if (CLOUD && !payInfo){ try { const r = await fetch("/api/pay?info"); payInfo = r.ok ? await r.json() : { enabled: {} }; } catch(e) { payInfo = { enabled: {} }; } if (box.isConnected) drawPay(); }
+    async function pay(provider, btn){
+      if (!U) return auth("in");
+      const w = window.open("", "_blank");
+      btn.disabled = true; say("Готовим оплату…");
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        const r = await fetch("/api/pay?create", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + (session ? session.access_token : "") }, body: JSON.stringify({ provider, plan: premPlan }) });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok || !j.url){ if (w) w.close(); btn.disabled = false; return say(j.error === "login_required" ? "Войди в аккаунт ещё раз." : j.error === "not_configured" ? "Этот способ оплаты пока не подключён." : "Не удалось создать оплату. Попробуй ещё раз.", "err"); }
+        if (w) w.location.href = j.url; else location.href = j.url;
+        btn.disabled = false;
+        say(provider === "stars" ? "Открыли оплату в Telegram. Как только оплатишь — подписка включится сама, эту страницу можно не закрывать." : "Открыли страницу оплаты. После оплаты подписка включится сама — обычно за минуту (крипта — после подтверждения сети).");
+        watch();
+      } catch(e) { if (w) w.close(); btn.disabled = false; say("Нет связи с сервером.", "err"); }
+    }
+    function watch(){
+      const was = PREM.get(U.id) || 0; let n = 0; clearInterval(premPoll);
+      premPoll = setInterval(async () => {
+        if (!box.isConnected || ++n > 200){ clearInterval(premPoll); return; }
+        await loadPrem();
+        if ((PREM.get(U.id) || 0) > was){ clearInterval(premPoll); toast(`<span class="tic">👑</span><span><b>Подписка 1x6+ активна!</b><small>до ${untilTxt(U.id)} · спасибо за поддержку</small></span>`, "lvl", 5000); premium(); }
+      }, 4000);
+    }
+    if (opts && opts.wait && U) { say("Проверяем оплату…"); watch(); }
+  }
+
   topbar();
   if (CLOUD){
+    loadPrem();
     sb.auth.onAuthStateChange((ev, session) => {
       if (ev === "PASSWORD_RECOVERY"){ U = session && session.user; setTimeout(newPass, 50); return; }
       if (ev === "SIGNED_IN" || ev === "SIGNED_OUT" || ev === "INITIAL_SESSION" || ev === "USER_UPDATED"){
@@ -2509,7 +2629,7 @@ const PROF = (() => {
       return { rows: data || [] };
     } catch(e) { return { error: "Нет связи с сервером." }; }
   }
-  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf, feedOpen, feedMore, openUser, me: () => P ? P.nick : null, rt: () => sb, duelReport, ratingOpen, medalHTML, statsOpen, loadPlayers: q => { clearTimeout(plT); plT = setTimeout(() => loadPlayers(q), 250); } };
+  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf, feedOpen, feedMore, openUser, me: () => P ? P.nick : null, rt: () => sb, duelReport, ratingOpen, medalHTML, statsOpen, premium, loadPlayers: q => { clearTimeout(plT); plT = setTimeout(() => loadPlayers(q), 250); } };
 })();
 window.__favSync = () => PROF.syncFavs();
 
@@ -3826,7 +3946,8 @@ document.getElementById("feedMore").onclick = () => PROF.feedMore();
 document.querySelectorAll(".rkc").forEach(b => b.onclick = () => PROF.ratingOpen(b.dataset.k));
 document.getElementById("plQ").addEventListener("input", e => PROF.loadPlayers(e.target.value));
 { const h = (location.hash || "").slice(1); setTab(TABS.includes(h) ? h : "1x6", { instant: true, keepHash: true, noScroll: true }); }
-addEventListener("hashchange", () => { const h = (location.hash || "").slice(1); if (TABS.includes(h) && h !== curTab) setTab(h, { keepHash: true }); });
+addEventListener("hashchange", () => { const h = (location.hash || "").slice(1); if (TABS.includes(h) && h !== curTab) setTab(h, { keepHash: true }); if (/^premium/.test(h)) PROF.premium({ wait: h === "premium-ok" }); });
+if (/^#premium/.test(location.hash)) setTimeout(() => { PROF.premium({ wait: location.hash === "#premium-ok" }); try { history.replaceState(null, "", location.pathname); } catch(e) {} }, 1200);
 /* ---------- меню (бургер) ---------- */
 const menu = document.getElementById("menu"), menuOv = document.getElementById("menuOv"), burger = document.getElementById("burger");
 let menuOpen = false;
@@ -3848,7 +3969,7 @@ const ACTS = {
   search(){ goBuilds(); setTimeout(() => document.getElementById("q").focus({preventScroll: true}), 450); },
   fav(){ setFilter(true, false); goBuilds(); },
   arc(){ setFilter(false, true); goBuilds(); },
-  profile(){ PROF.open(); }, feed(){ openFeed(); }, roll(){ roulette(); }, broll(){ buildRoulette(); }, quiz(){ quiz(); }, game(){ GAME.open(); }, duel(){ DUEL.open(); }, lasthit(){ MINI.lasthit(); }, invoker(){ MINI.invoker(); }
+  profile(){ PROF.open(); }, feed(){ openFeed(); }, roll(){ roulette(); }, broll(){ buildRoulette(); }, quiz(){ quiz(); }, game(){ GAME.open(); }, duel(){ DUEL.open(); }, lasthit(){ MINI.lasthit(); }, invoker(){ MINI.invoker(); }, premium(){ PROF.premium(); }
 };
 menu.querySelectorAll(".mi[data-act]").forEach(b => b.onclick = () => closeMenu(ACTS[b.dataset.act]));
 menu.querySelector(".tgmi").addEventListener("click", () => closeMenu());
