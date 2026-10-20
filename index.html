@@ -6,6 +6,8 @@
 <meta name="theme-color" content="#08080b">
 <meta name="description" content="Сборки для кастомки Dota 1x6: 54 героя, предметы по этапам игры, арканы, рулетка и квиз.">
 <link rel="icon" href="face/pudge.webp">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.100.0/dist/umd/supabase.js"></script>
+<script>window.SB_CONF = { url: "https://vsmjjlrgjyujaioknlkn.supabase.co", key: "sb_publishable_tJy3dl_kfNZXP6PXMqsQVQ_RUXqoPmn" };</script>
 <title>1x6 Сборки</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
@@ -427,7 +429,7 @@
   .pform { padding: 0 22px; margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
   .pf { min-width: 0; }
   .prof { overflow-x: hidden; }
-  .pf label.lb { display: block; font-size: 12px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; color: var(--muted-2); margin-bottom: 8px; }
+  .pf .lb { display: block; font-size: 12px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; color: var(--muted-2); margin-bottom: 8px; }
   .pf input[type=text] { width: 100%; background: var(--bg-soft); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; color: var(--fg); font: inherit; font-size: 16px; outline: none; transition: border-color .2s; }
   .pf input[type=text]:focus { border-color: var(--t1); }
   .pf .hint { font-size: 12px; color: var(--muted-2); margin-top: 6px; }
@@ -445,6 +447,40 @@
   .confirm { margin: 14px 22px 0; padding: 14px; border-radius: 14px; background: rgba(232,86,74,.1); border: 1px solid rgba(232,86,74,.3); font-size: 14px; }
   .confirm div { display: flex; gap: 8px; margin-top: 10px; }
   @media (max-width: 600px) { .pcover .close { top: max(14px, env(safe-area-inset-top, 0px)); } .pav { width: 88px; height: 88px; } .phead { margin-top: -44px; padding: 0 16px; } .pstats, .psec, .pacts, .pform { padding-left: 16px; padding-right: 16px; } .pbtn:not(.has) { padding: 0 13px; font-size: 13px; } }
+
+  /* ---------- вход ---------- */
+  .pcover.plain { height: 90px; background: radial-gradient(120% 140% at 20% 0%, color-mix(in srgb, var(--t1) 40%, transparent), transparent 60%), radial-gradient(120% 140% at 90% 100%, color-mix(in srgb, var(--t2) 80%, transparent), transparent 60%), var(--bg-soft); }
+  .auth { padding: 0 24px 26px; margin-top: -34px; position: relative; z-index: 1; max-width: 440px; margin-inline: auto; text-align: center; }
+  .auth-logo .mark { width: 64px; height: 64px; border-radius: 18px; display: inline-grid; place-items: center; color: #fff; font-family: var(--display); font-weight: 800; font-size: 22px; background: linear-gradient(140deg, var(--t1), color-mix(in srgb, var(--t2) 60%, #000)); border: 4px solid var(--panel); box-shadow: 0 12px 30px rgba(0,0,0,.45); }
+  .auth h3 { margin: 12px 0 6px; font-family: var(--display); font-weight: 800; font-size: 24px; letter-spacing: -.4px; }
+  .auth-sub { margin: 0 auto 20px; color: var(--muted); font-size: 14px; max-width: 34ch; }
+  .oauth { display: grid; gap: 10px; }
+  .ob { position: relative; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 50px; border-radius: 14px; font: inherit; font-weight: 700; font-size: 15px; cursor: pointer; border: 1px solid var(--line); transition: transform .15s, filter .2s; }
+  .ob svg { width: 20px; height: 20px; flex: none; }
+  .ob:active:not(:disabled) { transform: scale(.98); }
+  .ob:hover:not(:disabled) { filter: brightness(1.08); }
+  .ob.google { background: #fff; color: #1f1f1f; }
+  .ob.discord { background: #5865f2; color: #fff; border-color: transparent; }
+  .ob.telegram { background: #229ed9; color: #fff; border-color: transparent; opacity: .55; cursor: not-allowed; }
+  .ob em { position: absolute; right: 12px; font-style: normal; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 99px; background: rgba(0,0,0,.25); }
+  .ob:disabled { cursor: default; }
+  .or { display: flex; align-items: center; gap: 12px; margin: 18px 0; color: var(--muted-2); font-size: 12.5px; }
+  .or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .aform { display: grid; gap: 10px; text-align: left; }
+  .aform input { width: 100%; background: var(--bg-soft); border: 1px solid var(--line); border-radius: 12px; padding: 13px 14px; color: var(--fg); font: inherit; font-size: 16px; outline: none; transition: border-color .2s; }
+  .aform input:focus { border-color: var(--t1); }
+  .pw { position: relative; } .pw input { padding-right: 48px; }
+  .eye { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 38px; height: 38px; border: 0; background: transparent; cursor: pointer; font-size: 16px; opacity: .6; }
+  .aok { width: 100%; margin-top: 4px; }
+  .aok:disabled { opacity: .6; }
+  .amsg { font-size: 13.5px; padding: 10px 12px; border-radius: 10px; background: rgba(232,86,74,.12); color: #ffb4ac; }
+  .amsg.good { background: rgba(80,200,120,.12); color: #9be7b4; }
+  .alinks { display: flex; flex-direction: column; gap: 4px; margin-top: 14px; }
+  .alinks button { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 14px; cursor: pointer; padding: 8px; border-radius: 10px; }
+  .alinks button:hover { color: var(--fg); background: rgba(255,255,255,.04); }
+  .alinks b { color: var(--fg); }
+  .pvia { color: var(--muted-2); font-size: 12px; margin-top: 4px; overflow-wrap: anywhere; }
+  .pnote { margin: 14px 22px 0; color: var(--muted-2); font-size: 12.5px; }
   /* ---------- темы героев ---------- */
   @property --t1 { syntax: "<color>"; inherits: true; initial-value: #e8564a; }
   @property --t2 { syntax: "<color>"; inherits: true; initial-value: #4a60e8; }
@@ -720,7 +756,7 @@ let query = "", arcOnly = false, favOnly = false;
 const STAR = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.3L12 17.1 6.3 20.2l1.2-6.3L2.8 9.5l6.4-.8z"/></svg>';
 let FAV = new Set();
 try { FAV = new Set(JSON.parse(localStorage.getItem("ub-fav") || "[]")); } catch(e) {}
-function saveFav(){ try { localStorage.setItem("ub-fav", JSON.stringify([...FAV])); } catch(e) {} updFavN(); }
+function saveFav(){ try { localStorage.setItem("ub-fav", JSON.stringify([...FAV])); } catch(e) {} updFavN(); if (window.__favSync) window.__favSync(); }
 function updFavN(){ const n = document.getElementById("favN"); if (n) n.textContent = FAV.size ? `(${FAV.size})` : ""; const m = document.getElementById("menuFavN"); if (m) m.textContent = FAV.size || ""; }
 function toggleFav(slug, btn){ FAV.has(slug) ? FAV.delete(slug) : FAV.add(slug); saveFav();
   document.querySelectorAll(`.fav[data-s="${slug}"]`).forEach(b => { b.setAttribute("aria-pressed", FAV.has(slug)); b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop"); });
@@ -1097,47 +1133,156 @@ document.getElementById("quizBtn").onclick = quiz;
   sp.addEventListener("click", () => { clearTimeout(t); sp.classList.add("skip"); done(); });
 })();
 
-/* ---------- профиль (хранится на этом устройстве) ---------- */
+/* ---------- профиль: облако (Supabase) на сайте, локально — в превью ---------- */
 const PROF = (() => {
-  const KEY = "ub-profile"; let P = null;
-  try { P = JSON.parse(localStorage.getItem(KEY) || "null"); } catch(e) {}
-  const esc = t => String(t || "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const LKEY = "ub-profile";
+  const sb = (window.supabase && window.SB_CONF && window.SB_CONF.url) ? (() => { try { return window.supabase.createClient(window.SB_CONF.url, window.SB_CONF.key, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: "pkce" } }); } catch(e) { return null; } })() : null;
+  const CLOUD = !!sb;
+  let P = null, U = null, autoOpened = false;
+  const HAD_CODE = /[?&]code=|access_token=/.test(location.href);
+  let LOCAL = null; try { LOCAL = JSON.parse(localStorage.getItem(LKEY) || "null"); } catch(e) {}
+  if (!CLOUD) P = LOCAL;
+
+  const esc = t => String(t == null ? "" : t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   const H = slug => HEROES.find(h => h.slug === slug);
-  const avSrc = a => !a ? "" : a.t === "img" ? a.v : `face/${a.v}.webp`;
-  const bnSrc = b => !b ? "" : b.t === "img" ? b.v : b.t === "arc" ? `arcana/${b.v}.webp` : b.t === "hero" ? `hero/${b.v}.webp` : "";
-  function save(np){ try { localStorage.setItem(KEY, JSON.stringify(np)); P = np; return true; } catch(e) { return false; } }
+  const avSrc = a => !a ? "" : (a.t === "img" || a.t === "url") ? a.v : `face/${a.v}.webp`;
+  const bnSrc = b => !b ? "" : (b.t === "img" || b.t === "url") ? b.v : b.t === "arc" ? `arcana/${b.v}.webp` : b.t === "hero" ? `hero/${b.v}.webp` : "";
+  const enc = o => !o ? "" : o.t === "grad" ? "grad" : `${o.t === "img" ? "url" : o.t}:${o.v}`;
+  const dec = s => { if (!s) return null; if (s === "grad") return { t: "grad", v: "" }; const i = s.indexOf(":"); const t = s.slice(0, i), v = s.slice(i + 1);
+    if (t === "url" && !/^https:\/\//.test(v)) return null; return { t, v }; };
+  const fromRow = r => ({ nick: r.nick, st: r.status || "", av: dec(r.avatar) || { t: "hero", v: "pudge" }, bn: dec(r.banner) || { t: "grad", v: "" } });
   function seen(){ try { return JSON.parse(localStorage.getItem("ub-seen") || "[]"); } catch(e) { return []; } }
+  const provName = u => { const p = u && u.app_metadata && u.app_metadata.provider; return p === "google" ? "Google" : p === "discord" ? "Discord" : p === "email" ? "почта" : p || ""; };
+
+  /* ---------- верхняя панель и меню ---------- */
   function topbar(){
     const b = document.getElementById("pBtn"), ma = document.getElementById("mpAv"), mn = document.getElementById("mpName");
     if (P){ b.classList.add("has"); b.innerHTML = `<img alt="" src="${esc(avSrc(P.av))}">`; b.setAttribute("aria-label", `Профиль ${P.nick}`);
       ma.innerHTML = `<img alt="" src="${esc(avSrc(P.av))}">`; mn.textContent = P.nick; }
-    else { b.classList.remove("has"); b.innerHTML = "<span>Войти</span>"; b.setAttribute("aria-label", "Создать профиль"); ma.textContent = "👤"; mn.textContent = "Создать профиль"; }
+    else if (CLOUD && U){ b.classList.remove("has"); b.innerHTML = "<span>Профиль</span>"; b.setAttribute("aria-label", "Заполнить профиль"); ma.textContent = "👤"; mn.textContent = "Заполнить профиль"; }
+    else { b.classList.remove("has"); b.innerHTML = "<span>Войти</span>"; b.setAttribute("aria-label", "Войти"); ma.textContent = "👤"; mn.textContent = CLOUD ? "Войти" : "Создать профиль"; }
   }
-  function shell(cover, body){
-    modal.innerHTML = `<div class="sheet prof" role="dialog" aria-modal="true" aria-label="Профиль"><div class="pcover">${cover ? `<img alt="" src="${esc(cover)}">` : ""}<button class="close" aria-label="Закрыть">✕</button></div>${body}</div>`;
+  function shell(cover, body, label){
+    modal.innerHTML = `<div class="sheet prof" role="dialog" aria-modal="true" aria-label="${label || "Профиль"}"><div class="pcover${cover ? "" : " plain"}">${cover ? `<img alt="" src="${esc(cover)}">` : ""}<button class="close" aria-label="Закрыть">✕</button></div>${body}</div>`;
     const was = !modal.hidden; modal.classList.toggle("swap", was); modal.hidden = false; modal._go = null; lockScroll();
     modal.querySelector(".close").onclick = closeModal; return modal.querySelector(".prof");
   }
   const faces = list => list.length ? `<div class="pfaces">${list.map(sl => { const h = H(sl); return h ? `<button type="button" data-s="${sl}" style="${vars(h)}" aria-label="${h.en}" title="${h.en}"><img alt="" loading="lazy" src="face/${sl}.webp"></button>` : ""; }).join("")}</div>` : "";
+
+  /* ---------- окно входа ---------- */
+  const IC = {
+    google: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.6 12.2c0-.8-.1-1.5-.2-2.2H12v4.2h5.9a5 5 0 0 1-2.2 3.3v2.7h3.6c2.1-1.9 3.3-4.8 3.3-8z"/><path fill="#34A853" d="M12 23c3 0 5.5-1 7.3-2.7l-3.6-2.7c-1 .7-2.2 1.1-3.7 1.1-2.9 0-5.3-1.9-6.2-4.5H2.1v2.8A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.8 14.2a6.6 6.6 0 0 1 0-4.3V7.1H2.1a11 11 0 0 0 0 9.9z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3 .6 4.2 1.6l3.1-3.1A11 11 0 0 0 2.1 7.1l3.7 2.8C6.7 7.3 9.1 5.4 12 5.4z"/></svg>',
+    discord: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M19.6 5.3A16.5 16.5 0 0 0 15.5 4l-.5 1a15.4 15.4 0 0 0-6 0l-.5-1a16.5 16.5 0 0 0-4.1 1.3C1.8 9.2 1.1 13 1.4 16.7a16.6 16.6 0 0 0 5 2.5l1.1-1.7a10.8 10.8 0 0 1-1.7-.8l.4-.3a11.8 11.8 0 0 0 11.6 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.7a16.5 16.5 0 0 0 5-2.5c.4-4.3-.7-8-3-11.4zM8.7 14.5c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm6.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></svg>',
+    telegram: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M21.9 4.3 18.8 19c-.2 1-.8 1.3-1.7.8l-4.7-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.8 8.8-7.9c.4-.3-.1-.5-.6-.2L6.8 13l-4.7-1.5c-1-.3-1-1 .2-1.5L20.6 3c.9-.3 1.6.2 1.3 1.3z"/></svg>'
+  };
+  const ERR = m => {
+    m = String(m || "");
+    if (/Invalid login credentials/i.test(m)) return "Неверная почта или пароль.";
+    if (/Email not confirmed/i.test(m)) return "Почта ещё не подтверждена — открой письмо от Supabase и нажми ссылку.";
+    if (/already registered|already been registered/i.test(m)) return "Этот email уже зарегистрирован — просто войди.";
+    if (/Password should be at least/i.test(m)) return "Пароль должен быть не короче 6 символов.";
+    if (/provider is not enabled|Unsupported provider/i.test(m)) return "Этот способ входа ещё не включён на сайте.";
+    if (/rate limit|too many/i.test(m)) return "Слишком много попыток. Подожди минуту и попробуй снова.";
+    if (/invalid.*email|valid email/i.test(m)) return "Проверь адрес почты.";
+    if (/Failed to fetch|NetworkError/i.test(m)) return "Нет связи с сервером. Проверь интернет.";
+    return "Что-то пошло не так: " + m;
+  };
+  function auth(mode){
+    mode = mode || "in";
+    const box = shell("", `
+      <div class="auth">
+        <div class="auth-logo"><span class="mark">1×6</span></div>
+        <h3>${mode === "up" ? "Регистрация" : mode === "reset" ? "Восстановление пароля" : "Вход в 1x6 Билды"}</h3>
+        <p class="auth-sub">${mode === "reset" ? "Пришлём ссылку для нового пароля на почту." : "Профиль, аватарка и избранное сохранятся в аккаунте и будут на всех устройствах."}</p>
+        ${mode === "reset" ? "" : `<div class="oauth">
+          <button type="button" class="ob google" data-p="google">${IC.google}<span>Войти через Google</span></button>
+          <button type="button" class="ob discord" data-p="discord">${IC.discord}<span>Войти через Discord</span></button>
+          <button type="button" class="ob telegram" disabled title="Скоро">${IC.telegram}<span>Telegram</span><em>скоро</em></button>
+        </div>
+        <div class="or"><span>или по почте</span></div>`}
+        <form class="aform" id="aForm" novalidate>
+          <input type="email" id="aEmail" autocomplete="email" placeholder="Почта" required>
+          ${mode === "reset" ? "" : `<div class="pw"><input type="password" id="aPass" autocomplete="${mode === "up" ? "new-password" : "current-password"}" placeholder="Пароль${mode === "up" ? " (от 6 символов)" : ""}" required minlength="6"><button type="button" class="eye" id="aEye" aria-label="Показать пароль">👁</button></div>`}
+          <div class="amsg" id="aMsg" role="status" hidden></div>
+          <button type="submit" class="btn btn-primary aok">${mode === "up" ? "Зарегистрироваться" : mode === "reset" ? "Отправить ссылку" : "Войти"}</button>
+        </form>
+        <div class="alinks">
+          ${mode === "in" ? `<button type="button" data-m="up">Нет аккаунта? <b>Регистрация</b></button><button type="button" data-m="reset">Забыли пароль?</button>` : `<button type="button" data-m="in">Уже есть аккаунт? <b>Войти</b></button>`}
+        </div>
+      </div>`, "Вход");
+    const msg = box.querySelector("#aMsg"), ok = box.querySelector(".aok");
+    const say = (t, good) => { msg.hidden = false; msg.textContent = t; msg.classList.toggle("good", !!good); };
+    const busy = on => { ok.disabled = on; box.querySelectorAll(".ob:not(.telegram)").forEach(b => b.disabled = on); };
+    box.querySelectorAll(".alinks [data-m]").forEach(b => b.onclick = () => auth(b.dataset.m));
+    const eye = box.querySelector("#aEye"); if (eye) eye.onclick = () => { const i = box.querySelector("#aPass"); i.type = i.type === "password" ? "text" : "password"; };
+    box.querySelectorAll(".ob[data-p]").forEach(b => b.onclick = async () => {
+      busy(true); say("Перенаправляем…", true);
+      try { sessionStorage.setItem("ub-auth-pending", "1"); } catch(e) {}
+      const { error } = await sb.auth.signInWithOAuth({ provider: b.dataset.p, options: { redirectTo: location.origin + location.pathname } });
+      if (error){ busy(false); say(ERR(error.message)); }
+    });
+    box.querySelector("#aForm").onsubmit = async e => {
+      e.preventDefault();
+      const email = box.querySelector("#aEmail").value.trim(), pi = box.querySelector("#aPass"), pass = pi ? pi.value : "";
+      if (!/^\S+@\S+\.\S+$/.test(email)) return say("Проверь адрес почты.");
+      if (mode !== "reset" && pass.length < 6) return say("Пароль должен быть не короче 6 символов.");
+      busy(true);
+      try {
+        if (mode === "in"){
+          try { sessionStorage.setItem("ub-auth-pending", "1"); } catch(_) {}
+          const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+          if (error) return say(ERR(error.message));
+          closeModal();
+        } else if (mode === "up"){
+          const { data, error } = await sb.auth.signUp({ email, password: pass, options: { emailRedirectTo: location.origin + location.pathname } });
+          if (error) return say(ERR(error.message));
+          if (data && data.user && Array.isArray(data.user.identities) && !data.user.identities.length) return say("Этот email уже зарегистрирован — просто войди.");
+          if (!data.session) say(`Готово! Мы отправили письмо на ${email}. Открой его и нажми ссылку, чтобы подтвердить почту — потом войди.`, true);
+        } else {
+          const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
+          if (error) return say(ERR(error.message));
+          say(`Если такой аккаунт есть, ссылка уже летит на ${email}.`, true);
+        }
+      } catch(err) { say(ERR(err && err.message)); }
+      finally { busy(false); }
+    };
+    setTimeout(() => { const i = box.querySelector("#aEmail"); if (i && mode !== "in") i.focus({preventScroll: true}); }, 300);
+  }
+  function newPass(){
+    const box = shell("", `<div class="auth"><h3>Новый пароль</h3><p class="auth-sub">Придумай новый пароль для входа.</p>
+      <form class="aform" id="npForm" novalidate><div class="pw"><input type="password" id="npPass" autocomplete="new-password" placeholder="Новый пароль (от 6 символов)"></div><div class="amsg" id="npMsg" hidden></div><button type="submit" class="btn btn-primary aok">Сохранить</button></form></div>`, "Новый пароль");
+    const m = box.querySelector("#npMsg");
+    box.querySelector("#npForm").onsubmit = async e => { e.preventDefault(); const pw = box.querySelector("#npPass").value;
+      if (pw.length < 6){ m.hidden = false; m.textContent = "Пароль должен быть не короче 6 символов."; return; }
+      const { error } = await sb.auth.updateUser({ password: pw });
+      m.hidden = false; m.classList.toggle("good", !error); m.textContent = error ? ERR(error.message) : "Пароль обновлён!";
+      if (!error) setTimeout(() => P ? view() : closeModal(), 900); };
+  }
+
+  /* ---------- просмотр профиля ---------- */
   function view(){
-    if (!P) return edit(true);
+    if (!P) return CLOUD ? (U ? edit(true) : auth("in")) : edit(true);
     let best = 0; try { best = +localStorage.getItem("ub-best") || 0; } catch(e) {}
     const fav = [...FAV], rec = (typeof RECENT !== "undefined" ? RECENT : []).slice(0, 8);
     const box = shell(bnSrc(P.bn), `
-      <div class="phead"><div class="pav"><img alt="" src="${esc(avSrc(P.av))}"></div><div class="pname"><h3>${esc(P.nick)}</h3>${P.st ? `<div class="pst">${esc(P.st)}</div>` : ""}</div></div>
+      <div class="phead"><div class="pav"><img alt="" src="${esc(avSrc(P.av))}"></div><div class="pname"><h3>${esc(P.nick)}</h3>${P.st ? `<div class="pst">${esc(P.st)}</div>` : ""}${CLOUD && U ? `<div class="pvia">Вход: ${esc(provName(U))}${U.email ? " · " + esc(U.email) : ""}</div>` : ""}</div></div>
       <div class="pstats"><div class="pstat"><b>${fav.length}</b><span>в избранном</span></div><div class="pstat"><b>${seen().length}</b><span>героев изучено</span></div><div class="pstat"><b>${best}</b><span>рекорд в квизе</span></div></div>
       <div class="psec"><h4>Избранные герои</h4>${faces(fav) || `<div class="pnone">Пока пусто — жми ★ на карточке героя.</div>`}</div>
       ${rec.length ? `<div class="psec"><h4>Недавно смотрел</h4>${faces(rec)}</div>` : ""}
       <div class="pacts"><button type="button" class="btn btn-primary" id="pEdit">Редактировать</button><button type="button" class="btn btn-danger" id="pOut">Выйти</button></div>
+      ${CLOUD ? "" : `<p class="pnote">Профиль сохранён только на этом устройстве.</p>`}
       <div id="pConf"></div>`);
     box.querySelectorAll(".pfaces button").forEach(b => b.onclick = () => openHero(H(b.dataset.s)));
     box.querySelector("#pEdit").onclick = () => edit(false);
     box.querySelector("#pOut").onclick = () => {
+      if (CLOUD){ sb.auth.signOut().finally(() => { U = null; P = null; topbar(); closeModal(); }); return; }
       box.querySelector("#pConf").innerHTML = `<div class="confirm">Выйти и удалить профиль с этого устройства? Избранное останется.<div><button type="button" class="btn btn-danger" id="pYes">Да, выйти</button><button type="button" class="btn btn-ghost" id="pNo">Отмена</button></div></div>`;
-      box.querySelector("#pYes").onclick = () => { try { localStorage.removeItem(KEY); } catch(e) {} P = null; topbar(); closeModal(); };
+      box.querySelector("#pYes").onclick = () => { try { localStorage.removeItem(LKEY); } catch(e) {} P = null; LOCAL = null; topbar(); closeModal(); };
       box.querySelector("#pNo").onclick = () => { box.querySelector("#pConf").innerHTML = ""; };
     };
   }
+
+  /* ---------- картинки ---------- */
   function shrink(file, w, h, cb){
     const r = new FileReader();
     r.onload = () => { const img = new Image(); img.onload = () => {
@@ -1147,62 +1292,127 @@ const PROF = (() => {
       img.onerror = () => cb(null); img.src = r.result; };
     r.onerror = () => cb(null); r.readAsDataURL(file);
   }
+  async function uploadData(dataUrl, kind){
+    const blob = await (await fetch(dataUrl)).blob();
+    const path = `${U.id}/${kind}-${Date.now()}.jpg`;
+    const { error } = await sb.storage.from("media").upload(path, blob, { contentType: "image/jpeg", upsert: true, cacheControl: "604800" });
+    if (error) throw error;
+    return sb.storage.from("media").getPublicUrl(path).data.publicUrl;
+  }
+
+  /* ---------- редактирование ---------- */
   function edit(isNew){
-    const d = P ? JSON.parse(JSON.stringify(P)) : { nick: "", st: "", av: { t: "hero", v: HEROES[rnd(HEROES.length)].slug }, bn: { t: "arc", v: Object.keys(ARCANA)[rnd(11)] } };
+    if (CLOUD && !U) return auth("in");
+    const base = P || (CLOUD ? LOCAL : null);
+    const d = base ? JSON.parse(JSON.stringify(base)) : { nick: "", st: "", av: { t: "hero", v: HEROES[rnd(HEROES.length)].slug }, bn: { t: "arc", v: Object.keys(ARCANA)[rnd(11)] } };
+    if (!d.nick && CLOUD && U){ const md = U.user_metadata || {}; d.nick = String(md.full_name || md.name || md.user_name || (U.email || "").split("@")[0] || "").replace(/[^\p{L}\p{N}_\-. ]/gu, "").slice(0, 20); }
     const arcs = Object.keys(ARCANA);
+    const lb = t => `<span class="lb">${t}</span>`;
     const box = shell(bnSrc(d.bn), `
-      <div class="phead"><div class="pav" id="fAvPrev"><img alt="" src="${esc(avSrc(d.av))}"></div><div class="pname"><h3>${isNew ? "Новый профиль" : "Редактирование"}</h3><div class="pst">Профиль хранится на этом устройстве</div></div></div>
+      <div class="phead"><div class="pav" id="fAvPrev"><img alt="" src="${esc(avSrc(d.av))}"></div><div class="pname"><h3>${isNew ? "Новый профиль" : "Редактирование"}</h3><div class="pst">${CLOUD ? "Профиль сохранится в твоём аккаунте" : "Профиль хранится на этом устройстве"}</div></div></div>
       <form class="pform" id="pForm" novalidate>
         <div class="pf"><label class="lb" for="fNick">Ник</label><input type="text" id="fNick" maxlength="20" autocomplete="nickname" placeholder="Например, Mirox" value="${esc(d.nick)}"><div class="hint" id="fNickH">От 2 до 20 символов</div></div>
         <div class="pf"><label class="lb" for="fSt">Статус</label><input type="text" id="fSt" maxlength="40" placeholder="Например, мейню Пуджа" value="${esc(d.st)}"></div>
-        <div class="pf"><span class="lb" style="display:block;font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px">Аватарка</span>
-          <div class="pick av" id="fAv"><label class="up" title="Своё фото">＋<input type="file" accept="image/*" id="fAvUp"></label>${d.av.t === "img" ? `<button type="button" data-t="img" aria-pressed="true"><img alt="" src="${esc(d.av.v)}"></button>` : ""}${HEROES.map(h => `<button type="button" data-t="hero" data-v="${h.slug}" aria-label="${h.en}" aria-pressed="${d.av.t === "hero" && d.av.v === h.slug}"><img alt="" loading="lazy" src="face/${h.slug}.webp"></button>`).join("")}</div>
+        <div class="pf">${lb("Аватарка")}
+          <div class="pick av" id="fAv"><label class="up" title="Своё фото">＋<input type="file" accept="image/*" id="fAvUp"></label>${(d.av.t === "img" || d.av.t === "url") ? `<button type="button" data-t="${d.av.t}" aria-pressed="true"><img alt="" src="${esc(d.av.v)}"></button>` : ""}${HEROES.map(h => `<button type="button" data-t="hero" data-v="${h.slug}" aria-label="${h.en}" aria-pressed="${d.av.t === "hero" && d.av.v === h.slug}"><img alt="" loading="lazy" src="face/${h.slug}.webp"></button>`).join("")}</div>
           <div class="hint">Смайлик героя или своё фото (＋)</div></div>
-        <div class="pf"><span class="lb" style="display:block;font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px">Баннер сзади</span>
-          <div class="pick bn" id="fBn"><label class="up" title="Своя картинка">＋<input type="file" accept="image/*" id="fBnUp"></label>${d.bn.t === "img" ? `<button type="button" data-t="img" aria-pressed="true"><img alt="" src="${esc(d.bn.v)}"></button>` : ""}<button type="button" data-t="grad" aria-pressed="${d.bn.t === "grad"}" aria-label="Цвет темы" style="background:linear-gradient(135deg,var(--t1),var(--t2))"></button>${arcs.map(a => `<button type="button" data-t="arc" data-v="${a}" aria-pressed="${d.bn.t === "arc" && d.bn.v === a}" title="${ARCANA[a]}"><img alt="" loading="lazy" src="arcana/${a}.webp"></button>`).join("")}${HEROES.map(h => `<button type="button" data-t="hero" data-v="${h.slug}" aria-pressed="${d.bn.t === "hero" && d.bn.v === h.slug}" style="${vars(h)};background:radial-gradient(circle at 50% 30%,var(--c1),var(--c2))" title="${h.en}"><img alt="" loading="lazy" src="hero/${h.slug}.webp" style="object-fit:cover;object-position:center 22%"></button>`).join("")}</div>
+        <div class="pf">${lb("Баннер сзади")}
+          <div class="pick bn" id="fBn"><label class="up" title="Своя картинка">＋<input type="file" accept="image/*" id="fBnUp"></label>${(d.bn.t === "img" || d.bn.t === "url") ? `<button type="button" data-t="${d.bn.t}" aria-pressed="true"><img alt="" src="${esc(d.bn.v)}"></button>` : ""}<button type="button" data-t="grad" aria-pressed="${d.bn.t === "grad"}" aria-label="Цвет темы" style="background:linear-gradient(135deg,var(--t1),var(--t2))"></button>${arcs.map(a => `<button type="button" data-t="arc" data-v="${a}" aria-pressed="${d.bn.t === "arc" && d.bn.v === a}" title="${ARCANA[a]}"><img alt="" loading="lazy" src="arcana/${a}.webp"></button>`).join("")}${HEROES.map(h => `<button type="button" data-t="hero" data-v="${h.slug}" aria-pressed="${d.bn.t === "hero" && d.bn.v === h.slug}" style="${vars(h)};background:radial-gradient(circle at 50% 30%,var(--c1),var(--c2))" title="${h.en}"><img alt="" loading="lazy" src="hero/${h.slug}.webp" style="object-fit:cover;object-position:center 22%"></button>`).join("")}</div>
           <div class="hint">Аркана, герой или своя картинка (＋)</div></div>
         <div class="pf err" id="fErr" hidden></div>
-        <div class="pacts" style="padding:0"><button type="submit" class="btn btn-primary">${isNew ? "Создать профиль" : "Сохранить"}</button><button type="button" class="btn btn-ghost" id="fCancel">Отмена</button></div>
+        <div class="pacts" style="padding:0"><button type="submit" class="btn btn-primary" id="fSave">${isNew ? "Создать профиль" : "Сохранить"}</button><button type="button" class="btn btn-ghost" id="fCancel">Отмена</button></div>
       </form>`);
     const cover = box.querySelector(".pcover"), avPrev = box.querySelector("#fAvPrev img");
-    const setCover = src => { let im = cover.querySelector("img"); if (!src){ if (im) im.remove(); return; } if (!im){ im = document.createElement("img"); im.alt = ""; cover.prepend(im); } im.src = src; };
+    const setCover = src => { let im = cover.querySelector("img"); cover.classList.toggle("plain", !src); if (!src){ if (im) im.remove(); return; } if (!im){ im = document.createElement("img"); im.alt = ""; cover.prepend(im); } im.src = src; };
     function wire(pickId, key, onSet){
       const pk = box.querySelector(pickId);
       pk.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return;
         pk.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
-        d[key] = b.dataset.t === "img" ? { t: "img", v: b.querySelector("img").src } : { t: b.dataset.t, v: b.dataset.v || "" }; onSet(); });
+        d[key] = (b.dataset.t === "img" || b.dataset.t === "url") ? { t: b.dataset.t, v: b.querySelector("img").src } : { t: b.dataset.t, v: b.dataset.v || "" }; onSet(); });
       return pk;
     }
     const avPk = wire("#fAv", "av", () => { avPrev.src = avSrc(d.av); });
     const bnPk = wire("#fBn", "bn", () => setCover(bnSrc(d.bn)));
     const err = box.querySelector("#fErr");
+    const showErr = t => { err.hidden = false; err.textContent = t; };
     function upload(inp, pk, w, h, key, after){
       inp.onchange = () => { const f = inp.files && inp.files[0]; if (!f) return;
-        if (!/^image\//.test(f.type)) { err.hidden = false; err.textContent = "Это не картинка."; return; }
-        shrink(f, w, h, url => { if (!url){ err.hidden = false; err.textContent = "Не получилось открыть картинку."; return; }
-          err.hidden = true; let b = pk.querySelector('button[data-t="img"]');
-          if (!b){ b = document.createElement("button"); b.type = "button"; b.dataset.t = "img"; b.innerHTML = '<img alt="">'; pk.querySelector(".up").after(b); }
-          b.querySelector("img").src = url; pk.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
+        if (!/^image\//.test(f.type)) return showErr("Это не картинка.");
+        shrink(f, w, h, url => { if (!url) return showErr("Не получилось открыть картинку.");
+          err.hidden = true; let b = pk.querySelector('button[data-t="img"],button[data-t="url"]');
+          if (!b){ b = document.createElement("button"); b.type = "button"; b.innerHTML = '<img alt="">'; pk.querySelector(".up").after(b); }
+          b.dataset.t = "img"; b.querySelector("img").src = url; pk.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
           d[key] = { t: "img", v: url }; after(); pk.scrollLeft = 0; }); inp.value = ""; };
     }
     upload(box.querySelector("#fAvUp"), avPk, 256, 256, "av", () => { avPrev.src = d.av.v; });
     upload(box.querySelector("#fBnUp"), bnPk, 1200, 420, "bn", () => setCover(d.bn.v));
-    const sel = (pk) => { const a = pk.querySelector('[aria-pressed="true"]'); if (a) pk.scrollLeft = Math.max(0, a.offsetLeft - 70); };
+    const sel = pk => { const a = pk.querySelector('[aria-pressed="true"]'); if (a) pk.scrollLeft = Math.max(0, a.offsetLeft - 70); };
     if (!isNew) requestAnimationFrame(() => { sel(avPk); sel(bnPk); });
     box.querySelector("#fCancel").onclick = () => P ? view() : closeModal();
-    box.querySelector("#pForm").onsubmit = e => { e.preventDefault();
+    box.querySelector("#pForm").onsubmit = async e => { e.preventDefault();
       const nick = box.querySelector("#fNick").value.trim().replace(/\s+/g, " "), st = box.querySelector("#fSt").value.trim();
       const nh = box.querySelector("#fNickH");
       if (nick.length < 2){ nh.textContent = "Ник должен быть от 2 до 20 символов"; nh.classList.add("err"); box.querySelector("#fNick").focus(); return; }
       const np = { nick, st, av: d.av, bn: d.bn, created: (P && P.created) || Date.now() };
-      if (!save(np)){ err.hidden = false; err.textContent = "Картинка слишком большая для памяти браузера — выбери другую или героя."; return; }
-      topbar(); view(); };
-    if (isNew) setTimeout(() => box.querySelector("#fNick").focus({preventScroll: true}), 350);
+      if (!CLOUD){
+        try { localStorage.setItem(LKEY, JSON.stringify(np)); } catch(_) { return showErr("Картинка слишком большая для памяти браузера — выбери другую или героя."); }
+        P = np; LOCAL = np; topbar(); return view();
+      }
+      const btn = box.querySelector("#fSave"); btn.disabled = true; btn.textContent = "Сохраняем…"; err.hidden = true;
+      try {
+        if (np.av.t === "img" && /^data:/.test(np.av.v)) np.av = { t: "url", v: await uploadData(np.av.v, "avatar") };
+        if (np.bn.t === "img" && /^data:/.test(np.bn.v)) np.bn = { t: "url", v: await uploadData(np.bn.v, "banner") };
+        if (np.av.t === "img") np.av.t = "url"; if (np.bn.t === "img") np.bn.t = "url";
+        const { error } = await sb.from("profiles").upsert({ id: U.id, nick, status: st, avatar: enc(np.av), banner: enc(np.bn), favs: [...FAV], updated_at: new Date().toISOString() });
+        if (error){ if (error.code === "23505") { nh.textContent = "Этот ник уже занят — придумай другой"; nh.classList.add("err"); } else showErr(/relation|does not exist|schema cache/i.test(error.message) ? "База профилей ещё не настроена на сервере." : ERR(error.message)); return; }
+        P = { nick, st, av: np.av, bn: np.bn }; topbar(); view();
+      } catch(ex) { showErr(/Bucket not found|bucket/i.test(ex && ex.message || "") ? "Хранилище картинок ещё не настроено на сервере." : ERR(ex && ex.message)); }
+      finally { if (btn.isConnected){ btn.disabled = false; btn.textContent = isNew ? "Создать профиль" : "Сохранить"; } }
+    };
+    if (isNew) setTimeout(() => { const i = box.querySelector("#fNick"); if (!i.value) i.focus({preventScroll: true}); }, 350);
   }
+
+  /* ---------- синхронизация избранного ---------- */
+  let favT = 0;
+  function syncFavs(){ if (!CLOUD || !U || !P) return; clearTimeout(favT);
+    favT = setTimeout(() => { sb.from("profiles").update({ favs: [...FAV], updated_at: new Date().toISOString() }).eq("id", U.id).then(() => {}); }, 700); }
+
+  async function loadUser(u){
+    U = u || null;
+    if (!U){ P = null; topbar(); return; }
+    const { data, error } = await sb.from("profiles").select("*").eq("id", U.id).maybeSingle();
+    if (error){ P = null; topbar(); return; }
+    if (data){
+      P = fromRow(data);
+      const server = Array.isArray(data.favs) ? data.favs : [], before = FAV.size;
+      server.forEach(s => FAV.add(s));
+      if (FAV.size !== before){ try { localStorage.setItem("ub-fav", JSON.stringify([...FAV])); } catch(e) {} updFavN(); if (typeof render === "function") render(); }
+      if (FAV.size !== server.length) syncFavs();
+    } else P = null;
+    topbar();
+    let pending = false; try { pending = sessionStorage.getItem("ub-auth-pending") === "1"; sessionStorage.removeItem("ub-auth-pending"); } catch(e) {}
+    if (!P && !autoOpened && (pending || HAD_CODE)){ autoOpened = true; edit(true); }
+  }
+
   topbar();
-  document.getElementById("pBtn").onclick = () => P ? view() : edit(true);
-  return { open: () => P ? view() : edit(true) };
+  if (CLOUD){
+    sb.auth.onAuthStateChange((ev, session) => {
+      if (ev === "PASSWORD_RECOVERY"){ U = session && session.user; setTimeout(newPass, 50); return; }
+      if (ev === "SIGNED_IN" || ev === "SIGNED_OUT" || ev === "INITIAL_SESSION" || ev === "USER_UPDATED"){
+        const nu = session && session.user;
+        if ((nu && nu.id) !== (U && U.id) || ev === "INITIAL_SESSION") setTimeout(() => loadUser(nu), 0);
+      }
+      if (/[?&](code|error)=|#.*access_token=/.test(location.href) && ev !== "PASSWORD_RECOVERY") setTimeout(() => { try { history.replaceState(null, "", location.pathname); } catch(e) {} }, 400);
+    });
+    const qe = new URLSearchParams(location.search).get("error_description") || new URLSearchParams(location.hash.slice(1)).get("error_description");
+    if (qe) setTimeout(() => { auth("in"); const m = document.getElementById("aMsg"); if (m){ m.hidden = false; m.textContent = ERR(qe); } }, 600);
+  }
+  document.getElementById("pBtn").onclick = () => open();
+  function open(){ if (CLOUD) return U ? (P ? view() : edit(true)) : auth("in"); return P ? view() : edit(true); }
+  return { open, syncFavs, cloud: CLOUD };
 })();
+window.__favSync = () => PROF.syncFavs();
+
 /* ---------- меню (бургер) ---------- */
 const menu = document.getElementById("menu"), menuOv = document.getElementById("menuOv"), burger = document.getElementById("burger");
 let menuOpen = false;
