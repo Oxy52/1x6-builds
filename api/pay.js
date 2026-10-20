@@ -131,6 +131,10 @@ async function hookTg(req, res, body) {
     }
     return res.status(200).end();
   }
+  if (msg && msg.chat && typeof msg.text === "string" && /^\/(paysupport|terms)/.test(msg.text)) {
+    await tg("sendMessage", { chat_id: msg.chat.id, text: "Подписка 1x6+ — цифровая услуга сайта 1x6 Билды: значок, рамки, бонусы опыта, длинные посты и полная статистика. Включается сразу после оплаты на выбранный срок, сама не продлевается.\nПроблема с оплатой или подпиской? Напиши администратору в канал: https://t.me/+swCyihkKvwU4NTBi — укажи ник на сайте и время оплаты." });
+    return res.status(200).end();
+  }
   if (msg && msg.chat && typeof msg.text === "string" && /^\/(start|premium|help)/.test(msg.text)) {
     await tg("sendMessage", { chat_id: msg.chat.id, text: `Привет! Это бот сайта 1x6 Билды.\nСборки, мини-игры и рейтинг: ${SITE}\nПодписку 1x6+ можно оформить на сайте в профиле → «👑 1x6+».` });
   }
