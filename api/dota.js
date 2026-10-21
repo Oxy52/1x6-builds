@@ -29,14 +29,16 @@ module.exports = async (req, res) => {
     try { const r = await fetch(BASE + (req.query.ping === "2" ? "/constants/item_ids" : "/heroStats"), { signal: AbortSignal.timeout(8000), headers: { Accept: "application/json", "User-Agent": "1x6-builds (+https://1x6-eta.vercel.app)" } }); const t = await r.text();
       return res.status(200).json({ status: r.status, ms: Date.now() - t0, len: t.length, head: t.slice(0, 300) }); } catch (e) { return res.status(200).json({ error: String(e && e.message), ms: Date.now() - t0 }); }
   }
-  if (q === "probe") {
-    const urls = [1, 8].flatMap(n => [
-      `https://www.opendota.com/assets/images/dota2/rank_icons/rank_icon_${n}.png`,
-      `https://www.opendota.com/assets/images/dota2/rank_icons/rank_star_${n === 8 ? 5 : n}.png`,
-      `https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/icons/ranks/rank_icon_${n}.png`]);
-    const out = {};
-    await Promise.all(urls.map(async u => { try { const r = await fetch(u, { signal: AbortSignal.timeout(6000) }); out[u] = r.status + " " + r.headers.get("content-type") + " " + r.headers.get("content-length"); } catch (e) { out[u] = "ERR " + e.message; } }));
-    return res.status(200).json(out);
+  if (q === "rank") {
+    const n = String((req.query && req.query.n) || "");
+    if (!/^[1-8]$/.test(n)) return res.status(400).json({ error: "bad_rank" });
+    try {
+      const r = await fetch(`https://www.opendota.com/assets/images/dota2/rank_icons/rank_icon_${n}.png`, { signal: AbortSignal.timeout(8000) });
+      if (!r.ok) return res.status(502).end();
+      res.setHeader("Content-Type", "image/png");
+      res.setHeader("Cache-Control", "public, max-age=2592000, s-maxage=2592000, immutable");
+      return res.status(200).send(Buffer.from(await r.arrayBuffer()));
+    } catch (e) { return res.status(502).end(); }
   }
   if (!ROUTES[q]) return res.status(400).json({ error: "bad_query" });
   if (NEEDS_HERO.has(q) && !/^\d{1,3}$/.test(hero)) return res.status(400).json({ error: "bad_hero" });
@@ -54,7 +56,11 @@ module.exports = async (req, res) => {
     try {
       if (q === "items") {
         const j = JSON.parse(text), slim = {};
-        for (const k of Object.keys(j)) { const it = j[k] || {}; slim[k] = { dname: it.dname || k, img: it.img || "", cost: it.cost || 0 }; }
+        const attr = a => { if (!a) return ""; const v = Array.isArray(a.value) ? a.value.join("/") : a.value;
+          if (a.display) return String(a.display).replace("{value}", v); return [a.header, v, a.footer].filter(x => x != null && x !== "").join(" ").replace(/\s+/g, " ").trim(); };
+        for (const k of Object.keys(j)) { const it = j[k] || {};
+          slim[k] = { dname: it.dname || k, img: it.img || "", cost: it.cost || 0, comp: Array.isArray(it.components) ? it.components : null,
+            attr: Array.isArray(it.attrib) ? it.attrib.map(attr).filter(Boolean).slice(0, 8) : [], cd: it.cd || 0, mc: it.mc || 0 }; }
         out = JSON.stringify(slim);
       } else if (q === "heroStats") {
         const keep = ["id", "name", "localized_name", "primary_attr", "attack_type", "roles", "img", "icon", "turbo_picks", "turbo_wins", "pro_pick", "pro_win", "pro_ban", "pub_pick", "pub_win"];
