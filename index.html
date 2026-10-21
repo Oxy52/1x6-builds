@@ -1449,6 +1449,32 @@
   .nfoot { margin-top: 16px; color: var(--muted-2); font-size: 12.5px; }
   @media (max-width: 600px) { .npatch { grid-template-columns: 1fr; } .npatch .nv { grid-row: auto; } .ncard { grid-template-columns: 40px minmax(0, 1fr); gap: 12px; padding: 14px 14px 14px 14px; } .nic { width: 40px; height: 40px; font-size: 18px; } .hnews { font-size: 12.5px; } .tab .ndot { top: 6px; right: 6px; } }
 
+  .ncard { cursor: pointer; padding-right: 56px; transition: border-color .25s, transform .25s cubic-bezier(.22,.61,.36,1); }
+  @media (hover: hover) { .ncard:hover { border-color: color-mix(in srgb, var(--nc) 45%, transparent); transform: translateY(-2px); } }
+  .ncard:focus-visible { outline: 2px solid var(--nc); outline-offset: 2px; }
+  .ncard .nfav { top: 12px; right: 12px; width: 34px; height: 34px; }
+  .nsheet { max-width: 680px; position: relative; }
+  .ncover { position: relative; height: clamp(200px, 38vw, 300px); overflow: hidden; display: grid; place-items: center;
+    background: radial-gradient(80% 90% at 50% 30%, color-mix(in srgb, var(--c1, var(--nc)) 45%, transparent), transparent 70%), linear-gradient(160deg, color-mix(in srgb, var(--c2, var(--nc)) 70%, #0a0a0e), #0a0a0e); }
+  .ncover::after { content: ""; position: absolute; inset: auto 0 0 0; height: 45%; background: linear-gradient(to top, var(--panel), transparent); pointer-events: none; }
+  .ncover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; animation: kb 18s ease-in-out infinite alternate; }
+  .ncover.k-art img { object-fit: contain; object-position: center bottom; top: 8%; height: 92%; filter: drop-shadow(0 0 18px color-mix(in srgb, var(--c1, var(--nc)) 50%, transparent)); animation: none; }
+  .ncover.k-item img { position: relative; inset: auto; width: auto; height: 46%; image-rendering: auto; border-radius: 10px; box-shadow: 0 0 40px color-mix(in srgb, var(--nc) 60%, transparent), 0 10px 30px rgba(0,0,0,.6); animation: gBob 3s ease-in-out infinite; }
+  .ncv-ic { font-size: clamp(64px, 14vw, 96px); filter: drop-shadow(0 8px 24px rgba(0,0,0,.5)); }
+  .ncover img ~ .ncv-ic { display: none; }
+  .ncover .close { position: absolute; top: 14px; right: 14px; z-index: 3; }
+  .ncover .navh { z-index: 3; }
+  .nbody { padding: 4px 22px 22px; margin-top: -18px; position: relative; z-index: 1; }
+  .nbody h3 { margin: 8px 0 0; font-family: var(--display); font-weight: 800; font-size: clamp(21px, 4vw, 26px); letter-spacing: -.4px; line-height: 1.2; }
+  .nbody p { margin: 10px 0 0; color: var(--muted); font-size: 16px; line-height: 1.6; }
+  .nbody p b { color: var(--fg); font-weight: 600; }
+  .nbody .ntag { color: var(--nc); background: color-mix(in srgb, var(--nc) 14%, transparent); }
+  .nacts { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  .nacts .btn { padding: 11px 20px; font-size: 14px; }
+  .nfavbig[aria-pressed="true"] { background: var(--gold); color: #1a1205; border-color: var(--gold); }
+  .nfavbig.pop { animation: pop .35s ease; }
+  .npos { margin-left: auto; color: var(--muted-2); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+  @media (max-width: 600px) { .nbody { padding: 4px 16px 20px; } .ncover .close { top: max(14px, env(safe-area-inset-top, 0px)); } }
   .d2-subs .rkc { position: relative; } .d2-subs .rkc .ndot { top: -3px; right: -3px; }
   @media (max-width: 600px) { .tabs { gap: 2px; } .tab { flex: 0 1 auto; padding: 0 6px; } .tab[aria-selected="true"] { flex: 1 0 auto; padding: 0 10px; } .tab[aria-selected="false"] .ts { display: none; } }
 </style>
@@ -5611,6 +5637,14 @@ const NEWS = (() => {
   ];
   const TOP = ITEMS.reduce((m, n) => Math.max(m, n.id), 0);
   const H = slug => HEROES.find(h => h.slug === slug);
+  const NC = { patch: "#ffb547", players: "#c47bff", leaks: "#2ee6d6", events: "#4ade80", community: "#ff6b8b" };
+  // картинка в окне новости: арт героя сайта или герой/предмет Dota 2 с CDN Valve; без неё — обложка с иконкой
+  const CDN = "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react";
+  const PIC = { 22: "heroes/tidehunter", 11: "heroes/tidehunter", 20: "heroes/bounty_hunter", 1: "heroes/treant", 0: "heroes/windrunner", 21: "items/necronomicon_3" };
+  const pic = n => n.img ? { src: n.img, k: "photo" } : PIC[n.id] ? { src: `${CDN}/${PIC[n.id]}.png`, k: PIC[n.id].startsWith("items") ? "item" : "photo" } : n.hero && H(n.hero) ? { src: `hero/${n.hero}.webp`, k: "art" } : null;
+  const plain = s => String(s).replace(/<[^>]+>/g, "");
+  let NF = new Set(); try { NF = new Set(JSON.parse(localStorage.getItem("ub-news-fav") || "[]")); } catch(e) {}
+  const saveNF = () => { try { localStorage.setItem("ub-news-fav", JSON.stringify([...NF])); } catch(e) {} };
   let seen = -1; try { const v = localStorage.getItem("ub-news"); seen = v == null ? -1 : +v; } catch(e) {}
   const firstVisit = seen < 0;
   let cat = "all", wired = false;
@@ -5624,19 +5658,56 @@ const NEWS = (() => {
     return list.map(h => `<button type="button" class="nhero" data-s="${h.slug}" style="${vars(h)}"><img alt="" loading="lazy" src="face/${h.slug}.webp">Сборка ${h.en}</button>`).join(" "); }
   function card(n, i){
     const fresh = !firstVisit && n.id > seen;
-    return `<article class="ncard ${n.cat}" style="--i:${Math.min(i, 10)}">${icon(n)}<div><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span><span>${n.d}</span>${fresh ? `<span class="nnew">NEW</span>` : ""}</div>
-      <h3>${n.t}</h3><p>${n.x}</p>${chips(n)}</div></article>`;
+    return `<article class="ncard ${n.cat}" data-id="${n.id}" tabindex="0" style="--i:${Math.min(i, 10)}" aria-label="${plain(n.t)} — открыть">${icon(n)}<div><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span><span>${n.d}</span>${fresh ? `<span class="nnew">NEW</span>` : ""}</div>
+      <h3>${n.t}</h3><p>${n.x}</p>${chips(n)}</div>${favBtn(n.id)}</article>`;
+  }
+  const favBtn = id => `<button type="button" class="fav nfav" data-id="${id}" aria-pressed="${NF.has(id)}" aria-label="Новость в избранное">${STAR}</button>`;
+  let VIEW = [];
+  function drawChips(){
+    const cnt = k => k === "all" ? ITEMS.length : k === "fav" ? NF.size : ITEMS.filter(n => n.cat === k).length;
+    document.getElementById("nChips").innerHTML = [["all", "Всё"], ["fav", "★ Избранное"], ["patch", "🛠️ Патч"], ["players", "🧑‍💻 Игроки"], ["leaks", "🔍 Датамайн"], ["events", "🏆 Турниры"], ["community", "🎉 Комьюнити"]]
+      .map(([k, l]) => `<button type="button" class="rkc" data-c="${k}" aria-pressed="${cat === k}">${l}<em>${cnt(k)}</em></button>`).join("");
   }
   function draw(){
     const wk = ["20–21 октября", "12–18 октября", "5–11 октября", "Сентябрь"]; // неизвестная (новая) неделя встанет первой
-    const list = ITEMS.filter(n => cat === "all" || n.cat === cat).sort((a, b) => wk.indexOf(a.w) - wk.indexOf(b.w) || b.id - a.id);
-    const cnt = k => k === "all" ? ITEMS.length : ITEMS.filter(n => n.cat === k).length;
-    document.getElementById("nChips").innerHTML = [["all", "Всё"], ["patch", "🛠️ Патч"], ["players", "🧑‍💻 Игроки"], ["leaks", "🔍 Датамайн"], ["events", "🏆 Турниры"], ["community", "🎉 Комьюнити"]]
-      .map(([k, l]) => `<button type="button" class="rkc" data-c="${k}" aria-pressed="${cat === k}">${l}<em>${cnt(k)}</em></button>`).join("");
+    VIEW = ITEMS.filter(n => cat === "all" || (cat === "fav" ? NF.has(n.id) : n.cat === cat)).sort((a, b) => wk.indexOf(a.w) - wk.indexOf(b.w) || b.id - a.id);
+    drawChips();
     let html = "", w = "", i = 0;
-    list.forEach(n => { if (n.w !== w){ w = n.w; html += `<div class="ngrp">${w}</div>`; } html += card(n, i++); });
-    document.getElementById("nList").innerHTML = html;
+    VIEW.forEach(n => { if (n.w !== w){ w = n.w; html += `<div class="ngrp">${w}</div>`; } html += card(n, i++); });
+    document.getElementById("nList").innerHTML = html || `<div class="gempty">В избранном пока пусто — открой новость и нажми ★</div>`;
   }
+  function toggleFav(id){
+    NF.has(id) ? NF.delete(id) : NF.add(id); saveNF();
+    document.querySelectorAll(`.nfav[data-id="${id}"], .nfavbig[data-id="${id}"]`).forEach(b => { const on = NF.has(id); b.setAttribute("aria-pressed", on); b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop");
+      const s = b.querySelector("span"); if (s) s.textContent = on ? "В избранном" : "В избранное"; });
+    if (wired) cat === "fav" ? draw() : drawChips();
+  }
+  /* окно новости: картинка, полный текст, избранное, поделиться, листание */
+  function openNews(id){
+    const n = ITEMS.find(x => x.id === id); if (!n) return;
+    const p = pic(n), h = n.hero && H(n.hero), pool = VIEW.some(x => x.id === id) ? VIEW : ITEMS, idx = pool.findIndex(x => x.id === id);
+    const was = !modal.hidden;
+    if (modal._cleanup){ try { modal._cleanup(); } catch(e) {} modal._cleanup = null; }
+    modal.innerHTML = `<div class="sheet nsheet" role="dialog" aria-modal="true" aria-label="${plain(n.t)}" style="--nc:${NC[n.cat]};${h ? vars(h) : ""}">
+      <div class="ncover k-${p ? p.k : "none"}">${p ? `<img alt="" src="${p.src}" onerror="this.remove()">` : ""}<span class="ncv-ic" aria-hidden="true">${n.ic || "📰"}</span>
+        <button type="button" class="navh prev" aria-label="Предыдущая новость">‹</button><button type="button" class="navh next" aria-label="Следующая новость">›</button>
+        <button type="button" class="close" aria-label="Закрыть">✕</button></div>
+      <div class="nbody"><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span><span>${n.d} · ${n.w}</span></div>
+        <h3>${n.t}</h3><p>${n.x}</p>${chips(n)}
+        <div class="nacts"><button type="button" class="btn btn-ghost nfavbig" data-id="${id}" aria-pressed="${NF.has(id)}">★ <span>${NF.has(id) ? "В избранном" : "В избранное"}</span></button><button type="button" class="btn btn-ghost" id="nShare">Поделиться</button><span class="npos">${idx + 1} / ${pool.length}</span></div></div></div>`;
+    modal.classList.toggle("swap", was); modal.hidden = false; lockScroll();
+    const sh = modal.querySelector(".nsheet"); if (was) sh.scrollTop = 0;
+    const go = d => openNews(pool[(idx + d + pool.length) % pool.length].id);
+    modal._go = go;
+    modal.querySelector(".navh.prev").onclick = () => go(-1); modal.querySelector(".navh.next").onclick = () => go(1);
+    swipe(modal.querySelector(".ncover"), d => go(d));
+    modal.querySelector(".close").onclick = closeModal; if (!was) modal.querySelector(".close").focus({ preventScroll: true });
+    modal.querySelector(".nfavbig").onclick = () => toggleFav(id);
+    modal.querySelector("#nShare").onclick = () => shareLink(`${SITE_URL}/#news-${id}`, plain(n.t), plain(n.x));
+    sh.querySelectorAll(".nhero").forEach(b => b.onclick = () => { const hh = H(b.dataset.s); if (hh) openHero(hh); });
+  }
+  /* ссылка вида /#news-40 сразу открывает новость */
+  function fromHash(){ const m = /^#news-(\d+)$/.exec(location.hash || ""); if (!m) return; setTab("news", { keepHash: true, noScroll: true }); openNews(+m[1]); }
   function open(){
     const box = document.getElementById("newsBox"); if (!box) return;
     if (!wired){ wired = true;
@@ -5645,7 +5716,11 @@ const NEWS = (() => {
         <div class="nst"><span><b>211</b> дней без большого обновления</span><span>Рекорд 7.32: <b>240</b> дней</span><span>Последние правки: <b>15 сен</b></span><span>Мета: <b>Bounty Hunter</b></span></div>`;
       document.getElementById("nFoot").textContent = `Обновлено ${UPDATED}.`;
       document.getElementById("nChips").onclick = e => { const b = e.target.closest(".rkc"); if (!b) return; cat = b.dataset.c; draw(); };
-      document.getElementById("nList").onclick = e => { const b = e.target.closest("[data-s]"); if (b){ const h = H(b.dataset.s); if (h) openHero(h); } };
+      const nl = document.getElementById("nList");
+      nl.onclick = e => { const f = e.target.closest(".nfav"); if (f){ e.stopPropagation(); toggleFav(+f.dataset.id); return; }
+        const b = e.target.closest("[data-s]"); if (b){ const h = H(b.dataset.s); if (h) openHero(h); return; }
+        const c = e.target.closest(".ncard"); if (c) openNews(+c.dataset.id); };
+      nl.onkeydown = e => { if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("ncard")){ e.preventDefault(); openNews(+e.target.dataset.id); } };
     }
     draw();
     seen = TOP; try { localStorage.setItem("ub-news", String(TOP)); } catch(e) {} dot();
@@ -5656,7 +5731,7 @@ const NEWS = (() => {
     if (hl.length > 1 && !REDUCED) setInterval(() => { if (document.hidden) return; k = (k + 1) % hl.length; el.style.opacity = 0; setTimeout(() => { el.textContent = hl[k].t; el.style.opacity = 1; }, 250); }, 4500);
     el.style.transition = "opacity .25s ease"; })();
   dot();
-  return { open, go, dot };
+  return { open, go, dot, fromHash };
 })();
 
 /* ---------- вкладки ---------- */
@@ -5693,7 +5768,8 @@ document.getElementById("plQ").addEventListener("input", e => PROF.loadPlayers(e
 { const qs = new URLSearchParams(location.search), hs = qs.get("h"), dh = qs.get("d2h");
   if (hs){ const h = HEROES.find(x => x.slug === hs); if (h) setTimeout(() => openHero(h), 700); }
   if (dh && /^\d{1,3}$/.test(dh)) setTimeout(() => { setTab("dota", { noScroll: true }); D2.hero(+dh); }, 700); }
-addEventListener("hashchange", () => { const h = (location.hash || "").slice(1); if (TABS.includes(h) && h !== curTab) setTab(h, { keepHash: true }); if (/^premium/.test(h)) PROF.premium({ wait: h === "premium-ok" }); });
+if (/^#news-\d+$/.test(location.hash)) setTimeout(NEWS.fromHash, 500);
+addEventListener("hashchange", () => { const h = (location.hash || "").slice(1); if (TABS.includes(h) && h !== curTab) setTab(h, { keepHash: true }); if (/^news-\d+$/.test(h)) NEWS.fromHash(); if (/^premium/.test(h)) PROF.premium({ wait: h === "premium-ok" }); });
 if (/^#premium/.test(location.hash)) setTimeout(() => { PROF.premium({ wait: location.hash === "#premium-ok" }); try { history.replaceState(null, "", location.pathname); } catch(e) {} }, 1200);
 /* ---------- меню (бургер) ---------- */
 const menu = document.getElementById("menu"), menuOv = document.getElementById("menuOv"), burger = document.getElementById("burger");
