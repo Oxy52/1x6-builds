@@ -95,7 +95,7 @@ async function create(req, res, body) {
 
   if (provider === "stars") {
     const j = await tg("createInvoiceLink", {
-      title: `1x6+ — ${plan.title}`, description: `Подписка 1x6+ на сайте DotaSix на ${plan.title}: значок, рамки, опыт ×1.5, длинные посты и полная статистика.`,
+      title: `1x6+ — ${plan.title}`, description: `Подписка 1x6+ на сайте Aegis на ${plan.title}: значок, рамки, опыт ×1.5, длинные посты и полная статистика.`,
       payload: `${user.id}:${body.plan}`, currency: "XTR", prices: [{ label: `1x6+ ${plan.title}`, amount: plan.stars }]
     });
     if (!j.ok) return res.status(502).json({ error: "tg_failed", detail: String(j.description || "").slice(0, 200) });
@@ -149,11 +149,11 @@ async function hookTg(req, res, body) {
     return res.status(200).end();
   }
   if (msg && msg.chat && typeof msg.text === "string" && /^\/(paysupport|terms)/.test(msg.text)) {
-    await tg("sendMessage", { chat_id: msg.chat.id, text: "Подписка 1x6+ — цифровая услуга сайта DotaSix: значок, рамки, бонусы опыта, длинные посты и полная статистика. Включается сразу после оплаты на выбранный срок, сама не продлевается.\nПроблема с оплатой или подпиской? Напиши администратору в канал: https://t.me/+swCyihkKvwU4NTBi — укажи ник на сайте и время оплаты." });
+    await tg("sendMessage", { chat_id: msg.chat.id, text: "Подписка 1x6+ — цифровая услуга сайта Aegis: значок, рамки, бонусы опыта, длинные посты и полная статистика. Включается сразу после оплаты на выбранный срок, сама не продлевается.\nПроблема с оплатой или подпиской? Напиши администратору в канал: https://t.me/+swCyihkKvwU4NTBi — укажи ник на сайте и время оплаты." });
     return res.status(200).end();
   }
   if (msg && msg.chat && typeof msg.text === "string" && /^\/(start|premium|help)/.test(msg.text)) {
-    await tg("sendMessage", { chat_id: msg.chat.id, text: `Привет! Это бот сайта DotaSix.\nСборки, мини-игры и рейтинг: ${SITE}\nПодписку 1x6+ можно оформить на сайте в профиле → «👑 1x6+».` });
+    await tg("sendMessage", { chat_id: msg.chat.id, text: `Привет! Это бот сайта Aegis.\nСборки, мини-игры и рейтинг: ${SITE}\nПодписку 1x6+ можно оформить на сайте в профиле → «👑 1x6+».` });
   }
   return res.status(200).end();
 }

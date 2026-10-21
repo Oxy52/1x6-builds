@@ -3,32 +3,32 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Custom Hero Chaos — готовые билды по способностям | DotaSix</title>
+<title>Custom Hero Chaos — готовые билды по способностям | Aegis</title>
 <meta name="description" content="Отметь способности, которые выпали в Custom Hero Chaos, — получи готовый билд: порядок прокачки, предметы по стадиям, советы и что брать при реролле. Бесплатно.">
 <link rel="canonical" href="https://1x6-eta.vercel.app/chc">
 <meta name="theme-color" content="#08080b">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="DotaSix">
+<meta property="og:site_name" content="Aegis">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:url" content="https://1x6-eta.vercel.app/chc">
-<meta property="og:title" content="Custom Hero Chaos — готовые билды по способностям | DotaSix">
+<meta property="og:title" content="Custom Hero Chaos — готовые билды по способностям | Aegis">
 <meta property="og:description" content="Отметь способности, которые выпали в Custom Hero Chaos, — получи готовый билд: порядок прокачки, предметы по стадиям, советы и что брать при реролле. Бесплатно.">
 <meta property="og:image" content="https://1x6-eta.vercel.app/og/chc.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Custom Hero Chaos — готовые билды по способностям | DotaSix">
+<meta name="twitter:title" content="Custom Hero Chaos — готовые билды по способностям | Aegis">
 <meta name="twitter:description" content="Отметь способности, которые выпали в Custom Hero Chaos, — получи готовый билд: порядок прокачки, предметы по стадиям, советы и что брать при реролле. Бесплатно.">
 <meta name="twitter:image" content="https://1x6-eta.vercel.app/og/chc.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="DotaSix">
+<meta name="apple-mobile-web-app-title" content="Aegis">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="preconnect" href="https://vsmjjlrgjyujaioknlkn.supabase.co" crossorigin>
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "DotaSix", "url": "https://1x6-eta.vercel.app/", "inLanguage": "ru", "description": "Сборки для кастомки Dota 1x6: 54 героя, предметы по этапам игры и арканы. Готовые билды Custom Hero Chaos, мета и винрейты Dota 2, мини-игры, рейтинг и онлайн-дуэли."}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Aegis", "url": "https://1x6-eta.vercel.app/", "inLanguage": "ru", "description": "Сборки для кастомки Dota 1x6: 54 героя, предметы по этапам игры и арканы. Готовые билды Custom Hero Chaos, мета и винрейты Dota 2, мини-игры, рейтинг и онлайн-дуэли."}</script>
 <script>window.START_TAB = "custom";</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.100.0/dist/umd/supabase.min.js"></script>
 <script>window.SB_CONF = { url: "https://vsmjjlrgjyujaioknlkn.supabase.co", key: "sb_publishable_tJy3dl_kfNZXP6PXMqsQVQ_RUXqoPmn" };</script>
@@ -1614,13 +1614,65 @@
   .rv.in { opacity: 1; transform: none; }
   .nofx .rv, .rv.no { opacity: 1; transform: none; transition: none; }
   @media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; } }
+
+  /* ---------- шапка и главный экран в духе uc.zone ---------- */
+  .logo { font-size: 18px; letter-spacing: -.4px; }
+  .logo .mark.lg { width: 34px; height: 34px; }
+  .mark.lg img { width: 100%; height: 100%; display: block; object-fit: contain; filter: drop-shadow(0 2px 8px rgba(232,50,60,.35)); }
+  .pbtn:not(.has) { height: 36px; border-radius: 8px; padding: 0 16px; background: #fff; color: #0b0b0e; border-color: #fff; font-weight: 600; font-size: 14px; }
+  .pbtn:not(.has):hover { background: #e9e9ee; }
+  .langbtn, .curbtn, .burger, .thbtn { border-radius: 8px !important; }
+  @media (min-width: 601px) {
+    .tabs { background: transparent; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 0; gap: 2px; margin: 0 0 6px; }
+    .tab { flex: 0 0 auto; min-height: 44px; padding: 0 14px; border-radius: 0; font-weight: 600; font-size: 14px; }
+    .tab:hover { color: var(--fg); }
+    .tab-ic { display: none; }
+    .tab-ink { top: auto; bottom: -1px; height: 2px; border-radius: 2px; background: var(--fg); box-shadow: none; }
+    .tab-ink::after { display: none; }
+  }
+  .hero { background: transparent !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; margin-top: 0; padding: clamp(64px, 13vh, 150px) 0 clamp(56px, 10vh, 110px) !important; }
+  .hero::after, .hero::before { display: none !important; }
+  .hero h1 { font-size: clamp(40px, 6.6vw, 76px); line-height: 1; letter-spacing: -2.5px; max-width: 15ch; }
+  .hero p { color: #a1a1aa; font-size: clamp(16px, 2vw, 19px); max-width: 46ch; }
+  .hero .actions { display: flex !important; flex-wrap: wrap; gap: 10px !important; max-width: 640px !important; margin-top: 30px; }
+  .hero .actions .btn { width: auto; grid-column: auto !important; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 18px !important; border-radius: 8px; font-size: 14.5px !important; font-weight: 600; transform: none; }
+  .hero .actions .btn-ghost, .hero .actions .btn-feed, .hero .actions .btn-game { background: rgba(255,255,255,.03); color: var(--fg); border: 1px solid rgba(255,255,255,.14); box-shadow: none; }
+  .hero .actions .btn-primary { background: #fff; color: #0b0b0e; border-color: #fff; }
+  .hero .actions .btn:hover { border-color: rgba(255,255,255,.4); transform: none; }
+  .hero .chc-promo { max-width: 640px; border-radius: 10px; }
+  .hero > .hero-bg { position: absolute; z-index: 0; inset: 0 -4% 0 44%; pointer-events: none; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 30%, #000 82%, transparent); mask-image: linear-gradient(90deg, transparent, #000 30%, #000 82%, transparent); }
+  .hb-list { position: absolute; left: 4%; top: 0; display: flex; flex-direction: column; gap: 26px; filter: blur(2px); opacity: .5; transform: rotate(-11deg); transform-origin: 0 0; animation: hbScroll 46s linear infinite; }
+  .hb-list div { display: flex; align-items: center; gap: 22px; font-family: var(--display); font-weight: 800; font-size: clamp(32px, 4.4vw, 58px); letter-spacing: -1px; color: #fff; white-space: nowrap; }
+  .hb-list img { width: 1.15em; height: 1.15em; flex: none; border-radius: 50%; object-fit: cover; object-position: 50% 15%; }
+  @keyframes hbScroll { from { transform: rotate(-11deg) translateY(0); } to { transform: rotate(-11deg) translateY(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .hb-list { animation: none; } }
+  @media (max-width: 600px) { .hero > .hero-bg { inset: 0 -20% 0 18%; } .hb-list { opacity: .3; } .hero h1 { letter-spacing: -1.5px; } }
+  .uzsec { margin: 0 0 80px; }
+  .uzgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 26px; }
+  .uzcard { position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 6px; aspect-ratio: 3 / 4; padding: 22px; border: 0; border-radius: 18px; overflow: hidden; text-align: left; color: #fff; font: inherit; cursor: pointer; background: var(--uzg); transition: transform .35s cubic-bezier(.22,.61,.36,1), filter .3s; }
+  .uzcard::before { content: ""; position: absolute; inset: -30%; background: radial-gradient(38% 34% at 72% 28%, rgba(255,255,255,.4), transparent 70%), radial-gradient(46% 44% at 18% 82%, rgba(0,0,0,.16), transparent 70%); filter: blur(24px); }
+  .uzcard:hover { transform: translateY(-4px); filter: brightness(1.06); }
+  .uz-red { --uzg: linear-gradient(160deg, #e2626a, #f2a2a3 55%, #e3777c); }
+  .uz-sand { --uzg: linear-gradient(160deg, #b2a57a, #d6cca5 55%, #bdb189); }
+  .uz-blue { --uzg: linear-gradient(160deg, #56649f, #8a97c8 55%, #616faa); }
+  .uz-green { --uzg: linear-gradient(160deg, #578f79, #9bcab3 55%, #639e86); }
+  .uzt { position: absolute; z-index: 1; top: 18px; left: 18px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .uzt i { font-style: normal; font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 11px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; padding: 5px 8px; border-radius: 6px; background: rgba(255,255,255,.38); color: rgba(0,0,0,.58); }
+  .uzt i.ok { background: rgba(225,255,238,.75); color: #2d6a4b; }
+  .uzi { position: absolute; z-index: 1; inset: 0 0 22% 0; display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: clamp(40px, 5vw, 70px); letter-spacing: -2px; color: rgba(255,255,255,.6); }
+  .uzcard b { position: relative; z-index: 1; font-family: var(--display); font-size: 20px; font-weight: 700; }
+  .uzcard small { position: relative; z-index: 1; font-size: 13px; line-height: 1.4; color: rgba(255,255,255,.88); }
+  @media (max-width: 900px) { .uzgrid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .uzcard { aspect-ratio: 4 / 5; padding: 16px; } .uzcard b { font-size: 17px; } .uzt { top: 12px; left: 12px; } }
+  .sp-mark { background: none !important; box-shadow: none !important; }
+  .sp-mark img { width: 100%; height: 100%; object-fit: contain; }
 </style>
 </head>
 <body>
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&family=Press+Start+2P&display=swap">
 
-<div class="splash" id="splash" aria-hidden="true"><div class="sp-half sp-top"></div><div class="sp-half sp-bot"></div><div class="sp-c"><div class="sp-mark">1×6</div><div class="sp-t"><span>1x6</span><span>Билды</span></div><div class="sp-bar"><i></i></div></div></div>
+<div class="splash" id="splash" aria-hidden="true"><div class="sp-half sp-top"></div><div class="sp-half sp-bot"></div><div class="sp-c"><div class="sp-mark"><img src="/logo.png" alt=""></div><div class="sp-t"><span>Aegis</span></div><div class="sp-bar"><i></i></div></div></div>
 <script>try { if (localStorage.getItem("ub-intro") || sessionStorage.getItem("ub-intro")) document.documentElement.classList.add("fast"); else { localStorage.setItem("ub-intro", "1"); sessionStorage.setItem("ub-intro", "1"); } } catch(e) {}</script>
 <div class="wrap" id="top">
   <nav class="nav" id="topbar">
@@ -1632,7 +1684,7 @@
         <div class="thgrid" id="thGrid"></div>
       </div>
     </div>
-    <a class="logo" href="/" id="logoBtn" title="Обновить сайт"><span class="mark lg"><svg viewBox="0 0 512 512" aria-hidden="true"><defs><linearGradient id="dshr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff7a4d"/><stop offset=".55" stop-color="#e8323c"/><stop offset="1" stop-color="#8e1230"/></linearGradient><linearGradient id="dshd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1216"/><stop offset="1" stop-color="#0c0608"/></linearGradient></defs><polygon points="256,16 463.8,136 463.8,376 256,496 48.2,376 48.2,136" fill="url(#dshr)" stroke="url(#dshr)" stroke-width="16" stroke-linejoin="round"/><polygon points="256,58 427.5,157 427.5,355 256,454 84.5,355 84.5,157" fill="url(#dshd)" stroke="#16080b" stroke-width="6" stroke-linejoin="round"/><path d="M256 374.4L256 374.4Q234.5 374.4 217.5 364.3Q200.5 354.3 190.6 336.3Q180.7 318.4 180.7 294.9L180.7 294.9L180.7 232.2Q180.7 206.7 190.6 188.1Q200.5 169.6 218.5 159.6Q236.5 149.7 260.8 149.7L260.8 149.7Q276.5 149.7 290.8 154.3Q305.0 159.0 316.9 170.1L316.9 170.1L287.8 199.2Q282.4 193.8 275.3 190.8Q268.3 187.8 260.8 187.8L260.8 187.8Q249.1 187.8 240.5 193.2Q231.8 198.7 227.1 207.5Q222.4 216.3 222.4 226.2L222.4 226.2L222.4 258.3L215.5 250.8Q224.8 241.3 237.0 236.3Q249.3 231.3 262.3 231.3L262.3 231.3Q282.7 231.3 298.2 240.4Q313.8 249.6 322.5 265.5Q331.3 281.4 331.3 301.8L331.3 301.8Q331.3 322.2 320.9 338.6Q310.6 355 293.5 364.7Q276.4 374.4 256 374.4ZM256 335.4L256 335.4Q265.3 335.4 273.0 330.9Q280.8 326.4 285.3 318.7Q289.9 311.1 289.9 301.8L289.9 301.8Q289.9 292.5 285.4 284.7Q280.9 277 273.3 272.4Q265.6 267.9 256.3 267.9L256.3 267.9Q247 267.9 239.3 272.4Q231.5 277 227.0 284.7Q222.4 292.5 222.4 301.8L222.4 301.8Q222.4 310.8 226.9 318.4Q231.4 326.1 239.0 330.7Q246.7 335.4 256 335.4Z" fill="#fff"/><polygon points="256,30 451.7,143 451.7,369 256,482 60.3,369 60.3,143" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="3" stroke-linejoin="round"/></svg></span><span class="lt">DotaSix</span></a>
+    <a class="logo" href="/" id="logoBtn" title="Обновить сайт"><span class="mark lg"><img src="/logo.png" alt="" width="64" height="64"></span><span class="lt">Aegis</span></a>
     <div class="curw"><button type="button" class="curbtn" id="curBtn" aria-label="Валюта" aria-expanded="false" aria-controls="curPop" translate="no"></button><div class="langpop curpop" id="curPop" role="menu" hidden translate="no"></div></div>
     <div class="langw"><button type="button" class="langbtn" id="langBtn" aria-label="Язык сайта" aria-expanded="false" aria-controls="langPop"></button><div class="langpop" id="langPop" role="menu" hidden></div></div>
     <button type="button" class="pbtn" id="pBtn" aria-label="Профиль"><span>Войти</span></button>
@@ -1653,6 +1705,7 @@
   <div class="panes" id="panes">
   <div class="tabpane" data-pane="1x6" role="tabpanel">
   <section class="hero">
+    <div class="hero-bg" aria-hidden="true" translate="no"><div class="hb-list"><div><img src="hero/pudge.webp" alt="" loading="lazy">Pudge</div><div><img src="hero/invoker.webp" alt="" loading="lazy">Invoker</div><div><img src="hero/juggernaut.webp" alt="" loading="lazy">Juggernaut</div><div><img src="hero/lina.webp" alt="" loading="lazy">Lina</div><div><img src="hero/axe.webp" alt="" loading="lazy">Axe</div><div><img src="hero/templarassassin.webp" alt="" loading="lazy">Templar Assassin</div><div><img src="hero/zeus.webp" alt="" loading="lazy">Zeus</div><div><img src="hero/slark.webp" alt="" loading="lazy">Slark</div><div><img src="hero/sven.webp" alt="" loading="lazy">Sven</div><div><img src="hero/morphling.webp" alt="" loading="lazy">Morphling</div><div><img src="hero/tinker.webp" alt="" loading="lazy">Tinker</div><div><img src="hero/shadowfiend.webp" alt="" loading="lazy">Shadow Fiend</div><div><img src="hero/pudge.webp" alt="" loading="lazy">Pudge</div><div><img src="hero/invoker.webp" alt="" loading="lazy">Invoker</div><div><img src="hero/juggernaut.webp" alt="" loading="lazy">Juggernaut</div><div><img src="hero/lina.webp" alt="" loading="lazy">Lina</div><div><img src="hero/axe.webp" alt="" loading="lazy">Axe</div><div><img src="hero/templarassassin.webp" alt="" loading="lazy">Templar Assassin</div><div><img src="hero/zeus.webp" alt="" loading="lazy">Zeus</div><div><img src="hero/slark.webp" alt="" loading="lazy">Slark</div><div><img src="hero/sven.webp" alt="" loading="lazy">Sven</div><div><img src="hero/morphling.webp" alt="" loading="lazy">Morphling</div><div><img src="hero/tinker.webp" alt="" loading="lazy">Tinker</div><div><img src="hero/shadowfiend.webp" alt="" loading="lazy">Shadow Fiend</div></div></div>
     <div class="hero-th" id="heroTh" aria-hidden="true"><img alt="" id="heroThImg"></div>
     <button type="button" class="hnews" id="hNews"><b>Свежее</b><span id="hNewsT">Новости патча и про-сцены</span><i>→</i></button>
     <h1>Сборки для кастомки Dota 1×6</h1>
@@ -1665,6 +1718,19 @@
       <button class="btn btn-feed" id="feedBtn"><span class="dot"></span>Лента героев</button>
       <button class="btn btn-ghost" id="quizBtn">Угадай героя по сборке</button>
       <button class="btn btn-game" id="gameBtn">⚔️ Арена 1x6</button>
+    </div>
+  </section>
+
+  <section class="uzsec" id="uzsec">
+    <div class="section-head">
+      <h2>Разделы</h2>
+      <p>Всё для Dota в одном месте: сборки, мета, способности и мини-игры.</p>
+    </div>
+    <div class="uzgrid">
+      <button type="button" class="uzcard uz-red" data-go="builds"><span class="uzt"><i>54 героя</i><i class="ok">Free</i></span><span class="uzi" translate="no">1×6</span><b>Dota 1x6</b><small>Сборки предметов по этапам игры и арканы</small></button>
+      <button type="button" class="uzcard uz-sand" data-go="dota"><span class="uzt"><i>Live</i><i class="ok">Free</i></span><span class="uzi" translate="no">D2</span><b>Мета Dota 2</b><small>Винрейты по рангам, сборки про-игроков и контрпики</small></button>
+      <button type="button" class="uzcard uz-blue" data-go="custom"><span class="uzt"><i>New</i></span><span class="uzi" translate="no">CHC</span><b>Hero Chaos</b><small>Отметь способности — получи готовую сборку</small></button>
+      <button type="button" class="uzcard uz-green" data-go="games"><span class="uzt"><i>PvP</i></span><span class="uzi" translate="no">VS</span><b>Мини-игры</b><small>Арена, дуэли, угадай героя и рейтинг игроков</small></button>
     </div>
   </section>
 
@@ -1752,12 +1818,12 @@
   </div>
   </div>
 
-  <footer>DotaSix · неофициальный каталог сборок для кастомки Dota 1×6. Арт героев — Valve.<br><a href="/heroes">Сборки всех героев</a> · <a href="/chc">Custom Hero Chaos</a> · <a href="/dota2">Мета Dota 2</a></footer>
+  <footer>Aegis · неофициальный каталог сборок для кастомки Dota 1×6. Арт героев — Valve.<br><a href="/heroes">Сборки всех героев</a> · <a href="/chc">Custom Hero Chaos</a> · <a href="/dota2">Мета Dota 2</a></footer>
 </div>
 
 <div class="menu-ov" id="menuOv" hidden></div>
 <aside class="menu" id="menu" aria-label="Меню" aria-hidden="true" inert>
-  <div class="menu-top"><span class="logo"><span class="mark lg"><svg viewBox="0 0 512 512" aria-hidden="true"><defs><linearGradient id="dsmr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff7a4d"/><stop offset=".55" stop-color="#e8323c"/><stop offset="1" stop-color="#8e1230"/></linearGradient><linearGradient id="dsmd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1216"/><stop offset="1" stop-color="#0c0608"/></linearGradient></defs><polygon points="256,16 463.8,136 463.8,376 256,496 48.2,376 48.2,136" fill="url(#dsmr)" stroke="url(#dsmr)" stroke-width="16" stroke-linejoin="round"/><polygon points="256,58 427.5,157 427.5,355 256,454 84.5,355 84.5,157" fill="url(#dsmd)" stroke="#16080b" stroke-width="6" stroke-linejoin="round"/><path d="M256 374.4L256 374.4Q234.5 374.4 217.5 364.3Q200.5 354.3 190.6 336.3Q180.7 318.4 180.7 294.9L180.7 294.9L180.7 232.2Q180.7 206.7 190.6 188.1Q200.5 169.6 218.5 159.6Q236.5 149.7 260.8 149.7L260.8 149.7Q276.5 149.7 290.8 154.3Q305.0 159.0 316.9 170.1L316.9 170.1L287.8 199.2Q282.4 193.8 275.3 190.8Q268.3 187.8 260.8 187.8L260.8 187.8Q249.1 187.8 240.5 193.2Q231.8 198.7 227.1 207.5Q222.4 216.3 222.4 226.2L222.4 226.2L222.4 258.3L215.5 250.8Q224.8 241.3 237.0 236.3Q249.3 231.3 262.3 231.3L262.3 231.3Q282.7 231.3 298.2 240.4Q313.8 249.6 322.5 265.5Q331.3 281.4 331.3 301.8L331.3 301.8Q331.3 322.2 320.9 338.6Q310.6 355 293.5 364.7Q276.4 374.4 256 374.4ZM256 335.4L256 335.4Q265.3 335.4 273.0 330.9Q280.8 326.4 285.3 318.7Q289.9 311.1 289.9 301.8L289.9 301.8Q289.9 292.5 285.4 284.7Q280.9 277 273.3 272.4Q265.6 267.9 256.3 267.9L256.3 267.9Q247 267.9 239.3 272.4Q231.5 277 227.0 284.7Q222.4 292.5 222.4 301.8L222.4 301.8Q222.4 310.8 226.9 318.4Q231.4 326.1 239.0 330.7Q246.7 335.4 256 335.4Z" fill="#fff"/><polygon points="256,30 451.7,143 451.7,369 256,482 60.3,369 60.3,143" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="3" stroke-linejoin="round"/></svg></span> Меню</span><button type="button" class="menu-x" id="menuX" aria-label="Закрыть меню">✕</button></div>
+  <div class="menu-top"><span class="logo"><span class="mark lg"><img src="/logo.png" alt="" width="64" height="64"></span> Меню</span><button type="button" class="menu-x" id="menuX" aria-label="Закрыть меню">✕</button></div>
   <button type="button" class="mi mprof" data-act="profile"><span class="mpav" id="mpAv"></span><span id="mpName">Создать профиль</span><em>›</em></button>
   <div class="menu-l">Сборки</div>
   <button type="button" class="mi" data-act="all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>Все герои</span><em>54</em></button>
@@ -2024,7 +2090,7 @@ function openHero(h, startK){
   }
   renderVariants(h, startK);
   modal.querySelector(".sheet").insertAdjacentHTML("beforeend", `<div class="d2link"><button type="button" class="btn btn-primary" id="shH">📤 Поделиться сборкой ${h.en}</button><button type="button" class="btn btn-ghost" id="d2Go"><span class="d2ic">D2</span> ${h.en} в обычной Доте: винрейт и сборка</button></div>`);
-  modal.querySelector("#shH").onclick = () => shareLink(`${SITE_URL}/?h=${h.slug}`, `Сборка ${h.en} — DotaSix`, `Сборка ${h.en} (${h.ru}) для Dota 1x6`);
+  modal.querySelector("#shH").onclick = () => shareLink(`${SITE_URL}/?h=${h.slug}`, `Сборка ${h.en} — Aegis`, `Сборка ${h.en} (${h.ru}) для Dota 1x6`);
   modal.querySelector("#d2Go").onclick = async e => { e.currentTarget.disabled = true; const ok = await D2.heroBySlug(h.slug); if (!ok){ e.currentTarget.disabled = false; e.currentTarget.textContent = "Не нашли героя в статистике Dota 2"; } };
 }
 const STAGES = [["Начало игры","~4 мин"],["Ранняя игра","~12 мин"],["Середина игры","~25 мин"],["Поздняя игра","31+ мин"]];
@@ -2405,8 +2471,8 @@ const PROF = (() => {
     mode = mode || "in";
     const box = shell("", `
       <div class="auth">
-        <div class="auth-logo"><span class="mark lg"><svg viewBox="0 0 512 512" aria-hidden="true"><defs><linearGradient id="dsar" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff7a4d"/><stop offset=".55" stop-color="#e8323c"/><stop offset="1" stop-color="#8e1230"/></linearGradient><linearGradient id="dsad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1216"/><stop offset="1" stop-color="#0c0608"/></linearGradient></defs><polygon points="256,16 463.8,136 463.8,376 256,496 48.2,376 48.2,136" fill="url(#dsar)" stroke="url(#dsar)" stroke-width="16" stroke-linejoin="round"/><polygon points="256,58 427.5,157 427.5,355 256,454 84.5,355 84.5,157" fill="url(#dsad)" stroke="#16080b" stroke-width="6" stroke-linejoin="round"/><path d="M256 374.4L256 374.4Q234.5 374.4 217.5 364.3Q200.5 354.3 190.6 336.3Q180.7 318.4 180.7 294.9L180.7 294.9L180.7 232.2Q180.7 206.7 190.6 188.1Q200.5 169.6 218.5 159.6Q236.5 149.7 260.8 149.7L260.8 149.7Q276.5 149.7 290.8 154.3Q305.0 159.0 316.9 170.1L316.9 170.1L287.8 199.2Q282.4 193.8 275.3 190.8Q268.3 187.8 260.8 187.8L260.8 187.8Q249.1 187.8 240.5 193.2Q231.8 198.7 227.1 207.5Q222.4 216.3 222.4 226.2L222.4 226.2L222.4 258.3L215.5 250.8Q224.8 241.3 237.0 236.3Q249.3 231.3 262.3 231.3L262.3 231.3Q282.7 231.3 298.2 240.4Q313.8 249.6 322.5 265.5Q331.3 281.4 331.3 301.8L331.3 301.8Q331.3 322.2 320.9 338.6Q310.6 355 293.5 364.7Q276.4 374.4 256 374.4ZM256 335.4L256 335.4Q265.3 335.4 273.0 330.9Q280.8 326.4 285.3 318.7Q289.9 311.1 289.9 301.8L289.9 301.8Q289.9 292.5 285.4 284.7Q280.9 277 273.3 272.4Q265.6 267.9 256.3 267.9L256.3 267.9Q247 267.9 239.3 272.4Q231.5 277 227.0 284.7Q222.4 292.5 222.4 301.8L222.4 301.8Q222.4 310.8 226.9 318.4Q231.4 326.1 239.0 330.7Q246.7 335.4 256 335.4Z" fill="#fff"/><polygon points="256,30 451.7,143 451.7,369 256,482 60.3,369 60.3,143" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="3" stroke-linejoin="round"/></svg></span></div>
-        <h3>${mode === "up" ? "Регистрация" : mode === "reset" ? "Восстановление пароля" : "Вход в DotaSix"}</h3>
+        <div class="auth-logo"><span class="mark lg"><img src="/logo.png" alt="" width="64" height="64"></span></div>
+        <h3>${mode === "up" ? "Регистрация" : mode === "reset" ? "Восстановление пароля" : "Вход в Aegis"}</h3>
         <p class="auth-sub">${mode === "reset" ? "Пришлём ссылку для нового пароля на почту." : "Профиль, аватарка и избранное сохранятся в аккаунте и будут на всех устройствах."}</p>${mode === "reset" ? "" : `<div class="perks"><span>🎁 Бонус каждый день</span><span>⭐ Уровни и рамки</span><span>🏆 Топ игроков</span><span>👍 Оценки билдов</span></div>`}<p hidden>${""}</p>
         ${mode === "reset" ? "" : `<div class="oauth">
           <button type="button" class="ob google" data-p="google">${IC.google}<span>Войти через Google</span></button>
@@ -3154,7 +3220,7 @@ const PROF = (() => {
       <div class="pm-refp">${[0, 1, 2].map(i => `<i class="${i < step ? "on" : ""}"></i>`).join("")}<span>${step}/3</span></div>
       <div class="pm-refl"><input readonly value="${esc(link)}"><button type="button" class="btn btn-primary" id="pmRefSh">📤 Пригласить</button></div>
       <small>Всего приглашено: ${n}${n >= 3 ? ` · получено недель 1x6+: ${Math.floor(n / 3)}` : ""}</small></div></div>`;
-    rEl.querySelector("#pmRefSh").onclick = () => shareLink(link, "DotaSix", "Заходи на DotaSix — сборки Dota 1x6, билды Custom Hero Chaos и мета Dota 2. По моей ссылке +50 опыта!");
+    rEl.querySelector("#pmRefSh").onclick = () => shareLink(link, "Aegis", "Заходи на Aegis — сборки Dota 1x6, билды Custom Hero Chaos и мета Dota 2. По моей ссылке +50 опыта!");
     rEl.querySelector("input").onclick = e => e.target.select();
   }
   // реферальная ссылка: ?ref=<id> запоминаем до регистрации
@@ -4186,7 +4252,7 @@ const GAME = (() => {
     /* ---------- топ ---------- */
     async function loadTop(){
       const el = $("gTop");
-      if (!PROF.cloud){ el.innerHTML = `<div class="gempty">Твой рекорд на этом устройстве: <b>${best}</b>.<br>Общий топ игроков работает на сайте DotaSix после входа.</div>`; return; }
+      if (!PROF.cloud){ el.innerHTML = `<div class="gempty">Твой рекорд на этом устройстве: <b>${best}</b>.<br>Общий топ игроков работает на сайте Aegis после входа.</div>`; return; }
       el.innerHTML = `<div class="gempty">Загружаем топ…</div>`;
       const r = await PROF.topScores(50);
       if (r.error){ el.innerHTML = `<div class="gempty">${esc(r.error)}</div>`; return; }
@@ -5673,7 +5739,7 @@ if ("serviceWorker" in navigator && /^https:/.test(location.protocol)) addEventL
 async function installApp(){
   if (installEv){ installEv.prompt(); try { await installEv.userChoice; } catch(e) {} installEv = null; return; }
   const ios = /iphone|ipad|ipod/i.test(navigator.userAgent), standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
-  openPanel(`<div class="inst"><div class="inst-ic"><img alt="" src="icon.png"></div><h3>DotaSix на телефоне</h3>
+  openPanel(`<div class="inst"><div class="inst-ic"><img alt="" src="icon.png"></div><h3>Aegis на телефоне</h3>
     ${standalone ? `<p>Приложение уже установлено — ты в нём 🎉</p>` : ios ? `<p>На iPhone приложение ставится через Safari:</p><ol><li>Нажми кнопку <b>«Поделиться»</b> <span class="inst-k">⬆️</span> внизу экрана</li><li>Выбери <b>«На экран „Домой“»</b></li><li>Нажми <b>«Добавить»</b> — иконка появится рядом с остальными приложениями</li></ol>`
       : `<p>Открой меню браузера <span class="inst-k">⋮</span> и выбери <b>«Установить приложение»</b> или <b>«Добавить на главный экран»</b>.</p>`}
     <p class="inst-n">Сайт будет открываться как приложение: на весь экран, с иконкой и без адресной строки.</p></div>`);
@@ -6155,6 +6221,7 @@ function setTab(name, opts){
 }
 document.querySelectorAll(".tab").forEach(b => b.onclick = () => setTab(b.dataset.tab));
 { const cp = document.getElementById("chcPromo"); if (cp) cp.onclick = () => setTab("custom"); }
+document.querySelectorAll(".uzcard").forEach(c => c.onclick = () => { const g = c.dataset.go; if (g === "builds") document.getElementById("builds").scrollIntoView({ behavior: REDUCED ? "auto" : "smooth" }); else setTab(g); });
 document.getElementById("supFab").onclick = () => PROF.support();
 I18N.init();
 CURSEL.init();
@@ -6195,7 +6262,7 @@ const ACTS = {
   search(){ goBuilds(); setTimeout(() => document.getElementById("q").focus({preventScroll: true}), 450); },
   fav(){ setFilter(true, false); goBuilds(); },
   arc(){ setFilter(false, true); goBuilds(); },
-  news(){ NEWS.go(); }, profile(){ PROF.open(); }, feed(){ openFeed(); }, roll(){ roulette(); }, broll(){ buildRoulette(); }, quiz(){ quiz(); }, game(){ GAME.open(); }, duel(){ DUEL.open(); }, lasthit(){ MINI.lasthit(); }, invoker(){ MINI.invoker(); }, premium(){ PROF.premium(); }, chc(){ setTab("custom"); }, support(){ PROF.support(); }, settings(){ PROF.settings(); }, install(){ installApp(); }, shareSite(){ shareLink(SITE_URL + "/", "DotaSix", "Сборки Dota 1x6, билды Custom Hero Chaos, мета Dota 2 и мини-игры"); }
+  news(){ NEWS.go(); }, profile(){ PROF.open(); }, feed(){ openFeed(); }, roll(){ roulette(); }, broll(){ buildRoulette(); }, quiz(){ quiz(); }, game(){ GAME.open(); }, duel(){ DUEL.open(); }, lasthit(){ MINI.lasthit(); }, invoker(){ MINI.invoker(); }, premium(){ PROF.premium(); }, chc(){ setTab("custom"); }, support(){ PROF.support(); }, settings(){ PROF.settings(); }, install(){ installApp(); }, shareSite(){ shareLink(SITE_URL + "/", "Aegis", "Сборки Dota 1x6, билды Custom Hero Chaos, мета Dota 2 и мини-игры"); }
 };
 menu.querySelectorAll(".mi[data-act]").forEach(b => b.onclick = () => closeMenu(ACTS[b.dataset.act]));
 menu.querySelector(".tgmi").addEventListener("click", () => closeMenu());
