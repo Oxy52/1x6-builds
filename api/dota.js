@@ -60,14 +60,17 @@ async function abilities() {
   const heroes = JSON.parse(ha), all = JSON.parse(ab), out = [];
   for (const hk of Object.keys(heroes)) {
     const list = (heroes[hk] && heroes[hk].abilities) || [];
+    const start = out.length;
     for (const k of list) {
       if (!k || /generic_hidden|_empty|^special_bonus/.test(k)) continue;
       const a = all[k]; if (!a || !a.dname) continue;
       const first = v => { const s = Array.isArray(v) ? v[0] : String(v == null ? "" : v).split(/[\s/]+/)[0]; const n = parseFloat(s); return isFinite(n) ? n : 0; };
       const beh = (Array.isArray(a.behavior) ? a.behavior : [a.behavior]).filter(Boolean).map(String);
       out.push({ k, n: a.dname, i: a.img || "", h: hk.replace("npc_dota_hero_", ""), d: clean(a.desc).slice(0, 260),
-        t: a.dmg_type ? String(a.dmg_type).slice(0, 1) : undefined, b: beh.length ? beh : undefined, cd: first(a.cd) || undefined, mc: first(a.mc) || undefined });
+        t: a.dmg_type ? String(a.dmg_type).slice(0, 4) : undefined, b: beh.length ? beh : undefined, cd: first(a.cd) || undefined, mc: first(a.mc) || undefined });
     }
+    // ультимейт — последняя активная способность героя (у неё есть перезарядка)
+    for (let i = out.length - 1; i >= start; i--) { const o = out[i]; if (o.cd && !(o.b || []).some(x => /passive/i.test(x))) { o.u = 1; break; } }
   }
   return JSON.stringify(out);
 }

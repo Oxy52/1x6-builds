@@ -1325,7 +1325,7 @@
     <div class="hero-th" id="heroTh" aria-hidden="true"><img alt="" id="heroThImg"></div>
     <h1>Сборки для кастомки Dota 1×6</h1>
     <p>54 героя, у каждого готовая сборка предметов по этапам игры: начало, ранняя, середина и поздняя. У 11 героев можно посмотреть аркану.</p>
-    <button type="button" class="chc-promo" id="chcPromo"><span class="chc-promo-ic">🧩</span><span><b>Custom Hero Chaos — AI-билды</b><small>Отметь выпавшие способности — AI придумает билд под комбинацию</small></span><em>Попробовать →</em></button>
+    <button type="button" class="chc-promo" id="chcPromo"><span class="chc-promo-ic">🧩</span><span><b>Custom Hero Chaos — билды</b><small>Отметь выпавшие способности — получи готовую сборку под комбинацию</small></span><em>Попробовать →</em></button>
     <div class="actions">
       <button class="btn btn-primary" id="toBuilds">Смотреть сборки</button>
       <button class="btn btn-ghost" id="randomBtn">Рулетка героя</button>
@@ -1397,8 +1397,8 @@
     <section class="section first">
       <div class="chc-ban"><div class="chc-ban-fx" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
         <small>Кастомка Dota 2</small><h2>Custom Hero <span>Chaos</span></h2>
-        <p>Выпали способности? Отметь их иконками — AI соберёт билд под твою комбинацию: порядок прокачки, предметы и план на игру.</p>
-        <div class="chc-steps"><span><b>1</b>Герой</span><span><b>2</b>Способности</span><span><b>3</b>🧠 AI-билд</span></div></div>
+        <p>Выпали способности? Отметь их иконками — сайт определит тип билда и подберёт готовую сборку: порядок прокачки, предметы и план на игру.</p>
+        <div class="chc-steps"><span><b>1</b>Герой</span><span><b>2</b>Способности</span><span><b>3</b>⚡ Готовый билд</span></div></div>
       <div id="chcCta"></div>
       <div id="chcBox"></div>
       <div class="soon" style="margin-top:22px">
@@ -1426,7 +1426,7 @@
   <button type="button" class="mi" data-act="broll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg><span>Рулетка билдов</span></button>
   <button type="button" class="mi" data-act="quiz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.3 9a2.8 2.8 0 0 1 5.4 1c0 2-2.7 2.4-2.7 4"/><circle cx="12" cy="17.3" r=".6" fill="currentColor"/></svg><span>Угадай героя</span></button>
   <button type="button" class="mi" data-act="game"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="7" width="19" height="11" rx="4"/><path d="M7 10.5v4M5 12.5h4"/><circle cx="15.5" cy="11.5" r="1" fill="currentColor"/><circle cx="18" cy="14" r="1" fill="currentColor"/></svg><span>Мини-игра: арена</span><em>топ</em></button>
-  <button type="button" class="mi" data-act="chc"><span style="width:21px;text-align:center">🧩</span><span>Custom Hero Chaos · AI</span><em>new</em></button>
+  <button type="button" class="mi" data-act="chc"><span style="width:21px;text-align:center">🧩</span><span>Custom Hero Chaos</span><em>new</em></button>
   <button type="button" class="mi" data-act="duel"><span style="width:21px;text-align:center">🃏</span><span>Дуэль 1x6</span><em>new</em></button>
   <button type="button" class="mi" data-act="lasthit"><span style="width:21px;text-align:center">🗡️</span><span>Ластхит</span></button>
   <button type="button" class="mi" data-act="invoker"><span style="width:21px;text-align:center">🔮</span><span>Инвокер</span></button>
@@ -2721,7 +2721,7 @@ const PROF = (() => {
       if (isPrem(uid) && !g.querySelector(".pbadge")){ g.classList.add("gold"); g.insertAdjacentHTML("afterbegin", premBadge(uid)); } });
   }
   const PLANS = [{ k: "m1", t: "1 месяц", rub: 99, stars: 59, usd: 1.25, per: "" }, { k: "m6", t: "6 месяцев", rub: 499, stars: 299, usd: 6.25, per: "83 ₽ в месяц", off: "−16%" }, { k: "y1", t: "1 год", rub: 799, stars: 499, usd: 9.99, per: "67 ₽ в месяц", off: "−33%", best: 1 }];
-  const PERKS = [["👑", "Значок и золотой ник", "Везде: в ленте, рейтинге, профиле и статистике"], ["💠", "3 эксклюзивные рамки", "Корона, Аегис и Сияние — только для 1x6+"], ["⚡", "Опыт ×1.5 и бонус ×2", "Уровни и награды открываются быстрее"], ["✍️", "Длинные посты", "До 1000 символов и 120 постов в день вместо 280 и 40"], ["📊", "Полная статистика", "Вся история матчей и график MMR за всё время"], ["🧠", "AI-помощник", "40 запросов в день вместо 5: билды Custom Hero Chaos и AI-пикер"]];
+  const PERKS = [["👑", "Значок и золотой ник", "Везде: в ленте, рейтинге, профиле и статистике"], ["💠", "3 эксклюзивные рамки", "Корона, Аегис и Сияние — только для 1x6+"], ["⚡", "Опыт ×1.5 и бонус ×2", "Уровни и награды открываются быстрее"], ["✍️", "Длинные посты", "До 1000 символов и 120 постов в день вместо 280 и 40"], ["📊", "Полная статистика", "Вся история матчей и график MMR за всё время"], ["❤️", "Поддержка сайта", "Помогаешь проекту расти: новые кастомки, игры и разделы"]];
   let payInfo = null, premPlan = "y1", premPoll = 0;
   const untilTxt = uid => new Date(PREM.get(uid)).toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
   async function premium(opts){
@@ -4326,7 +4326,7 @@ const D2 = (() => {
     const pane = document.getElementById("d2Pane"); if (!pane) return;
     if (pane.dataset.ready) return draw();
     pane.dataset.ready = "1";
-    pane.innerHTML = `<div class="rkchips d2-subs"><button type="button" class="rkc" data-sub2="heroes" aria-pressed="true">📊 Герои</button><button type="button" class="rkc" data-sub2="players" aria-pressed="false">👤 Игроки</button><button type="button" class="rkc" data-sub2="picker" aria-pressed="false">🧠 AI-пикер</button></div><div id="d2Heroes"><div class="d2-bar">
+    pane.innerHTML = `<div class="rkchips d2-subs"><button type="button" class="rkc" data-sub2="heroes" aria-pressed="true">📊 Герои</button><button type="button" class="rkc" data-sub2="players" aria-pressed="false">👤 Игроки</button><button type="button" class="rkc" data-sub2="picker" aria-pressed="false">🎯 Пикер</button></div><div id="d2Heroes"><div class="d2-bar">
         <div class="rkchips d2-ranks">${RANKS.map(r => `<button type="button" class="rkc d2-rc" data-r="${r[0]}" aria-pressed="${r[0] === st.rank}">${rankIc(r[0])}${r[1]}</button>`).join("")}</div>
         <div class="rkchips sub d2-roles">${ROLES.map(r => `<button type="button" class="rkc" data-role="${r[0]}" aria-pressed="${r[0] === st.role}">${r[1]}</button>`).join("")}</div>
         <label class="d2-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="d2Q" placeholder="Найти героя" autocomplete="off"></label>
@@ -4544,7 +4544,7 @@ const D2 = (() => {
   function pickerView(){
     const el = document.getElementById("d2Picker");
     const slot = (side, i) => { const h = PK[side][i]; return `<button type="button" class="d2-slot${h ? " on" : ""}" data-side="${side}" data-i="${i}">${h ? `<img alt="" src="${esc(himg(h))}"><span>${esc(h.localized_name)}</span><i>✕</i>` : `<span>＋</span>`}</button>`; };
-    el.innerHTML = `${PROF.user() ? "" : signupCard("d2")}<p class="db-note">Добавь врагов (и союзников, если знаешь), выбери свою роль — пикер посчитает по статистике матчапов, кто сильнее всего против этого драфта. AI объяснит выбор и подскажет план на игру.</p>
+    el.innerHTML = `${PROF.user() ? "" : signupCard("d2")}<p class="db-note">Добавь врагов (и союзников, если знаешь), выбери свою роль — пикер посчитает по статистике матчапов, кто сильнее всего против этого драфта. «Разобрать пик» объяснит выбор и подскажет предметы.</p>
       <div class="d2-draft"><h5>Враги</h5><div class="d2-slots en">${[0, 1, 2, 3, 4].map(i => slot("enemies", i)).join("")}</div><h5>Союзники</h5><div class="d2-slots al">${[0, 1, 2, 3].map(i => slot("allies", i)).join("")}</div>
       <h5>Моя роль</h5><div class="rkchips sub" id="d2PkR">${ROLES.map(r => `<button type="button" class="rkc" data-role="${r[0]}" aria-pressed="${r[0] === PK.role}">${r[0] ? r[1] : "Любая"}</button>`).join("")}</div></div>
       <div class="pacts" style="padding:0;margin:14px 0"><button type="button" class="btn btn-primary" id="d2PkGo"${PK.enemies.length ? "" : " disabled"}>Подобрать героя</button>${PK.enemies.length || PK.allies.length ? `<button type="button" class="btn btn-ghost" id="d2PkClr">Очистить</button>` : ""}</div>
@@ -4646,9 +4646,9 @@ const AI = (() => {
     btn.onclick = async () => {
       if (!PROF.user() && !(fallback && !(await enabled()))){ out.innerHTML = `<div class="ai-msg">Чтобы спросить AI, войди в аккаунт — это бесплатно. <button type="button" class="btn btn-ghost" id="aiIn">Войти</button></div>`; out.querySelector("#aiIn").onclick = () => PROF.open(); return; }
       const payload = getPayload(); if (!payload) return;
-      btn.disabled = true; out.innerHTML = `<div class="ai-think"><span></span><span></span><span></span><b>AI думает…</b></div>`;
+      btn.disabled = true; out.innerHTML = `<div class="ai-think"><span></span><span></span><span></span><b>Считаем…</b></div>`;
       if (!(await enabled())){
-        if (fallback){ try { const fr = await fallback(); btn.disabled = false; out.innerHTML = render(fr) + `<p class="ai-left">Разбор по статистике матчей. Подробные советы AI скоро будут доступны.</p>`; if (onResult) onResult(fr, out); return; } catch(e) {} }
+        if (fallback){ try { const fr = await fallback(); btn.disabled = false; out.innerHTML = render(fr) + `<p class="ai-left">Разбор по статистике матчей OpenDota.</p>`; if (onResult) onResult(fr, out); return; } catch(e) {} }
         btn.disabled = false; out.innerHTML = `<div class="ai-msg">🧠 AI-помощник скоро заработает — осталось подключить его на сервере.</div>`; return; }
       const r = await call(payload); btn.disabled = false;
       if (r.error){ out.innerHTML = `<div class="ai-msg">${r.error === "limit" ? "На сегодня запросы к AI закончились. С подпиской 👑 1x6+ — 40 запросов в день. <button type=\"button\" class=\"btn btn-ghost\" id=\"aiPrem\">1x6+</button>" : r.error === "login" ? "Войди в аккаунт ещё раз." : r.error === "off" ? "🧠 AI-помощник скоро заработает." : "AI не ответил. Попробуй ещё раз через минуту."}</div>`; const pb = out.querySelector("#aiPrem"); if (pb) pb.onclick = () => PROF.premium(); return; }
@@ -4660,6 +4660,118 @@ const AI = (() => {
 })();
 
 /* ---------- Кастомки: Custom Hero Chaos — AI-билд под выпавшие способности ---------- */
+
+/* ---------- Custom Hero Chaos: готовый билд по типу способностей (без AI) ---------- */
+const CHCGEN = (() => {
+  const RX = {
+    atk: /each attack|on attack|attacks? (deal|apply|will|has|have|steal|cause|reduce|slow)|chance to|critical|lifesteal|bash|cleave|bonus attack|attack damage|attack speed|instant attack|extra attack|splits? shot|multishot|poison attack|on hit/i,
+    disable: /stun|root|silence|hex|sleep|fear|taunt|disarm|cyclone|banish|entangle|polymorph|frozen|freez|knock/i,
+    slow: /slow/i,
+    heal: /heal|restor|regenerat|lifesteal/i,
+    summon: /summon|spawn|creates? (a|an|\d|several|illusion)|illusion|clone|wards?\b|zombie|spirits? that|familiar|treant|golem|eidolon|spider|wolves|boar|bear/i,
+    mob: /teleport|blink|leap|dash|jump|charge|rush|surge|movement speed|move speed|phase|travel/i,
+    tank: /armor|damage block|magic resist|reduc\w* (incoming |all )?damage|return\w* damage|reflect|bonus health|max(imum)? health|strength|damage barrier|shield/i,
+    aura: /aura|nearby allies|allied units/i,
+    nuke: /deal\w* \d*|damage to|damaging|explod|bolt|blast|beam|wave|strike|burn/i,
+    stat: /bonus (strength|agility|intelligence|all attributes)|attribute|gains? \w+ (strength|agility|intelligence)|permanent/i,
+    magic: /magical damage|magic damage/i, phys: /physical damage/i
+  };
+  function tags(a){
+    const d = String(a.d || "") + " " + String(a.n || ""), b = (a.b || []).join(" ");
+    const passive = /passive/i.test(b) && !/no target|unit target|point target|toggle|channel/i.test(b);
+    const t = { passive, ult: !passive && (!!a.u || (a.cd || 0) >= 50), spam: !passive && (a.cd || 0) > 0 && (a.cd || 0) <= 8,
+      magic: a.t === "Magi" || RX.magic.test(d), phys: a.t === "Phys" || RX.phys.test(d), pure: a.t === "Pure" || /pure damage/i.test(d) };
+    for (const k of ["atk", "disable", "slow", "heal", "summon", "mob", "tank", "aura", "stat"]) t[k] = RX[k].test(d);
+    t.nuke = !passive && !t.summon && (t.magic || t.pure || RX.nuke.test(d)) && !t.atk;
+    if (/attack modifier|autocast/i.test(b)) t.atk = true;
+    return t;
+  }
+  const ARCH = {
+    mage: { title: "Маг-взрывник", adj: "с магическим уроном",
+      items: { start: ["null_talisman", "magic_wand", "faerie_fire"], early: ["arcane_boots", "kaya", "aether_lens"], core: ["kaya_and_sange", "octarine_core", "ultimate_scepter", "aghanims_shard"], late: ["refresher", "shivas_guard", "ethereal_blade", "sheepstick", "bloodstone"] },
+      tips: ["В PvE-раундах чисти крипов заклинаниями по области — так быстрее растёт золото и опыт.", "В дуэлях начинай с контроля или самого сильного нюка, затем добивай остальными.", "Как только будет Octarine Core — спамь способности, не экономь ману."],
+      weak: "Враги с Black King Bar, Pipe и высоким сопротивлением магии; герои, которые быстро подбегают и бьют руками." },
+    phys: { title: "Физический керри", adj: "с уроном от атак",
+      items: { start: ["wraith_band", "magic_wand", "quelling_blade"], early: ["power_treads", "maelstrom", "mask_of_madness"], core: ["black_king_bar", "desolator", "greater_crit", "monkey_king_bar"], late: ["satanic", "butterfly", "skadi", "abyssal_blade", "mjollnir"] },
+      tips: ["Скорость атаки и урон усиливают каждый модификатор — бери их в первую очередь.", "Black King Bar перед дуэлями обязателен: без контроля по тебе враг проиграет размен.", "Против уклонения (Butterfly, Phantom Assassin) — Monkey King Bar."],
+      weak: "Контроль и снижение брони у врагов, уклонение, Ghost Scepter и Blade Mail." },
+    tank: { title: "Неубиваемый танк", adj: "с защитой и лечением",
+      items: { start: ["bracer", "magic_wand", "flask"], early: ["phase_boots", "vanguard", "blade_mail"], core: ["heart", "black_king_bar", "shivas_guard", "lotus_orb"], late: ["assault", "satanic", "eternal_shroud", "crimson_guard", "refresher"] },
+      tips: ["Твоя сила — переживать всех: заходи первым и забирай урон на себя.", "Blade Mail возвращает урон — отлично против тех, кто бьёт тебя руками.", "Стакающиеся пассивки на здоровье и броню качай раньше — в CHC они быстро разгоняются."],
+      weak: "Чистый урон, снижение лечения (Spirit Vessel, Skadi) и сжигание здоровья в процентах." },
+    summon: { title: "Повелитель призыва", adj: "с призванными существами",
+      items: { start: ["magic_wand", "null_talisman", "flask"], early: ["boots", "helm_of_the_dominator", "vladmir"], core: ["helm_of_the_overlord", "assault", "ultimate_scepter", "pipe"], late: ["refresher", "octarine_core", "guardian_greaves", "aghanims_shard"] },
+      tips: ["Существа бьют и танкуют за тебя — держи их рядом и усиливай аурами.", "Ауры (Vladmir, Assault Cuirass) действуют и на призванных — это много урона.", "В дуэлях отправляй призванных первыми, а сам держись позади."],
+      weak: "Урон по области, который убивает призванных одной кнопкой." },
+    control: { title: "Контроль и инициатор", adj: "с контролем",
+      items: { start: ["magic_wand", "bracer", "wind_lace"], early: ["arcane_boots", "blink", "force_staff"], core: ["ultimate_scepter", "octarine_core", "black_king_bar", "aghanims_shard"], late: ["refresher", "sheepstick", "wind_waker", "shivas_guard"] },
+      tips: ["Начинай драку с контроля — пока враг в стане, у тебя бесплатный урон.", "Blink Dagger позволяет внезапно поймать врага на нужной дистанции.", "Сокращение перезарядки = больше контроля: Octarine Core и Refresher очень сильны."],
+      weak: "Black King Bar и Linken's Sphere у врагов, развеивание эффектов." }
+  };
+  const ATTR = { str: "tank", agi: "phys", int: "mage", all: "control" };
+  function build(hero, abil){
+    const T = abil.map(a => ({ a, t: tags(a) }));
+    const cnt = k => T.filter(x => x.t[k]).length;
+    const sc = {
+      mage: cnt("nuke") * 2 + cnt("magic") + cnt("pure") + cnt("spam") * 0.5,
+      phys: cnt("atk") * 2.5 + cnt("phys") * 0.5,
+      tank: cnt("tank") * 2 + cnt("heal") * 1.2,
+      summon: cnt("summon") * 2.6 + cnt("aura") * 0.6,
+      control: cnt("disable") * 1.6 + cnt("slow") * 0.4
+    };
+    if (hero){ const a = ATTR[hero.primary_attr]; if (a) sc[a] += 1.5; if (hero.attack_type === "Ranged") sc.phys += .5; }
+    const order = Object.keys(sc).sort((a, b) => sc[b] - sc[a]), p = order[0], s = sc[order[1]] >= 2 ? order[1] : null;
+    const A = ARCH[p], B = s ? ARCH[s] : null;
+    // предметы: основа от главного типа + 1 предмет от второго
+    const uniq = arr => [...new Set(arr)];
+    const items = { start: A.items.start.slice(), early: A.items.early.slice(), core: A.items.core.slice(0, 3), late: A.items.late.slice(0, 3) };
+    if (B){ const c = B.items.core.find(k => !items.core.includes(k)); if (c) items.core.push(c); const l = B.items.late.find(k => !items.late.includes(k) && !items.core.includes(k)); if (l) items.late.push(l); }
+    if (cnt("spam") >= 2 && !items.core.includes("octarine_core")) items.core.unshift("octarine_core");
+    if (cnt("mob") === 0 && (p === "control" || p === "tank") && !items.early.includes("blink")) items.early.push("blink");
+    if (p === "phys" && hero && hero.attack_type === "Ranged") items.early.splice(1, 0, "dragon_lance");
+    if (cnt("ult") && T.some(x => x.t.ult && (x.a.mc || 0) >= 200) && !items.early.includes("arcane_boots")) items.early[0] = "arcane_boots";
+    for (const k in items) items[k] = uniq(items[k]).slice(0, k === "core" ? 5 : 4);
+    // порядок прокачки
+    const rel = x => { const t = x.t; let v = 0;
+      if (t.ult) v += 100;
+      if (p === "mage") v += (t.nuke ? 30 : 0) + (t.magic || t.pure ? 8 : 0);
+      if (p === "phys") v += (t.atk ? 30 : 0) + (t.stat ? 10 : 0);
+      if (p === "tank") v += (t.tank ? 30 : 0) + (t.heal ? 15 : 0);
+      if (p === "summon") v += (t.summon ? 30 : 0) + (t.aura ? 12 : 0);
+      if (p === "control") v += (t.disable ? 30 : 0) + (t.nuke ? 10 : 0);
+      if (t.stat) v += 6; if (t.nuke) v += 5; if (t.atk) v += 4; if (t.disable) v += 4;
+      if (t.mob && !t.nuke && !t.disable) v -= 15; return v; };
+    const why = x => { const t = x.t;
+      if (t.ult) return "Ультимейт — качай при каждой возможности.";
+      if (t.atk && p === "phys") return "Усиливает каждый удар — основа урона, максимум как можно раньше.";
+      if (t.nuke && (p === "mage" || p === "control")) return "Главный урон заклинаниями — максимум рано, чистит крипов и убивает в дуэлях.";
+      if (t.summon) return "Призыв — чем выше уровень, тем сильнее существа. Качай рано.";
+      if (t.tank || t.heal) return "Выживаемость — держит тебя в драке. Качай вторым приоритетом.";
+      if (t.disable) return "Контроль — 1 уровень сразу, потом по мере необходимости.";
+      if (t.stat) return "Растущие характеристики — в CHC быстро разгоняются, не откладывай.";
+      if (t.mob) return "Мобильность — 1 уровень для побега и догонялок, остальное в конце.";
+      if (t.passive) return "Пассивка — работает всегда, качай после основных.";
+      return "Вспомогательная способность — качай в конце."; };
+    const pri = T.slice().sort((a, b) => rel(b) - rel(a)).map(x => ({ ability: x.a.n, why: why(x) }));
+    // идея и синергии
+    const syn = [];
+    if (cnt("atk") >= 2) syn.push("Несколько модификаторов атаки срабатывают одновременно — скорость атаки умножает их силу.");
+    if (cnt("nuke") >= 2 && cnt("spam") >= 1) syn.push("Нюки с короткой перезарядкой: с Octarine Core и Kaya это постоянный поток урона.");
+    if (cnt("disable") >= 1 && (cnt("nuke") >= 1 || cnt("atk") >= 1)) syn.push("Есть контроль и урон: сначала обездвижь врага, потом добивай.");
+    if (cnt("heal") >= 1 && cnt("tank") >= 1) syn.push("Лечение плюс защита — тебя очень сложно убить в затяжной драке.");
+    if (cnt("summon") >= 1 && cnt("aura") >= 1) syn.push("Ауры усиливают и твоих существ — чем их больше, тем сильнее билд.");
+    if (cnt("mob") >= 1) syn.push("Есть мобильность — легко догнать раненого врага или уйти из плохой драки.");
+    if (cnt("stat") >= 1) syn.push("Есть растущие характеристики — со временем билд становится только сильнее.");
+    const idea = `Основа билда — ${A.title.toLowerCase()}${B ? " " + B.adj : ""}. ` + (syn[0] || "Собирай предметы под главный тип урона и не распыляйся.");
+    // реролл: способность, которая хуже всех подходит
+    const worst = T.slice().sort((a, b) => rel(a) - rel(b))[0];
+    const want = { mage: "нюки с магическим уроном или усиление заклинаний", phys: "модификаторы атаки (криты, вампиризм, баши) или скорость атаки", tank: "пассивки на броню, здоровье или лечение", summon: "ещё призыв или ауры", control: "оглушение, сайленс или массовый контроль" }[p];
+    const reroll = T.length >= 3 && worst && rel(worst) < 20 ? `Меняй ${worst.a.n} — слабее всего сочетается с остальными. Ищи ${want}.` : `Комбинация цельная — реролл лучше потратить на поиск: ${want}.`;
+    return { title: A.title + (B ? " " + B.adj : ""), idea, priority: pri, items, tips: syn.slice(1, 3).concat(A.tips).slice(0, 5), weak: A.weak, reroll, type: p };
+  }
+  return { build, tags };
+})();
+
 const CHC = (() => {
   const esc = AI.esc;
   const S = { hero: null, ab: [], note: "", q: "", hf: "" };
@@ -4679,20 +4791,24 @@ const CHC = (() => {
         <div class="chc-find"><label class="d2-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="chcQ" placeholder="Название способности или героя" autocomplete="off" disabled></label></div>
         <div class="chc-grid" id="chcGrid"><div class="feed-sk"></div></div>
         <p class="chc-hint">Нажми на иконку, чтобы добавить способность. Ещё раз — убрать.</p></div>
-      <div class="chc-step"><h4><span>3</span>Пожелание <small>необязательно</small></h4><textarea id="chcNote" maxlength="200" rows="2" placeholder="Хочу играть от магии, нужен танк, осталось 2 реролла…"></textarea></div>
-      <div id="chcAI"></div><div id="chcHist"></div>`;
+            <div id="chcAI"></div><div id="chcHist"></div>`;
     const q = el.querySelector("#chcQ");
     el.querySelector("#chcHero").onclick = () => D2.pickHero("Твой герой в CHC", S.hero ? [S.hero.id] : [], h => { S.hero = h; draw(); grid(); });
-    el.querySelector("#chcNote").oninput = e => { S.note = e.target.value; };
     let qt = 0; q.oninput = () => { clearTimeout(qt); qt = setTimeout(() => { S.q = q.value.trim().toLowerCase(); grid(); }, 120); };
     draw();
     D2.loadHeroes().then(() => { draw(); grid(); }).catch(() => {});
     try { ABIL = await D2.get("abilities"); q.disabled = false; grid(); } catch(e) { el.querySelector("#chcGrid").innerHTML = `<div class="pnone">Не удалось загрузить способности — обнови страницу</div>`; }
     D2.itemsMeta().catch(() => {});
-    AI.button(el.querySelector("#chcAI"), "🧠 Придумать билд (AI)", () => {
-      if (S.ab.length < 2){ el.querySelector("#chcAI .ai-out").innerHTML = `<div class="ai-msg">Добавь хотя бы 2 способности.</div>`; return null; }
-      return { kind: "chc", hero: S.hero ? S.hero.localized_name : "", abilities: S.ab.map(a => `${a.n} (${heroName(a.h)})`), note: S.note };
-    }, renderBuild, (res, out) => { const h = hist(); h.unshift({ t: Date.now(), hero: S.hero ? S.hero.id : null, ab: S.ab.map(a => a.k), res }); saveHist(h); drawHist(); out.scrollIntoView({ behavior: "smooth", block: "start" }); });
+    el.querySelector("#chcAI").innerHTML = `<button type="button" class="btn ai-btn" id="chcGo">⚡ Собрать билд</button><div class="ai-out"></div>`;
+    el.querySelector("#chcGo").onclick = () => {
+      const out = el.querySelector("#chcAI .ai-out");
+      if (S.ab.length < 2){ out.innerHTML = `<div class="ai-msg">Добавь хотя бы 2 способности.</div>`; return; }
+      const res = CHCGEN.build(S.hero, S.ab);
+      out.innerHTML = renderBuild(res);
+      const h = hist(); h.unshift({ t: Date.now(), hero: S.hero ? S.hero.id : null, ab: S.ab.map(a => a.k), res }); saveHist(h); drawHist();
+      out.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (typeof PROF !== "undefined" && PROF.user()) PROF.grant("quiz");
+    };
     drawHist();
   }
   // приглашение зарегистрироваться
@@ -4722,7 +4838,7 @@ const CHC = (() => {
   }
   function draw(){
     const hb = document.getElementById("chcHero"); if (!hb) return;
-    hb.innerHTML = S.hero ? `<img alt="" src="${esc(D2.img(S.hero.img))}"><span><b>${esc(S.hero.localized_name)}</b><small>нажми, чтобы сменить</small></span>` : `<span class="chc-plus">＋</span><span><b>Выбрать героя</b><small>AI учтёт его характеристики</small></span>`;
+    hb.innerHTML = S.hero ? `<img alt="" src="${esc(D2.img(S.hero.img))}"><span><b>${esc(S.hero.localized_name)}</b><small>нажми, чтобы сменить</small></span>` : `<span class="chc-plus">＋</span><span><b>Выбрать героя</b><small>учтём его атрибут и тип атаки</small></span>`;
     const sel = document.getElementById("chcSel");
     sel.innerHTML = Array.from({ length: MAX }, (_, i) => { const a = S.ab[i];
       return a ? `<button type="button" class="chc-slot on" data-i="${i}" title="${esc(a.n)} — ${esc(heroName(a.h))}"><img alt="" src="${esc(D2.img(a.i))}"><i>✕</i><span>${esc(a.n)}</span></button>` : `<span class="chc-slot"${i >= 6 ? ' data-x="1"' : ""}></span>`; }).join("");
@@ -4736,7 +4852,7 @@ const CHC = (() => {
   function renderBuild(r){
     const find = name => (ABIL || []).find(x => x.n.toLowerCase() === String(name || "").toLowerCase().replace(/\s*\(.*\)$/, ""));
     const it = r.items || {};
-    return `<div class="ai-card chc-res"><div class="ai-best"><div><small>AI-билд</small><b>${esc(r.title || "Билд")}</b></div></div>
+    return `<div class="ai-card chc-res"><div class="ai-best"><div><small>Готовый билд</small><b>${esc(r.title || "Билд")}</b></div></div>
       ${r.idea ? `<p>${esc(r.idea)}</p>` : ""}
       ${Array.isArray(r.priority) && r.priority.length ? `<h5>Порядок прокачки</h5><ol class="chc-pr">${r.priority.map((p, i) => { const a = find(p.ability); return `<li><span class="chc-pn">${i + 1}</span>${a ? `<img alt="" src="${esc(D2.img(a.i))}">` : `<span class="chc-noi">✦</span>`}<span><b>${esc(p.ability || "")}</b><small>${esc(p.why || "")}</small></span></li>`; }).join("")}</ol>` : ""}
       <h5>Предметы</h5>${[["start", "Старт"], ["early", "Ранние"], ["core", "Основные"], ["late", "Поздние"]].filter(([k]) => Array.isArray(it[k]) && it[k].length).map(([k, t]) => `<div class="chc-st"><small>${t}</small>${itemRow(it[k])}</div>`).join("")}
@@ -4756,8 +4872,8 @@ const CHC = (() => {
 
 /* приглашение зарегистрироваться (общая карточка) */
 function signupCard(kind){
-  const P = { chc: ["Сохрани свои билды и получи AI-помощника", ["🧠 5 AI-билдов CHC в день бесплатно", "💾 История билдов и избранные герои на всех устройствах", "🏆 Рейтинг, дуэли, лента и уровни с наградами"]],
-    d2: ["Войди — и AI объяснит любой драфт", ["🧠 AI-пикер и AI-билды бесплатно", "⭐ Запомни свой профиль Dota 2", "🏆 Рейтинг, дуэли, лента и уровни"]] }[kind] || ["Создай аккаунт", []];
+  const P = { chc: ["Создай аккаунт — это бесплатно", ["⭐ Опыт за каждый билд, уровни и рамки для аватарки", "💾 Избранные герои на всех устройствах", "🏆 Рейтинг, онлайн-дуэли, лента и свой профиль"]],
+    d2: ["Создай аккаунт — это бесплатно", ["⭐ Уровни, награды и рамки для аватарки", "🏆 Рейтинг и онлайн-дуэли с друзьями", "💬 Лента: делись пиками и билдами"]] }[kind] || ["Создай аккаунт", []];
   return `<div class="su-card"><div class="su-ic">🎮</div><div class="su-b"><b>${P[0]}</b><ul>${P[1].map(x => `<li>${x}</li>`).join("")}</ul></div><button type="button" class="btn btn-primary su-go">Зарегистрироваться — 10 секунд</button><small class="su-n">Google, Discord, Telegram или почта. Бесплатно.</small></div>`;
 }
 
