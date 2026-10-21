@@ -1615,57 +1615,25 @@
   .nofx .rv, .rv.no { opacity: 1; transform: none; transition: none; }
   @media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; } }
 
-  /* ---------- шапка и главный экран в духе uc.zone ---------- */
-  .logo { font-size: 18px; letter-spacing: -.4px; }
+  /* ---------- логотип Aegis ---------- */
   .logo .mark.lg { width: 34px; height: 34px; }
   .mark.lg img { width: 100%; height: 100%; display: block; object-fit: contain; filter: drop-shadow(0 2px 8px rgba(232,50,60,.35)); }
-  .pbtn:not(.has) { height: 36px; border-radius: 8px; padding: 0 16px; background: #fff; color: #0b0b0e; border-color: #fff; font-weight: 600; font-size: 14px; }
-  .pbtn:not(.has):hover { background: #e9e9ee; }
-  .langbtn, .curbtn, .burger, .thbtn { border-radius: 8px !important; }
-  @media (min-width: 601px) {
-    .tabs { background: transparent; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 0; gap: 2px; margin: 0 0 6px; }
-    .tab { flex: 0 0 auto; min-height: 44px; padding: 0 14px; border-radius: 0; font-weight: 600; font-size: 14px; }
-    .tab:hover { color: var(--fg); }
-    .tab-ic { display: none; }
-    .tab-ink { top: auto; bottom: -1px; height: 2px; border-radius: 2px; background: var(--fg); box-shadow: none; }
-    .tab-ink::after { display: none; }
-  }
-  .hero { background: transparent !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; margin-top: 0; padding: clamp(64px, 13vh, 150px) 0 clamp(56px, 10vh, 110px) !important; }
-  .hero::after, .hero::before { display: none !important; }
-  .hero h1 { font-size: clamp(40px, 6.6vw, 76px); line-height: 1; letter-spacing: -2.5px; max-width: 15ch; }
-  .hero p { color: #a1a1aa; font-size: clamp(16px, 2vw, 19px); max-width: 46ch; }
-  .hero .actions { display: flex !important; flex-wrap: wrap; gap: 10px !important; max-width: 640px !important; margin-top: 30px; }
-  .hero .actions .btn { width: auto; grid-column: auto !important; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 18px !important; border-radius: 8px; font-size: 14.5px !important; font-weight: 600; transform: none; }
-  .hero .actions .btn-ghost, .hero .actions .btn-feed, .hero .actions .btn-game { background: rgba(255,255,255,.03); color: var(--fg); border: 1px solid rgba(255,255,255,.14); box-shadow: none; }
-  .hero .actions .btn-primary { background: #fff; color: #0b0b0e; border-color: #fff; }
-  .hero .actions .btn:hover { border-color: rgba(255,255,255,.4); transform: none; }
-  .hero .chc-promo { max-width: 640px; border-radius: 10px; }
-  .hero > .hero-bg { position: absolute; z-index: 0; inset: 0 -4% 0 44%; pointer-events: none; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 30%, #000 82%, transparent); mask-image: linear-gradient(90deg, transparent, #000 30%, #000 82%, transparent); }
-  .hb-list { position: absolute; left: 4%; top: 0; display: flex; flex-direction: column; gap: 26px; filter: blur(2px); opacity: .5; transform: rotate(-11deg); transform-origin: 0 0; animation: hbScroll 46s linear infinite; }
-  .hb-list div { display: flex; align-items: center; gap: 22px; font-family: var(--display); font-weight: 800; font-size: clamp(32px, 4.4vw, 58px); letter-spacing: -1px; color: #fff; white-space: nowrap; }
-  .hb-list img { width: 1.15em; height: 1.15em; flex: none; border-radius: 50%; object-fit: cover; object-position: 50% 15%; }
-  @keyframes hbScroll { from { transform: rotate(-11deg) translateY(0); } to { transform: rotate(-11deg) translateY(-50%); } }
-  @media (prefers-reduced-motion: reduce) { .hb-list { animation: none; } }
-  @media (max-width: 600px) { .hero > .hero-bg { inset: 0 -20% 0 18%; } .hb-list { opacity: .3; } .hero h1 { letter-spacing: -1.5px; } }
-  .uzsec { margin: 0 0 80px; }
-  .uzgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 26px; }
-  .uzcard { position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 6px; aspect-ratio: 3 / 4; padding: 22px; border: 0; border-radius: 18px; overflow: hidden; text-align: left; color: #fff; font: inherit; cursor: pointer; background: var(--uzg); transition: transform .35s cubic-bezier(.22,.61,.36,1), filter .3s; }
-  .uzcard::before { content: ""; position: absolute; inset: -30%; background: radial-gradient(38% 34% at 72% 28%, rgba(255,255,255,.4), transparent 70%), radial-gradient(46% 44% at 18% 82%, rgba(0,0,0,.16), transparent 70%); filter: blur(24px); }
-  .uzcard:hover { transform: translateY(-4px); filter: brightness(1.06); }
-  .uz-red { --uzg: linear-gradient(160deg, #e2626a, #f2a2a3 55%, #e3777c); }
-  .uz-sand { --uzg: linear-gradient(160deg, #b2a57a, #d6cca5 55%, #bdb189); }
-  .uz-blue { --uzg: linear-gradient(160deg, #56649f, #8a97c8 55%, #616faa); }
-  .uz-green { --uzg: linear-gradient(160deg, #578f79, #9bcab3 55%, #639e86); }
-  .uzt { position: absolute; z-index: 1; top: 18px; left: 18px; display: flex; flex-wrap: wrap; gap: 6px; }
-  .uzt i { font-style: normal; font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 11px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; padding: 5px 8px; border-radius: 6px; background: rgba(255,255,255,.38); color: rgba(0,0,0,.58); }
-  .uzt i.ok { background: rgba(225,255,238,.75); color: #2d6a4b; }
-  .uzi { position: absolute; z-index: 1; inset: 0 0 22% 0; display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: clamp(40px, 5vw, 70px); letter-spacing: -2px; color: rgba(255,255,255,.6); }
-  .uzcard b { position: relative; z-index: 1; font-family: var(--display); font-size: 20px; font-weight: 700; }
-  .uzcard small { position: relative; z-index: 1; font-size: 13px; line-height: 1.4; color: rgba(255,255,255,.88); }
-  @media (max-width: 900px) { .uzgrid { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 600px) { .uzcard { aspect-ratio: 4 / 5; padding: 16px; } .uzcard b { font-size: 17px; } .uzt { top: 12px; left: 12px; } }
   .sp-mark { background: none !important; box-shadow: none !important; }
   .sp-mark img { width: 100%; height: 100%; object-fit: contain; }
+
+  /* ---------- фон главного экрана: плывущие колонки карточек героев ---------- */
+  .hero > .hero-bg { position: absolute; z-index: 0; top: -12%; bottom: -12%; right: -4%; width: 52%; pointer-events: none; overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 38%); mask-image: linear-gradient(90deg, transparent, #000 38%); }
+  .hb-cols { display: flex; gap: 14px; height: 100%; transform: rotate(9deg) scale(1.15); transform-origin: 50% 50%; }
+  .hb-col { flex: 1; display: flex; flex-direction: column; gap: 14px; animation: hbUp 70s linear infinite; }
+  .hb-col:nth-child(2) { animation-name: hbDown; animation-duration: 85s; }
+  .hb-col:nth-child(3) { animation-duration: 95s; }
+  .hb-col img { width: 100%; aspect-ratio: 3 / 4; flex: none; object-fit: cover; border-radius: 18px; opacity: .42; border: 1px solid rgba(255,255,255,.08); box-shadow: 0 14px 34px rgba(0,0,0,.5); }
+  .hero > .hero-bg::after { content: ""; position: absolute; inset: 0; background: radial-gradient(70% 55% at 65% 50%, color-mix(in srgb, var(--t1) 22%, transparent), transparent 70%), linear-gradient(180deg, var(--bg-soft, #0e0e12) 0%, transparent 18%, transparent 82%, var(--bg-soft, #0e0e12) 100%); mix-blend-mode: normal; opacity: .9; }
+  @keyframes hbUp { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+  @keyframes hbDown { from { transform: translateY(-50%); } to { transform: translateY(0); } }
+  @media (prefers-reduced-motion: reduce) { .hb-col { animation: none; } }
+  @media (max-width: 600px) { .hero > .hero-bg { width: 70%; right: -22%; } .hb-col img { opacity: .28; } }
 </style>
 </head>
 <body>
@@ -1705,7 +1673,7 @@
   <div class="panes" id="panes">
   <div class="tabpane" data-pane="1x6" role="tabpanel">
   <section class="hero">
-    <div class="hero-bg" aria-hidden="true" translate="no"><div class="hb-list"><div><img src="hero/pudge.webp" alt="" loading="lazy">Pudge</div><div><img src="hero/invoker.webp" alt="" loading="lazy">Invoker</div><div><img src="hero/juggernaut.webp" alt="" loading="lazy">Juggernaut</div><div><img src="hero/lina.webp" alt="" loading="lazy">Lina</div><div><img src="hero/axe.webp" alt="" loading="lazy">Axe</div><div><img src="hero/templarassassin.webp" alt="" loading="lazy">Templar Assassin</div><div><img src="hero/zeus.webp" alt="" loading="lazy">Zeus</div><div><img src="hero/slark.webp" alt="" loading="lazy">Slark</div><div><img src="hero/sven.webp" alt="" loading="lazy">Sven</div><div><img src="hero/morphling.webp" alt="" loading="lazy">Morphling</div><div><img src="hero/tinker.webp" alt="" loading="lazy">Tinker</div><div><img src="hero/shadowfiend.webp" alt="" loading="lazy">Shadow Fiend</div><div><img src="hero/pudge.webp" alt="" loading="lazy">Pudge</div><div><img src="hero/invoker.webp" alt="" loading="lazy">Invoker</div><div><img src="hero/juggernaut.webp" alt="" loading="lazy">Juggernaut</div><div><img src="hero/lina.webp" alt="" loading="lazy">Lina</div><div><img src="hero/axe.webp" alt="" loading="lazy">Axe</div><div><img src="hero/templarassassin.webp" alt="" loading="lazy">Templar Assassin</div><div><img src="hero/zeus.webp" alt="" loading="lazy">Zeus</div><div><img src="hero/slark.webp" alt="" loading="lazy">Slark</div><div><img src="hero/sven.webp" alt="" loading="lazy">Sven</div><div><img src="hero/morphling.webp" alt="" loading="lazy">Morphling</div><div><img src="hero/tinker.webp" alt="" loading="lazy">Tinker</div><div><img src="hero/shadowfiend.webp" alt="" loading="lazy">Shadow Fiend</div></div></div>
+    <div class="hero-bg" aria-hidden="true"><div class="hb-cols"><div class="hb-col"><img src="hero/pudge.webp" alt="" loading="lazy"><img src="hero/invoker.webp" alt="" loading="lazy"><img src="hero/lina.webp" alt="" loading="lazy"><img src="hero/axe.webp" alt="" loading="lazy"><img src="hero/sven.webp" alt="" loading="lazy"><img src="hero/zeus.webp" alt="" loading="lazy"><img src="hero/pudge.webp" alt="" loading="lazy"><img src="hero/invoker.webp" alt="" loading="lazy"><img src="hero/lina.webp" alt="" loading="lazy"><img src="hero/axe.webp" alt="" loading="lazy"><img src="hero/sven.webp" alt="" loading="lazy"><img src="hero/zeus.webp" alt="" loading="lazy"></div><div class="hb-col"><img src="hero/juggernaut.webp" alt="" loading="lazy"><img src="hero/templarassassin.webp" alt="" loading="lazy"><img src="hero/slark.webp" alt="" loading="lazy"><img src="hero/morphling.webp" alt="" loading="lazy"><img src="hero/tinker.webp" alt="" loading="lazy"><img src="hero/shadowfiend.webp" alt="" loading="lazy"><img src="hero/juggernaut.webp" alt="" loading="lazy"><img src="hero/templarassassin.webp" alt="" loading="lazy"><img src="hero/slark.webp" alt="" loading="lazy"><img src="hero/morphling.webp" alt="" loading="lazy"><img src="hero/tinker.webp" alt="" loading="lazy"><img src="hero/shadowfiend.webp" alt="" loading="lazy"></div><div class="hb-col"><img src="hero/crystalmaiden.webp" alt="" loading="lazy"><img src="hero/phantomassassin.webp" alt="" loading="lazy"><img src="hero/terrorblade.webp" alt="" loading="lazy"><img src="hero/queenofpain.webp" alt="" loading="lazy"><img src="hero/mars.webp" alt="" loading="lazy"><img src="hero/emberspirit.webp" alt="" loading="lazy"><img src="hero/crystalmaiden.webp" alt="" loading="lazy"><img src="hero/phantomassassin.webp" alt="" loading="lazy"><img src="hero/terrorblade.webp" alt="" loading="lazy"><img src="hero/queenofpain.webp" alt="" loading="lazy"><img src="hero/mars.webp" alt="" loading="lazy"><img src="hero/emberspirit.webp" alt="" loading="lazy"></div></div></div>
     <div class="hero-th" id="heroTh" aria-hidden="true"><img alt="" id="heroThImg"></div>
     <button type="button" class="hnews" id="hNews"><b>Свежее</b><span id="hNewsT">Новости патча и про-сцены</span><i>→</i></button>
     <h1>Сборки для кастомки Dota 1×6</h1>
@@ -1718,19 +1686,6 @@
       <button class="btn btn-feed" id="feedBtn"><span class="dot"></span>Лента героев</button>
       <button class="btn btn-ghost" id="quizBtn">Угадай героя по сборке</button>
       <button class="btn btn-game" id="gameBtn">⚔️ Арена 1x6</button>
-    </div>
-  </section>
-
-  <section class="uzsec" id="uzsec">
-    <div class="section-head">
-      <h2>Разделы</h2>
-      <p>Всё для Dota в одном месте: сборки, мета, способности и мини-игры.</p>
-    </div>
-    <div class="uzgrid">
-      <button type="button" class="uzcard uz-red" data-go="builds"><span class="uzt"><i>54 героя</i><i class="ok">Free</i></span><span class="uzi" translate="no">1×6</span><b>Dota 1x6</b><small>Сборки предметов по этапам игры и арканы</small></button>
-      <button type="button" class="uzcard uz-sand" data-go="dota"><span class="uzt"><i>Live</i><i class="ok">Free</i></span><span class="uzi" translate="no">D2</span><b>Мета Dota 2</b><small>Винрейты по рангам, сборки про-игроков и контрпики</small></button>
-      <button type="button" class="uzcard uz-blue" data-go="custom"><span class="uzt"><i>New</i></span><span class="uzi" translate="no">CHC</span><b>Hero Chaos</b><small>Отметь способности — получи готовую сборку</small></button>
-      <button type="button" class="uzcard uz-green" data-go="games"><span class="uzt"><i>PvP</i></span><span class="uzi" translate="no">VS</span><b>Мини-игры</b><small>Арена, дуэли, угадай героя и рейтинг игроков</small></button>
     </div>
   </section>
 
@@ -6221,7 +6176,6 @@ function setTab(name, opts){
 }
 document.querySelectorAll(".tab").forEach(b => b.onclick = () => setTab(b.dataset.tab));
 { const cp = document.getElementById("chcPromo"); if (cp) cp.onclick = () => setTab("custom"); }
-document.querySelectorAll(".uzcard").forEach(c => c.onclick = () => { const g = c.dataset.go; if (g === "builds") document.getElementById("builds").scrollIntoView({ behavior: REDUCED ? "auto" : "smooth" }); else setTab(g); });
 document.getElementById("supFab").onclick = () => PROF.support();
 I18N.init();
 CURSEL.init();
