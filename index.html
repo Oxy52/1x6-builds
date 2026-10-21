@@ -870,6 +870,56 @@
   .d2-pop-t span.up i { background: #5cf07f; } .d2-pop-t span.dn i { background: #ff6b6b; } .d2-pop-t span.up b { color: #5cf07f; } .d2-pop-t span.dn b { color: #ff6b6b; }
   .d2-pop-t p { font-size: 12px; color: var(--muted); margin: 6px 0 0; }
   .d2-pop-a { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; } .d2-pop-a span { font-size: 12px; padding: 4px 9px; border-radius: 99px; background: var(--bg-soft); border: 1px solid var(--line); }
+  /* ---- Dota 2: игроки, пикер, AI, CHC ---- */
+  .d2-subs { margin: 0 0 14px; } .d2-subs .rkc { font-size: 14px; }
+  .d2-hp { max-height: 90vh; display: flex; flex-direction: column; gap: 10px; } .d2-hp-t { font-family: var(--display); font-size: 18px; padding-right: 40px; }
+  .d2-hgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 6px; overflow-y: auto; min-height: 200px; padding-bottom: 6px; }
+  .d2-hgrid button { display: grid; gap: 3px; padding: 4px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg-soft); color: inherit; font: inherit; cursor: pointer; } .d2-hgrid button:disabled { opacity: .3; cursor: default; }
+  .d2-hgrid img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; background: #111; } .d2-hgrid span { font-size: 10.5px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .d2-psearch { display: flex; gap: 8px; } .d2-psearch .d2-search { flex: 1; min-width: 0; } .d2-psearch .btn { flex: none; }
+  .d2-meb { margin-top: 8px; border: 1px solid color-mix(in srgb, var(--t1) 50%, var(--line)); background: color-mix(in srgb, var(--t1) 12%, transparent); color: var(--fg); font: inherit; font-weight: 700; padding: 9px 14px; border-radius: 12px; cursor: pointer; }
+  .d2-plist { display: grid; gap: 6px; } .d2-plist button { display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-soft); color: inherit; font: inherit; cursor: pointer; text-align: left; }
+  .d2-plist img { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; } .d2-plist small { display: block; color: var(--muted); font-size: 12px; }
+  .d2-pav { width: 72px; height: 72px; border-radius: 16px; object-fit: cover; flex: none; } .d2-pav.sk { background: var(--bg-soft); }
+  .d2-medal { display: flex; align-items: center; gap: 6px; margin-top: 6px; } .d2-medal img { width: 34px; height: 34px; object-fit: contain; } .d2-medal b { font-size: 14px; }
+  .d2-ml { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
+  .d2-ml a { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 12px; background: var(--bg-soft); border: 1px solid var(--line); border-left: 3px solid #ff6b6b; color: inherit; text-decoration: none; }
+  .d2-ml li.w a { border-left-color: #5cf07f; } .d2-ml img { width: 34px; height: 34px; border-radius: 8px; object-fit: cover; }
+  .d2-ml span { min-width: 0; } .d2-ml span:nth-child(2) { flex: 1; } .d2-ml small { display: block; font-size: 11px; color: var(--muted); }
+  .d2-kda { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; } .d2-ml em { font-style: normal; font-size: 12px; font-weight: 800; width: 76px; text-align: right; color: #ff6b6b; } .d2-ml li.w em { color: #5cf07f; }
+  @media (max-width: 480px){ .d2-ml em { display: none; } }
+  .d2-draft h5, .d2-h5 { margin: 12px 0 6px; font-size: 13px; }
+  .d2-slots { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; } .d2-slots.al { grid-template-columns: repeat(4, 1fr); max-width: 80%; }
+  .d2-slot { position: relative; aspect-ratio: 16 / 11; border-radius: 12px; border: 1.5px dashed var(--line); background: var(--bg-soft); color: var(--muted); font: inherit; font-size: 22px; cursor: pointer; overflow: hidden; display: grid; place-items: center; padding: 0; }
+  .d2-slots.en .d2-slot.on { border: 1.5px solid #ff6b6b; } .d2-slots.al .d2-slot.on { border: 1.5px solid #5cf07f; }
+  .d2-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; } .d2-slot.on span { position: absolute; left: 0; right: 0; bottom: 0; font-size: 9.5px; font-weight: 700; color: #fff; padding: 10px 3px 3px; background: linear-gradient(transparent, rgba(0,0,0,.85)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .d2-slot i { position: absolute; top: 3px; right: 3px; font-style: normal; font-size: 10px; width: 18px; height: 18px; border-radius: 50%; background: rgba(0,0,0,.6); color: #fff; display: grid; place-items: center; }
+  .d2-sug { display: grid; gap: 6px; } .d2-sg { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-soft); color: inherit; font: inherit; cursor: pointer; text-align: left; }
+  .d2-sg > img { width: 56px; height: 32px; border-radius: 7px; object-fit: cover; flex: none; } .d2-sgn { flex: 1; min-width: 0; } .d2-sgn small { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px; }
+  .d2-sgn i { display: inline-flex; align-items: center; gap: 2px; font-style: normal; font-size: 10.5px; font-weight: 700; padding: 1px 5px 1px 1px; border-radius: 99px; background: var(--bg); } .d2-sgn i img { width: 16px; height: 16px; border-radius: 50%; object-fit: cover; }
+  .d2-sgn i.up { color: #5cf07f; } .d2-sgn i.dn { color: #ff6b6b; } .d2-sg > b { font-size: 16px; font-variant-numeric: tabular-nums; }
+  .ai-btn { width: 100%; background: linear-gradient(135deg, #7b5cff, #25a4ee); color: #fff; border: 0; font-weight: 800; }
+  .ai-out { margin-top: 10px; } .ai-msg { padding: 12px; border-radius: 12px; background: var(--bg-soft); border: 1px solid var(--line); font-size: 14px; line-height: 1.5; } .ai-msg .btn { margin-left: 6px; padding: 6px 12px; }
+  .ai-think { display: flex; align-items: center; gap: 6px; padding: 14px; border-radius: 12px; background: var(--bg-soft); } .ai-think span { width: 8px; height: 8px; border-radius: 50%; background: #7b5cff; animation: aiDot 1s ease-in-out infinite; } .ai-think span:nth-child(2) { animation-delay: .15s; } .ai-think span:nth-child(3) { animation-delay: .3s; } .ai-think b { margin-left: 6px; font-size: 14px; }
+  @keyframes aiDot { 50% { transform: translateY(-6px); opacity: .5; } }
+  .ai-card { padding: 16px; border-radius: 16px; border: 1px solid rgba(123,92,255,.5); background: linear-gradient(180deg, rgba(123,92,255,.12), var(--bg-soft)); font-size: 14px; line-height: 1.55; }
+  .ai-card p { margin: 8px 0; } .ai-card h5 { margin: 14px 0 6px; font-size: 13px; } .ai-card ul, .ai-card ol { margin: 0; padding-left: 18px; } .ai-card li { margin: 4px 0; }
+  .ai-best { display: flex; align-items: center; gap: 12px; } .ai-best img { width: 72px; height: 40px; border-radius: 8px; object-fit: cover; } .ai-best small { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; } .ai-best b { font-family: var(--display); font-size: 20px; }
+  .ai-warn { color: #ffb3b3; } .ai-tip { color: #b8ffc8; } .ai-left { font-size: 12px; color: var(--muted); margin: 8px 0 0; }
+  .chc { display: grid; gap: 10px; } .chc-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; } .chc-row small { color: var(--muted); font-size: 12px; }
+  .chc-hero { display: flex; align-items: center; gap: 10px; padding: 6px 12px 6px 6px; min-height: 48px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-soft); color: inherit; font: inherit; font-weight: 700; cursor: pointer; }
+  .chc-hero img { width: 64px; height: 36px; border-radius: 7px; object-fit: cover; } .chc-hero i { font-style: normal; font-size: 12px; color: var(--muted); font-weight: 500; } .chc-hero > span:only-child { padding: 0 8px; }
+  .chc-sug { display: grid; gap: 4px; } .chc-sug:empty { display: none; }
+  .chc-sug button, .chc-ab { display: flex; align-items: center; gap: 10px; padding: 6px 10px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-soft); color: inherit; font: inherit; cursor: pointer; text-align: left; }
+  .chc-sug img, .chc-ab img, .chc-pr img { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; flex: none; } .chc-sug small, .chc-ab small, .chc-pr small { display: block; font-size: 11.5px; color: var(--muted); }
+  .chc-sel { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; align-items: center; } .chc-ab { border-color: rgba(123,92,255,.55); } .chc-ab span { flex: 1; min-width: 0; } .chc-ab b { display: block; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .chc-ab i { font-style: normal; color: var(--muted); }
+  .chc-n { color: var(--muted); font-size: 12px; }
+  .chc textarea { width: 100%; resize: vertical; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-soft); color: var(--fg); font: inherit; font-size: 14px; padding: 10px 12px; }
+  .chc-pr { list-style: none; padding: 0 !important; display: grid; gap: 6px; } .chc-pr li { display: flex; gap: 10px; align-items: flex-start; margin: 0 !important; } .chc-noi { width: 36px; height: 36px; border-radius: 8px; display: grid; place-items: center; background: var(--bg); flex: none; }
+  .chc-st { margin-bottom: 8px; } .chc-st > small { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+  .chc-its { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; } .chc-it { display: grid; justify-items: center; gap: 2px; width: 64px; text-align: center; } .chc-it img { width: 52px; height: 38px; border-radius: 6px; object-fit: cover; }
+  .chc-it small { font-size: 10px; line-height: 1.15; color: var(--muted); max-width: 64px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; } .chc-it.txt { width: auto; padding: 6px 8px; border-radius: 8px; background: var(--bg); }
+  .chc-hist { display: flex; flex-wrap: wrap; gap: 6px; } .chc-hist button { padding: 8px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-soft); color: inherit; font: inherit; cursor: pointer; text-align: left; } .chc-hist small { display: block; font-size: 11px; color: var(--muted); }
   /* ---- подписка 1x6+ ---- */
   .pbadge { display: inline-block; margin-left: 4px; font-size: .85em; filter: drop-shadow(0 0 6px rgba(243,195,90,.7)); vertical-align: 1px; }
   .gn .pbadge { margin: 0 4px 0 0; }
@@ -1219,7 +1269,7 @@
     <button type="button" class="tab" role="tab" data-tab="games" aria-selected="false"><span class="tab-ic">🎮</span><span class="tl">Мини-игры</span><span class="ts">Игры</span></button>
     <button type="button" class="tab" role="tab" data-tab="feed" aria-selected="false"><span class="tab-ic">💬</span><span>Лента</span></button>
     <button type="button" class="tab" role="tab" data-tab="rating" aria-selected="false"><span class="tab-ic">🏆</span><span class="tl">Рейтинг</span><span class="ts">Топ</span></button>
-    <button type="button" class="tab" role="tab" data-tab="soon" aria-selected="false"><span class="tab-ic">＋</span><span class="tl">Скоро</span></button>
+    <button type="button" class="tab" role="tab" data-tab="custom" aria-selected="false"><span class="tab-ic">🧩</span><span class="tl">Кастомки</span><span class="ts">CHC</span></button>
     <i class="tab-ink" id="tabInk"></i>
   </div>
   <div class="panes" id="panes">
@@ -1295,12 +1345,12 @@
       <div id="d2Pane"></div>
     </section>
   </div>
-  <div class="tabpane" data-pane="soon" role="tabpanel" hidden>
+  <div class="tabpane" data-pane="custom" role="tabpanel" hidden>
     <section class="section first">
-      <div class="section-head"><h2>Новые кастомки — скоро</h2><p>Здесь появятся сборки и гайды для других кастомок Dota 2. Напиши в наш канал, какую добавить первой.</p></div>
-      <div class="soon">
-        <div class="soonc"><span>🧩</span><b>Следующая кастомка</b><small>Вкладка уже готова — осталось наполнить сборками</small></div>
-        <a class="soonc cta" href="https://t.me/+swCyihkKvwU4NTBi" target="_blank" rel="noopener"><span>✉️</span><b>Предложить кастомку</b><small>Напиши в Telegram-канал «сборки dota 1x6»</small></a>
+      <div class="section-head"><h2>Custom Hero Chaos — AI-билд</h2><p>Отметь способности, которые тебе выпали, — AI придумает билд именно под эту комбинацию: что качать первым, какие предметы собирать и как играть.</p></div>
+      <div id="chcBox"></div>
+      <div class="soon" style="margin-top:22px">
+        <a class="soonc cta" href="https://t.me/+swCyihkKvwU4NTBi" target="_blank" rel="noopener"><span>✉️</span><b>Предложить кастомку</b><small>Какую кастомку добавить следующей? Напиши в Telegram-канал «сборки dota 1x6»</small></a>
       </div>
     </section>
   </div>
@@ -2618,7 +2668,7 @@ const PROF = (() => {
       if (isPrem(uid) && !g.querySelector(".pbadge")){ g.classList.add("gold"); g.insertAdjacentHTML("afterbegin", premBadge(uid)); } });
   }
   const PLANS = [{ k: "m1", t: "1 месяц", rub: 99, stars: 59, usd: 1.25, per: "" }, { k: "m6", t: "6 месяцев", rub: 499, stars: 299, usd: 6.25, per: "83 ₽ в месяц", off: "−16%" }, { k: "y1", t: "1 год", rub: 799, stars: 499, usd: 9.99, per: "67 ₽ в месяц", off: "−33%", best: 1 }];
-  const PERKS = [["👑", "Значок и золотой ник", "Везде: в ленте, рейтинге, профиле и статистике"], ["💠", "3 эксклюзивные рамки", "Корона, Аегис и Сияние — только для 1x6+"], ["⚡", "Опыт ×1.5 и бонус ×2", "Уровни и награды открываются быстрее"], ["✍️", "Длинные посты", "До 1000 символов и 120 постов в день вместо 280 и 40"], ["📊", "Полная статистика", "Вся история матчей и график MMR за всё время"], ["🚀", "Раньше всех", "Новые мини-игры и сборки — сначала подписчикам"]];
+  const PERKS = [["👑", "Значок и золотой ник", "Везде: в ленте, рейтинге, профиле и статистике"], ["💠", "3 эксклюзивные рамки", "Корона, Аегис и Сияние — только для 1x6+"], ["⚡", "Опыт ×1.5 и бонус ×2", "Уровни и награды открываются быстрее"], ["✍️", "Длинные посты", "До 1000 символов и 120 постов в день вместо 280 и 40"], ["📊", "Полная статистика", "Вся история матчей и график MMR за всё время"], ["🧠", "AI-помощник", "40 запросов в день вместо 5: билды Custom Hero Chaos и AI-пикер"]];
   let payInfo = null, premPlan = "y1", premPoll = 0;
   const untilTxt = uid => new Date(PREM.get(uid)).toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
   async function premium(opts){
@@ -4223,12 +4273,13 @@ const D2 = (() => {
     const pane = document.getElementById("d2Pane"); if (!pane) return;
     if (pane.dataset.ready) return draw();
     pane.dataset.ready = "1";
-    pane.innerHTML = `<div class="d2-bar">
+    pane.innerHTML = `<div class="rkchips d2-subs"><button type="button" class="rkc" data-sub2="heroes" aria-pressed="true">📊 Герои</button><button type="button" class="rkc" data-sub2="players" aria-pressed="false">👤 Игроки</button><button type="button" class="rkc" data-sub2="picker" aria-pressed="false">🧠 AI-пикер</button></div><div id="d2Heroes"><div class="d2-bar">
         <div class="rkchips d2-ranks">${RANKS.map(r => `<button type="button" class="rkc d2-rc" data-r="${r[0]}" aria-pressed="${r[0] === st.rank}">${rankIc(r[0])}${r[1]}</button>`).join("")}</div>
         <div class="rkchips sub d2-roles">${ROLES.map(r => `<button type="button" class="rkc" data-role="${r[0]}" aria-pressed="${r[0] === st.role}">${r[1]}</button>`).join("")}</div>
         <label class="d2-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="d2Q" placeholder="Найти героя" autocomplete="off"></label>
       </div><div id="d2Sum"></div><div id="d2List"><div class="feed-sk"></div><div class="feed-sk"></div><div class="feed-sk"></div></div>
-      <p class="db-note">Данные — открытая статистика публичных матчей <a href="https://www.opendota.com" target="_blank" rel="noopener">OpenDota</a>, обновляются раз в несколько часов. Нажми на героя — откроются винрейт по рангам и линиям, сборка предметов и контрпики.</p>`;
+      <p class="db-note">Данные — открытая статистика публичных матчей <a href="https://www.opendota.com" target="_blank" rel="noopener">OpenDota</a>, обновляются раз в несколько часов. Нажми на героя — откроются винрейт по рангам и линиям, сборка предметов и контрпики.</p></div><div id="d2Players" hidden></div><div id="d2Picker" hidden></div>`;
+    pane.querySelectorAll("[data-sub2]").forEach(b => b.onclick = () => sub(b.dataset.sub2));
     pane.querySelectorAll("[data-r]").forEach(b => b.onclick = () => { st.rank = b.dataset.r; pane.querySelectorAll("[data-r]").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); });
     pane.querySelectorAll("[data-role]").forEach(b => b.onclick = () => { st.role = b.dataset.role; pane.querySelectorAll("[data-role]").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); });
     let qt = 0; pane.querySelector("#d2Q").oninput = e => { clearTimeout(qt); qt = setTimeout(() => { st.q = e.target.value.trim().toLowerCase(); draw(); }, 150); };
@@ -4362,17 +4413,247 @@ const D2 = (() => {
     box.querySelector(".d2-pop-x").onclick = close;
     requestAnimationFrame(() => box.classList.add("in"));
   }
+
+  // ---------- выбор героя (сетка с поиском) ----------
+  function pickHero(title, exclude, onPick){
+    const box = document.createElement("div"); box.className = "d2-pop"; box.setAttribute("role", "dialog");
+    box.innerHTML = `<div class="d2-pop-c d2-hp"><button type="button" class="d2-pop-x" aria-label="Закрыть">✕</button><b class="d2-hp-t">${esc(title)}</b>
+      <label class="d2-search"><input type="search" placeholder="Найти героя" autocomplete="off"></label><div class="d2-hgrid"></div></div>`;
+    (document.getElementById("modal") && !document.getElementById("modal").hidden ? document.getElementById("modal") : document.body).appendChild(box);
+    const grid = box.querySelector(".d2-hgrid"), inp = box.querySelector("input");
+    const close = () => { box.classList.add("out"); setTimeout(() => box.remove(), 260); };
+    const draw = () => { const q = inp.value.trim().toLowerCase();
+      grid.innerHTML = HEROES_D2.slice().sort((a, b) => a.localized_name.localeCompare(b.localized_name)).filter(h => !q || h.localized_name.toLowerCase().includes(q)).map(h => `<button type="button" data-h="${h.id}"${exclude.includes(h.id) ? " disabled" : ""}><img alt="" loading="lazy" src="${esc(himg(h))}"><span>${esc(h.localized_name)}</span></button>`).join("") || `<div class="pnone">Никого не нашли</div>`;
+      grid.querySelectorAll("[data-h]").forEach(b => b.onclick = () => { close(); onPick(HEROES_D2.find(h => h.id === +b.dataset.h)); }); };
+    inp.oninput = draw; draw();
+    box.onclick = e => { if (e.target === box) close(); }; box.querySelector(".d2-pop-x").onclick = close;
+    requestAnimationFrame(() => { box.classList.add("in"); if (matchMedia("(pointer:fine)").matches) inp.focus(); });
+  }
+
+  // ---------- игроки (как профиль на Dotabuff) ----------
+  const RANK_RU = ["", "Рекрут", "Страж", "Рыцарь", "Герой", "Легенда", "Властелин", "Божество", "Титан"];
+  const ago = s => { const d = Math.max(1, Date.now() / 1000 - s); return d < 3600 ? Math.floor(d / 60) + " мин назад" : d < 86400 ? Math.floor(d / 3600) + " ч назад" : d < 2592000 ? Math.floor(d / 86400) + " д назад" : new Date(s * 1000).toLocaleDateString("ru-RU", { day: "numeric", month: "short", year: "numeric" }); };
+  const dur = s => Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+  const myId = () => { try { return localStorage.getItem("d2-me") || ""; } catch(e) { return ""; } };
+  function parseAcc(v){
+    v = String(v || "").trim();
+    let m = /(?:dotabuff\.com|opendota\.com|stratz\.com)\/players\/(\d+)/i.exec(v); if (m) return m[1];
+    m = /steamcommunity\.com\/profiles\/(\d{17})/i.exec(v); if (m) v = m[1];
+    if (/^\d{17}$/.test(v)) return String(BigInt(v) - 76561197960265728n);
+    if (/^\d{3,12}$/.test(v)) return v;
+    return null;
+  }
+  function playersView(){
+    const el = document.getElementById("d2Players"); if (el.dataset.ready) return; el.dataset.ready = "1";
+    const me = myId();
+    el.innerHTML = `<form class="d2-psearch" id="d2PF"><label class="d2-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="d2PQ" placeholder="Ник, Steam ID или ссылка Dotabuff" autocomplete="off"></label><button type="submit" class="btn btn-primary">Найти</button></form>
+      ${me ? `<button type="button" class="d2-meb" id="d2Me">⭐ Мой профиль Dota 2</button>` : ""}
+      <p class="db-note">Статистика публичных матчей из OpenDota, как профиль на Dotabuff. Если профиль закрыт, включи в Доте «Общедоступная история матчей» (Настройки → Социальное).</p><div id="d2PR"></div>`;
+    const out = el.querySelector("#d2PR");
+    el.querySelector("#d2PF").onsubmit = async e => { e.preventDefault(); const v = el.querySelector("#d2PQ").value.trim(); if (!v) return;
+      const id = parseAcc(v); if (id) return player(id);
+      if (v.length < 2) return; out.innerHTML = `<div class="feed-sk"></div><div class="feed-sk"></div>`;
+      try { const rs = await fetch(`/api/dota?q=search&name=${encodeURIComponent(v)}`).then(r => { if (!r.ok) throw 0; return r.json(); });
+        out.innerHTML = rs.length ? `<div class="d2-plist">${rs.map(p => `<button type="button" data-id="${p.account_id}"><img alt="" loading="lazy" src="${esc(p.avatarfull || "")}"><span><b>${esc(p.personaname || "Без имени")}</b><small>ID ${p.account_id}${p.last_match_time ? " · последний матч " + ago(new Date(p.last_match_time).getTime() / 1000) : ""}</small></span></button>`).join("")}</div>` : `<div class="gempty">Никого не нашли. Попробуй Steam ID или ссылку на Dotabuff.</div>`;
+        out.querySelectorAll("[data-id]").forEach(b => b.onclick = () => player(b.dataset.id));
+      } catch(_) { out.innerHTML = `<div class="gempty">Поиск сейчас не отвечает. Попробуй ещё раз или вставь Steam ID.</div>`; } };
+    const mb = el.querySelector("#d2Me"); if (mb) mb.onclick = () => player(me);
+  }
+  async function player(id){
+    if (!HEROES_D2){ try { HEROES_D2 = await get("heroStats"); } catch(e) {} }
+    const g = openPanel(`<div class="d2h"><div class="d2h-top"><div class="d2-pav sk"></div><div><h3>Загружаем…</h3><small>ID ${esc(id)}</small></div></div><div class="psec"><div class="feed-sk"></div><div class="feed-sk"></div></div></div>`);
+    const J = q => fetch(`/api/dota?q=${q}&id=${id}`).then(r => r.ok ? r.json() : null).catch(() => null);
+    const [pr, wl, rec, hs] = await Promise.all([J("player"), J("wl"), J("recent"), J("pheroes")]);
+    if (!g.isConnected) return;
+    const p = pr && pr.profile;
+    if (!p){ g.querySelector(".d2h").innerHTML = `<div class="d2h-top"><div><h3>Игрок не найден</h3><small>ID ${esc(id)} — проверь номер или открой профиль в Доте.</small></div></div>`; return; }
+    const W = (wl && wl.win) || 0, L = (wl && wl.lose) || 0, wr = W + L ? pct(W, W + L) : 0;
+    const rt = pr.rank_tier || 0, med = Math.floor(rt / 10), stars = rt % 10;
+    const H = id2 => HEROES_D2 && HEROES_D2.find(x => x.id === +id2);
+    const heroes = (Array.isArray(hs) ? hs : []).filter(x => x.games > 0).slice(0, 10);
+    const matches = Array.isArray(rec) ? rec : [];
+    const isMe = myId() === String(id);
+    g.querySelector(".d2h").innerHTML = `
+      <div class="d2h-top"><img class="d2-pav" alt="" src="${esc(p.avatarfull || "")}"><div><h3>${esc(p.personaname || "Без имени")}${p.plus ? ` <span title="Dota Plus">➕</span>` : ""}</h3><small>ID ${esc(p.account_id)}${pr.leaderboard_rank ? ` · топ-${pr.leaderboard_rank} мира` : ""}</small>
+        ${med ? `<div class="d2-medal"><img alt="" src="/api/dota?q=rank&n=${med}" onerror="this.onerror=null;this.src='https://www.opendota.com/assets/images/dota2/rank_icons/rank_icon_${med}.png'"><b>${RANK_RU[med]}${med < 8 && stars ? " " + stars : ""}</b></div>` : `<div class="d2-medal"><b>Без ранга</b></div>`}</div></div>
+      <div class="pstats d2-kpi"><div class="pstat"><b>${(W + L).toLocaleString("ru-RU")}</b><span>матчей</span></div><div class="pstat"><b class="db-wr ${wrCls(wr)}">${W + L ? f1(wr) + "%" : "—"}</b><span>винрейт</span></div><div class="pstat"><b>${W.toLocaleString("ru-RU")}</b><span>побед</span></div></div>
+      ${W + L ? `<div class="psec"><div class="db-wl"><span style="flex:${W || .001}" class="w">${W} побед</span><span style="flex:${L || .001}" class="l">${L} поражений</span></div></div>` : ""}
+      <div class="psec"><h4>Последние матчи</h4>${matches.length ? `<ul class="d2-ml">${matches.map(m => { const rad = m.player_slot < 128, win = rad === !!m.radiant_win, h = H(m.hero_id);
+        return `<li class="${win ? "w" : "l"}"><a href="https://www.dotabuff.com/matches/${m.match_id}" target="_blank" rel="noopener">${h ? `<img alt="" loading="lazy" src="${esc(hicon(h))}">` : ""}<span><b>${h ? esc(h.localized_name) : "Герой"}</b><small>${ago(m.start_time)} · ${dur(m.duration)}</small></span><span class="d2-kda">${m.kills}/${m.deaths}/${m.assists}<small>${m.gold_per_min} GPM</small></span><em>${win ? "Победа" : "Поражение"}</em></a></li>`; }).join("")}</ul>` : `<div class="pnone">Матчей нет — возможно, история матчей скрыта.</div>`}</div>
+      <div class="psec"><h4>Любимые герои</h4>${heroes.length ? `<div class="db-tw"><table class="db-t"><thead><tr><th>Герой</th><th>Матчи</th><th>Винрейт</th><th>Последний</th></tr></thead><tbody>${heroes.map(x => { const h = H(x.hero_id), v = pct(x.win, x.games); return h ? `<tr data-h="${h.id}"><td class="db-hc"><span class="d2-hi"><img alt="" loading="lazy" src="${esc(himg(h))}"></span><span>${esc(h.localized_name)}</span></td><td><b>${x.games}</b></td><td class="db-wr ${wrCls(v)}"><b>${f1(v)}%</b></td><td>${x.last_played ? ago(x.last_played) : "—"}</td></tr>` : ""; }).join("")}</tbody></table></div>` : `<div class="pnone">Нет данных</div>`}</div>
+      <div class="pacts"><button type="button" class="btn ${isMe ? "btn-ghost" : "btn-primary"}" id="d2SetMe">${isMe ? "✓ Это мой профиль" : "⭐ Это я — запомнить"}</button><a class="btn btn-ghost" href="https://www.dotabuff.com/players/${esc(p.account_id)}" target="_blank" rel="noopener">Dotabuff ↗</a></div><div style="height:20px"></div>`;
+    g.querySelectorAll("tr[data-h]").forEach(tr => tr.onclick = () => hero(+tr.dataset.h));
+    g.querySelector("#d2SetMe").onclick = e => { try { localStorage.setItem("d2-me", String(p.account_id)); } catch(_) {} e.currentTarget.textContent = "✓ Это мой профиль"; e.currentTarget.className = "btn btn-ghost"; const pl = document.getElementById("d2Players"); if (pl){ pl.dataset.ready = ""; } };
+  }
+
+  // ---------- AI-пикер ----------
+  const PK = { allies: [], enemies: [], role: "" };
+  function pickerView(){
+    const el = document.getElementById("d2Picker");
+    const slot = (side, i) => { const h = PK[side][i]; return `<button type="button" class="d2-slot${h ? " on" : ""}" data-side="${side}" data-i="${i}">${h ? `<img alt="" src="${esc(himg(h))}"><span>${esc(h.localized_name)}</span><i>✕</i>` : `<span>＋</span>`}</button>`; };
+    el.innerHTML = `<p class="db-note">Добавь врагов (и союзников, если знаешь), выбери свою роль — пикер посчитает по статистике матчапов, кто сильнее всего против этого драфта. AI объяснит выбор и подскажет план на игру.</p>
+      <div class="d2-draft"><h5>Враги</h5><div class="d2-slots en">${[0, 1, 2, 3, 4].map(i => slot("enemies", i)).join("")}</div><h5>Союзники</h5><div class="d2-slots al">${[0, 1, 2, 3].map(i => slot("allies", i)).join("")}</div>
+      <h5>Моя роль</h5><div class="rkchips sub" id="d2PkR">${ROLES.map(r => `<button type="button" class="rkc" data-role="${r[0]}" aria-pressed="${r[0] === PK.role}">${r[0] ? r[1] : "Любая"}</button>`).join("")}</div></div>
+      <div class="pacts" style="padding:0;margin:14px 0"><button type="button" class="btn btn-primary" id="d2PkGo"${PK.enemies.length ? "" : " disabled"}>Подобрать героя</button>${PK.enemies.length || PK.allies.length ? `<button type="button" class="btn btn-ghost" id="d2PkClr">Очистить</button>` : ""}</div>
+      <div id="d2PkOut"></div>`;
+    el.querySelectorAll(".d2-slot").forEach(b => b.onclick = () => { const side = b.dataset.side, i = +b.dataset.i;
+      if (PK[side][i]){ PK[side].splice(i, 1); return pickerView(); }
+      const used = PK.allies.concat(PK.enemies).map(h => h.id);
+      pickHero(side === "enemies" ? "Выбери врага" : "Выбери союзника", used, h => { PK[side].push(h); pickerView(); }); });
+    el.querySelectorAll("#d2PkR [data-role]").forEach(b => b.onclick = () => { PK.role = b.dataset.role; pickerView(); });
+    const clr = el.querySelector("#d2PkClr"); if (clr) clr.onclick = () => { PK.allies = []; PK.enemies = []; pickerView(); };
+    el.querySelector("#d2PkGo").onclick = () => suggest(el.querySelector("#d2PkOut"));
+  }
+  async function suggest(out){
+    out.innerHTML = `<div class="feed-sk"></div><div class="feed-sk"></div>`;
+    let mus;
+    try { mus = await Promise.all(PK.enemies.map(e => get("matchups", e.id).then(rs => ({ e, rs: Array.isArray(rs) ? rs : [] })))); }
+    catch(_) { out.innerHTML = `<div class="gempty">Не удалось загрузить статистику матчапов. Попробуй ещё раз.</div>`; return; }
+    const used = new Set(PK.allies.concat(PK.enemies).map(h => h.id));
+    const cands = HEROES_D2.filter(h => !used.has(h.id) && (!PK.role || posOf(h).includes(+PK.role))).map(c => {
+      const per = mus.map(({ e, rs }) => { const m = rs.find(x => num(x.hero_id) === c.id); if (!m || num(m.games_played) < 15) return { e, v: null }; return { e, v: 50 - pct(num(m.wins), num(m.games_played)), g: num(m.games_played) }; });
+      const known = per.filter(x => x.v != null), adv = known.length ? known.reduce((s, x) => s + x.v, 0) / known.length : 0;
+      const [pp, ww] = pw(c, st.rank), base = pp ? pct(ww, pp) - 50 : 0;
+      return { h: c, per, adv, base, score: adv * 1.6 + base * 0.6, n: known.length };
+    }).filter(x => x.n >= Math.min(2, PK.enemies.length)).sort((a, b) => b.score - a.score).slice(0, 10);
+    if (!cands.length){ out.innerHTML = `<div class="gempty">Мало данных по этим героям. Добавь ещё врагов или убери фильтр роли.</div>`; return; }
+    out.innerHTML = `<h5 class="d2-h5">Лучшие пики против этого драфта</h5><div class="d2-sug">${cands.map((c, i) => `<button type="button" class="d2-sg" data-h="${c.h.id}"><span class="gr">${i + 1}</span><img alt="" loading="lazy" src="${esc(himg(c.h))}"><span class="d2-sgn"><b>${esc(c.h.localized_name)}</b><small>${c.per.map(x => x.v == null ? "" : `<i class="${x.v >= 0 ? "up" : "dn"}" title="против ${esc(x.e.localized_name)}"><img alt="" src="${esc(hicon(x.e))}">${x.v >= 0 ? "+" : ""}${f1(x.v)}</i>`).join("")}</small></span><b class="db-wr ${c.adv >= 1 ? "up" : c.adv <= -1 ? "dn" : ""}">${c.adv >= 0 ? "+" : ""}${f1(c.adv)}%</b></button>`).join("")}</div>
+      <p class="db-note">Число справа — насколько в среднем этот герой выигрывает чаще против выбранных врагов (по матчам из выборки OpenDota). Иконки — преимущество против каждого врага.</p>
+      <div class="d2-ai" id="d2PkAI"></div>`;
+    out.querySelectorAll(".d2-sg").forEach(b => b.onclick = () => hero(+b.dataset.h));
+    AI.button(out.querySelector("#d2PkAI"), "🧠 Объяснить пик (AI)", () => ({ kind: "pick", role: PK.role ? ROLES.find(r => r[0] === PK.role)[1] : "", allies: PK.allies.map(h => h.localized_name), enemies: PK.enemies.map(h => h.localized_name), candidates: cands.map(c => ({ hero: c.h.localized_name, score: c.adv })) }), r => `
+      <div class="ai-card"><div class="ai-best">${(() => { const h = HEROES_D2.find(x => x.localized_name === r.best); return h ? `<img alt="" src="${esc(himg(h))}">` : ""; })()}<div><small>AI советует</small><b>${esc(r.best || "")}</b></div></div>
+      <p>${esc(r.why || "")}</p>${Array.isArray(r.alts) && r.alts.length ? `<h5>Запасные варианты</h5><ul>${r.alts.map(a => `<li><b>${esc(a.hero || "")}</b> — ${esc(a.why || "")}</li>`).join("")}</ul>` : ""}
+      ${r.plan ? `<h5>План на игру</h5><p>${esc(r.plan)}</p>` : ""}${r.avoid ? `<p class="ai-warn">⚠️ ${esc(r.avoid)}</p>` : ""}</div>`);
+  }
+  function sub(name){
+    const pane = document.getElementById("d2Pane"); if (!pane) return;
+    pane.querySelectorAll("[data-sub2]").forEach(b => b.setAttribute("aria-pressed", b.dataset.sub2 === name));
+    ["Heroes", "Players", "Picker"].forEach(k => { const el = document.getElementById("d2" + k); if (el) el.hidden = k.toLowerCase() !== name; });
+    if (name === "players") playersView();
+    if (name === "picker"){ if (HEROES_D2) pickerView(); else get("heroStats").then(r => { HEROES_D2 = r; pickerView(); }).catch(() => {}); }
+  }
   // открыть героя по слагу сайта (crystalmaiden и т.п.)
   async function heroBySlug(slug){
     try { if (!HEROES_D2) HEROES_D2 = await get("heroStats"); } catch(e) { return false; }
     const s = norm(slug), h = HEROES_D2.find(x => norm(x.localized_name) === s || norm(String(x.name).replace("npc_dota_hero_", "")) === s);
     if (!h) return false; hero(h.id); return true;
   }
-  return { open, hero, heroBySlug };
+  const loadHeroes = async () => { if (!HEROES_D2) HEROES_D2 = await get("heroStats"); return HEROES_D2; };
+  const pickHeroSafe = async (title, ex, cb) => { try { await loadHeroes(); } catch(e) { return; } pickHero(title, ex, cb); };
+  return { open, hero, heroBySlug, player, sub, get, img, itemsMeta, items: () => ITEMS, heroes: () => HEROES_D2, loadHeroes, pickHero: pickHeroSafe };
+})();
+
+/* ---------- AI-помощник (запросы к /api/ai) ---------- */
+const AI = (() => {
+  let info = null;
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  async function enabled(){
+    if (info == null){ try { info = await fetch("/api/ai?info").then(r => r.ok ? r.json() : { enabled: false }); } catch(e) { info = { enabled: false }; } }
+    return !!info.enabled;
+  }
+  async function call(payload){
+    const sb = PROF.rt && PROF.rt();
+    if (!PROF.cloud || !sb) return { error: "AI работает на сайте 1x6-eta.vercel.app" };
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) return { error: "login" };
+    try {
+      const r = await fetch("/api/ai", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + session.access_token }, body: JSON.stringify(payload) });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) return { error: j.error === "limit" ? "limit" : j.error === "login_required" ? "login" : j.error === "not_configured" ? "off" : "fail" };
+      return j;
+    } catch(e) { return { error: "fail" }; }
+  }
+  function button(el, label, getPayload, render, onResult){
+    el.innerHTML = `<button type="button" class="btn ai-btn">${label}</button><div class="ai-out"></div>`;
+    const btn = el.querySelector(".ai-btn"), out = el.querySelector(".ai-out");
+    btn.onclick = async () => {
+      if (!PROF.user()){ out.innerHTML = `<div class="ai-msg">Чтобы спросить AI, войди в аккаунт — это бесплатно. <button type="button" class="btn btn-ghost" id="aiIn">Войти</button></div>`; out.querySelector("#aiIn").onclick = () => PROF.open(); return; }
+      const payload = getPayload(); if (!payload) return;
+      btn.disabled = true; out.innerHTML = `<div class="ai-think"><span></span><span></span><span></span><b>AI думает…</b></div>`;
+      if (!(await enabled())){ btn.disabled = false; out.innerHTML = `<div class="ai-msg">🧠 AI-помощник скоро заработает — осталось подключить его на сервере.</div>`; return; }
+      const r = await call(payload); btn.disabled = false;
+      if (r.error){ out.innerHTML = `<div class="ai-msg">${r.error === "limit" ? "На сегодня запросы к AI закончились. С подпиской 👑 1x6+ — 40 запросов в день. <button type=\"button\" class=\"btn btn-ghost\" id=\"aiPrem\">1x6+</button>" : r.error === "login" ? "Войди в аккаунт ещё раз." : r.error === "off" ? "🧠 AI-помощник скоро заработает." : "AI не ответил. Попробуй ещё раз через минуту."}</div>`; const pb = out.querySelector("#aiPrem"); if (pb) pb.onclick = () => PROF.premium(); return; }
+      out.innerHTML = render(r.result || {}) + (r.left != null ? `<p class="ai-left">Осталось запросов к AI сегодня: ${r.left}</p>` : "");
+      if (onResult) onResult(r.result, out);
+    };
+  }
+  return { button, call, enabled, esc };
+})();
+
+/* ---------- Кастомки: Custom Hero Chaos — AI-билд под выпавшие способности ---------- */
+const CHC = (() => {
+  const esc = AI.esc;
+  const S = { hero: null, ab: [], note: "" };
+  let ABIL = null;
+  const hist = () => { try { return JSON.parse(localStorage.getItem("chc-hist") || "[]"); } catch(e) { return []; } };
+  const saveHist = h => { try { localStorage.setItem("chc-hist", JSON.stringify(h.slice(0, 6))); } catch(e) {} };
+  async function open(){
+    const el = document.getElementById("chcBox"); if (!el) return;
+    if (el.dataset.ready) return; el.dataset.ready = "1";
+    el.innerHTML = `<div class="chc">
+      <div class="chc-row"><button type="button" class="chc-hero" id="chcHero"></button><small>Герой необязателен — главное способности.</small></div>
+      <label class="d2-search chc-q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="chcQ" placeholder="Какие способности выпали? Например: Meat Hook" autocomplete="off" disabled></label>
+      <div class="chc-sug" id="chcSug"></div>
+      <div class="chc-sel" id="chcSel"></div>
+      <textarea id="chcNote" maxlength="200" rows="2" placeholder="Пожелание (необязательно): хочу играть от магии, нужен танк, есть 2 реролла…"></textarea>
+      <div id="chcAI"></div><div id="chcHist"></div></div>`;
+    const q = el.querySelector("#chcQ"), sug = el.querySelector("#chcSug");
+    el.querySelector("#chcHero").onclick = () => D2.pickHero("Твой герой в CHC", S.hero ? [S.hero.id] : [], h => { S.hero = h; draw(); });
+    el.querySelector("#chcNote").oninput = e => { S.note = e.target.value; };
+    q.oninput = () => suggest(q.value);
+    q.onkeydown = e => { if (e.key === "Enter"){ e.preventDefault(); const f = sug.querySelector("[data-k]"); if (f) f.click(); } };
+    draw(); D2.loadHeroes().catch(() => {});
+    try { ABIL = await D2.get("abilities"); q.disabled = false; } catch(e) { q.placeholder = "Не удалось загрузить способности — обнови страницу"; }
+    D2.itemsMeta().catch(() => {});
+    AI.button(el.querySelector("#chcAI"), "🧠 Придумать билд (AI)", () => {
+      if (S.ab.length < 2){ el.querySelector("#chcAI .ai-out").innerHTML = `<div class="ai-msg">Добавь хотя бы 2 способности.</div>`; return null; }
+      return { kind: "chc", hero: S.hero ? S.hero.localized_name : "", abilities: S.ab.map(a => `${a.n} (${heroName(a.h)})`), note: S.note };
+    }, renderBuild, (res) => { const h = hist(); h.unshift({ t: Date.now(), hero: S.hero ? S.hero.id : null, ab: S.ab.map(a => a.k), res }); saveHist(h); drawHist(); });
+    drawHist();
+  }
+  const heroName = hk => { const h = (D2.heroes() || []).find(x => String(x.name).replace("npc_dota_hero_", "") === hk); return h ? h.localized_name : hk; };
+  function suggest(v){
+    const sug = document.getElementById("chcSug"); v = String(v || "").trim().toLowerCase();
+    if (!ABIL || v.length < 2){ sug.innerHTML = ""; return; }
+    const have = new Set(S.ab.map(a => a.k));
+    const rs = ABIL.filter(a => !have.has(a.k) && (a.n.toLowerCase().includes(v) || heroName(a.h).toLowerCase().includes(v))).slice(0, 8);
+    sug.innerHTML = rs.length ? rs.map(a => `<button type="button" data-k="${esc(a.k)}"><img alt="" loading="lazy" src="${esc(D2.img(a.i))}"><span><b>${esc(a.n)}</b><small>${esc(heroName(a.h))}</small></span></button>`).join("") : `<div class="pnone">Не нашли такую способность</div>`;
+    sug.querySelectorAll("[data-k]").forEach(b => b.onclick = () => { if (S.ab.length >= 8) return; const a = ABIL.find(x => x.k === b.dataset.k); if (a) S.ab.push(a); const q = document.getElementById("chcQ"); q.value = ""; sug.innerHTML = ""; draw(); q.focus(); });
+  }
+  function draw(){
+    const hb = document.getElementById("chcHero");
+    hb.innerHTML = S.hero ? `<img alt="" src="${esc(D2.img(S.hero.img))}"><span>${esc(S.hero.localized_name)}</span><i>сменить</i>` : `<span>＋ Выбрать героя</span>`;
+    const sel = document.getElementById("chcSel");
+    sel.innerHTML = S.ab.length ? S.ab.map((a, i) => `<button type="button" class="chc-ab" data-i="${i}" title="${esc(a.d || "")}"><img alt="" src="${esc(D2.img(a.i))}"><span><b>${esc(a.n)}</b><small>${esc(heroName(a.h))}</small></span><i>✕</i></button>`).join("") + `<small class="chc-n">${S.ab.length}/8</small>` : `<div class="pnone">Добавь способности, которые тебе выпали (от 2 до 8).</div>`;
+    sel.querySelectorAll("[data-i]").forEach(b => b.onclick = () => { S.ab.splice(+b.dataset.i, 1); draw(); });
+  }
+  function itemRow(keys){
+    const IT = D2.items() || {};
+    return `<div class="chc-its">${(Array.isArray(keys) ? keys : []).map(k => { const it = IT[k]; return it ? `<span class="chc-it" title="${esc(it.dname)}"><img alt="" loading="lazy" src="${esc(D2.img(it.img))}"><small>${esc(it.dname)}</small></span>` : `<span class="chc-it txt"><small>${esc(String(k).replace(/_/g, " "))}</small></span>`; }).join("")}</div>`;
+  }
+  function renderBuild(r){
+    const abIcon = name => { const a = (ABIL || []).find(x => x.n.toLowerCase() === String(name || "").toLowerCase().replace(/\s*\(.*\)$/, "")); return a ? `<img alt="" src="${esc(D2.img(a.i))}">` : `<span class="chc-noi">✦</span>`; };
+    const it = r.items || {};
+    return `<div class="ai-card chc-res"><div class="ai-best"><div><small>AI-билд</small><b>${esc(r.title || "Билд")}</b></div></div>
+      ${r.idea ? `<p>${esc(r.idea)}</p>` : ""}
+      ${Array.isArray(r.priority) && r.priority.length ? `<h5>Порядок прокачки</h5><ol class="chc-pr">${r.priority.map(p => `<li>${abIcon(p.ability)}<span><b>${esc(p.ability || "")}</b><small>${esc(p.why || "")}</small></span></li>`).join("")}</ol>` : ""}
+      <h5>Предметы</h5>${[["start", "Старт"], ["early", "Ранние"], ["core", "Основные"], ["late", "Поздние"]].filter(([k]) => Array.isArray(it[k]) && it[k].length).map(([k, t]) => `<div class="chc-st"><small>${t}</small>${itemRow(it[k])}</div>`).join("")}
+      ${Array.isArray(r.tips) && r.tips.length ? `<h5>Как играть</h5><ul>${r.tips.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
+      ${r.weak ? `<p class="ai-warn">⚠️ Слабое место: ${esc(r.weak)}</p>` : ""}${r.reroll ? `<p class="ai-tip">🎲 Реролл: ${esc(r.reroll)}</p>` : ""}</div>`;
+  }
+  function drawHist(){
+    const el = document.getElementById("chcHist"); if (!el) return; const h = hist();
+    el.innerHTML = h.length ? `<h5 class="d2-h5">Прошлые билды</h5><div class="chc-hist">${h.map((x, i) => `<button type="button" data-i="${i}"><b>${esc((x.res && x.res.title) || "Билд")}</b><small>${new Date(x.t).toLocaleDateString("ru-RU", { day: "numeric", month: "short" })} · ${x.ab.length} способн.</small></button>`).join("")}</div>` : "";
+    el.querySelectorAll("[data-i]").forEach(b => b.onclick = () => { const x = h[+b.dataset.i];
+      S.ab = x.ab.map(k => (ABIL || []).find(a => a.k === k)).filter(Boolean); S.hero = x.hero ? (D2.heroes() || []).find(hh => hh.id === x.hero) || null : null; draw();
+      document.querySelector("#chcAI .ai-out").innerHTML = renderBuild(x.res || {}); document.getElementById("chcAI").scrollIntoView({ behavior: "smooth", block: "start" }); });
+  }
+  return { open };
 })();
 
 /* ---------- вкладки ---------- */
-const TABS = ["1x6", "dota", "games", "feed", "rating", "soon"];
+const TABS = ["1x6", "dota", "games", "feed", "rating", "custom"];
 let curTab = "1x6";
 function inkTo(btn, instant){ const ink = document.getElementById("tabInk"), bar = btn.parentElement; if (!ink) return;
   if (instant){ ink.style.transition = "none"; requestAnimationFrame(() => ink.style.transition = ""); }
@@ -4386,6 +4667,7 @@ function setTab(name, opts){
   if (name === "feed") PROF.feedOpen();
   if (name === "rating") PROF.ratingOpen();
   if (name === "dota") D2.open();
+  if (name === "custom") CHC.open();
   if (!opts.keepHash){ try { history.replaceState(null, "", name === "1x6" ? location.pathname + location.search : "#" + name); } catch(e) {} }
   if (prev !== name && !opts.noScroll){ const tb = document.querySelector(".tabs"); const y = tb.getBoundingClientRect().top + scrollY - 70; if (scrollY > y) window.scrollTo({ top: y, behavior: REDUCED ? "auto" : "smooth" }); }
 }
@@ -4399,7 +4681,7 @@ document.querySelectorAll(".gcard").forEach(c => c.onclick = () => ({ arena: () 
 document.getElementById("feedMore").onclick = () => PROF.feedMore();
 document.querySelectorAll(".rkc").forEach(b => b.onclick = () => PROF.ratingOpen(b.dataset.k));
 document.getElementById("plQ").addEventListener("input", e => PROF.loadPlayers(e.target.value));
-{ const h = (location.hash || "").slice(1); setTab(TABS.includes(h) ? h : "1x6", { instant: true, keepHash: true, noScroll: true }); }
+{ let h = (location.hash || "").slice(1); if (h === "soon") h = "custom"; setTab(TABS.includes(h) ? h : "1x6", { instant: true, keepHash: true, noScroll: true }); }
 addEventListener("hashchange", () => { const h = (location.hash || "").slice(1); if (TABS.includes(h) && h !== curTab) setTab(h, { keepHash: true }); if (/^premium/.test(h)) PROF.premium({ wait: h === "premium-ok" }); });
 if (/^#premium/.test(location.hash)) setTimeout(() => { PROF.premium({ wait: location.hash === "#premium-ok" }); try { history.replaceState(null, "", location.pathname); } catch(e) {} }, 1200);
 /* ---------- меню (бургер) ---------- */
