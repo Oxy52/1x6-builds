@@ -844,6 +844,7 @@
   @media (max-width: 480px){ .d2-mus { grid-template-columns: 1fr; } }
   .d2link { padding: 0 22px 22px; } .d2link .btn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
   .d2-rc { display: inline-flex; align-items: center; gap: 6px; }
+  .d2-hroles { margin: 0 0 8px; } .d2-rnote { display: grid; gap: 2px; margin-bottom: 10px; font-size: 13px; } .d2-rnote small { color: var(--muted); font-size: 12px; line-height: 1.4; }
   .d2-rk { width: 24px; height: 24px; object-fit: contain; flex: none; filter: drop-shadow(0 2px 4px rgba(0,0,0,.5)); }
   .d2-rk.bar { width: 26px; height: 26px; } .d2-rke.bar { font-size: 16px; line-height: 1; }
   @media (max-width: 480px){ .d2-rk.bar { width: 20px; height: 20px; } }
@@ -3998,8 +3999,8 @@ const DUEL = (() => {
 /* ---------- Dota 2: позиции героев и описания предметов ---------- */
 const D2_POS = {
   1: "antimage alchemist arc_warden bloodseeker chaos_knight clinkz drow_ranger faceless_void gyrocopter juggernaut life_stealer luna lycan medusa meepo monkey_king morphling muerta naga_siren phantom_assassin phantom_lancer razor riki slark spectre sven terrorblade troll_warlord ursa weaver skeleton_king kez lone_druid furion abaddon windrunner nevermore templar_assassin sniper dragon_knight wraith_king".split(" "),
-  2: "arc_warden batrider broodmother dragon_knight death_prophet ember_spirit invoker kunkka leshrac lina meepo necrolyte nevermore obsidian_destroyer puck pugna queenofpain razor sniper storm_spirit templar_assassin tinker viper void_spirit zuus huskar primal_beast pangolier shredder windrunner tiny visage alchemist beastmaster monkey_king morphling lone_druid earth_spirit outworld_destroyer kez".split(" "),
-  3: "axe bristleback batrider beastmaster brewmaster centaur dark_seer dawnbreaker doom_bringer legion_commander mars magnataur necrolyte night_stalker omniknight pangolier primal_beast sand_king shredder slardar tidehunter abyssal_underlord venomancer viper visage windrunner razor death_prophet dragon_knight furion lone_druid kunkka abaddon earthshaker enigma timbersaw phoenix largo".split(" "),
+  2: "pudge arc_warden batrider broodmother dragon_knight death_prophet ember_spirit invoker kunkka leshrac lina meepo necrolyte nevermore obsidian_destroyer puck pugna queenofpain razor sniper storm_spirit templar_assassin tinker viper void_spirit zuus huskar primal_beast pangolier shredder windrunner tiny visage alchemist beastmaster monkey_king morphling lone_druid earth_spirit outworld_destroyer kez".split(" "),
+  3: "pudge axe bristleback batrider beastmaster brewmaster centaur dark_seer dawnbreaker doom_bringer legion_commander mars magnataur necrolyte night_stalker omniknight pangolier primal_beast sand_king shredder slardar tidehunter abyssal_underlord venomancer viper visage windrunner razor death_prophet dragon_knight furion lone_druid kunkka abaddon earthshaker enigma timbersaw phoenix largo".split(" "),
   4: "earth_spirit earthshaker tusk rubick mirana hoodwink pudge tiny spirit_breaker rattletrap snapfire nyx_assassin skywrath_mage phoenix marci dark_willow bounty_hunter techies grimstroke windrunner shadow_shaman lion venomancer enigma sand_king monkey_king batrider ringmaster jakiro zuus weaver muerta keeper_of_the_light largo".split(" "),
   5: "ancient_apparition bane chen crystal_maiden dazzle disruptor elder_titan enchantress grimstroke wisp jakiro keeper_of_the_light lich lion ogre_magi omniknight oracle shadow_demon shadow_shaman silencer treant undying vengefulspirit warlock winter_wyvern witch_doctor abaddon rubick snapfire dark_willow techies ringmaster pugna skywrath_mage marci".split(" ")
 };
@@ -4181,8 +4182,12 @@ const D2 = (() => {
   const RANKS = [["all", "Все ранги"], ["1", "Рекрут"], ["2", "Страж"], ["3", "Рыцарь"], ["4", "Герой"], ["5", "Легенда"], ["6", "Властелин"], ["7", "Божество"], ["8", "Титан"], ["turbo", "Турбо"], ["pro", "Про-сцена"]];
   const RANK_IC = { "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, turbo: "⚡", pro: "🎙️" };
   const rankIc = (r, cls) => { const v = RANK_IC[r]; return v == null ? "" : typeof v === "number" ? `<img class="d2-rk${cls ? " " + cls : ""}" alt="" loading="lazy" src="/api/dota?q=rank&n=${v}" onerror="this.onerror=null;this.src='https://www.opendota.com/assets/images/dota2/rank_icons/rank_icon_${v}.png'">` : `<span class="d2-rke${cls ? " " + cls : ""}">${v}</span>`; };
-  const ROLES = [["", "Все роли"], ["1", "Керри"], ["2", "Мидер"], ["3", "Оффлейнер"], ["4", "Частичная поддержка"], ["5", "Полная поддержка"]];
-  const POS_SHORT = { 1: "Керри", 2: "Мид", 3: "Оффлейн", 4: "Поддержка 4", 5: "Поддержка 5" };
+  const ROLES = [["", "Все роли"], ["1", "Керри"], ["2", "Мидер"], ["3", "Оффлейнер"], ["4", "Поддержка"], ["5", "Полная поддержка"]];
+  const POS_SHORT = { 1: "Керри", 2: "Мидер", 3: "Оффлейнер", 4: "Поддержка", 5: "Полная поддержка" };
+  const SUP_ONLY = new Set("ward_observer ward_sentry ward_dispenser smoke_of_deceit dust blood_grenade tranquil_boots guardian_greaves boots_of_bearing pavise solar_crest glimmer_cape mekansm holy_locket ancient_janggo buckler headdress ring_of_basilius wind_lace clarity urn_of_shadows".split(" "));
+  const CORE_ONLY = new Set("bfury radiance manta butterfly satanic skadi mjollnir maelstrom desolator greater_crit lesser_crit monkey_king_bar abyssal_blade basher hand_of_midas mask_of_madness power_treads falcon_blade wraith_band echo_sabre harpoon diffusal_blade disperser assault heart sange_and_yasha yasha revenants_brooch devastator bloodthorn nullifier travel_boots travel_boots_2 bottle armlet silver_edge vanguard crimson_guard blade_mail quelling_blade lifesteal".split(" "));
+  const roleOk = (key, role) => !role ? true : role >= 4 ? !CORE_ONLY.has(key) : !SUP_ONLY.has(key) && (key !== "bottle" || role === 2);
+  const LANE_OF = { 1: 1, 2: 2, 3: 3 };
   const ROLE_RU = { Carry: "Керри", Support: "Саппорт", Nuker: "Нюкер", Disabler: "Контроль", Initiator: "Инициатор", Durable: "Танк", Escape: "Мобильный", Pusher: "Пушер", Jungler: "Лесник" };
   const hkey = h => String(h.name || "").replace("npc_dota_hero_", "");
   const posOf = h => [1, 2, 3, 4, 5].filter(p => D2_POS[p].includes(hkey(h)));
@@ -4273,16 +4278,18 @@ const D2 = (() => {
       <div class="pstats d2-kpi"><div class="pstat"><b class="db-wr ${wrCls(pct(w, p))}">${p ? f1(pct(w, p)) + "%" : "—"}</b><span>винрейт · ${esc(RANKS.find(r => r[0] === st.rank)[1])}</span></div><div class="pstat"><b>${p.toLocaleString("ru-RU")}</b><span>матчей</span></div><div class="pstat"><b>${num(h.pro_pick)}</b><span>пиков на про-сцене</span></div></div>
       <div class="psec"><h4>Винрейт по рангам</h4><div class="d2-ranksbar">${RANKS.slice(1).filter(r => HEROES_D2.some(x => pw(x, r[0])[0] > 0)).map(r => { const [pp, ww] = pw(h, r[0]), v = pp ? pct(ww, pp) : 0; return `<div class="d2-rb ${wrCls(v)}" title="${esc(r[1])}: ${pp ? f1(v) + "%, " + pp + " матчей" : "нет данных"}"><b>${pp ? f1(v) : "—"}</b><i style="height:${pp ? Math.max(4, Math.min(100, (v - 35) * 100 / 30)) : 0}%"></i>${rankIc(r[0], "bar")}<small>${esc(r[1])}</small></div>`; }).join("")}</div></div>
       <div class="psec"><h4>По линиям</h4><div id="d2Lanes"><div class="feed-sk"></div></div></div>
-      <div class="psec"><h4>Сборка предметов</h4><div id="d2Items"><div class="feed-sk"></div><div class="feed-sk"></div></div></div>
+      <div class="psec"><h4>Сборка предметов</h4>${posOf(h).length ? `<div class="rkchips sub d2-hroles" role="group" aria-label="Роль">${posOf(h).map(p => `<button type="button" class="rkc" data-hp="${p}" aria-pressed="false">${POS_SHORT[p]}</button>`).join("")}<button type="button" class="rkc" data-hp="0" aria-pressed="false">Все роли</button></div><div class="d2-rnote" id="d2RNote"></div>` : ""}<div id="d2Items"><div class="feed-sk"></div><div class="feed-sk"></div></div></div>
       <div class="psec"><h4>Контрпики</h4><div id="d2Mu"><div class="feed-sk"></div></div></div>
       <div class="pacts"><a class="btn btn-ghost" href="https://www.dotabuff.com/heroes/${esc(dbSlug(h))}" target="_blank" rel="noopener">Открыть на Dotabuff ↗</a></div>
       <p class="db-note" style="padding:0 22px 20px">Сборка — самые популярные предметы в публичных матчах на этом герое. Винрейт предмета — как часто побеждают, когда его покупают; это зависит и от времени покупки, так что смотри на него вместе с популярностью.</p></div>`);
     const $ = s => g.querySelector(s);
     // линии
+    let LAGG = null, renderRole = null;
     get("laneRoles", id).then(rs => {
-      const agg = {}; (Array.isArray(rs) ? rs : []).forEach(r => { const k = num(r.lane_role); if (!LANES[k]) return; const o = agg[k] || (agg[k] = { g: 0, w: 0 }); o.g += num(r.games); o.w += num(r.wins); });
+      const agg = {}; LAGG = agg; (Array.isArray(rs) ? rs : []).forEach(r => { const k = num(r.lane_role); if (!LANES[k]) return; const o = agg[k] || (agg[k] = { g: 0, w: 0 }); o.g += num(r.games); o.w += num(r.wins); });
       const tot = Object.values(agg).reduce((s, o) => s + o.g, 0);
       $("#d2Lanes").innerHTML = tot ? `<div class="d2-lanes">${Object.keys(LANES).filter(k => agg[k] && agg[k].g).map(k => { const o = agg[k], v = pct(o.w, o.g); return `<div class="d2-lane"><b>${LANES[k]}</b><span class="db-wr ${wrCls(v)}">${f1(v)}%</span><small>${f1(pct(o.g, tot))}% игр · ${o.g.toLocaleString("ru-RU")}</small><i class="db-bar"><i style="width:${pct(o.g, tot)}%"></i></i></div>`; }).join("")}</div>` : `<div class="pnone">Нет данных по линиям</div>`;
+      if (renderRole) renderRole();
     }).catch(() => { if ($("#d2Lanes")) $("#d2Lanes").innerHTML = `<div class="pnone">Не удалось загрузить</div>`; });
     // предметы
     Promise.all([get("itemPopularity", id), get("itemTimings", id).catch(() => []), itemsMeta()]).then(([pop, tim]) => {
@@ -4291,13 +4298,23 @@ const D2 = (() => {
         const bt = s ? s.t.filter(x => x[1] >= 15).sort((a, b) => b[2] / b[1] - a[2] / a[1])[0] : null;
         return `<div class="d2-it" role="button" tabindex="0" data-it="${esc(key)}" data-ph="${PH_CUR}" title="${esc(it.name)}${it.cost ? " · " + it.cost + " золота" : ""}${bt ? " · лучше всего до " + Math.round(bt[0] / 60) + " мин (" + f1(pct(bt[2], bt[1])) + "%)" : ""}"><img alt="" loading="lazy" src="${esc(it.img)}"><span>${esc(it.name)}</span>${v != null ? `<b class="db-wr ${wrCls(v)}">${f1(v)}%</b>` : `<b class="d2-na">—</b>`}<i class="db-bar"><i style="width:${Math.round(cnt * 100 / max)}%"></i></i></div>`; };
       let PH_CUR = "";
-      const html = PHASES.map(([k, t]) => { PH_CUR = k; const obj = (pop && pop[k]) || {}; const list = Object.entries(obj).map(([iid, c]) => [IDS[iid] || iid, num(c)]).filter(x => ITEMS[x[0]]).sort((a, b) => b[1] - a[1]).slice(0, k === "start_game_items" ? 6 : 6);
-        if (!list.length) return ""; const max = list[0][1];
-        return `<div class="d2-ph"><h5>${t}</h5><div class="d2-its">${list.map(([key, c]) => cell(key, c, max)).join("")}</div></div>`; }).join("");
-      const top = Object.entries(iw).filter(([k, s]) => s.g >= 100 && ITEMS[k] && (ITEMS[k].cost || 0) >= 1000).map(([k, s]) => [k, pct(s.w, s.g), s.g]).sort((a, b) => b[1] - a[1]).slice(0, 6);
-      $("#d2Items").innerHTML = (html || `<div class="pnone">Нет данных о предметах</div>`) + (top.length ? `<div class="d2-ph"><h5>Самый высокий винрейт</h5><div class="d2-its">${top.map(([k, v, gg]) => { const it = itemOf(k); return `<div class="d2-it" role="button" tabindex="0" data-it="${esc(k)}" data-ph="" title="${esc(it.name)} · ${gg} покупок"><img alt="" loading="lazy" src="${esc(it.img)}"><span>${esc(it.name)}</span><b class="db-wr ${wrCls(v)}">${f1(v)}%</b></div>`; }).join("")}</div></div>` : "");
+      const ps = posOf(h); let role = st.role && ps.includes(+st.role) ? +st.role : (ps[0] || 0);
       const pops = {}; PHASES.forEach(([k]) => { const obj = (pop && pop[k]) || {}; const list = Object.entries(obj).map(([iid, c]) => [IDS[iid] || iid, num(c)]).sort((a, b) => b[1] - a[1]); pops[k] = list; });
+      renderRole = () => {
+      g.querySelectorAll("[data-hp]").forEach(b => b.setAttribute("aria-pressed", +b.dataset.hp === role));
+      const note = g.querySelector("#d2RNote");
+      if (note){ const ln = LANE_OF[role], o = ln && LAGG && LAGG[ln];
+        note.innerHTML = role ? `${o && o.g >= 10 ? `<span>Винрейт на линии «${LANES[ln]}»: <b class="db-wr ${wrCls(pct(o.w, o.g))}">${f1(pct(o.w, o.g))}%</b> · ${o.g} игр</span>` : ""}<small>Сборка для роли «${POS_SHORT[role]}»: из популярных предметов героя убраны те, что на этой роли не берут${role >= 4 ? ", добавлены варды" : ""}.</small>` : `<small>Все популярные предметы героя без разделения по ролям.</small>`; }
+      const html = PHASES.map(([k, t]) => { PH_CUR = k; let list = pops[k].filter(x => ITEMS[x[0]] && roleOk(x[0], role)).slice(0, 6);
+        if (role >= 4 && k === "start_game_items"){ ["ward_sentry", "ward_observer"].forEach(w => { if (ITEMS[w] && !list.some(x => x[0] === w)) list.unshift([w, 0]); }); list = list.slice(0, 6); }
+        if (!list.length) return ""; const max = Math.max(1, ...list.map(x => x[1]));
+        return `<div class="d2-ph"><h5>${t}</h5><div class="d2-its">${list.map(([key, c]) => cell(key, c, max)).join("")}</div></div>`; }).join("");
+      const top = Object.entries(iw).filter(([k, s]) => s.g >= 100 && ITEMS[k] && (ITEMS[k].cost || 0) >= 1000 && roleOk(k, role)).map(([k, s]) => [k, pct(s.w, s.g), s.g]).sort((a, b) => b[1] - a[1]).slice(0, 6);
+      $("#d2Items").innerHTML = (html || `<div class="pnone">Нет данных о предметах</div>`) + (top.length ? `<div class="d2-ph"><h5>Самый высокий винрейт</h5><div class="d2-its">${top.map(([k, v, gg]) => { const it = itemOf(k); return `<div class="d2-it" role="button" tabindex="0" data-it="${esc(k)}" data-ph="" title="${esc(it.name)} · ${gg} покупок"><img alt="" loading="lazy" src="${esc(it.img)}"><span>${esc(it.name)}</span><b class="db-wr ${wrCls(v)}">${f1(v)}%</b></div>`; }).join("")}</div></div>` : "");
       $("#d2Items").querySelectorAll("[data-it]").forEach(el => { const go = () => itemPop(g, h, el.dataset.it, el.dataset.ph, iw, pops); el.onclick = go; el.onkeydown = e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); go(); } }; });
+      };
+      g.querySelectorAll("[data-hp]").forEach(b => b.onclick = () => { role = +b.dataset.hp; renderRole(); });
+      renderRole();
     }).catch(() => { if ($("#d2Items")) $("#d2Items").innerHTML = `<div class="pnone">Не удалось загрузить сборку</div>`; });
     // контрпики
     get("matchups", id).then(ms => {
