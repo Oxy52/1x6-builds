@@ -1069,9 +1069,9 @@
   .langw + .pbtn { margin-left: 8px; } .langw + .pbtn ~ .burger { flex: none; }
   .langbtn { width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-soft); display: grid; place-items: center; cursor: pointer; padding: 0; }
   .langbtn img { width: 24px; height: 17px; border-radius: 3px; object-fit: cover; box-shadow: 0 0 0 1px rgba(255,255,255,.15); }
-  .langpop { position: absolute; right: 0; top: calc(100% + 8px); z-index: 60; min-width: 190px; padding: 6px; border-radius: 16px; background: var(--panel, #15151b); border: 1px solid var(--line); box-shadow: 0 20px 60px -20px rgba(0,0,0,.8); display: grid; gap: 2px; animation: langIn .25s cubic-bezier(.2,.8,.2,1); }
+  .langpop { position: fixed; z-index: 60; width: min(340px, calc(100vw - 24px)); max-height: calc(100dvh - 90px); overflow-y: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 6px; border-radius: 16px; background: var(--panel, #15151b); border: 1px solid var(--line); box-shadow: 0 20px 60px -20px rgba(0,0,0,.8); display: grid; gap: 2px; animation: langIn .25s cubic-bezier(.2,.8,.2,1); }
   @keyframes langIn { from { opacity: 0; transform: translateY(-6px) scale(.97); } }
-  .langpop button { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border: 0; border-radius: 10px; background: none; color: inherit; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; text-align: left; }
+  .langpop button { display: flex; align-items: center; gap: 9px; padding: 9px 9px; min-width: 0; white-space: nowrap; overflow: hidden; border: 0; border-radius: 10px; background: none; color: inherit; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; text-align: left; }
   .langpop button:hover { background: var(--bg-soft); } .langpop button[aria-pressed="true"] { background: color-mix(in srgb, var(--t1) 18%, transparent); }
   .langpop img { width: 22px; height: 16px; border-radius: 3px; object-fit: cover; }
   .pm-cur { display: flex; gap: 6px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
@@ -2250,7 +2250,7 @@ const PROF = (() => {
     let best = 0; try { best = +localStorage.getItem("ub-best") || 0; } catch(e) {}
     const fav = [...FAV], rec = (typeof RECENT !== "undefined" ? RECENT : []).slice(0, 8);
     const box = shell(bnSrc(P.bn), `
-      <div class="phead"><div class="pav${frameCls(P.frame)}"><img alt="" src="${esc(avSrc(P.av))}"></div><div class="pname"><h3>${esc(P.nick)}</h3>${P.st ? `<div class="pst">${esc(P.st)}</div>` : ""}${CLOUD && U ? `<div class="pvia">${viaLine(U)}</div>` : ""}</div></div>
+      <div class="phead"><div class="pav${frameCls(P.frame)}"><img alt="" src="${esc(avSrc(P.av))}"></div><div class="pname"><h3 translate="no">${esc(P.nick)}</h3>${P.st ? `<div class="pst">${esc(P.st)}</div>` : ""}${CLOUD && U ? `<div class="pvia">${viaLine(U)}</div>` : ""}</div></div>
       <div class="pstats"><div class="pstat"><b>${fav.length}</b><span>в избранном</span></div><div class="pstat"><b>${seen().length}</b><span>героев изучено</span></div><div class="pstat"><b>${best}</b><span>рекорд в квизе</span></div></div>
       ${CLOUD && U ? lvlBlock() : ""}
       <div class="psec"><h4>Избранные герои</h4>${faces(fav) || `<div class="pnone">Пока пусто — жми ★ на карточке героя.</div>`}</div>
@@ -2544,8 +2544,8 @@ const PROF = (() => {
   function postHTML(r, liked){
     const mine = U && r.user_id === U.id;
     return `<article class="post${isPrem(r.user_id) ? " prem" : ""}" data-id="${r.id}" data-uid="${esc(r.user_id)}">${avaHTML(r.avatar, r.frame, r.user_id)}
-      <div class="pb"><div class="phd"><button type="button" class="pnick${isPrem(r.user_id) ? " gold" : ""}" data-user="${esc(r.user_id)}">${esc(r.nick)}</button>${premBadge(r.user_id)}<em class="glv">${lvlOf(r.xp)} ур.</em><span class="ptime">· ${ago(r.created_at)}</span>${mine || IS_ADMIN ? `<button type="button" class="pdel" aria-label="Удалить">🗑</button>` : ""}</div>
-      <div class="ptext">${esc(r.body).replace(/\n/g, "<br>")}</div>
+      <div class="pb"><div class="phd"><button type="button" class="pnick${isPrem(r.user_id) ? " gold" : ""}" translate="no" data-user="${esc(r.user_id)}">${esc(r.nick)}</button>${premBadge(r.user_id)}<em class="glv">${lvlOf(r.xp)} ур.</em><span class="ptime">· ${ago(r.created_at)}</span>${mine || IS_ADMIN ? `<button type="button" class="pdel" aria-label="Удалить">🗑</button>` : ""}</div>
+      <div class="ptext" translate="no">${esc(r.body).replace(/\n/g, "<br>")}</div>
       ${okImg(r.image) ? `<img class="pimg" alt="" loading="lazy" src="${esc(r.image)}">` : ""}
       <div class="pact"><button type="button" class="pa like" aria-pressed="${!!liked}">${liked ? "❤️" : "🤍"} <b>${r.likes || 0}</b></button><button type="button" class="pa rep">💬 <b>${r.replies || 0}</b></button></div></div></article>`;
   }
@@ -2633,7 +2633,7 @@ const PROF = (() => {
     let req = sb.from("profiles").select("id,nick,avatar,frame,status").order("updated_at", { ascending: false }).limit(24);
     const qq = (q || "").replace(/[%_\\,()]/g, "").trim(); if (qq) req = sb.from("profiles").select("id,nick,avatar,frame,status").ilike("nick", `%${qq}%`).limit(24);
     const { data, error } = await req; if (error){ row.innerHTML = ""; return; }
-    row.innerHTML = (data || []).map(x => `<button type="button" class="plc" data-user="${esc(x.id)}"><span class="ava${frameCls(x.frame)}"><img alt="" loading="lazy" src="${esc(avatarOf(x.avatar))}"></span><b>${esc(x.nick)}</b></button>`).join("") || `<span class="pnone">Никого не нашли</span>`;
+    row.innerHTML = (data || []).map(x => `<button type="button" class="plc" data-user="${esc(x.id)}"><span class="ava${frameCls(x.frame)}"><img alt="" loading="lazy" src="${esc(avatarOf(x.avatar))}"></span><b translate="no">${esc(x.nick)}</b></button>`).join("") || `<span class="pnone">Никого не нашли</span>`;
     row.onclick = e => { const b = e.target.closest("[data-user]"); if (b) openUser(b.dataset.user); };
   }
   async function openThread(id){
@@ -2659,7 +2659,7 @@ const PROF = (() => {
     const dm = await duelMMR(uid);
     const q = fromRow(pr), xp = st ? st.xp : 0, lv = lvlOf(xp), mine = U && uid === U.id, favs = Array.isArray(pr.favs) ? pr.favs.slice(0, 12) : [];
     const box = shell(bnSrc(q.bn), `
-      <div class="phead"><div class="pav${frameCls(q.frame)}"><img alt="" src="${esc(avSrc(q.av))}"></div><div class="pname"><h3 class="${isPrem(uid) ? "gold" : ""}">${esc(q.nick)}${premBadge(uid)} <em class="glv">${lv} ур.</em></h3>${q.st ? `<div class="pst">${esc(q.st)}</div>` : ""}</div></div>
+      <div class="phead"><div class="pav${frameCls(q.frame)}"><img alt="" src="${esc(avSrc(q.av))}"></div><div class="pname"><h3 translate="no" class="${isPrem(uid) ? "gold" : ""}">${esc(q.nick)}${premBadge(uid)} <em class="glv">${lv} ур.</em></h3>${q.st ? `<div class="pst">${esc(q.st)}</div>` : ""}</div></div>
       <div class="pstats"><div class="pstat"><b>${lv}</b><span>уровень</span></div><div class="pstat"><b>${rs ? rs.best : 0}</b><span>рекорд арены</span></div><div class="pstat"><b>${dm ? dm.mmr : "—"}</b><span>MMR дуэлей</span></div></div>
       ${dm && dm.wins + dm.losses > 0 ? `<div class="psec">${medalHTML(dm.mmr)} <small class="pnone">${dm.wins} побед · ${dm.losses} поражений</small></div>` : ""}
       ${favs.length ? `<div class="psec"><h4>Любимые герои</h4>${faces(favs)}</div>` : ""}
@@ -2705,7 +2705,7 @@ const PROF = (() => {
     const { data, error } = await sb.from(cfg[0]).select(cfg[1]).order(cfg[2], { ascending: false }).limit(50);
     if (error){ list.innerHTML = `<div class="gempty">${/relation|does not exist|schema cache/i.test(error.message) ? "Рейтинг ещё не настроен на сервере." : "Не удалось загрузить рейтинг."}</div>`; me.innerHTML = ""; return; }
     const rows = data || [];
-    list.innerHTML = rows.length ? `<ol class="glist rk">${rows.map((r, i) => `<li class="${U && r.user_id === U.id ? "me" : ""}" data-user="${esc(r.user_id)}"><span class="gr">${i < 3 ? ["🥇","🥈","🥉"][i] : i + 1}</span><span class="ga${frameCls(r.frame)}"><img alt="" loading="lazy" src="${esc(avatarOf(r.avatar))}"></span><span class="gn${isPrem(r.user_id) ? " gold" : ""}">${premBadge(r.user_id)}${esc(r.nick)}<span class="rk-sub">${cfg[4](r)}</span></span>${cfg[3](r)}</li>`).join("")}</ol>`
+    list.innerHTML = rows.length ? `<ol class="glist rk">${rows.map((r, i) => `<li class="${U && r.user_id === U.id ? "me" : ""}" data-user="${esc(r.user_id)}"><span class="gr">${i < 3 ? ["🥇","🥈","🥉"][i] : i + 1}</span><span class="ga${frameCls(r.frame)}"><img alt="" loading="lazy" src="${esc(avatarOf(r.avatar))}"></span><span translate="no" class="gn${isPrem(r.user_id) ? " gold" : ""}">${premBadge(r.user_id)}${esc(r.nick)}<span class="rk-sub">${cfg[4](r)}</span></span>${cfg[3](r)}</li>`).join("")}</ol>`
       : `<div class="gempty">${rkKind === "duel" ? "Пока никто не сыграл рейтинговую дуэль. Сыграй онлайн с другом!" : "Пока пусто — будь первым!"}</div>`;
     list.querySelectorAll("li[data-user]").forEach(li => li.onclick = () => openUser(li.dataset.user));
     // моё место
@@ -2825,7 +2825,7 @@ const PROF = (() => {
     const best = runs.reduce((s, r) => Math.max(s, r.score), 0), mine = U && U.id === uid;
     const streak = (() => { let n = 0, k = null; for (const m of matches){ if (!m.winner) continue; const w = m.winner === uid; if (k == null) k = w; if (w !== k) break; n++; } const pl = (n, a, b, c) => n % 10 === 1 && n % 100 !== 11 ? a : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? b : c; return n > 1 ? (k ? `🔥 ${n} ${pl(n, "победа", "победы", "побед")} подряд` : `🧊 ${n} ${pl(n, "поражение", "поражения", "поражений")} подряд`) : ""; })();
     const box = shell(bnSrc(q.bn), `
-      <div class="phead"><div class="pav${frameCls(q.frame)}"><img alt="" src="${esc(avSrc(q.av))}"></div><div class="pname"><h3 class="${isPrem(uid) ? "gold" : ""}">${esc(q.nick)}${premBadge(uid)}</h3><div class="pst">${W + L ? medalHTML(mmr) : "Ещё не играл рейтинговых дуэлей"}${streak ? ` <small class="db-streak">${streak}</small>` : ""}</div></div></div>
+      <div class="phead"><div class="pav${frameCls(q.frame)}"><img alt="" src="${esc(avSrc(q.av))}"></div><div class="pname"><h3 translate="no" class="${isPrem(uid) ? "gold" : ""}">${esc(q.nick)}${premBadge(uid)}</h3><div class="pst">${W + L ? medalHTML(mmr) : "Ещё не играл рейтинговых дуэлей"}${streak ? ` <small class="db-streak">${streak}</small>` : ""}</div></div></div>
       <div class="pstats db-sum"><div class="pstat"><b>${W + L ? mmr : "—"}</b><span>MMR</span></div><div class="pstat"><b class="db-wr ${wrCls(wr)}">${W + L ? wr + "%" : "—"}</b><span>винрейт</span></div><div class="pstat"><b>${W + L}</b><span>матчей</span></div><div class="pstat"><b>${best || "—"}</b><span>рекорд арены</span></div></div>
       ${W + L ? `<div class="psec"><div class="db-wl"><span style="flex:${W || .001}" class="w">${W} побед</span><span style="flex:${L || .001}" class="l">${L} поражений</span></div></div>` : ""}
       ${setupMissing ? `<div class="psec"><div class="pnone">Подробная статистика ещё не настроена на сервере.</div></div>` : ""}
@@ -2867,7 +2867,7 @@ const PROF = (() => {
   }
   const PLANS = [{ k: "m1", t: "1 месяц", mo: 1, rub: 99, stars: 59, usd: 1.25 }, { k: "m6", t: "6 месяцев", mo: 6, rub: 499, stars: 299, usd: 6.25, off: "−16%" }, { k: "y1", t: "1 год", mo: 12, rub: 799, stars: 499, usd: 9.99, off: "−33%", best: 1 }];
   const CUR = { uah: ["₴", "грн", [49, 249, 399]], rub: ["₽", "руб", [99, 499, 799]], eur: ["€", "евро", [1.19, 5.99, 9.49]], usd: ["$", "долл", [1.25, 6.25, 9.99]] };
-  const curDef = () => { const l = typeof I18N !== "undefined" ? I18N.get() : "ru"; return l === "uk" ? "uah" : l === "ru" ? "rub" : l === "en" || l === "pt" ? "usd" : "eur"; };
+  const curDef = () => { const l = typeof I18N !== "undefined" ? I18N.get() : "ru"; return l === "uk" ? "uah" : l === "ru" ? "rub" : ["de", "es", "fr", "it", "pl"].includes(l) ? "eur" : "usd"; };
   let curK = (() => { try { const c = localStorage.getItem("ub-cur"); return CUR[c] ? c : ""; } catch(e) { return ""; } })();
   const cur = () => CUR[curK] ? curK : curDef();
   const money = (v, fine) => { const c = CUR[cur()]; const s = v % 1 || (fine && c[2][0] < 5) ? v.toFixed(2).replace(".", ",") : String(Math.round(v)); return c[0] === "$" || c[0] === "€" ? c[0] + s : s + " " + c[0]; };
@@ -3016,13 +3016,13 @@ const PROF = (() => {
     if (!box.isConnected) return;
     if (error){ el.innerHTML = `<div class="gempty">${supErr(error.message)}</div>`; return; }
     const rows = (data || []).sort((a, b) => (b.unread > 0) - (a.unread > 0) || new Date(b.last_at) - new Date(a.last_at));
-    el.innerHTML = rows.length ? `<div class="sup-threads">${rows.map(r => `<button type="button" class="sup-th${r.unread ? " new" : ""}" data-u="${esc(r.user_id)}"><span class="ga${frameCls(r.frame)}"><img alt="" loading="lazy" src="${esc(avatarOf(r.avatar))}"></span><span class="sup-thb"><b>${esc(r.nick || "Игрок без профиля")}${premBadge(r.user_id)}</b><small>${r.last_sender === "admin" ? "Ты: " : ""}${esc(String(r.last_body || "").slice(0, 80))}</small></span><span class="sup-thm"><small>${ago(r.last_at)}</small>${r.unread ? `<em>${r.unread}</em>` : ""}</span></button>`).join("")}</div>` : `<div class="gempty">Обращений пока нет 🎉</div>`;
+    el.innerHTML = rows.length ? `<div class="sup-threads">${rows.map(r => `<button type="button" class="sup-th${r.unread ? " new" : ""}" data-u="${esc(r.user_id)}"><span class="ga${frameCls(r.frame)}"><img alt="" loading="lazy" src="${esc(avatarOf(r.avatar))}"></span><span class="sup-thb"><b translate="no">${esc(r.nick || "Игрок без профиля")}${premBadge(r.user_id)}</b><small>${r.last_sender === "admin" ? "Ты: " : ""}${esc(String(r.last_body || "").slice(0, 80))}</small></span><span class="sup-thm"><small>${ago(r.last_at)}</small>${r.unread ? `<em>${r.unread}</em>` : ""}</span></button>`).join("")}</div>` : `<div class="gempty">Обращений пока нет 🎉</div>`;
     el.querySelectorAll("[data-u]").forEach(b => b.onclick = () => thread(b.dataset.u, true));
   }
   async function thread(uid, asAdmin){
     let nick = "", av = "";
     if (asAdmin){ try { const { data } = await sb.from("profiles").select("nick,avatar,frame").eq("id", uid).maybeSingle(); if (data){ nick = data.nick; av = data.avatar; } } catch(e) {} }
-    const box = shell("", `<div class="sup-head">${asAdmin ? `<button type="button" class="sup-back" id="supBack">← Все обращения</button><h3>${esc(nick || "Игрок")}</h3><small>Ответ увидит только этот игрок.</small>` : `<h3>💬 Поддержка 1x6</h3><small>Вопрос, баг или идея — пиши. Ответим здесь же, обычно в течение дня.</small>`}</div>
+    const box = shell("", `<div class="sup-head">${asAdmin ? `<button type="button" class="sup-back" id="supBack">← Все обращения</button><h3 translate="no">${esc(nick || "Игрок")}</h3><small>Ответ увидит только этот игрок.</small>` : `<h3>💬 Поддержка 1x6</h3><small>Вопрос, баг или идея — пиши. Ответим здесь же, обычно в течение дня.</small>`}</div>
       <div class="sup-list" id="supList"><div class="feed-sk"></div></div>
       <form class="sup-form" id="supF"><textarea maxlength="2000" rows="1" placeholder="${asAdmin ? "Ответ игроку…" : "Напиши сообщение…"}"></textarea><button type="submit" class="btn btn-primary" aria-label="Отправить" disabled>➤</button></form>
       <div class="sup-err" id="supE" hidden></div>`, asAdmin ? "Диалог с игроком" : "Поддержка");
@@ -3031,7 +3031,7 @@ const PROF = (() => {
     if (asAdmin) box.querySelector("#supBack").onclick = () => { supView = null; inbox(); };
     let lastId = 0, n = 0;
     const mine = m => asAdmin ? m.sender === "admin" : m.sender === "user";
-    const bubble = m => `<div class="sup-msg ${mine(m) ? "me" : "them"}${m.sender === "admin" ? " adm" : ""}">${!mine(m) ? `<span class="sup-who">${m.sender === "admin" ? "🛡️ Поддержка" : esc(nick || "Игрок")}</span>` : ""}<p>${esc(m.body).replace(/\n/g, "<br>")}</p><small>${new Date(m.created_at).toLocaleString("ru-RU", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}${mine(m) && m.read ? " · прочитано" : ""}</small></div>`;
+    const bubble = m => `<div class="sup-msg ${mine(m) ? "me" : "them"}${m.sender === "admin" ? " adm" : ""}">${!mine(m) ? `<span class="sup-who">${m.sender === "admin" ? "🛡️ Поддержка" : esc(nick || "Игрок")}</span>` : ""}<p translate="no">${esc(m.body).replace(/\n/g, "<br>")}</p><small>${new Date(m.created_at).toLocaleString("ru-RU", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}${mine(m) && m.read ? " · прочитано" : ""}</small></div>`;
     async function reload(){
       const { data, error } = await sb.from("support_messages").select("*").eq("user_id", uid).order("created_at", { ascending: true }).limit(300);
       if (!box.isConnected) return;
@@ -3935,7 +3935,7 @@ const GAME = (() => {
       if (r.error){ el.innerHTML = `<div class="gempty">${esc(r.error)}</div>`; return; }
       const me = PROF.user(), rows = r.rows || [];
       if (!rows.length){ el.innerHTML = `<div class="gempty">Пока никого нет — стань первым!</div>`; return; }
-      el.innerHTML = `<ol class="glist">${rows.map((x, i) => `<li class="${me && x.user_id === me.id ? "me" : ""}"><span class="gr">${i < 3 ? ["🥇","🥈","🥉"][i] : i + 1}</span><span class="ga${PROF.frameCls(x.frame)}"><img alt="" loading="lazy" src="${esc(PROF.avatarOf(x.avatar))}"></span><span class="gn">${esc(x.nick)}${x.xp != null ? ` <em class="glv">${PROF.lvlOf(x.xp)} ур.</em>` : ""}</span><b class="gp">${x.best}</b></li>`).join("")}</ol>
+      el.innerHTML = `<ol class="glist">${rows.map((x, i) => `<li class="${me && x.user_id === me.id ? "me" : ""}"><span class="gr">${i < 3 ? ["🥇","🥈","🥉"][i] : i + 1}</span><span class="ga${PROF.frameCls(x.frame)}"><img alt="" loading="lazy" src="${esc(PROF.avatarOf(x.avatar))}"></span><span class="gn" translate="no">${esc(x.nick)}${x.xp != null ? ` <em class="glv">${PROF.lvlOf(x.xp)} ур.</em>` : ""}</span><b class="gp">${x.best}</b></li>`).join("")}</ol>
         ${me ? "" : `<button type="button" class="gchg" id="gLogin2">Войди, чтобы попасть в топ</button>`}`;
       const l2 = el.querySelector("#gLogin2"); if (l2) l2.onclick = () => PROF.open();
       el.querySelectorAll(".glist li").forEach((li, i) => { li.style.cursor = "pointer"; li.onclick = () => PROF.openUser(rows[i].user_id); });
@@ -5294,7 +5294,7 @@ async function installApp(){
 
 /* ---------- языки сайта ---------- */
 const I18N = (() => {
-  const LANGS = [["ru", "Русский", "ru"], ["uk", "Українська", "ua"], ["en", "English", "gb"], ["es", "Español", "es"], ["pt", "Português", "br"], ["de", "Deutsch", "de"], ["pl", "Polski", "pl"], ["tr", "Türkçe", "tr"]];
+  const LANGS = [["ru", "Русский", "ru"], ["uk", "Українська", "ua"], ["en", "English", "gb"], ["es", "Español", "es"], ["pt", "Português", "br"], ["de", "Deutsch", "de"], ["pl", "Polski", "pl"], ["tr", "Türkçe", "tr"], ["fr", "Français", "fr"], ["it", "Italiano", "it"], ["kk", "Қазақша", "kz"], ["zh", "中文", "cn"], ["ja", "日本語", "jp"], ["ko", "한국어", "kr"]];
   // [ru, uk, en, es, pt, de, pl, tr]
   const ROWS = [
 ["Тема героя","Тема героя","Hero theme","Tema de héroe","Tema de herói","Helden-Design","Motyw bohatera","Kahraman teması"],
@@ -5436,44 +5436,58 @@ const I18N = (() => {
 ["Персональный разбор","Персональний розбір","Personal analysis","Análisis personal","Análise pessoal","Persönliche Analyse","Analiza osobista","Kişisel analiz"]
   ];
   const IDX = { ru: 0, uk: 1, en: 2, es: 3, pt: 4, de: 5, pl: 6, tr: 7 };
-  const MAP = {}; LANGS.forEach(([c]) => { if (c !== "ru") MAP[c] = new Map(); });
-  ROWS.forEach(r => { for (const c in MAP) MAP[c].set(r[0], r[IDX[c]]); });
+  const MAP = {}, RX = {}, LOADED = {}, HAS = c => LANGS.some(x => x[0] === c);
+  LANGS.forEach(([c]) => { if (c !== "ru") MAP[c] = new Map(); });
+  ROWS.forEach(r => { for (const c in MAP) if (IDX[c] != null) MAP[c].set(r[0], r[IDX[c]]); });
+  const esc = x => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  function buildRx(c){ const keys = [...MAP[c].keys()].filter(k => k.length > 1 || /[дч]/.test(k)).sort((a, b) => b.length - a.length);
+    RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
+  function load(c){
+    if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=2").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+  }
+  function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
+    const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
+    const out = key.replace(rx, k => m.get(k) || k); return out !== key ? out : null; }
   let lang = "ru";
   try { lang = localStorage.getItem("ub-lang") || ""; } catch(e) {}
-  if (!IDX.hasOwnProperty(lang)){ const n = (navigator.language || "ru").slice(0, 2).toLowerCase(); lang = IDX.hasOwnProperty(n) ? n : n === "be" || n === "kk" ? "ru" : "en"; }
+  if (!HAS(lang)){ const n = (navigator.language || "ru").slice(0, 2).toLowerCase(); lang = HAS(n) ? n : n === "be" ? "ru" : "en"; }
   const orig = new WeakMap(), origAttr = new WeakMap();
   const ATTRS = ["placeholder", "aria-label", "title"];
   function trText(node){
     const raw = orig.has(node) ? orig.get(node) : node.nodeValue;
     const key = raw.trim(); if (!key || !/[А-Яа-яЁё]/.test(key)) return;
     if (!orig.has(node)) orig.set(node, raw);
-    const tr = lang === "ru" ? null : MAP[lang].get(key);
-    const want = tr ? raw.replace(key, tr) : raw;
+    const t = lang === "ru" ? null : tr(lang, key);
+    const want = t ? raw.replace(key, t) : raw;
     if (node.nodeValue !== want) node.nodeValue = want;
   }
   function trEl(el){
-    for (const a of ATTRS){ if (!el.hasAttribute || !el.hasAttribute(a)) continue;
+    for (const a of ATTRS){ if (!el.hasAttribute || !el.hasAttribute(a) || (a === "title" && el.id === "langBtn")) continue;
       let m = origAttr.get(el); if (!m){ m = {}; origAttr.set(el, m); }
       const raw = m[a] != null ? m[a] : el.getAttribute(a); if (!/[А-Яа-яЁё]/.test(raw)) continue; if (m[a] == null) m[a] = raw;
-      const tr = lang === "ru" ? null : MAP[lang].get(raw.trim()); const want = tr || raw; if (el.getAttribute(a) !== want) el.setAttribute(a, want); }
+      const t = lang === "ru" ? null : tr(lang, raw.trim()); const want = t || raw; if (el.getAttribute(a) !== want) el.setAttribute(a, want); }
   }
   function walk(root){
     if (!root) return;
-    if (root.nodeType === 3) return trText(root);
-    if (root.nodeType !== 1 || /^(SCRIPT|STYLE|TEXTAREA|CANVAS|SVG)$/i.test(root.nodeName)) return;
+    if (root.nodeType === 3){ const pe = root.parentElement; if (pe && pe.closest('[translate="no"]')) return; return trText(root); }
+    if (root.nodeType !== 1 || /^(SCRIPT|STYLE|TEXTAREA|CANVAS|SVG)$/i.test(root.nodeName) || root.closest('[translate="no"]')) return;
     trEl(root);
-    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT, { acceptNode: n => n.nodeType === 1 && /^(SCRIPT|STYLE|TEXTAREA)$/i.test(n.nodeName) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT, { acceptNode: n => n.nodeType === 1 && (/^(SCRIPT|STYLE|TEXTAREA)$/i.test(n.nodeName) || n.getAttribute("translate") === "no") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
     let n; while ((n = w.nextNode())) n.nodeType === 3 ? trText(n) : trEl(n);
   }
   let pend = new Set(), raf = 0;
   const obs = new MutationObserver(ms => { if (lang === "ru" && !document.documentElement.dataset.trd) return; ms.forEach(m => { if (m.type === "characterData") pend.add(m.target); m.addedNodes && m.addedNodes.forEach(x => pend.add(x)); });
     if (!raf) raf = requestAnimationFrame(() => { raf = 0; const list = [...pend]; pend.clear(); obs.disconnect(); list.forEach(walk); start(); }); });
   const start = () => obs.observe(document.body, { childList: true, subtree: true, characterData: true });
+  function apply(){ obs.disconnect(); walk(document.body); start(); }
   function set(l, save){
-    if (!IDX.hasOwnProperty(l)) return; lang = l; if (save){ try { localStorage.setItem("ub-lang", l); } catch(e) {} }
+    if (!HAS(l)) return; lang = l; if (save){ try { localStorage.setItem("ub-lang", l); } catch(e) {} }
     document.documentElement.lang = l; if (l !== "ru") document.documentElement.dataset.trd = "1";
-    obs.disconnect(); walk(document.body); start(); drawBtn();
+    if (l !== "ru" && !RX.hasOwnProperty(l)) buildRx(l);
+    apply(); drawBtn();
     document.dispatchEvent(new CustomEvent("langchange", { detail: l }));
+    load(l).then(() => { if (lang === l){ apply(); document.dispatchEvent(new CustomEvent("langchange", { detail: l })); } });
   }
   const flag = cc => `<img alt="" src="https://flagcdn.com/w40/${cc}.png" srcset="https://flagcdn.com/w80/${cc}.png 2x" width="22" height="16" loading="lazy">`;
   function drawBtn(){ const b = document.getElementById("langBtn"); if (!b) return; const L = LANGS.find(x => x[0] === lang); b.innerHTML = flag(L[2]); b.title = L[1];
@@ -5482,12 +5496,14 @@ const I18N = (() => {
     const b = document.getElementById("langBtn"), pop = document.getElementById("langPop");
     pop.innerHTML = LANGS.map(([c, n, cc]) => `<button type="button" data-l="${c}" aria-pressed="${c === lang}">${flag(cc)}<span>${n}</span></button>`).join("");
     const close = () => { pop.hidden = true; b.setAttribute("aria-expanded", "false"); };
-    b.onclick = e => { e.stopPropagation(); pop.hidden = !pop.hidden; b.setAttribute("aria-expanded", String(!pop.hidden)); };
+    const place = () => { const r = b.getBoundingClientRect(), w = pop.offsetWidth; pop.style.top = (r.bottom + 8) + "px"; pop.style.left = Math.max(12, Math.min(innerWidth - w - 12, r.right - w)) + "px"; };
+    b.onclick = e => { e.stopPropagation(); pop.hidden = !pop.hidden; b.setAttribute("aria-expanded", String(!pop.hidden)); if (!pop.hidden) place(); };
+    addEventListener("scroll", () => { if (!pop.hidden) place(); }, { passive: true });
     pop.onclick = e => { e.stopPropagation(); const x = e.target.closest("[data-l]"); if (!x) return; set(x.dataset.l, true); close(); };
     document.addEventListener("click", () => { if (!pop.hidden) close(); });
     set(lang, false);
   }
-  return { init, set, get: () => lang, t: s => lang === "ru" ? s : (MAP[lang].get(s) || s) };
+  return { init, set, get: () => lang, t: s => lang === "ru" ? s : (tr(lang, s) || s) };
 })();
 
 /* ---------- вкладки ---------- */
