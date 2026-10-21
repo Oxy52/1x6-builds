@@ -1020,6 +1020,35 @@
   .inst h3 { font-family: var(--display); font-size: 22px; margin: 14px 0 8px; } .inst p { color: var(--muted); font-size: 14.5px; line-height: 1.5; margin: 8px 0; }
   .inst ol { text-align: left; margin: 12px auto; max-width: 340px; padding-left: 20px; display: grid; gap: 8px; font-size: 14.5px; line-height: 1.45; } .inst-k { display: inline-block; padding: 0 6px; border-radius: 6px; background: var(--bg-soft); border: 1px solid var(--line); }
   .inst-n { font-size: 12.5px !important; }
+  /* ---- 1x6+: что мотивирует купить ---- */
+  .post.prem { border-color: rgba(243,195,90,.55) !important; box-shadow: 0 0 0 1px rgba(243,195,90,.18), 0 10px 30px -18px rgba(243,195,90,.7); background: linear-gradient(180deg, rgba(243,195,90,.07), transparent 60%); }
+  .pglow .pcover { position: relative; } .pglow .pcover::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(105deg, transparent 35%, rgba(255,236,170,.35) 50%, transparent 65%); background-size: 250% 100%; animation: pglow 3.2s ease-in-out infinite; mix-blend-mode: screen; }
+  .pglow .pcover.plain { background: linear-gradient(120deg, #3a2a05, #f3c35a 50%, #3a2a05); }
+  @keyframes pglow { from { background-position: 120% 0; } to { background-position: -120% 0; } }
+  .pglow .pav { box-shadow: 0 0 0 3px rgba(243,195,90,.7), 0 0 30px rgba(243,195,90,.5); }
+  .thpt { padding: 0 2px 8px; } .thpt small { display: block; font-size: 11px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; color: #f3c35a; margin: 2px 0 6px; }
+  .thpt > div { display: flex; gap: 6px; flex-wrap: wrap; }
+  .thp { display: grid; justify-items: center; gap: 3px; border: 0; background: none; color: inherit; font: inherit; cursor: pointer; padding: 2px; }
+  .thp i { width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--a), var(--b)); box-shadow: 0 0 0 2px rgba(255,255,255,.12); position: relative; }
+  .thp i::after { content: "👑"; position: absolute; right: -4px; bottom: -4px; font-size: 11px; }
+  .thp[aria-pressed="true"] i { box-shadow: 0 0 0 2px #fff, 0 0 14px var(--a); } .thp span { font-size: 9.5px; color: var(--muted); }
+  .thsw { display: block; width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--a), var(--b)); }
+  :root[data-pt="gold"] .btn-primary { background: linear-gradient(135deg, #fff1b8, #f3c35a); color: #1a1205; }
+  :root[data-pt="arcana"] body { background-image: radial-gradient(60% 40% at 50% -10%, rgba(201,123,255,.18), transparent); }
+  :root[data-pt="neon"] .tab[aria-selected="true"] { box-shadow: 0 0 18px -4px #25f4ee; }
+  :root[data-pt="inferno"] body { background-image: radial-gradient(60% 40% at 50% -10%, rgba(255,90,31,.16), transparent); }
+  :root[data-pt="ice"] body { background-image: radial-gradient(60% 40% at 50% -10%, rgba(138,216,255,.14), transparent); }
+  .pm-trial, .pm-refc { display: grid; gap: 6px; padding: 16px; border-radius: 16px; }
+  .pm-trial { border: 1px solid rgba(243,195,90,.6); background: linear-gradient(135deg, rgba(243,195,90,.18), rgba(255,154,61,.06)); box-shadow: 0 14px 40px -24px rgba(243,195,90,.9); }
+  .pm-trial b, .pm-refc b { font-size: 16px; } .pm-trial small, .pm-refc small { color: var(--muted); font-size: 13px; line-height: 1.45; } .pm-trial .btn { margin-top: 4px; }
+  .pm-refc { border: 1px solid var(--line); background: var(--bg-soft); }
+  .pm-refp { display: flex; align-items: center; gap: 6px; margin: 4px 0; } .pm-refp i { flex: 1; height: 8px; border-radius: 99px; background: var(--bg); border: 1px solid var(--line); } .pm-refp i.on { background: linear-gradient(90deg, #f3c35a, #ff9a3d); border-color: transparent; } .pm-refp span { font-weight: 800; font-size: 13px; }
+  .pm-refl { display: flex; gap: 6px; } .pm-refl input { flex: 1; min-width: 0; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); font: inherit; font-size: 12.5px; padding: 0 10px; height: 44px; } .pm-refl .btn { flex: none; }
+  .pm-cmp { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .pm-cr { display: grid; grid-template-columns: 1fr 86px 86px; align-items: center; padding: 9px 12px; font-size: 13px; border-top: 1px solid color-mix(in srgb, var(--line) 60%, transparent); }
+  .pm-cr:first-child { border-top: 0; } .pm-cr > span:nth-child(2) { color: var(--muted); text-align: center; } .pm-cr > b { text-align: center; color: #f3c35a; }
+  .pm-ch { background: var(--bg-soft); font-weight: 800; font-size: 12px; } .pm-ch > span:nth-child(3) { text-align: center; color: #f3c35a; }
+  .chc-hn { font-weight: 600; color: var(--muted); font-size: 12px; margin-left: 6px; } .chc-more { border: 0; background: none; color: #f3c35a; font: inherit; font-weight: 700; cursor: pointer; padding: 0; }
   /* ---- подписка 1x6+ ---- */
   .pbadge { display: inline-block; margin-left: 4px; font-size: .85em; filter: drop-shadow(0 0 6px rgba(243,195,90,.7)); vertical-align: 1px; }
   .gn .pbadge { margin: 0 4px 0 0; }
@@ -1355,6 +1384,7 @@
       <button type="button" class="thbtn" id="thBtn" aria-label="Тема сайта: выбрать героя" aria-expanded="false" aria-controls="thPop"><span class="thdef">🎨</span></button>
       <div class="thpop" id="thPop" role="dialog" aria-label="Тема сайта" hidden>
         <div class="thhead"><b>Тема героя</b><button type="button" class="threset" id="thReset">Обычная</button></div>
+        <div class="thpt" id="thPrem"></div>
         <div class="thgrid" id="thGrid"></div>
       </div>
     </div>
@@ -1962,10 +1992,19 @@ document.getElementById("gameBtn").onclick = () => GAME.open();
 (() => {
   const btn = document.getElementById("thBtn"), pop = document.getElementById("thPop"), gridT = document.getElementById("thGrid"), root = document.documentElement;
   const hth = document.getElementById("heroTh"), himg = document.getElementById("heroThImg");
+  const PT = [["gold", "Золото", "#f3c35a", "#2a1d04"], ["arcana", "Аркана", "#c97bff", "#170a2c"], ["ice", "Лёд", "#8ad8ff", "#05202e"], ["inferno", "Инферно", "#ff5a1f", "#2a0805"], ["neon", "Неон", "#25f4ee", "#2b0b3d"]];
+  const ptEl = document.getElementById("thPrem");
+  ptEl.innerHTML = `<small>👑 Темы 1x6+</small><div>${PT.map(x => `<button type="button" class="thp" data-p="${x[0]}" title="${x[1]}" aria-pressed="false" style="--a:${x[2]};--b:${x[3]}"><i></i><span>${x[1]}</span></button>`).join("")}</div>`;
+  const premMe = () => typeof PROF !== "undefined" && PROF.isPremMe && PROF.isPremMe();
   gridT.innerHTML = HEROES.map(h => `<button type="button" class="thf" data-s="${h.slug}" style="${vars(h)}" title="${h.en}" aria-label="Тема ${h.en}" aria-pressed="false"><img alt="" loading="lazy" src="face/${h.slug}.webp"></button>`).join("");
   function apply(slug, anim){
-    const h = HEROES.find(x => x.slug === slug);
+    const h = HEROES.find(x => x.slug === slug), pt = /^p:/.test(slug || "") ? PT.find(x => "p:" + x[0] === slug) : null;
     gridT.querySelectorAll(".thf").forEach(b => b.setAttribute("aria-pressed", b.dataset.s === slug));
+    ptEl.querySelectorAll(".thp").forEach(b => b.setAttribute("aria-pressed", "p:" + b.dataset.p === slug));
+    if (pt){ root.style.setProperty("--t1", pt[2]); root.style.setProperty("--t2", pt[3]); root.classList.add("themed"); root.dataset.pt = pt[0];
+      btn.innerHTML = `<span class="thsw" style="--a:${pt[2]};--b:${pt[3]}"></span>`; if (anim){ btn.classList.remove("pop"); void btn.offsetWidth; btn.classList.add("pop"); } hth.classList.remove("on");
+      const meta = document.querySelector('meta[name="theme-color"]'); if (meta) meta.content = pt[3]; return; }
+    delete root.dataset.pt;
     if (!h){ root.classList.remove("themed"); root.style.removeProperty("--t1"); root.style.removeProperty("--t2"); btn.innerHTML = '<span class="thdef">🎨</span>'; hth.classList.remove("on"); return; }
     const [, c1, c2] = themeOf(h);
     root.style.setProperty("--t1", c1); root.style.setProperty("--t2", c2); root.classList.add("themed");
@@ -1983,6 +2022,10 @@ document.getElementById("gameBtn").onclick = () => GAME.open();
   document.addEventListener("keydown", e => { if (e.key === "Escape" && !pop.hidden) { close(); btn.focus(); } });
   gridT.onclick = e => { const b = e.target.closest(".thf"); if (!b) return; cur = b.dataset.s; try { localStorage.setItem("ub-theme", cur); } catch(_) {} apply(cur, true); setTimeout(close, 180); };
   document.getElementById("thReset").onclick = () => { cur = ""; try { localStorage.removeItem("ub-theme"); } catch(_) {} apply("", true); close(); };
+  ptEl.onclick = e => { const b = e.target.closest(".thp"); if (!b) return;
+    if (!premMe()){ close(); PROF.premium(); return; }
+    cur = "p:" + b.dataset.p; try { localStorage.setItem("ub-theme", cur); } catch(_) {} apply(cur, true); setTimeout(close, 180); };
+  window.__thCheck = () => { if (/^p:/.test(cur) && !premMe()){ cur = ""; try { localStorage.removeItem("ub-theme"); } catch(_) {} apply("", false); } };
 })();
 /* ---------- заставка ---------- */
 (() => { const sp = document.getElementById("splash"); if (!sp) return;
@@ -2014,7 +2057,7 @@ const PROF = (() => {
   const provName = u => { if (u && u.user_metadata && u.user_metadata.provider === "telegram") return "Telegram"; const p = u && u.app_metadata && u.app_metadata.provider; return p === "google" ? "Google" : p === "discord" ? "Discord" : p === "email" ? "почта" : p || ""; };
 
   /* ---------- верхняя панель и меню ---------- */
-  function topbar(){
+  function topbar(){ setTimeout(() => { try { claimRef(); } catch(e) {} }, 0);
     const b = document.getElementById("pBtn"), ma = document.getElementById("mpAv"), mn = document.getElementById("mpName");
     if (P){ b.className = "pbtn has" + frameCls(P.frame); b.innerHTML = `<img alt="" src="${esc(avSrc(P.av))}">${CLOUD && ST ? `<span class="lvb">${lvlOf(ST.xp)}</span>` : ""}`; b.setAttribute("aria-label", `Профиль ${P.nick}`);
       ma.innerHTML = `<img alt="" src="${esc(avSrc(P.av))}">`; mn.textContent = P.nick; }
@@ -2177,6 +2220,7 @@ const PROF = (() => {
       <div id="pConf"></div>`);
     box.querySelectorAll(".pfaces button").forEach(b => b.onclick = () => openHero(H(b.dataset.s)));
     box.querySelector("#pEdit").onclick = () => edit(false);
+    if (CLOUD && U && isPrem(U.id)) box.classList.add("pglow");
     { const pp = box.querySelector("#pPrem"); if (pp) pp.onclick = () => premium(); }
     { const pb = box.querySelector("#pPub"); if (pb) pb.onclick = () => openUser(U.id); }
     if (CLOUD && U) fillAch(box);
@@ -2291,7 +2335,7 @@ const PROF = (() => {
 
   async function loadUser(u){
     U = u || null;
-    if (!U){ P = null; ST = null; claimedFor = null; IS_ADMIN = false; topbar(); supInit(); if (typeof CHC !== "undefined") CHC.cta(); feedLoaded = false; if (typeof curTab !== "undefined" && curTab === "feed") setTimeout(() => feedOpen(true), 0); return; }
+    if (!U){ P = null; ST = null; claimedFor = null; IS_ADMIN = false; topbar(); supInit(); if (window.__thCheck) setTimeout(window.__thCheck, 0); if (typeof CHC !== "undefined") CHC.cta(); feedLoaded = false; if (typeof curTab !== "undefined" && curTab === "feed") setTimeout(() => feedOpen(true), 0); return; }
     const { data, error } = await sb.from("profiles").select("*").eq("id", U.id).maybeSingle();
     if (error){ P = null; topbar(); return; }
     if (data){
@@ -2302,7 +2346,7 @@ const PROF = (() => {
       if (FAV.size !== server.length) syncFavs();
     } else P = null;
     topbar(); if (typeof CHC !== "undefined") CHC.cta();
-    checkAdmin().then(supInit); feedLoaded = false; if (typeof curTab !== "undefined" && curTab === "feed") setTimeout(() => feedOpen(true), 0);
+    checkAdmin().then(supInit); feedLoaded = false; loadPrem().then(() => { if (window.__thCheck) window.__thCheck(); }); if (typeof curTab !== "undefined" && curTab === "feed") setTimeout(() => feedOpen(true), 0);
     if (P) claimDaily(); else { try { const r0 = await sb.from("user_stats").select("xp,streak,best_streak").eq("user_id", U.id).maybeSingle(); if (r0.data) ST = r0.data; } catch(e) {} }
     let pending = false; try { pending = sessionStorage.getItem("ub-auth-pending") === "1"; sessionStorage.removeItem("ub-auth-pending"); } catch(e) {}
     if (!P && !autoOpened && (pending || HAD_CODE)){ autoOpened = true; edit(true); }
@@ -2457,7 +2501,7 @@ const PROF = (() => {
   const avaHTML = (av, frame, uid, cls) => `<button type="button" class="ava ${cls || ""}${frameCls(frame)}" data-user="${esc(uid)}" aria-label="Профиль"><img alt="" loading="lazy" src="${esc(avatarOf(av))}"></button>`;
   function postHTML(r, liked){
     const mine = U && r.user_id === U.id;
-    return `<article class="post" data-id="${r.id}" data-uid="${esc(r.user_id)}">${avaHTML(r.avatar, r.frame, r.user_id)}
+    return `<article class="post${isPrem(r.user_id) ? " prem" : ""}" data-id="${r.id}" data-uid="${esc(r.user_id)}">${avaHTML(r.avatar, r.frame, r.user_id)}
       <div class="pb"><div class="phd"><button type="button" class="pnick${isPrem(r.user_id) ? " gold" : ""}" data-user="${esc(r.user_id)}">${esc(r.nick)}</button>${premBadge(r.user_id)}<em class="glv">${lvlOf(r.xp)} ур.</em><span class="ptime">· ${ago(r.created_at)}</span>${mine || IS_ADMIN ? `<button type="button" class="pdel" aria-label="Удалить">🗑</button>` : ""}</div>
       <div class="ptext">${esc(r.body).replace(/\n/g, "<br>")}</div>
       ${okImg(r.image) ? `<img class="pimg" alt="" loading="lazy" src="${esc(r.image)}">` : ""}
@@ -2580,6 +2624,7 @@ const PROF = (() => {
       <div class="pacts"><button type="button" class="btn btn-primary" id="upStats">📊 Статистика</button>${mine ? `<button type="button" class="btn btn-ghost" id="upEdit">Редактировать профиль</button>` : ""}</div>
       <div class="psec"><h4>Посты</h4><div id="upPosts"></div></div>`, "Профиль игрока");
     box.querySelectorAll(".pfaces button").forEach(b => b.onclick = () => openHero(H(b.dataset.s)));
+    if (isPrem(uid)) box.classList.add("pglow");
     const ed = box.querySelector("#upEdit"); if (ed) ed.onclick = () => view();
     box.querySelector("#upStats").onclick = () => statsOpen(uid);
     const list = box.querySelector("#upPosts"); wirePosts(list);
@@ -2779,20 +2824,61 @@ const PROF = (() => {
       if (isPrem(uid) && !g.querySelector(".pbadge")){ g.classList.add("gold"); g.insertAdjacentHTML("afterbegin", premBadge(uid)); } });
   }
   const PLANS = [{ k: "m1", t: "1 месяц", rub: 99, stars: 59, usd: 1.25, per: "" }, { k: "m6", t: "6 месяцев", rub: 499, stars: 299, usd: 6.25, per: "83 ₽ в месяц", off: "−16%" }, { k: "y1", t: "1 год", rub: 799, stars: 499, usd: 9.99, per: "67 ₽ в месяц", off: "−33%", best: 1 }];
-  const PERKS = [["👑", "Значок и золотой ник", "Везде: в ленте, рейтинге, профиле и статистике"], ["💠", "3 эксклюзивные рамки", "Корона, Аегис и Сияние — только для 1x6+"], ["⚡", "Опыт ×1.5 и бонус ×2", "Уровни и награды открываются быстрее"], ["✍️", "Длинные посты", "До 1000 символов и 120 постов в день вместо 280 и 40"], ["📊", "Полная статистика", "Вся история матчей и график MMR за всё время"], ["❤️", "Поддержка сайта", "Помогаешь проекту расти: новые кастомки, игры и разделы"]];
+  const PERKS = [["👑", "Значок и золотой ник", "Везде: в ленте, рейтинге, профиле и статистике"], ["✨", "Сияющий профиль и посты", "Золотая подсветка твоих постов и анимированная обложка профиля — видят все"], ["💠", "3 эксклюзивные рамки", "Корона, Аегис и Сияние — только для 1x6+"], ["🎨", "5 премиум-тем сайта", "Золото, Аркана, Лёд, Инферно и Неон"], ["⚡", "Опыт ×1.5 и бонус ×2", "Уровни и награды открываются быстрее"], ["✍️", "Длинные посты", "До 1000 символов и 120 постов в день вместо 280 и 40"], ["📊", "Полная статистика", "Вся история матчей и график MMR за всё время"], ["🧩", "50 билдов CHC в истории", "Вместо 6 — храни все удачные комбинации"]];
+  const CMP = [["Значок 👑 и золотой ник", "—", "✓"], ["Подсветка постов и профиля", "—", "✓"], ["Рамки аватарки", "6", "9"], ["Темы сайта", "54 героя", "+5 премиум"], ["Опыт за действия", "×1", "×1.5"], ["Ежедневный бонус", "×1", "×2"], ["Длина поста", "280", "1000"], ["Постов в день", "40", "120"], ["История матчей", "30", "вся"], ["История билдов CHC", "6", "50"]];
   let payInfo = null, premPlan = "y1", premPoll = 0;
   const untilTxt = uid => new Date(PREM.get(uid)).toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
+  // пробные 3 дня и приглашения друзей
+  async function premExtras(box, on){
+    const tEl = box.querySelector("#pmTrial"), rEl = box.querySelector("#pmRef");
+    if (!CLOUD) return;
+    if (!U){ tEl.innerHTML = `<div class="psec"><div class="pm-trial"><b>🎁 3 дня 1x6+ бесплатно</b><small>Войди или зарегистрируйся — и попробуй все плюшки без оплаты.</small><button type="button" class="btn pm-btn" id="pmTrIn">Войти и попробовать</button></div></div>`; tEl.querySelector("#pmTrIn").onclick = () => auth("in"); return; }
+    if (!on){ try { const { data, error } = await sb.from("payments").select("id").eq("user_id", U.id).limit(1);
+      const { data: sd } = await sb.from("subscriptions").select("user_id").eq("user_id", U.id).maybeSingle();
+      if (!error && !(data || []).length && !sd && box.isConnected){
+        tEl.innerHTML = `<div class="psec"><div class="pm-trial"><b>🎁 3 дня 1x6+ бесплатно</b><small>Попробуй все плюшки прямо сейчас — без оплаты и без привязки карты. Один раз на аккаунт.</small><button type="button" class="btn pm-btn" id="pmTr">Попробовать бесплатно</button></div></div>`;
+        tEl.querySelector("#pmTr").onclick = async e => { e.currentTarget.disabled = true;
+          const { error: er } = await sb.rpc("claim_trial");
+          if (er){ e.currentTarget.disabled = false; tEl.querySelector("small").textContent = /trial_used/.test(er.message) ? "Пробный период уже был на этом аккаунте." : /function|schema cache/i.test(er.message) ? "Пробный период скоро будет доступен." : "Не получилось — попробуй ещё раз."; return; }
+          await loadPrem(); toast(`<span class="tic">🎁</span><span><b>1x6+ на 3 дня включена!</b><small>Загляни в профиль — там новые рамки и темы</small></span>`, "lvl", 5000); premium(); }; } } catch(e) {} }
+    // приглашения
+    let n = null; try { const { count, error } = await sb.from("referrals").select("invitee", { count: "exact", head: true }).eq("inviter", U.id); if (!error) n = count || 0; } catch(e) {}
+    if (n == null || !box.isConnected) return;
+    const link = `${SITE_URL}/?ref=${U.id}`, step = n % 3;
+    rEl.innerHTML = `<div class="psec"><div class="pm-refc"><b>👥 Пригласи 3 друзей — неделя 1x6+ бесплатно</b><small>Друг заходит по твоей ссылке и создаёт профиль: ему +50 опыта, тебе +100. За каждых трёх друзей — 7 дней 1x6+.</small>
+      <div class="pm-refp">${[0, 1, 2].map(i => `<i class="${i < step ? "on" : ""}"></i>`).join("")}<span>${step}/3</span></div>
+      <div class="pm-refl"><input readonly value="${esc(link)}"><button type="button" class="btn btn-primary" id="pmRefSh">📤 Пригласить</button></div>
+      <small>Всего приглашено: ${n}${n >= 3 ? ` · получено недель 1x6+: ${Math.floor(n / 3)}` : ""}</small></div></div>`;
+    rEl.querySelector("#pmRefSh").onclick = () => shareLink(link, "1x6 Билды", "Заходи на 1x6 Билды — сборки Dota 1x6, билды Custom Hero Chaos и мета Dota 2. По моей ссылке +50 опыта!");
+    rEl.querySelector("input").onclick = e => e.target.select();
+  }
+  // реферальная ссылка: ?ref=<id> запоминаем до регистрации
+  try { const r = new URLSearchParams(location.search).get("ref"); if (r && /^[0-9a-f-]{36}$/i.test(r)) localStorage.setItem("ub-ref", r); } catch(e) {}
+  let refTried = false;
+  async function claimRef(){
+    if (refTried || !CLOUD || !U || !P) return; let r = null; try { r = localStorage.getItem("ub-ref"); } catch(e) {}
+    if (!r || r === U.id){ try { localStorage.removeItem("ub-ref"); } catch(e) {} return; }
+    refTried = true;
+    const { error } = await sb.rpc("claim_ref", { p_inviter: r });
+    if (error && /function|schema cache/i.test(error.message)){ refTried = false; return; }
+    try { localStorage.removeItem("ub-ref"); } catch(e) {}
+    if (!error) toast(`<span class="tic">👥</span><span><b>+50 опыта за приглашение!</b><small>Тебя пригласил друг — добро пожаловать</small></span>`, "xp", 4000);
+  }
   async function premium(opts){
     clearInterval(premPoll);
     const me = U && U.id, on = isPrem(me);
     const box = shell("", `<div class="pm-hero"><div class="pm-crown">👑</div><h3>1x6<span>+</span></h3><p>Поддержи сайт и получи плюшки. Без преимуществ в MMR — рейтинг остаётся честным.</p>
         ${on ? `<div class="pm-on">Подписка активна до <b>${untilTxt(me)}</b>. Продлить можно заранее — дни добавятся к сроку</div>` : ""}</div>
+      <div id="pmTrial"></div>
       <div class="psec"><div class="pm-perks">${PERKS.map(p => `<div class="pm-perk"><span>${p[0]}</span><b>${p[1]}</b><small>${p[2]}</small></div>`).join("")}</div></div>
+      <div class="psec"><h4>Бесплатно и с 1x6+</h4><div class="pm-cmp"><div class="pm-cr pm-ch"><span></span><span>Бесплатно</span><span>1x6+</span></div>${CMP.map(r => `<div class="pm-cr"><span>${r[0]}</span><span>${r[1]}</span><b>${r[2]}</b></div>`).join("")}</div></div>
+      <div id="pmRef"></div>
       <div class="psec"><h4>Срок</h4><div class="pm-plans">${PLANS.map(p => `<button type="button" class="pm-plan${p.best ? " best" : ""}" data-k="${p.k}" aria-pressed="${p.k === premPlan}">${p.best ? `<em>Выгоднее всего</em>` : ""}<b>${p.t}</b><span class="pm-rub">${p.rub} ₽</span><small>${p.per || "&nbsp;"}${p.off ? ` <i>${p.off}</i>` : ""}</small></button>`).join("")}</div></div>
       <div class="psec"><h4>Оплата</h4><div id="pmPay"></div><div class="pm-msg" id="pmMsg" hidden></div>
         <p class="pm-note">Рубли указаны примерно: звёзды покупаются в Telegram, карта и крипта списываются в долларах. Подписка сама не продлевается — никаких автосписаний.</p></div>`, "Подписка 1x6+");
     box.classList.add("pm");
     const payEl = box.querySelector("#pmPay"), msg = box.querySelector("#pmMsg");
+    premExtras(box, on);
     const say = (t, cls) => { msg.hidden = !t; msg.className = "pm-msg" + (cls ? " " + cls : ""); msg.innerHTML = t || ""; };
     const drawPay = () => {
       const p = PLANS.find(x => x.k === premPlan), en = (payInfo && payInfo.enabled) || {};
@@ -2960,7 +3046,7 @@ const PROF = (() => {
       return { rows: data || [] };
     } catch(e) { return { error: "Нет связи с сервером." }; }
   }
-  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf, feedOpen, feedMore, openUser, me: () => P ? P.nick : null, rt: () => sb, duelReport, ratingOpen, medalHTML, statsOpen, premium, support, toast, loadPlayers: q => { clearTimeout(plT); plT = setTimeout(() => loadPlayers(q), 250); } };
+  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf, feedOpen, feedMore, openUser, me: () => P ? P.nick : null, rt: () => sb, duelReport, ratingOpen, medalHTML, statsOpen, premium, support, toast, isPrem, isPremMe: () => isPrem(U && U.id), loadPlayers: q => { clearTimeout(plT); plT = setTimeout(() => loadPlayers(q), 250); } };
 })();
 window.__favSync = () => PROF.syncFavs();
 
@@ -4929,7 +5015,8 @@ const CHC = (() => {
   const MAX = 8;
   let ABIL = null;
   const hist = () => { try { return JSON.parse(localStorage.getItem("chc-hist") || "[]"); } catch(e) { return []; } };
-  const saveHist = h => { try { localStorage.setItem("chc-hist", JSON.stringify(h.slice(0, 6))); } catch(e) {} };
+  const histMax = () => (PROF.isPremMe && PROF.isPremMe()) ? 50 : 6;
+  const saveHist = h => { try { localStorage.setItem("chc-hist", JSON.stringify(h.slice(0, histMax()))); } catch(e) {} };
   const heroName = hk => { const h = (D2.heroes() || []).find(x => String(x.name).replace("npc_dota_hero_", "") === hk); return h ? h.localized_name : hk; };
   async function open(){
     const el = document.getElementById("chcBox"); if (!el) return;
@@ -5018,7 +5105,8 @@ const CHC = (() => {
   function drawHist(){
     const el = document.getElementById("chcHist"); if (!el) return; const h = hist();
     const icons = x => x.ab.slice(0, 4).map(k => { const a = (ABIL || []).find(y => y.k === k); return a ? `<img alt="" src="${esc(D2.img(a.i))}">` : ""; }).join("");
-    el.innerHTML = h.length ? `<h5 class="d2-h5">Прошлые билды</h5><div class="chc-hist">${h.map((x, i) => `<button type="button" data-i="${i}"><span class="chc-hi">${icons(x)}</span><b>${esc((x.res && x.res.title) || "Билд")}</b><small>${new Date(x.t).toLocaleDateString("ru-RU", { day: "numeric", month: "short" })} · ${x.ab.length} способн.</small></button>`).join("")}</div>` : "";
+    el.innerHTML = h.length ? `<h5 class="d2-h5">Прошлые билды <small class="chc-hn">${h.length}/${histMax()}${histMax() < 50 ? ` · <button type="button" class="chc-more" id="chcMore">👑 до 50 с 1x6+</button>` : ""}</small></h5><div class="chc-hist">${h.map((x, i) => `<button type="button" data-i="${i}"><span class="chc-hi">${icons(x)}</span><b>${esc((x.res && x.res.title) || "Билд")}</b><small>${new Date(x.t).toLocaleDateString("ru-RU", { day: "numeric", month: "short" })} · ${x.ab.length} способн.</small></button>`).join("")}</div>` : "";
+    { const m = el.querySelector("#chcMore"); if (m) m.onclick = () => PROF.premium(); }
     el.querySelectorAll("[data-i]").forEach(b => b.onclick = () => { const x = h[+b.dataset.i];
       S.ab = x.ab.map(k => (ABIL || []).find(a => a.k === k)).filter(Boolean); S.hero = x.hero ? (D2.heroes() || []).find(hh => hh.id === x.hero) || null : null; draw(); grid();
       const out = document.querySelector("#chcAI .ai-out"); out.innerHTML = renderBuild(x.res || {}); out.scrollIntoView({ behavior: "smooth", block: "start" }); });
