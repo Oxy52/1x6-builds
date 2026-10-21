@@ -2249,7 +2249,7 @@ const PROF = (() => {
   function shell(cover, body, label){
     modal.innerHTML = `<div class="sheet prof" role="dialog" aria-modal="true" aria-label="${label || "Профиль"}"><div class="pcover${cover ? "" : " plain"}">${cover ? `<img alt="" src="${esc(cover)}">` : ""}<button class="close" aria-label="Закрыть">✕</button></div>${body}</div>`;
     const was = !modal.hidden; modal.classList.toggle("swap", was); modal.hidden = false; modal._go = null; lockScroll();
-    modal.querySelector(".close").onclick = closeModal; return modal.querySelector(".prof");
+    modal.querySelector(".close").onclick = () => { curId = null; closeModal(); }; return modal.querySelector(".prof");
   }
   const faces = list => list.length ? `<div class="pfaces">${list.map(sl => { const h = H(sl); return h ? `<button type="button" data-s="${sl}" style="${vars(h)}" aria-label="${h.en}" title="${h.en}"><img alt="" loading="lazy" src="face/${sl}.webp"></button>` : ""; }).join("")}</div>` : "";
 
@@ -4893,7 +4893,7 @@ const D2 = (() => {
             <div><b class="t">${esc(names.join(" → "))}</b><small>${LANES[x.ln] ? esc(LANES[x.ln]) + " · " : ""}${x.g.toLocaleString("ru-RU")} игр · ${f1(pct(x.g, b.n))}% матчей${x.g < 20 ? `<em class="d2-bld-few">мало игр</em>` : ""}</small></div>
             <div class="d2-bld-w"><b class="db-wr ${wrCls(v)}">${f1(v)}%</b><small>винрейт</small></div></div>
             <div class="d2-bld-p">${step("Сапоги", x.boots.map(([k, c]) => ic(k, Math.round(c * 100 / x.g) + "% игр")).join(""))}${step("Сначала", x.early.map(([k, c]) => ic(k, Math.round(c * 100 / x.g) + "% игр")).join(""))}${step("Основа", x.items.map(([k, t]) => ic(k, t + "′ в среднем", "")).join(""))}${step("Потом", x.next.map(([k, c, w]) => ic(k, f1(pct(w, c)) + "% · " + c + " игр", wrCls(pct(w, c)))).join(""))}</div></div>`; }).join("")}</div>
-          <p class="db-note">Сборки собраны из закупок в про-матчах ${b.patch ? "патча 7.41" : "за последний год"} (${b.n.toLocaleString("ru-RU")} игр на герое): матчи сгруппированы по первым двум крупным предметам. Винрейт — доля побед с такой сборкой; у сборок с малым числом игр он неточный.</p>`;
+          <p class="db-note">${b.patch ? "Сборки собраны из закупок в про-матчах патча 7.41: матчи сгруппированы по первым двум крупным предметам. Винрейт — доля побед с такой сборкой; у сборок с малым числом игр он неточный." : "Сборки собраны из закупок в про-матчах за последний год: матчи сгруппированы по первым двум крупным предметам. Винрейт — доля побед с такой сборкой; у сборок с малым числом игр он неточный."}</p>`;
       };
       g.querySelectorAll("[data-bs]").forEach(el => el.onclick = () => draw(el.dataset.bs));
       draw("g");
@@ -5498,7 +5498,7 @@ async function installApp(){
 
 /* ---------- языки сайта ---------- */
 const I18N = (() => {
-  const LANGS = [["ru", "Русский", "ru"], ["uk", "Українська", "ua"], ["en", "English", "gb"], ["es", "Español", "es"], ["pt", "Português", "br"], ["de", "Deutsch", "de"], ["pl", "Polski", "pl"], ["tr", "Türkçe", "tr"], ["fr", "Français", "fr"], ["it", "Italiano", "it"], ["kk", "Қазақша", "kz"], ["zh", "中文", "cn"], ["ja", "日本語", "jp"], ["ko", "한국어", "kr"]];
+  const LANGS = [["ru", "Русский", "ru"], ["uk", "Українська", "ua"], ["en", "English", "gb"], ["es", "Español", "es"], ["pt", "Português", "br"], ["de", "Deutsch", "de"], ["pl", "Polski", "pl"], ["tr", "Türkçe", "tr"], ["fr", "Français", "fr"], ["it", "Italiano", "it"], ["kk", "Қазақша", "kz"], ["be", "Беларуская", "by"], ["nl", "Nederlands", "nl"], ["zh", "中文", "cn"], ["ja", "日本語", "jp"], ["ko", "한국어", "kr"]];
   // [ru, uk, en, es, pt, de, pl, tr]
   const ROWS = [
 ["Тема героя","Тема героя","Hero theme","Tema de héroe","Tema de herói","Helden-Design","Motyw bohatera","Kahraman teması"],
@@ -5648,14 +5648,14 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=2").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=3").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
     const out = key.replace(rx, k => m.get(k) || k); return out !== key ? out : null; }
   let lang = "ru";
   try { lang = localStorage.getItem("ub-lang") || ""; } catch(e) {}
-  if (!HAS(lang)){ const n = (navigator.language || "ru").slice(0, 2).toLowerCase(); lang = HAS(n) ? n : n === "be" ? "ru" : "en"; }
+  if (!HAS(lang)){ const n = (navigator.language || "ru").slice(0, 2).toLowerCase(); lang = HAS(n) ? n : "en"; }
   const orig = new WeakMap(), origAttr = new WeakMap();
   const ATTRS = ["placeholder", "aria-label", "title"];
   function trText(node){
@@ -5713,7 +5713,7 @@ const I18N = (() => {
 
 /* ---------- новости: патч и про-сцена ---------- */
 const NEWS = (() => {
-  const UPDATED = "21 октября 2026";
+  const UPDATED = "2026-10-21"; // дата обновления новостей (ГГГГ-ММ-ДД)
   const CATS = { patch: "Патч", players: "Игроки", events: "Турниры", leaks: "Датамайн", community: "Комьюнити" };
   // id растёт с каждой новостью — по нему считаем «новое с прошлого визита»
   const ITEMS = [
@@ -5782,7 +5782,18 @@ const NEWS = (() => {
   const saveNF = () => { try { localStorage.setItem("ub-news-fav", JSON.stringify([...NF])); } catch(e) {} };
   let seen = -1; try { const v = localStorage.getItem("ub-news"); seen = v == null ? -1 : +v; } catch(e) {}
   const firstVisit = seen < 0;
-  let cat = "all", wired = false;
+  let cat = "all", wired = false, curId = null;
+  // переводы: { items: { id: [заголовок, текст] }, dates: { "21 окт": "Oct 21" } }; русский — оригинал
+  let TRN = null, TL = "ru";
+  async function loadTr(l){
+    if (l === "ru"){ TRN = null; TL = l; return; }
+    try { const r = await fetch(`/i18n/news/${l}.json?v=${TOP}`); TRN = r.ok ? await r.json() : null; } catch(e) { TRN = null; }
+    TL = l;
+  }
+  const tt = n => { const v = TRN && TRN.items && TRN.items[n.id]; return v ? { t: v[0], x: v[1] } : { t: n.t, x: n.x }; };
+  const td = v => (TRN && TRN.dates && TRN.dates[v]) || v;
+  const NT = () => TRN ? ' translate="no"' : "";
+  const updTxt = () => { const d = new Date(UPDATED + "T12:00:00"); try { return d.toLocaleDateString(TL === "ru" ? "ru-RU" : TL, { day: "numeric", month: "long", year: "numeric" }); } catch(e) { return UPDATED; } };
 
   function dot(){ document.querySelectorAll('.tab[data-tab="news"]').forEach(tb => { let d = tb.querySelector(".ndot");
     if (TOP > seen && !d){ d = document.createElement("i"); d.className = "ndot"; d.setAttribute("aria-hidden", "true"); tb.appendChild(d); } else if (TOP <= seen && d) d.remove(); }); }
@@ -5793,9 +5804,9 @@ const NEWS = (() => {
   function chips(n){ const list = [n.hero, ...(n.also || [])].map(H).filter(Boolean); if (!list.length) return "";
     return list.map(h => `<button type="button" class="nhero" data-s="${h.slug}" style="${vars(h)}"><img alt="" loading="lazy" src="face/${h.slug}.webp">Сборка ${h.en}</button>`).join(" "); }
   function card(n, i){
-    const fresh = !firstVisit && n.id > seen;
-    return `<article class="ncard ${n.cat}" data-id="${n.id}" tabindex="0" style="--i:${Math.min(i, 10)}" aria-label="${plain(n.t)} — открыть">${icon(n)}<div><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span><span>${n.d}</span>${fresh ? `<span class="nnew">NEW</span>` : ""}</div>
-      <h3>${n.t}</h3><p>${n.x}</p>${chips(n)}</div>${favBtn(n.id)}</article>`;
+    const fresh = !firstVisit && n.id > seen, T = tt(n);
+    return `<article class="ncard ${n.cat}" data-id="${n.id}" tabindex="0" style="--i:${Math.min(i, 10)}" aria-label="${plain(T.t)}">${icon(n)}<div><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span><span${NT()}>${td(n.d)}</span>${fresh ? `<span class="nnew">NEW</span>` : ""}</div>
+      <h3${NT()}>${T.t}</h3><p${NT()}>${T.x}</p>${chips(n)}</div>${favBtn(n.id)}</article>`;
   }
   const favBtn = id => `<button type="button" class="fav nfav" data-id="${id}" aria-pressed="${NF.has(id)}" aria-label="Новость в избранное">${STAR}</button>`;
   let VIEW = [];
@@ -5809,7 +5820,7 @@ const NEWS = (() => {
     VIEW = ITEMS.filter(n => cat === "all" || (cat === "fav" ? NF.has(n.id) : n.cat === cat)).sort((a, b) => wk.indexOf(a.w) - wk.indexOf(b.w) || b.id - a.id);
     drawChips();
     let html = "", w = "", i = 0;
-    VIEW.forEach(n => { if (n.w !== w){ w = n.w; html += `<div class="ngrp">${w}</div>`; } html += card(n, i++); });
+    VIEW.forEach(n => { if (n.w !== w){ w = n.w; html += `<div class="ngrp"${NT()}>${td(w)}</div>`; } html += card(n, i++); });
     document.getElementById("nList").innerHTML = html || `<div class="gempty">В избранном пока пусто — открой новость и нажми ★</div>`;
   }
   function toggleFav(id){
@@ -5821,16 +5832,17 @@ const NEWS = (() => {
   /* окно новости: картинка, полный текст, избранное, поделиться, листание */
   function openNews(id){
     const n = ITEMS.find(x => x.id === id); if (!n) return;
+    curId = id; const T = tt(n);
     const p = pic(n), h = n.hero && H(n.hero), pool = VIEW.some(x => x.id === id) ? VIEW : ITEMS, idx = pool.findIndex(x => x.id === id);
     const was = !modal.hidden;
     if (modal._cleanup){ try { modal._cleanup(); } catch(e) {} modal._cleanup = null; }
-    modal.innerHTML = `<div class="sheet nsheet" role="dialog" aria-modal="true" aria-label="${plain(n.t)}" style="--nc:${NC[n.cat]};${h ? vars(h) : ""}">
+    modal.innerHTML = `<div class="sheet nsheet" role="dialog" aria-modal="true" aria-label="${plain(T.t)}" style="--nc:${NC[n.cat]};${h ? vars(h) : ""}">
       <div class="ncover k-${p ? p.k : "none"}">${p ? (p.anim && CAN_ANIM && !REDUCED && !NOFX ? `<video autoplay muted loop playsinline aria-hidden="true" poster="${p.src}" src="${p.anim}" onerror="this.outerHTML='<img alt=&quot;&quot; src=&quot;${p.src}&quot;>'"></video>` : `<img alt="" src="${p.src}" onerror="this.remove()">`) : ""}
-        <div class="ncv-t" aria-hidden="true">${cic(n.cat)}<span>${CATS[n.cat]}</span><b>${plain(n.t)}</b></div>
+        <div class="ncv-t" aria-hidden="true">${cic(n.cat)}<span>${CATS[n.cat]}</span><b${NT()}>${plain(T.t)}</b></div>
         <button type="button" class="navh prev" aria-label="Предыдущая новость">‹</button><button type="button" class="navh next" aria-label="Следующая новость">›</button>
         <button type="button" class="close" aria-label="Закрыть">✕</button></div>
-      <div class="nbody"><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span><span>${n.d} · ${n.w}</span></div>
-        <h3>${n.t}</h3><p>${n.x}</p>${chips(n)}
+      <div class="nbody"><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span><span${NT()}>${td(n.d)} · ${td(n.w)}</span></div>
+        <h3${NT()}>${T.t}</h3><p${NT()}>${T.x}</p>${chips(n)}
         <div class="nacts"><button type="button" class="btn btn-ghost nfavbig" data-id="${id}" aria-pressed="${NF.has(id)}">★ <span>${NF.has(id) ? "В избранном" : "В избранное"}</span></button><button type="button" class="btn btn-ghost" id="nShare">Поделиться</button><span class="npos">${idx + 1} / ${pool.length}</span></div></div></div>`;
     modal.classList.toggle("swap", was); modal.hidden = false; lockScroll();
     const sh = modal.querySelector(".nsheet"); if (was) sh.scrollTop = 0;
@@ -5840,7 +5852,7 @@ const NEWS = (() => {
     swipe(modal.querySelector(".ncover"), d => go(d));
     modal.querySelector(".close").onclick = closeModal; if (!was) modal.querySelector(".close").focus({ preventScroll: true });
     modal.querySelector(".nfavbig").onclick = () => toggleFav(id);
-    modal.querySelector("#nShare").onclick = () => shareLink(`${SITE_URL}/#news-${id}`, plain(n.t), plain(n.x));
+    modal.querySelector("#nShare").onclick = () => shareLink(`${SITE_URL}/#news-${id}`, plain(T.t), plain(T.x));
     sh.querySelectorAll(".nhero").forEach(b => b.onclick = () => { const hh = H(b.dataset.s); if (hh) openHero(hh); });
   }
   /* ссылка вида /#news-40 сразу открывает новость */
@@ -5850,8 +5862,7 @@ const NEWS = (() => {
     if (!wired){ wired = true;
       box.innerHTML = `<div class="npatch" id="nPatch"></div><div class="rkchips nchips" id="nChips"></div><div class="nlist" id="nList"></div><p class="nfoot" id="nFoot"></p>`;
       document.getElementById("nPatch").innerHTML = `<span class="nv">7.41f</span><span class="nl">Текущий патч</span><h3>Второй по длительности патч в истории — и идёт на рекорд</h3>
-        <div class="nst"><span><b>211</b> дней без большого обновления</span><span>Рекорд 7.32: <b>240</b> дней</span><span>Последние правки: <b>15 сен</b></span><span>Мета: <b>Bounty Hunter</b></span></div>`;
-      document.getElementById("nFoot").textContent = `Обновлено ${UPDATED}.`;
+        <div class="nst"><span><b>211</b> дней без большого обновления</span><span>Рекорд 7.32: <b>240</b> дней</span><span>Последние правки: <b${NT()}>${td("15 сен")}</b></span><span>Мета: <b>Bounty Hunter</b></span></div>`;
       document.getElementById("nChips").onclick = e => { const b = e.target.closest(".rkc"); if (!b) return; cat = b.dataset.c; draw(); };
       const nl = document.getElementById("nList");
       nl.onclick = e => { const f = e.target.closest(".nfav"); if (f){ e.stopPropagation(); toggleFav(+f.dataset.id); return; }
@@ -5859,14 +5870,21 @@ const NEWS = (() => {
         const c = e.target.closest(".ncard"); if (c) openNews(+c.dataset.id); };
       nl.onkeydown = e => { if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("ncard")){ e.preventDefault(); openNews(+e.target.dataset.id); } };
     }
+    document.getElementById("nPatch").querySelectorAll("b").forEach((b, i) => { if (i === 2){ if (TRN) b.setAttribute("translate", "no"); else b.removeAttribute("translate"); b.textContent = td("15 сен"); } });
+    document.getElementById("nFoot").innerHTML = `<span>Обновлено</span> <span translate="no">${updTxt()}</span>`;
     draw();
     seen = TOP; try { localStorage.setItem("ub-news", String(TOP)); } catch(e) {} dot();
   }
   /* бегущая строка «Свежее» в шапке */
+  let teaser = () => {};
   (() => { const hl = ITEMS.filter(n => n.hl), el = document.getElementById("hNewsT"), b = document.getElementById("hNews"); if (!el || !b) return;
-    let k = 0; el.textContent = hl[0].t; b.onclick = go;
-    if (hl.length > 1 && !REDUCED) setInterval(() => { if (document.hidden) return; k = (k + 1) % hl.length; el.style.opacity = 0; setTimeout(() => { el.textContent = hl[k].t; el.style.opacity = 1; }, 250); }, 4500);
+    let k = 0; teaser = () => { if (TRN) el.setAttribute("translate", "no"); else el.removeAttribute("translate"); el.textContent = tt(hl[k]).t; }; teaser(); b.onclick = go;
+    if (hl.length > 1 && !REDUCED) setInterval(() => { if (document.hidden) return; k = (k + 1) % hl.length; el.style.opacity = 0; setTimeout(() => { teaser(); el.style.opacity = 1; }, 250); }, 4500);
     el.style.transition = "opacity .25s ease"; })();
+  // смена языка — подгружаем перевод и перерисовываем
+  const relang = l => loadTr(l).then(() => { teaser(); if (wired) open(); if (curId != null && !modal.hidden && modal.querySelector(".nsheet")) openNews(curId); });
+  document.addEventListener("langchange", e => { if (e.detail !== TL) relang(e.detail); });
+  if (typeof I18N !== "undefined" && I18N.get() !== "ru") relang(I18N.get());
   dot();
   return { open, go, dot, fromHash };
 })();
