@@ -1460,8 +1460,17 @@
   .ncover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; animation: kb 18s ease-in-out infinite alternate; }
   .ncover.k-art img { object-fit: contain; object-position: center bottom; top: 8%; height: 92%; filter: drop-shadow(0 0 18px color-mix(in srgb, var(--c1, var(--nc)) 50%, transparent)); animation: none; }
   .ncover.k-item img { position: relative; inset: auto; width: auto; height: 46%; image-rendering: auto; border-radius: 10px; box-shadow: 0 0 40px color-mix(in srgb, var(--nc) 60%, transparent), 0 10px 30px rgba(0,0,0,.6); animation: gBob 3s ease-in-out infinite; }
-  .ncv-ic { font-size: clamp(64px, 14vw, 96px); filter: drop-shadow(0 8px 24px rgba(0,0,0,.5)); }
-  .ncover img ~ .ncv-ic { display: none; }
+  .ncover video { position: absolute; left: 0; right: 0; bottom: -4%; width: 100%; height: 108%; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 0 22px color-mix(in srgb, var(--c1, var(--nc)) 45%, transparent)); }
+  .ncover.k-doc { background: #0c1630; } .ncover.k-doc img { object-fit: contain; animation: none; background: #0c1630; }
+  .ncv-t { position: relative; z-index: 1; display: grid; justify-items: center; gap: 8px; max-width: 86%; text-align: center; }
+  .ncv-t svg { width: 46px; height: 46px; color: var(--nc); filter: drop-shadow(0 0 16px var(--nc)); }
+  .ncv-t span { font-size: 11.5px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--nc); }
+  .ncv-t b { font-family: var(--display); font-weight: 800; font-size: clamp(22px, 4.6vw, 32px); line-height: 1.1; letter-spacing: -.6px; text-wrap: balance; text-shadow: 0 4px 24px rgba(0,0,0,.6); }
+  .ncover.k-none { background: radial-gradient(70% 90% at 50% 20%, color-mix(in srgb, var(--nc) 34%, transparent), transparent 70%), repeating-linear-gradient(135deg, rgba(255,255,255,.025) 0 2px, transparent 2px 14px), linear-gradient(160deg, color-mix(in srgb, var(--nc) 22%, #0b0b10), #0a0a0e 70%); }
+  .ncover img ~ .ncv-t, .ncover video ~ .ncv-t { display: none; }
+  .nic.nthumb { overflow: hidden; padding: 0; border-radius: 12px; } .nic.nthumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .nic.nthumb.k-item img, .nic.nthumb.k-doc img { object-fit: contain; }
+  .nic.ncat svg { width: 21px; height: 21px; color: var(--nc); }
   .ncover .close { position: absolute; top: 14px; right: 14px; z-index: 3; }
   .ncover .navh { z-index: 3; }
   .nbody { padding: 4px 22px 22px; margin-top: -18px; position: relative; z-index: 1; }
@@ -5638,10 +5647,19 @@ const NEWS = (() => {
   const TOP = ITEMS.reduce((m, n) => Math.max(m, n.id), 0);
   const H = slug => HEROES.find(h => h.slug === slug);
   const NC = { patch: "#ffb547", players: "#c47bff", leaks: "#2ee6d6", events: "#4ade80", community: "#ff6b8b" };
-  // картинка в окне новости: арт героя сайта или герой/предмет Dota 2 с CDN Valve; без неё — обложка с иконкой
+  // картинка новости: официальный арт из первоисточника (news/), герой/предмет с CDN Valve или живая анимация героя сайта; без неё — обложка с заголовком
   const CDN = "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react";
-  const PIC = { 22: "heroes/tidehunter", 11: "heroes/tidehunter", 20: "heroes/bounty_hunter", 1: "heroes/treant", 0: "heroes/windrunner", 21: "items/necronomicon_3" };
-  const pic = n => n.img ? { src: n.img, k: "photo" } : PIC[n.id] ? { src: `${CDN}/${PIC[n.id]}.png`, k: PIC[n.id].startsWith("items") ? "item" : "photo" } : n.hero && H(n.hero) ? { src: `hero/${n.hero}.webp`, k: "art" } : null;
+  const PIC = { 8: "news/trove.webp", 11: "news/trove.webp", 22: "news/trove.webp", 40: "news/carnival.webp", 34: "news/patch741.webp", 43: "news/patch741.webp", 1: "news/patch741.webp", 0: "news/patch741.webp",
+    38: ["news/eg.webp", "doc"], 20: `${CDN}/heroes/bounty_hunter.png`, 21: [`${CDN}/items/necronomicon_3.png`, "item"] };
+  const pic = n => { const v = n.img || PIC[n.id]; if (v) return Array.isArray(v) ? { src: v[0], k: v[1] } : { src: v, k: "photo" };
+    return n.hero && H(n.hero) ? { src: `hero/${n.hero}.webp`, k: "art", anim: `anim/${n.hero}.webm` } : null; };
+  const CIC = {
+    patch: '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.2L3.5 17.3a1.8 1.8 0 0 0 2.6 2.6l5.8-5.8a4 4 0 0 0 5.2-5.4l-2.4 2.4-2.3-.4-.4-2.3z"/>',
+    players: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>',
+    leaks: '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2M8.5 11h5M11 8.5v5"/>',
+    events: '<path d="M7 4h10v4a5 5 0 0 1-10 0zM7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4M12 13v4M8 21h8M9 17h6v4H9z"/>',
+    community: '<path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/>' };
+  const cic = c => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${CIC[c] || CIC.community}</svg>`;
   const plain = s => String(s).replace(/<[^>]+>/g, "");
   let NF = new Set(); try { NF = new Set(JSON.parse(localStorage.getItem("ub-news-fav") || "[]")); } catch(e) {}
   const saveNF = () => { try { localStorage.setItem("ub-news-fav", JSON.stringify([...NF])); } catch(e) {} };
@@ -5653,7 +5671,8 @@ const NEWS = (() => {
     if (TOP > seen && !d){ d = document.createElement("i"); d.className = "ndot"; d.setAttribute("aria-hidden", "true"); tb.appendChild(d); } else if (TOP <= seen && d) d.remove(); }); }
   function go(){ setTab("news"); }
   function icon(n){ const h = n.hero && H(n.hero);
-    return h ? `<button type="button" class="nic" data-s="${h.slug}" style="${vars(h)}" aria-label="Сборка ${h.en}" title="Сборка ${h.en}"><img alt="" loading="lazy" src="face/${h.slug}.webp"></button>` : `<span class="nic" aria-hidden="true">${n.ic || "📰"}</span>`; }
+    return h ? `<button type="button" class="nic" data-s="${h.slug}" style="${vars(h)}" aria-label="Сборка ${h.en}" title="Сборка ${h.en}"><img alt="" loading="lazy" src="face/${h.slug}.webp"></button>`
+      : (p => p ? `<span class="nic nthumb k-${p.k}" aria-hidden="true"><img alt="" loading="lazy" src="${p.src}"></span>` : `<span class="nic ncat" aria-hidden="true">${cic(n.cat)}</span>`)(pic(n)); }
   function chips(n){ const list = [n.hero, ...(n.also || [])].map(H).filter(Boolean); if (!list.length) return "";
     return list.map(h => `<button type="button" class="nhero" data-s="${h.slug}" style="${vars(h)}"><img alt="" loading="lazy" src="face/${h.slug}.webp">Сборка ${h.en}</button>`).join(" "); }
   function card(n, i){
@@ -5689,7 +5708,8 @@ const NEWS = (() => {
     const was = !modal.hidden;
     if (modal._cleanup){ try { modal._cleanup(); } catch(e) {} modal._cleanup = null; }
     modal.innerHTML = `<div class="sheet nsheet" role="dialog" aria-modal="true" aria-label="${plain(n.t)}" style="--nc:${NC[n.cat]};${h ? vars(h) : ""}">
-      <div class="ncover k-${p ? p.k : "none"}">${p ? `<img alt="" src="${p.src}" onerror="this.remove()">` : ""}<span class="ncv-ic" aria-hidden="true">${n.ic || "📰"}</span>
+      <div class="ncover k-${p ? p.k : "none"}">${p ? (p.anim && CAN_ANIM && !REDUCED && !NOFX ? `<video autoplay muted loop playsinline aria-hidden="true" poster="${p.src}" src="${p.anim}" onerror="this.outerHTML='<img alt=&quot;&quot; src=&quot;${p.src}&quot;>'"></video>` : `<img alt="" src="${p.src}" onerror="this.remove()">`) : ""}
+        <div class="ncv-t" aria-hidden="true">${cic(n.cat)}<span>${CATS[n.cat]}</span><b>${plain(n.t)}</b></div>
         <button type="button" class="navh prev" aria-label="Предыдущая новость">‹</button><button type="button" class="navh next" aria-label="Следующая новость">›</button>
         <button type="button" class="close" aria-label="Закрыть">✕</button></div>
       <div class="nbody"><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span><span>${n.d} · ${n.w}</span></div>
