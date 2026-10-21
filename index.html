@@ -4180,7 +4180,7 @@ const D2 = (() => {
   const CDN = "https://cdn.cloudflare.steamstatic.com";
   const RANKS = [["all", "Все ранги"], ["1", "Рекрут"], ["2", "Страж"], ["3", "Рыцарь"], ["4", "Герой"], ["5", "Легенда"], ["6", "Властелин"], ["7", "Божество"], ["8", "Титан"], ["turbo", "Турбо"], ["pro", "Про-сцена"]];
   const RANK_IC = { "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, turbo: "⚡", pro: "🎙️" };
-  const rankIc = (r, cls) => { const v = RANK_IC[r]; return v == null ? "" : typeof v === "number" ? `<img class="d2-rk${cls ? " " + cls : ""}" alt="" loading="lazy" src="/api/dota?q=rank&n=${v}">` : `<span class="d2-rke${cls ? " " + cls : ""}">${v}</span>`; };
+  const rankIc = (r, cls) => { const v = RANK_IC[r]; return v == null ? "" : typeof v === "number" ? `<img class="d2-rk${cls ? " " + cls : ""}" alt="" loading="lazy" src="/api/dota?q=rank&n=${v}" onerror="this.onerror=null;this.src='https://www.opendota.com/assets/images/dota2/rank_icons/rank_icon_${v}.png'">` : `<span class="d2-rke${cls ? " " + cls : ""}">${v}</span>`; };
   const ROLES = [["", "Все роли"], ["1", "Керри"], ["2", "Мидер"], ["3", "Оффлейнер"], ["4", "Частичная поддержка"], ["5", "Полная поддержка"]];
   const POS_SHORT = { 1: "Керри", 2: "Мид", 3: "Оффлейн", 4: "Поддержка 4", 5: "Поддержка 5" };
   const ROLE_RU = { Carry: "Керри", Support: "Саппорт", Nuker: "Нюкер", Disabler: "Контроль", Initiator: "Инициатор", Durable: "Танк", Escape: "Мобильный", Pusher: "Пушер", Jungler: "Лесник" };
