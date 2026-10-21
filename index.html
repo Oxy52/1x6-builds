@@ -1064,6 +1064,30 @@
   .set-tg i::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--muted); transition: transform .3s cubic-bezier(.2,.8,.2,1), background .3s; }
   .set-tg input:checked + i { background: color-mix(in srgb, var(--t1) 60%, var(--bg)); } .set-tg input:checked + i::after { transform: translateX(18px); background: #fff; }
   .set-out { padding: 9px 14px; font-size: 13px; }
+  /* ---- языки ---- */
+  .langw { position: relative; margin-left: auto; }
+  .langw + .pbtn { margin-left: 8px; } .langw + .pbtn ~ .burger { flex: none; }
+  .langbtn { width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-soft); display: grid; place-items: center; cursor: pointer; padding: 0; }
+  .langbtn img { width: 24px; height: 17px; border-radius: 3px; object-fit: cover; box-shadow: 0 0 0 1px rgba(255,255,255,.15); }
+  .langpop { position: absolute; right: 0; top: calc(100% + 8px); z-index: 60; min-width: 190px; padding: 6px; border-radius: 16px; background: var(--panel, #15151b); border: 1px solid var(--line); box-shadow: 0 20px 60px -20px rgba(0,0,0,.8); display: grid; gap: 2px; animation: langIn .25s cubic-bezier(.2,.8,.2,1); }
+  @keyframes langIn { from { opacity: 0; transform: translateY(-6px) scale(.97); } }
+  .langpop button { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border: 0; border-radius: 10px; background: none; color: inherit; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; text-align: left; }
+  .langpop button:hover { background: var(--bg-soft); } .langpop button[aria-pressed="true"] { background: color-mix(in srgb, var(--t1) 18%, transparent); }
+  .langpop img { width: 22px; height: 16px; border-radius: 3px; object-fit: cover; }
+  .pm-cur { display: flex; gap: 6px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+  .pm-cur button { border: 1px solid var(--line); background: var(--bg-soft); color: var(--muted); font: inherit; font-size: 12.5px; font-weight: 700; padding: 6px 12px; border-radius: 99px; cursor: pointer; }
+  .pm-cur button[aria-pressed="true"] { color: #1a1205; background: #f3c35a; border-color: #f3c35a; }
+  /* ---- персональный разбор ---- */
+  .ins { display: grid; gap: 10px; }
+  .ins-form { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; } .ins-form div { padding: 10px 6px; border-radius: 12px; background: var(--bg-soft); border: 1px solid var(--line); text-align: center; } .ins-form b { display: block; font-size: 16px; font-variant-numeric: tabular-nums; } .ins-form small { font-size: 10.5px; color: var(--muted); }
+  @media (max-width: 480px){ .ins-form { grid-template-columns: 1fr 1fr; } }
+  .ins-note { margin: 0; font-size: 13px; color: var(--muted); }
+  .ins-paid { position: relative; display: grid; gap: 6px; } .ins-paid h5 { margin: 8px 0 2px; font-size: 13px; }
+  .ins-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-soft); color: inherit; font: inherit; text-align: left; cursor: pointer; }
+  .ins-row img, .ins-row > i { width: 34px; height: 34px; border-radius: 8px; object-fit: cover; flex: none; background: var(--bg); } .ins-row > span { flex: 1; min-width: 0; } .ins-row small { display: block; font-size: 12px; color: var(--muted); line-height: 1.35; } .ins-row > b { font-variant-numeric: tabular-nums; }
+  .ins-paid.locked > :not(.ins-lock) { filter: blur(6px); opacity: .55; pointer-events: none; user-select: none; }
+  .ins-lock { position: absolute; inset: 20px 0 auto; margin: 0 auto; max-width: 340px; display: grid; gap: 6px; text-align: center; padding: 18px; border-radius: 18px; border: 1px solid rgba(243,195,90,.6); background: color-mix(in srgb, var(--panel, #15151b) 88%, transparent); box-shadow: 0 20px 60px -20px rgba(243,195,90,.6); }
+  .ins-lock b { font-size: 16px; } .ins-lock small { font-size: 13px; color: var(--muted); line-height: 1.45; }
   /* ---- подписка 1x6+ ---- */
   .pbadge { display: inline-block; margin-left: 4px; font-size: .85em; filter: drop-shadow(0 0 6px rgba(243,195,90,.7)); vertical-align: 1px; }
   .gn .pbadge { margin: 0 4px 0 0; }
@@ -1404,6 +1428,7 @@
       </div>
     </div>
     <a class="logo" href="#top" id="logoBtn"><span class="mark">1×6</span><span class="lt">1x6 Билды</span></a>
+    <div class="langw"><button type="button" class="langbtn" id="langBtn" aria-label="Язык сайта" aria-expanded="false" aria-controls="langPop"></button><div class="langpop" id="langPop" role="menu" hidden></div></div>
     <button type="button" class="pbtn" id="pBtn" aria-label="Профиль"><span>Войти</span></button>
     <button type="button" class="burger" id="burger" aria-label="Меню" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
   </nav>
@@ -2840,9 +2865,15 @@ const PROF = (() => {
     root.querySelectorAll(".glist.rk li[data-user] .gn").forEach(g => { const uid = g.closest("li").dataset.user;
       if (isPrem(uid) && !g.querySelector(".pbadge")){ g.classList.add("gold"); g.insertAdjacentHTML("afterbegin", premBadge(uid)); } });
   }
-  const PLANS = [{ k: "m1", t: "1 месяц", rub: 99, stars: 59, usd: 1.25, per: "" }, { k: "m6", t: "6 месяцев", rub: 499, stars: 299, usd: 6.25, per: "83 ₽ в месяц", off: "−16%" }, { k: "y1", t: "1 год", rub: 799, stars: 499, usd: 9.99, per: "67 ₽ в месяц", off: "−33%", best: 1 }];
-  const PERKS = [["👑", "Значок и золотой ник", "Везде: в ленте, рейтинге, профиле и статистике"], ["✨", "Сияющий профиль и посты", "Золотая подсветка твоих постов и анимированная обложка профиля — видят все"], ["💠", "3 эксклюзивные рамки", "Корона, Аегис и Сияние — только для 1x6+"], ["🎨", "5 премиум-тем сайта", "Золото, Аркана, Лёд, Инферно и Неон"], ["⚡", "Опыт ×1.5 и бонус ×2", "Уровни и награды открываются быстрее"], ["✍️", "Длинные посты", "До 1000 символов и 120 постов в день вместо 280 и 40"], ["📊", "Полная статистика", "Вся история матчей и график MMR за всё время"], ["🧩", "50 билдов CHC в истории", "Вместо 6 — храни все удачные комбинации"]];
-  const CMP = [["Значок 👑 и золотой ник", "—", "✓"], ["Подсветка постов и профиля", "—", "✓"], ["Рамки аватарки", "6", "9"], ["Темы сайта", "54 героя", "+5 премиум"], ["Опыт за действия", "×1", "×1.5"], ["Ежедневный бонус", "×1", "×2"], ["Длина поста", "280", "1000"], ["Постов в день", "40", "120"], ["История матчей", "30", "вся"], ["История билдов CHC", "6", "50"]];
+  const PLANS = [{ k: "m1", t: "1 месяц", mo: 1, rub: 99, stars: 59, usd: 1.25 }, { k: "m6", t: "6 месяцев", mo: 6, rub: 499, stars: 299, usd: 6.25, off: "−16%" }, { k: "y1", t: "1 год", mo: 12, rub: 799, stars: 499, usd: 9.99, off: "−33%", best: 1 }];
+  const CUR = { uah: ["₴", "грн", [49, 249, 399]], rub: ["₽", "руб", [99, 499, 799]], eur: ["€", "евро", [1.19, 5.99, 9.49]], usd: ["$", "долл", [1.25, 6.25, 9.99]] };
+  const curDef = () => { const l = typeof I18N !== "undefined" ? I18N.get() : "ru"; return l === "uk" ? "uah" : l === "ru" ? "rub" : l === "en" || l === "pt" ? "usd" : "eur"; };
+  let curK = (() => { try { const c = localStorage.getItem("ub-cur"); return CUR[c] ? c : ""; } catch(e) { return ""; } })();
+  const cur = () => CUR[curK] ? curK : curDef();
+  const money = (v, fine) => { const c = CUR[cur()]; const s = v % 1 || (fine && c[2][0] < 5) ? v.toFixed(2).replace(".", ",") : String(Math.round(v)); return c[0] === "$" || c[0] === "€" ? c[0] + s : s + " " + c[0]; };
+  const priceOf = p => CUR[cur()][2][PLANS.indexOf(p)];
+  const PERKS = [["👑", "Значок и золотой ник", "Везде: в ленте, рейтинге, профиле и статистике"], ["✨", "Сияющий профиль и посты", "Золотая подсветка твоих постов и анимированная обложка профиля — видят все"], ["💠", "3 эксклюзивные рамки", "Корона, Аегис и Сияние — только для 1x6+"], ["🎨", "5 премиум-тем сайта", "Золото, Аркана, Лёд, Инферно и Неон"], ["⚡", "Опыт ×1.5 и бонус ×2", "Уровни и награды открываются быстрее"], ["✍️", "Длинные посты", "До 1000 символов и 120 постов в день вместо 280 и 40"], ["📈", "Разбор твоих игр в Dota 2", "Сильные герои, герои-ловушки и кого брать на твоём ранге и роли"], ["🧩", "50 билдов CHC в истории", "Вместо 6 — храни все удачные комбинации"]];
+  const CMP = [["Значок 👑 и золотой ник", "—", "✓"], ["Подсветка постов и профиля", "—", "✓"], ["Рамки аватарки", "6", "9"], ["Темы сайта", "54 героя", "+5 премиум"], ["Опыт за действия", "×1", "×1.5"], ["Ежедневный бонус", "×1", "×2"], ["Длина поста", "280", "1000"], ["Постов в день", "40", "120"], ["Разбор игр Dota 2", "форма", "полный"], ["История матчей", "30", "вся"], ["История билдов CHC", "6", "50"]];
   let payInfo = null, premPlan = "y1", premPoll = 0;
   const untilTxt = uid => new Date(PREM.get(uid)).toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
   // пробные 3 дня и приглашения друзей
@@ -2890,9 +2921,10 @@ const PROF = (() => {
       <div class="psec"><div class="pm-perks">${PERKS.map(p => `<div class="pm-perk"><span>${p[0]}</span><b>${p[1]}</b><small>${p[2]}</small></div>`).join("")}</div></div>
       <div class="psec"><h4>Бесплатно и с 1x6+</h4><div class="pm-cmp"><div class="pm-cr pm-ch"><span></span><span>Бесплатно</span><span>1x6+</span></div>${CMP.map(r => `<div class="pm-cr"><span>${r[0]}</span><span>${r[1]}</span><b>${r[2]}</b></div>`).join("")}</div></div>
       <div id="pmRef"></div>
-      <div class="psec"><h4>Срок</h4><div class="pm-plans">${PLANS.map(p => `<button type="button" class="pm-plan${p.best ? " best" : ""}" data-k="${p.k}" aria-pressed="${p.k === premPlan}">${p.best ? `<em>Выгоднее всего</em>` : ""}<b>${p.t}</b><span class="pm-rub">${p.rub} ₽</span><small>${p.per || "&nbsp;"}${p.off ? ` <i>${p.off}</i>` : ""}</small></button>`).join("")}</div></div>
+      <div class="psec"><h4>Срок</h4><div class="pm-plans">${PLANS.map(p => `<button type="button" class="pm-plan${p.best ? " best" : ""}" data-k="${p.k}" aria-pressed="${p.k === premPlan}">${p.best ? `<em>Выгоднее всего</em>` : ""}<b>${p.t}</b><span class="pm-rub">${money(priceOf(p))}</span><small>${p.mo > 1 ? money(Math.round(priceOf(p) / p.mo * 100) / 100, true) + " в месяц" : "&nbsp;"}${p.off ? ` <i>${p.off}</i>` : ""}</small></button>`).join("")}</div>
+        <div class="pm-cur" role="group" aria-label="Валюта">${Object.keys(CUR).map(k => `<button type="button" data-c="${k}" aria-pressed="${k === cur()}">${CUR[k][0]} ${CUR[k][1]}</button>`).join("")}</div></div>
       <div class="psec"><h4>Оплата</h4><div id="pmPay"></div><div class="pm-msg" id="pmMsg" hidden></div>
-        <p class="pm-note">Рубли указаны примерно: звёзды покупаются в Telegram, карта и крипта списываются в долларах. Подписка сама не продлевается — никаких автосписаний.</p></div>`, "Подписка 1x6+");
+        <p class="pm-note">Цены в гривнах, рублях и евро — примерные: звёзды покупаются в Telegram, карта и крипта списываются в долларах. Подписка сама не продлевается — никаких автосписаний.</p></div>`, "Подписка 1x6+");
     box.classList.add("pm");
     const payEl = box.querySelector("#pmPay"), msg = box.querySelector("#pmMsg");
     premExtras(box, on);
@@ -2905,6 +2937,7 @@ const PROF = (() => {
       payEl.innerHTML = `<div class="pm-ways">${m.map(w => `<button type="button" class="pm-way" data-p="${w[0]}"${payInfo && !en[w[0]] ? " disabled" : ""}><span class="pm-wi">${w[1]}</span><span class="pm-wt">${w[2]}${payInfo && !en[w[0]] ? "<small>скоро</small>" : ""}</span><b>${w[3]}</b></button>`).join("")}</div>`;
       payEl.querySelectorAll(".pm-way").forEach(b => b.onclick = () => pay(b.dataset.p, b));
     };
+    box.querySelectorAll(".pm-cur [data-c]").forEach(b => b.onclick = () => { curK = b.dataset.c; try { localStorage.setItem("ub-cur", curK); } catch(e) {} premium(); });
     box.querySelectorAll(".pm-plan").forEach(b => b.onclick = () => { premPlan = b.dataset.k; box.querySelectorAll(".pm-plan").forEach(x => x.setAttribute("aria-pressed", x === b)); drawPay(); });
     drawPay();
     if (CLOUD && !payInfo){ try { const r = await fetch("/api/pay?info"); payInfo = r.ok ? await r.json() : { enabled: {} }; } catch(e) { payInfo = { enabled: {} }; } if (box.isConnected) drawPay(); }
@@ -4846,14 +4879,53 @@ const D2 = (() => {
         ${med ? `<div class="d2-medal"><img alt="" src="/api/dota?q=rank&n=${med}" onerror="this.onerror=null;this.src='https://www.opendota.com/assets/images/dota2/rank_icons/rank_icon_${med}.png'"><b>${RANK_RU[med]}${med < 8 && stars ? " " + stars : ""}</b></div>` : `<div class="d2-medal"><b>Без ранга</b></div>`}</div></div>
       <div class="pstats d2-kpi"><div class="pstat"><b>${(W + L).toLocaleString("ru-RU")}</b><span>матчей</span></div><div class="pstat"><b class="db-wr ${wrCls(wr)}">${W + L ? f1(wr) + "%" : "—"}</b><span>винрейт</span></div><div class="pstat"><b>${W.toLocaleString("ru-RU")}</b><span>побед</span></div></div>
       ${W + L ? `<div class="psec"><div class="db-wl"><span style="flex:${W || .001}" class="w">${W} побед</span><span style="flex:${L || .001}" class="l">${L} поражений</span></div></div>` : ""}
+      <div class="psec"><h4>📈 Персональный разбор</h4><div id="d2Ins"></div></div>
       <div class="psec"><h4>Последние матчи</h4>${matches.length ? `<ul class="d2-ml">${matches.map(m => { const rad = m.player_slot < 128, win = rad === !!m.radiant_win, h = H(m.hero_id);
         return `<li class="${win ? "w" : "l"}"><a href="https://www.dotabuff.com/matches/${m.match_id}" target="_blank" rel="noopener">${h ? `<img alt="" loading="lazy" src="${esc(hicon(h))}">` : ""}<span><b>${h ? esc(h.localized_name) : "Герой"}</b><small>${ago(m.start_time)} · ${dur(m.duration)}</small></span><span class="d2-kda">${m.kills}/${m.deaths}/${m.assists}<small>${m.gold_per_min} GPM</small></span><em>${win ? "Победа" : "Поражение"}</em></a></li>`; }).join("")}</ul>` : `<div class="pnone">Матчей нет — возможно, история матчей скрыта.</div>`}</div>
       <div class="psec"><h4>Любимые герои</h4>${heroes.length ? `<div class="db-tw"><table class="db-t"><thead><tr><th>Герой</th><th>Матчи</th><th>Винрейт</th><th>Последний</th></tr></thead><tbody>${heroes.map(x => { const h = H(x.hero_id), v = pct(x.win, x.games); return h ? `<tr data-h="${h.id}"><td class="db-hc"><span class="d2-hi"><img alt="" loading="lazy" src="${esc(himg(h))}"></span><span>${esc(h.localized_name)}</span></td><td><b>${x.games}</b></td><td class="db-wr ${wrCls(v)}"><b>${f1(v)}%</b></td><td>${x.last_played ? ago(x.last_played) : "—"}</td></tr>` : ""; }).join("")}</tbody></table></div>` : `<div class="pnone">Нет данных</div>`}</div>
       <div class="pacts"><button type="button" class="btn ${isMe ? "btn-ghost" : "btn-primary"}" id="d2SetMe">${isMe ? "✓ Это мой профиль" : "⭐ Это я — запомнить"}</button><a class="btn btn-ghost" href="https://www.dotabuff.com/players/${esc(p.account_id)}" target="_blank" rel="noopener">Dotabuff ↗</a></div><div style="height:20px"></div>`;
     g.querySelectorAll("tr[data-h]").forEach(tr => tr.onclick = () => hero(+tr.dataset.h));
+    insights(g.querySelector("#d2Ins"), hs, matches, med);
     g.querySelector("#d2SetMe").onclick = e => { try { localStorage.setItem("d2-me", String(p.account_id)); } catch(_) {} e.currentTarget.textContent = "✓ Это мой профиль"; e.currentTarget.className = "btn btn-ghost"; const pl = document.getElementById("d2Players"); if (pl){ pl.dataset.ready = ""; } };
   }
 
+
+  // ---------- персональный разбор игрока (фишка 1x6+) ----------
+  function insights(el, hs, matches, med){
+    const prem = typeof PROF !== "undefined" && PROF.isPremMe && PROF.isPremMe();
+    const br = med >= 1 && med <= 8 && HEROES_D2.some(x => pw(x, String(med))[0] > 0) ? String(med) : "all";
+    const H = id => HEROES_D2.find(x => x.id === +id);
+    const metaWr = h => { const [p, w] = pw(h, br); return p ? pct(w, p) : 50; };
+    const mine = (Array.isArray(hs) ? hs : []).map(x => ({ h: H(x.hero_id), g: num(x.games), w: num(x.win) })).filter(x => x.h && x.g > 0);
+    const min = mine.filter(x => x.g >= 10).length >= 3 ? 10 : 5;
+    const pool = mine.filter(x => x.g >= min).map(x => ({ ...x, wr: pct(x.w, x.g), meta: metaWr(x.h) }));
+    // форма за последние матчи (бесплатно)
+    const ms = Array.isArray(matches) ? matches : [];
+    const win = m => (m.player_slot < 128) === !!m.radiant_win;
+    const W = ms.filter(win).length, avg = k => ms.length ? ms.reduce((s, m) => s + num(m[k]), 0) / ms.length : 0;
+    let streak = 0, sw = null; for (const m of ms){ const v = win(m); if (sw == null) sw = v; if (v !== sw) break; streak++; }
+    const bestM = ms.slice().sort((a, b) => (num(b.kills) + num(b.assists) * .5 - num(b.deaths)) - (num(a.kills) + num(a.assists) * .5 - num(a.deaths)))[0];
+    const form = ms.length ? `<div class="ins-form"><div><b class="db-wr ${wrCls(pct(W, ms.length))}">${W}/${ms.length}</b><small>побед за последние игры</small></div><div><b>${f1(avg("kills"))}/${f1(avg("deaths"))}/${f1(avg("assists"))}</b><small>средний K/D/A</small></div><div><b>${Math.round(avg("gold_per_min"))}</b><small>золота в минуту</small></div><div><b>${streak > 1 ? (sw ? "🔥 " : "🧊 ") + streak : "—"}</b><small>${streak > 1 ? (sw ? "побед подряд" : "поражений подряд") : "серия"}</small></div></div>${bestM && H(bestM.hero_id) ? `<p class="ins-note">Лучшая игра: <b>${esc(H(bestM.hero_id).localized_name)}</b> ${bestM.kills}/${bestM.deaths}/${bestM.assists} — ${win(bestM) ? "победа" : "поражение"}.</p>` : ""}` : `<div class="pnone">Нет последних матчей — возможно, история скрыта.</div>`;
+    // платные блоки
+    const strong = pool.slice().sort((a, b) => (b.wr - b.meta) - (a.wr - a.meta) || b.g - a.g).slice(0, 3);
+    const traps = pool.filter(x => x.wr < 47).sort((a, b) => b.g - a.g).slice(0, 2);
+    const played = new Set(mine.slice(0, 15).map(x => x.h.id));
+    const posCnt = {}; mine.slice(0, 8).forEach(x => posOf(x.h).forEach(p => posCnt[p] = (posCnt[p] || 0) + x.g));
+    const mainPos = +Object.keys(posCnt).sort((a, b) => posCnt[b] - posCnt[a])[0] || 0;
+    const metaTop = p => HEROES_D2.filter(h => !played.has(h.id) && (!p || posOf(h).includes(p)) && pw(h, br)[0] >= 30).sort((a, b) => metaWr(b) - metaWr(a));
+    const tryH = metaTop(mainPos).slice(0, 3);
+    const swap = t => { const p = posOf(t.h)[0]; return metaTop(p).find(h => h.id !== t.h.id); };
+    const row = (h, right, sub) => `<button type="button" class="ins-row" data-h="${h.id}"><img alt="" loading="lazy" src="${esc(hicon(h))}"><span><b>${esc(h.localized_name)}</b><small>${sub}</small></span>${right}</button>`;
+    const RU_POS = { 1: "керри", 2: "мидера", 3: "оффлейнера", 4: "поддержки", 5: "полной поддержки" };
+    const paid = `
+      <h5>💪 Твои сильные герои</h5>${strong.length ? strong.map(x => row(x.h, `<b class="db-wr ${wrCls(x.wr)}">${f1(x.wr)}%</b>`, `${x.g} игр · ${x.wr - x.meta >= 0 ? "+" : ""}${f1(x.wr - x.meta)}% к среднему на твоём ранге`)).join("") : `<div class="pnone">Сыграй больше матчей на героях — от ${min} игр</div>`}
+      <h5>⚠️ Герои-ловушки</h5>${traps.length ? traps.map(x => { const s = swap(x); return row(x.h, `<b class="db-wr dn">${f1(x.wr)}%</b>`, `${x.g} игр — часто берёшь, но проигрываешь${s ? `. Попробуй вместо него <b>${esc(s.localized_name)}</b>` : ""}`); }).join("") : `<div class="pnone">Ловушек нет — на частых героях ты не проигрываешь 👍</div>`}
+      <h5>🎯 Попробуй${mainPos ? " на роли " + RU_POS[mainPos] : ""}</h5>${tryH.map(h => row(h, `<b class="db-wr ${wrCls(metaWr(h))}">${f1(metaWr(h))}%</b>`, `сильный в мете на твоём ранге, ты на нём почти не играл`)).join("") || `<div class="pnone">Нет данных</div>`}`;
+    const fake = `<h5>💪 Твои сильные герои</h5>${[1, 2, 3].map(() => `<div class="ins-row fake"><i></i><span><b>Герой героевич</b><small>48 игр · +6.4% к среднему</small></span><b>58.3%</b></div>`).join("")}<h5>⚠️ Герои-ловушки</h5>${[1, 2].map(() => `<div class="ins-row fake"><i></i><span><b>Какой-то герой</b><small>31 игра — попробуй вместо него…</small></span><b>41.2%</b></div>`).join("")}<h5>🎯 Попробуй на своей роли</h5>${[1, 2, 3].map(() => `<div class="ins-row fake"><i></i><span><b>Мета-герой</b><small>сильный в мете на твоём ранге</small></span><b>53.9%</b></div>`).join("")}`;
+    el.innerHTML = `<div class="ins">${form}<div class="ins-paid${prem ? "" : " locked"}">${prem ? paid : fake}${prem ? "" : `<div class="ins-lock"><b>👑 Полный разбор — с 1x6+</b><small>Сильные герои и герои-ловушки, кого взять вместо них и кто сейчас силён в мете на твоём ранге и роли.</small><button type="button" class="btn pm-btn" id="insPrem">Открыть разбор</button></div>`}</div></div>`;
+    el.querySelectorAll(".ins-row[data-h]").forEach(b => b.onclick = () => hero(+b.dataset.h));
+    const ip = el.querySelector("#insPrem"); if (ip) ip.onclick = () => PROF.premium();
+  }
   // ---------- AI-пикер ----------
   const PK = { allies: [], enemies: [], role: "" };
   function pickerView(){
@@ -5220,6 +5292,204 @@ async function installApp(){
     <p class="inst-n">Сайт будет открываться как приложение: на весь экран, с иконкой и без адресной строки.</p></div>`);
 }
 
+/* ---------- языки сайта ---------- */
+const I18N = (() => {
+  const LANGS = [["ru", "Русский", "ru"], ["uk", "Українська", "ua"], ["en", "English", "gb"], ["es", "Español", "es"], ["pt", "Português", "br"], ["de", "Deutsch", "de"], ["pl", "Polski", "pl"], ["tr", "Türkçe", "tr"]];
+  // [ru, uk, en, es, pt, de, pl, tr]
+  const ROWS = [
+["Тема героя","Тема героя","Hero theme","Tema de héroe","Tema de herói","Helden-Design","Motyw bohatera","Kahraman teması"],
+["Обычная","Звичайна","Default","Normal","Padrão","Standard","Domyślny","Varsayılan"],
+["Войти","Увійти","Sign in","Entrar","Entrar","Anmelden","Zaloguj","Giriş"],
+["Сборки","Збірки","Builds","Builds","Builds","Builds","Buildy","Buildler"],
+["Мета","Мета","Meta","Meta","Meta","Meta","Meta","Meta"],
+["Мини-игры","Міні-ігри","Mini-games","Minijuegos","Minijogos","Minispiele","Minigry","Mini oyunlar"],
+["Игры","Ігри","Games","Juegos","Jogos","Spiele","Gry","Oyunlar"],
+["Лента","Стрічка","Feed","Feed","Feed","Feed","Tablica","Akış"],
+["Рейтинг","Рейтинг","Rating","Ranking","Ranking","Rangliste","Ranking","Sıralama"],
+["Топ","Топ","Top","Top","Top","Top","Top","Top"],
+["Сборки для кастомки Dota 1×6","Збірки для кастомки Dota 1×6","Builds for the Dota 1×6 custom game","Builds para el modo personalizado Dota 1×6","Builds para o modo personalizado Dota 1×6","Builds für den Custom-Modus Dota 1×6","Buildy do trybu Dota 1×6","Dota 1×6 özel modu için buildler"],
+["54 героя, у каждого готовая сборка предметов по этапам игры: начало, ранняя, середина и поздняя. У 11 героев можно посмотреть аркану.","54 героя, у кожного готова збірка предметів за етапами гри: початок, рання, середина і пізня. У 11 героїв можна подивитися аркану.","54 heroes, each with a ready item build for every stage: start, early, mid and late game. 11 heroes have an arcana to view.","54 héroes, cada uno con build de objetos por fases: inicio, temprano, medio y tardío. 11 héroes tienen arcana.","54 heróis, cada um com build de itens por fase: início, early, meio e late. 11 heróis têm arcana.","54 Helden, jeder mit fertigem Item-Build für jede Phase: Start, früh, mittel und spät. 11 Helden haben eine Arcana.","54 bohaterów, każdy z gotowym buildem na każdy etap: start, wczesna, środkowa i późna gra. 11 bohaterów ma arcanę.","54 kahraman, her biri için oyun aşamalarına göre hazır eşya buildi. 11 kahramanın arcanası var."],
+["Custom Hero Chaos — билды","Custom Hero Chaos — білди","Custom Hero Chaos — builds","Custom Hero Chaos — builds","Custom Hero Chaos — builds","Custom Hero Chaos — Builds","Custom Hero Chaos — buildy","Custom Hero Chaos — buildler"],
+["Отметь выпавшие способности — получи готовую сборку под комбинацию","Познач здібності, що випали, — отримай готову збірку під комбінацію","Pick the abilities you rolled — get a ready build for the combo","Marca las habilidades que te salieron y obtén un build para el combo","Marque as habilidades que saíram e receba um build para o combo","Wähle deine gewürfelten Fähigkeiten — erhalte einen fertigen Build","Zaznacz wylosowane umiejętności — otrzymaj gotowy build","Çıkan yetenekleri seç — kombinasyona hazır build al"],
+["Попробовать →","Спробувати →","Try it →","Probar →","Testar →","Ausprobieren →","Wypróbuj →","Dene →"],
+["Смотреть сборки","Дивитися збірки","View builds","Ver builds","Ver builds","Builds ansehen","Zobacz buildy","Buildleri gör"],
+["Рулетка героя","Рулетка героя","Hero roulette","Ruleta de héroe","Roleta de herói","Helden-Roulette","Ruletka bohatera","Kahraman ruleti"],
+["Рулетка билдов","Рулетка білдів","Build roulette","Ruleta de builds","Roleta de builds","Build-Roulette","Ruletka buildów","Build ruleti"],
+["Лента героев","Стрічка героїв","Hero feed","Feed de héroes","Feed de heróis","Helden-Feed","Kanał bohaterów","Kahraman akışı"],
+["Угадай героя по сборке","Вгадай героя за збіркою","Guess the hero by the build","Adivina el héroe por el build","Adivinhe o herói pelo build","Errate den Helden am Build","Zgadnij bohatera po buildzie","Builde göre kahramanı tahmin et"],
+["⚔️ Арена 1x6","⚔️ Арена 1x6","⚔️ 1x6 Arena","⚔️ Arena 1x6","⚔️ Arena 1x6","⚔️ 1x6-Arena","⚔️ Arena 1x6","⚔️ 1x6 Arena"],
+["Все герои","Усі герої","All heroes","Todos los héroes","Todos os heróis","Alle Helden","Wszyscy bohaterowie","Tüm kahramanlar"],
+["Жми на карточку — внутри все варианты сборки. Герои с золотой рамкой — с арканой.","Тисни на картку — всередині всі варіанти збірки. Герої із золотою рамкою — з арканою.","Tap a card to see every build variant. Heroes with a gold frame have an arcana.","Toca una tarjeta para ver todas las variantes. Los de marco dorado tienen arcana.","Toque num card para ver todas as variantes. Moldura dourada = tem arcana.","Tippe auf eine Karte für alle Build-Varianten. Goldrahmen = Arcana.","Kliknij kartę, aby zobaczyć wszystkie warianty. Złota ramka = arcana.","Tüm varyantlar için karta dokun. Altın çerçeve = arcana."],
+["Только с арканой","Тільки з арканою","Arcana only","Solo con arcana","Só com arcana","Nur mit Arcana","Tylko z arcaną","Sadece arcanalı"],
+["★ Избранное","★ Обране","★ Favorites","★ Favoritos","★ Favoritos","★ Favoriten","★ Ulubione","★ Favoriler"],
+["Недавно смотрели","Нещодавно переглянуті","Recently viewed","Vistos recientemente","Vistos recentemente","Zuletzt angesehen","Ostatnio oglądane","Son bakılanlar"],
+["Играть","Грати","Play","Jugar","Jogar","Spielen","Graj","Oyna"],
+["Дуэль 1x6","Дуель 1x6","1x6 Duel","Duelo 1x6","Duelo 1x6","1x6-Duell","Pojedynek 1x6","1x6 Düello"],
+["Ластхит","Ластхіт","Last hit","Last hit","Last hit","Last Hit","Last hit","Son vuruş"],
+["Инвокер","Інвокер","Invoker","Invoker","Invoker","Invoker","Invoker","Invoker"],
+["Угадай героя","Вгадай героя","Guess the hero","Adivina el héroe","Adivinhe o herói","Errate den Helden","Zgadnij bohatera","Kahramanı tahmin et"],
+["Кем играть сегодня?","Ким грати сьогодні?","Who to play today?","¿Con quién jugar hoy?","Com quem jogar hoje?","Wen heute spielen?","Kim dziś zagrać?","Bugün kimle oynasam?"],
+["Крутить","Крутити","Spin","Girar","Girar","Drehen","Kręć","Çevir"],
+["Смотреть","Дивитися","Watch","Ver","Ver","Ansehen","Oglądaj","İzle"],
+["Топ арены","Топ арени","Arena top","Top de la arena","Top da arena","Arena-Top","Top areny","Arena sıralaması"],
+["Открыть","Відкрити","Open","Abrir","Abrir","Öffnen","Otwórz","Aç"],
+["Лента игроков","Стрічка гравців","Player feed","Feed de jugadores","Feed de jogadores","Spieler-Feed","Tablica graczy","Oyuncu akışı"],
+["Загрузить ещё","Завантажити ще","Load more","Cargar más","Carregar mais","Mehr laden","Wczytaj więcej","Daha fazla"],
+["Рейтинг игроков","Рейтинг гравців","Player rating","Ranking de jugadores","Ranking de jogadores","Spieler-Rangliste","Ranking graczy","Oyuncu sıralaması"],
+["🃏 Дуэль · MMR","🃏 Дуель · MMR","🃏 Duel · MMR","🃏 Duelo · MMR","🃏 Duelo · MMR","🃏 Duell · MMR","🃏 Pojedynek · MMR","🃏 Düello · MMR"],
+["⚔️ Арена","⚔️ Арена","⚔️ Arena","⚔️ Arena","⚔️ Arena","⚔️ Arena","⚔️ Arena","⚔️ Arena"],
+["⭐ Уровень","⭐ Рівень","⭐ Level","⭐ Nivel","⭐ Nível","⭐ Level","⭐ Poziom","⭐ Seviye"],
+["📊 Герои","📊 Герої","📊 Heroes","📊 Héroes","📊 Heróis","📊 Helden","📊 Bohaterowie","📊 Kahramanlar"],
+["🕓 Матчи","🕓 Матчі","🕓 Matches","🕓 Partidas","🕓 Partidas","🕓 Matches","🕓 Mecze","🕓 Maçlar"],
+["Медали MMR","Медалі MMR","MMR medals","Medallas MMR","Medalhas MMR","MMR-Medaillen","Medale MMR","MMR madalyaları"],
+["Dota 2 — мета и сборки","Dota 2 — мета і збірки","Dota 2 — meta and builds","Dota 2 — meta y builds","Dota 2 — meta e builds","Dota 2 — Meta und Builds","Dota 2 — meta i buildy","Dota 2 — meta ve buildler"],
+["Все герои обычной Доты: винрейт и пикрейт по рангам и ролям, сборки предметов с винрейтом и контрпики — как на Dotabuff.","Усі герої звичайної Доти: вінрейт і пікрейт за рангами та ролями, збірки предметів із вінрейтом і контрпіки — як на Dotabuff.","Every Dota 2 hero: win and pick rate by rank and role, item builds with win rates and counters — like Dotabuff.","Todos los héroes de Dota 2: winrate y pickrate por rango y rol, builds con winrate y counters — como Dotabuff.","Todos os heróis de Dota 2: winrate e pickrate por rank e função, builds com winrate e counters — como o Dotabuff.","Alle Dota-2-Helden: Win- und Pickrate nach Rang und Rolle, Item-Builds mit Winrate und Konter — wie Dotabuff.","Wszyscy bohaterowie Dota 2: winrate i pickrate wg rangi i roli, buildy z winrate i kontry — jak Dotabuff.","Tüm Dota 2 kahramanları: rütbe ve role göre kazanma/seçilme oranı, buildler ve counterlar — Dotabuff gibi."],
+["Кастомка Dota 2","Кастомка Dota 2","Dota 2 custom game","Modo personalizado de Dota 2","Modo personalizado de Dota 2","Dota-2-Custom-Spiel","Tryb niestandardowy Dota 2","Dota 2 özel modu"],
+["Выпали способности? Отметь их иконками — сайт определит тип билда и подберёт готовую сборку: порядок прокачки, предметы и план на игру.","Випали здібності? Познач їх іконками — сайт визначить тип білда й підбере готову збірку: порядок прокачки, предмети й план на гру.","Rolled your abilities? Tap their icons — the site detects the build type and gives a ready build: skill order, items and a game plan.","¿Te salieron habilidades? Márcalas — el sitio detecta el tipo de build y te da orden de habilidades, objetos y plan.","Saíram habilidades? Marque os ícones — o site identifica o tipo de build e mostra ordem de skills, itens e plano.","Fähigkeiten gewürfelt? Tippe die Icons an — die Seite erkennt den Build-Typ und liefert Skill-Reihenfolge, Items und Spielplan.","Wylosowałeś umiejętności? Zaznacz ikony — strona dobierze build: kolejność, przedmioty i plan gry.","Yetenekler mi çıktı? Simgelerini seç — site build türünü bulur: yetenek sırası, eşyalar ve oyun planı."],
+["Герой","Герой","Hero","Héroe","Herói","Held","Bohater","Kahraman"],
+["Способности","Здібності","Abilities","Habilidades","Habilidades","Fähigkeiten","Umiejętności","Yetenekler"],
+["⚡ Готовый билд","⚡ Готовий білд","⚡ Ready build","⚡ Build listo","⚡ Build pronto","⚡ Fertiger Build","⚡ Gotowy build","⚡ Hazır build"],
+["Предложить кастомку","Запропонувати кастомку","Suggest a custom game","Sugerir un modo","Sugerir um modo","Custom-Spiel vorschlagen","Zaproponuj tryb","Mod öner"],
+["Меню","Меню","Menu","Menú","Menu","Menü","Menu","Menü"],
+["Создать профиль","Створити профіль","Create profile","Crear perfil","Criar perfil","Profil erstellen","Utwórz profil","Profil oluştur"],
+["Поиск героя","Пошук героя","Find a hero","Buscar héroe","Buscar herói","Held suchen","Szukaj bohatera","Kahraman ara"],
+["Избранное","Обране","Favorites","Favoritos","Favoritos","Favoriten","Ulubione","Favoriler"],
+["Герои с арканой","Герої з арканою","Heroes with arcana","Héroes con arcana","Heróis com arcana","Helden mit Arcana","Bohaterowie z arcaną","Arcanalı kahramanlar"],
+["Развлечения","Розваги","Fun","Diversión","Diversão","Spaß","Rozrywka","Eğlence"],
+["Мини-игра: арена","Міні-гра: арена","Mini-game: arena","Minijuego: arena","Minijogo: arena","Minispiel: Arena","Minigra: arena","Mini oyun: arena"],
+["Ещё","Ще","More","Más","Mais","Mehr","Więcej","Daha fazla"],
+["Настройки аккаунта","Налаштування акаунта","Account settings","Ajustes de cuenta","Configurações da conta","Kontoeinstellungen","Ustawienia konta","Hesap ayarları"],
+["Установить на телефон","Встановити на телефон","Install on phone","Instalar en el móvil","Instalar no celular","Aufs Handy installieren","Zainstaluj na telefonie","Telefona yükle"],
+["Поделиться сайтом","Поділитися сайтом","Share the site","Compartir sitio","Compartilhar site","Seite teilen","Udostępnij stronę","Siteyi paylaş"],
+["Поддержка","Підтримка","Support","Soporte","Suporte","Support","Wsparcie","Destek"],
+["Подписка 1x6+","Підписка 1x6+","1x6+ subscription","Suscripción 1x6+","Assinatura 1x6+","1x6+-Abo","Subskrypcja 1x6+","1x6+ abonelik"],
+["Наш Telegram-канал","Наш Telegram-канал","Our Telegram channel","Nuestro canal de Telegram","Nosso canal no Telegram","Unser Telegram-Kanal","Nasz kanał Telegram","Telegram kanalımız"],
+["Живые анимации","Живі анімації","Live animations","Animaciones","Animações","Animationen","Animacje","Animasyonlar"],
+["Поиск героя (рус или англ)…","Пошук героя…","Search hero…","Buscar héroe…","Buscar herói…","Held suchen…","Szukaj bohatera…","Kahraman ara…"],
+["Найти игрока по нику","Знайти гравця за ніком","Find player by nickname","Buscar jugador por nick","Buscar jogador pelo nick","Spieler nach Nick suchen","Znajdź gracza po nicku","Takma adla oyuncu bul"],
+["Профиль","Профіль","Profile","Perfil","Perfil","Profil","Profil","Profil"],
+["👤 Игроки","👤 Гравці","👤 Players","👤 Jugadores","👤 Jogadores","👤 Spieler","👤 Gracze","👤 Oyuncular"],
+["🎯 Пикер","🎯 Пікер","🎯 Picker","🎯 Picker","🎯 Picker","🎯 Picker","🎯 Picker","🎯 Seçici"],
+["Все ранги","Усі ранги","All ranks","Todos los rangos","Todos os ranks","Alle Ränge","Wszystkie rangi","Tüm rütbeler"],
+["Рекрут","Рекрут","Herald","Heraldo","Arauto","Herold","Herold","Haberci"],
+["Страж","Страж","Guardian","Guardián","Guardião","Wächter","Strażnik","Muhafız"],
+["Рыцарь","Лицар","Crusader","Cruzado","Cruzado","Kreuzritter","Krzyżowiec","Haçlı"],
+["Легенда","Легенда","Legend","Leyenda","Lenda","Legende","Legenda","Efsane"],
+["Властелин","Володар","Ancient","Ancestral","Ancestral","Uralter","Starożytny","Kadim"],
+["Божество","Божество","Divine","Divino","Divino","Göttlich","Boski","İlahi"],
+["Турбо","Турбо","Turbo","Turbo","Turbo","Turbo","Turbo","Turbo"],
+["Про-сцена","Про-сцена","Pro scene","Escena pro","Cena pro","Pro-Szene","Scena pro","Pro sahne"],
+["Все роли","Усі ролі","All roles","Todos los roles","Todas as funções","Alle Rollen","Wszystkie role","Tüm roller"],
+["Керри","Кері","Carry","Carry","Carry","Carry","Carry","Carry"],
+["Мидер","Мідер","Mid","Mid","Mid","Mid","Mid","Mid"],
+["Оффлейнер","Офлейнер","Offlane","Offlane","Offlane","Offlane","Offlane","Offlane"],
+["Поддержка","Підтримка","Support","Soporte","Suporte","Support","Wsparcie","Destek"],
+["Полная поддержка","Повна підтримка","Hard support","Soporte duro","Suporte total","Hard Support","Pełne wsparcie","Tam destek"],
+["Найти героя","Знайти героя","Find a hero","Buscar héroe","Buscar herói","Held suchen","Znajdź bohatera","Kahraman bul"],
+["Винрейт","Вінрейт","Win rate","Winrate","Winrate","Winrate","Winrate","Kazanma oranı"],
+["Пикрейт","Пікрейт","Pick rate","Pickrate","Pickrate","Pickrate","Pickrate","Seçilme oranı"],
+["Матчи","Матчі","Matches","Partidas","Partidas","Matches","Mecze","Maçlar"],
+["Винрейт по рангам","Вінрейт за рангами","Win rate by rank","Winrate por rango","Winrate por rank","Winrate nach Rang","Winrate wg rangi","Rütbeye göre kazanma oranı"],
+["По линиям","За лініями","By lane","Por línea","Por rota","Nach Lane","Wg linii","Koridora göre"],
+["Сборка предметов","Збірка предметів","Item build","Build de objetos","Build de itens","Item-Build","Build przedmiotów","Eşya buildi"],
+["Контрпики","Контрпіки","Counters","Counters","Counters","Konter","Kontry","Counterlar"],
+["Стартовые","Стартові","Starting","Iniciales","Iniciais","Start","Startowe","Başlangıç"],
+["Ранние","Ранні","Early","Tempranos","Early","Früh","Wczesne","Erken"],
+["Основные","Основні","Core","Principales","Principais","Kern","Główne","Ana"],
+["Поздние","Пізні","Late","Tardíos","Late","Spät","Późne","Geç"],
+["Сильнее против","Сильніший проти","Strong against","Fuerte contra","Forte contra","Stark gegen","Silny przeciw","Karşısında güçlü"],
+["Слабее против","Слабший проти","Weak against","Débil contra","Fraco contra","Schwach gegen","Słaby przeciw","Karşısında zayıf"],
+["Враги","Вороги","Enemies","Enemigos","Inimigos","Gegner","Wrogowie","Düşmanlar"],
+["Союзники","Союзники","Allies","Aliados","Aliados","Verbündete","Sojusznicy","Müttefikler"],
+["Моя роль","Моя роль","My role","Mi rol","Minha função","Meine Rolle","Moja rola","Rolüm"],
+["Любая","Будь-яка","Any","Cualquiera","Qualquer","Beliebig","Dowolna","Herhangi"],
+["Подобрать героя","Підібрати героя","Find a pick","Buscar pick","Sugerir herói","Pick finden","Dobierz bohatera","Kahraman öner"],
+["Найти","Знайти","Search","Buscar","Buscar","Suchen","Szukaj","Ara"],
+["Последние матчи","Останні матчі","Recent matches","Partidas recientes","Partidas recentes","Letzte Matches","Ostatnie mecze","Son maçlar"],
+["Любимые герои","Улюблені герої","Most played heroes","Héroes más jugados","Heróis mais jogados","Meistgespielte Helden","Ulubieni bohaterowie","En çok oynanan"],
+["Победа","Перемога","Win","Victoria","Vitória","Sieg","Wygrana","Galibiyet"],
+["Поражение","Поразка","Loss","Derrota","Derrota","Niederlage","Porażka","Yenilgi"],
+["Порядок прокачки","Порядок прокачки","Skill order","Orden de habilidades","Ordem de habilidades","Skill-Reihenfolge","Kolejność umiejętności","Yetenek sırası"],
+["Предметы","Предмети","Items","Objetos","Itens","Items","Przedmioty","Eşyalar"],
+["Как играть","Як грати","How to play","Cómo jugar","Como jogar","So spielst du","Jak grać","Nasıl oynanır"],
+["Прошлые билды","Минулі білди","Previous builds","Builds anteriores","Builds anteriores","Frühere Builds","Poprzednie buildy","Önceki buildler"],
+["⚡ Собрать билд","⚡ Зібрати білд","⚡ Make build","⚡ Crear build","⚡ Montar build","⚡ Build erstellen","⚡ Utwórz build","⚡ Build oluştur"],
+["Срок","Термін","Period","Periodo","Período","Laufzeit","Okres","Süre"],
+["Оплата","Оплата","Payment","Pago","Pagamento","Zahlung","Płatność","Ödeme"],
+["1 месяц","1 місяць","1 month","1 mes","1 mês","1 Monat","1 miesiąc","1 ay"],
+["6 месяцев","6 місяців","6 months","6 meses","6 meses","6 Monate","6 miesięcy","6 ay"],
+["1 год","1 рік","1 year","1 año","1 ano","1 Jahr","1 rok","1 yıl"],
+["Выгоднее всего","Найвигідніше","Best value","Mejor precio","Melhor custo","Bester Preis","Najkorzystniej","En avantajlı"],
+["Войди, чтобы оформить","Увійди, щоб оформити","Sign in to subscribe","Entra para suscribirte","Entre para assinar","Zum Abonnieren anmelden","Zaloguj, aby kupić","Abone olmak için giriş yap"],
+["Попробовать бесплатно","Спробувати безкоштовно","Try for free","Probar gratis","Testar grátis","Gratis testen","Wypróbuj za darmo","Ücretsiz dene"],
+["⚙️ Настройки","⚙️ Налаштування","⚙️ Settings","⚙️ Ajustes","⚙️ Configurações","⚙️ Einstellungen","⚙️ Ustawienia","⚙️ Ayarlar"],
+["Редактировать","Редагувати","Edit","Editar","Editar","Bearbeiten","Edytuj","Düzenle"],
+["Мой публичный профиль","Мій публічний профіль","My public profile","Mi perfil público","Meu perfil público","Mein öffentliches Profil","Mój profil publiczny","Herkese açık profilim"],
+["Выйти","Вийти","Sign out","Salir","Sair","Abmelden","Wyloguj","Çıkış"],
+["Напиши сообщение…","Напиши повідомлення…","Write a message…","Escribe un mensaje…","Escreva uma mensagem…","Nachricht schreiben…","Napisz wiadomość…","Mesaj yaz…"],
+["Статистика","Статистика","Stats","Estadísticas","Estatísticas","Statistik","Statystyki","İstatistik"],
+["📊 Статистика","📊 Статистика","📊 Stats","📊 Estadísticas","📊 Estatísticas","📊 Statistik","📊 Statystyki","📊 İstatistik"],
+["Посты","Пости","Posts","Publicaciones","Posts","Beiträge","Posty","Gönderiler"],
+["Опубликовать","Опублікувати","Post","Publicar","Publicar","Posten","Opublikuj","Paylaş"],
+["Закрыть","Закрити","Close","Cerrar","Fechar","Schließen","Zamknij","Kapat"],
+["📈 Мой разбор","📈 Мій розбір","📈 My analysis","📈 Mi análisis","📈 Minha análise","📈 Meine Analyse","📈 Moja analiza","📈 Analizim"],
+["Персональный разбор","Персональний розбір","Personal analysis","Análisis personal","Análise pessoal","Persönliche Analyse","Analiza osobista","Kişisel analiz"]
+  ];
+  const IDX = { ru: 0, uk: 1, en: 2, es: 3, pt: 4, de: 5, pl: 6, tr: 7 };
+  const MAP = {}; LANGS.forEach(([c]) => { if (c !== "ru") MAP[c] = new Map(); });
+  ROWS.forEach(r => { for (const c in MAP) MAP[c].set(r[0], r[IDX[c]]); });
+  let lang = "ru";
+  try { lang = localStorage.getItem("ub-lang") || ""; } catch(e) {}
+  if (!IDX.hasOwnProperty(lang)){ const n = (navigator.language || "ru").slice(0, 2).toLowerCase(); lang = IDX.hasOwnProperty(n) ? n : n === "be" || n === "kk" ? "ru" : "en"; }
+  const orig = new WeakMap(), origAttr = new WeakMap();
+  const ATTRS = ["placeholder", "aria-label", "title"];
+  function trText(node){
+    const raw = orig.has(node) ? orig.get(node) : node.nodeValue;
+    const key = raw.trim(); if (!key || !/[А-Яа-яЁё]/.test(key)) return;
+    if (!orig.has(node)) orig.set(node, raw);
+    const tr = lang === "ru" ? null : MAP[lang].get(key);
+    const want = tr ? raw.replace(key, tr) : raw;
+    if (node.nodeValue !== want) node.nodeValue = want;
+  }
+  function trEl(el){
+    for (const a of ATTRS){ if (!el.hasAttribute || !el.hasAttribute(a)) continue;
+      let m = origAttr.get(el); if (!m){ m = {}; origAttr.set(el, m); }
+      const raw = m[a] != null ? m[a] : el.getAttribute(a); if (!/[А-Яа-яЁё]/.test(raw)) continue; if (m[a] == null) m[a] = raw;
+      const tr = lang === "ru" ? null : MAP[lang].get(raw.trim()); const want = tr || raw; if (el.getAttribute(a) !== want) el.setAttribute(a, want); }
+  }
+  function walk(root){
+    if (!root) return;
+    if (root.nodeType === 3) return trText(root);
+    if (root.nodeType !== 1 || /^(SCRIPT|STYLE|TEXTAREA|CANVAS|SVG)$/i.test(root.nodeName)) return;
+    trEl(root);
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT, { acceptNode: n => n.nodeType === 1 && /^(SCRIPT|STYLE|TEXTAREA)$/i.test(n.nodeName) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+    let n; while ((n = w.nextNode())) n.nodeType === 3 ? trText(n) : trEl(n);
+  }
+  let pend = new Set(), raf = 0;
+  const obs = new MutationObserver(ms => { if (lang === "ru" && !document.documentElement.dataset.trd) return; ms.forEach(m => { if (m.type === "characterData") pend.add(m.target); m.addedNodes && m.addedNodes.forEach(x => pend.add(x)); });
+    if (!raf) raf = requestAnimationFrame(() => { raf = 0; const list = [...pend]; pend.clear(); obs.disconnect(); list.forEach(walk); start(); }); });
+  const start = () => obs.observe(document.body, { childList: true, subtree: true, characterData: true });
+  function set(l, save){
+    if (!IDX.hasOwnProperty(l)) return; lang = l; if (save){ try { localStorage.setItem("ub-lang", l); } catch(e) {} }
+    document.documentElement.lang = l; if (l !== "ru") document.documentElement.dataset.trd = "1";
+    obs.disconnect(); walk(document.body); start(); drawBtn();
+    document.dispatchEvent(new CustomEvent("langchange", { detail: l }));
+  }
+  const flag = cc => `<img alt="" src="https://flagcdn.com/w40/${cc}.png" srcset="https://flagcdn.com/w80/${cc}.png 2x" width="22" height="16" loading="lazy">`;
+  function drawBtn(){ const b = document.getElementById("langBtn"); if (!b) return; const L = LANGS.find(x => x[0] === lang); b.innerHTML = flag(L[2]); b.title = L[1];
+    const pop = document.getElementById("langPop"); if (pop) pop.querySelectorAll("[data-l]").forEach(x => x.setAttribute("aria-pressed", x.dataset.l === lang)); }
+  function init(){
+    const b = document.getElementById("langBtn"), pop = document.getElementById("langPop");
+    pop.innerHTML = LANGS.map(([c, n, cc]) => `<button type="button" data-l="${c}" aria-pressed="${c === lang}">${flag(cc)}<span>${n}</span></button>`).join("");
+    const close = () => { pop.hidden = true; b.setAttribute("aria-expanded", "false"); };
+    b.onclick = e => { e.stopPropagation(); pop.hidden = !pop.hidden; b.setAttribute("aria-expanded", String(!pop.hidden)); };
+    pop.onclick = e => { e.stopPropagation(); const x = e.target.closest("[data-l]"); if (!x) return; set(x.dataset.l, true); close(); };
+    document.addEventListener("click", () => { if (!pop.hidden) close(); });
+    set(lang, false);
+  }
+  return { init, set, get: () => lang, t: s => lang === "ru" ? s : (MAP[lang].get(s) || s) };
+})();
+
 /* ---------- вкладки ---------- */
 const TABS = ["1x6", "custom", "dota", "games", "feed", "rating"];
 let curTab = "1x6";
@@ -5242,6 +5512,7 @@ function setTab(name, opts){
 document.querySelectorAll(".tab").forEach(b => b.onclick = () => setTab(b.dataset.tab));
 { const cp = document.getElementById("chcPromo"); if (cp) cp.onclick = () => setTab("custom"); }
 document.getElementById("supFab").onclick = () => PROF.support();
+I18N.init();
 addEventListener("resize", () => { const a = document.querySelector('.tab[aria-selected="true"]'); if (a) inkTo(a, true); });
 { const el = document.getElementById("panes"); let x0 = null, y0 = 0, t0 = 0;
   el.addEventListener("touchstart", e => { if (e.target.closest(".recent-row, .tt-topics, input, .pick")){ x0 = null; return; } const t = e.touches[0]; x0 = t.clientX; y0 = t.clientY; t0 = Date.now(); }, { passive: true });
