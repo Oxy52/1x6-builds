@@ -34,11 +34,12 @@ module.exports = async (req, res) => {
     if (!/^[1-8]$/.test(n)) return res.status(400).json({ error: "bad_rank" });
     try {
       const r = await fetch(`https://www.opendota.com/assets/images/dota2/rank_icons/rank_icon_${n}.png`, { signal: AbortSignal.timeout(8000) });
+      if (req.query.dbg) return res.status(200).json({ status: r.status, type: r.headers.get("content-type") });
       if (!r.ok) return res.status(502).end();
       res.setHeader("Content-Type", "image/png");
       res.setHeader("Cache-Control", "public, max-age=2592000, s-maxage=2592000, immutable");
       return res.status(200).send(Buffer.from(await r.arrayBuffer()));
-    } catch (e) { return res.status(502).end(); }
+    } catch (e) { return req.query.dbg ? res.status(200).json({ error: String(e && e.message) }) : res.status(502).end(); }
   }
   if (!ROUTES[q]) return res.status(400).json({ error: "bad_query" });
   if (NEEDS_HERO.has(q) && !/^\d{1,3}$/.test(hero)) return res.status(400).json({ error: "bad_hero" });
@@ -60,7 +61,7 @@ module.exports = async (req, res) => {
           if (a.display) return String(a.display).replace("{value}", v); return [a.header, v, a.footer].filter(x => x != null && x !== "").join(" ").replace(/\s+/g, " ").trim(); };
         for (const k of Object.keys(j)) { const it = j[k] || {};
           slim[k] = { dname: it.dname || k, img: it.img || "", cost: it.cost || 0, comp: Array.isArray(it.components) ? it.components : null,
-            attr: Array.isArray(it.attrib) ? it.attrib.map(attr).filter(Boolean).slice(0, 8) : [], cd: it.cd || 0, mc: it.mc || 0 }; }
+            attr: Array.isArray(it.attrib) ? it.attrib.map(attr).filter(s => /[A-Za-z]/.test(s)).slice(0, 8) : [], cd: it.cd || 0, mc: it.mc || 0 }; }
         out = JSON.stringify(slim);
       } else if (q === "heroStats") {
         const keep = ["id", "name", "localized_name", "primary_attr", "attack_type", "roles", "img", "icon", "turbo_picks", "turbo_wins", "pro_pick", "pro_win", "pro_ban", "pub_pick", "pub_win"];
