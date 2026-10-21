@@ -1,0 +1,39 @@
+{
+ "name": "1x6 Билды",
+ "short_name": "1x6 Билды",
+ "description": "Сборки Dota 1x6, билды Custom Hero Chaos, мета Dota 2 и мини-игры",
+ "start_url": "/",
+ "scope": "/",
+ "display": "standalone",
+ "background_color": "#08080b",
+ "theme_color": "#08080b",
+ "lang": "ru",
+ "icons": [
+  {
+   "src": "/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Custom Hero Chaos",
+   "url": "/chc"
+  },
+  {
+   "name": "Мета Dota 2",
+   "url": "/dota2"
+  }
+ ]
+}
