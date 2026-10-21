@@ -5515,7 +5515,9 @@ document.getElementById("supFab").onclick = () => PROF.support();
 I18N.init();
 addEventListener("resize", () => { const a = document.querySelector('.tab[aria-selected="true"]'); if (a) inkTo(a, true); });
 { const el = document.getElementById("panes"); let x0 = null, y0 = 0, t0 = 0;
-  el.addEventListener("touchstart", e => { if (e.target.closest(".recent-row, .tt-topics, input, .pick")){ x0 = null; return; } const t = e.touches[0]; x0 = t.clientX; y0 = t.clientY; t0 = Date.now(); }, { passive: true });
+  // не листать вкладки, если палец на горизонтально прокручиваемом блоке (ранги, роли, таблицы, сетки)
+  const hScroll = n => { for (; n && n !== el; n = n.parentElement){ if (n.scrollWidth > n.clientWidth + 2){ const ox = getComputedStyle(n).overflowX; if (ox === "auto" || ox === "scroll") return true; } } return false; };
+  el.addEventListener("touchstart", e => { if (e.target.closest(".recent-row, .tt-topics, input, textarea, .pick, .rkchips, .db-tw, .chc-grid, .d2-slots, .chc-slots") || hScroll(e.target)){ x0 = null; return; } const t = e.touches[0]; x0 = t.clientX; y0 = t.clientY; t0 = Date.now(); }, { passive: true });
   el.addEventListener("touchend", e => { if (x0 === null) return; const t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0; x0 = null;
     if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 2 && Date.now() - t0 < 600 && !document.querySelector(".modal:not([hidden])")){ const i = TABS.indexOf(curTab) + (dx < 0 ? 1 : -1); if (i >= 0 && i < TABS.length) setTab(TABS[i]); } }, { passive: true }); }
 document.querySelectorAll(".gcard").forEach(c => c.onclick = () => ({ arena: () => GAME.open(), quiz: () => quiz(), roll: () => roulette(), broll: () => buildRoulette(), feed: () => openFeed(), top: () => GAME.open("top"), lasthit: () => MINI.lasthit(), duel: () => DUEL.open(), invoker: () => MINI.invoker() })[c.dataset.g]());
