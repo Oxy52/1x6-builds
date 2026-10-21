@@ -13,6 +13,7 @@
 //   GET /api/dota?q=matchups&hero=1            -> против каких героев
 //   GET /api/dota?q=search&name=Miracle        -> поиск игроков по нику
 //   GET /api/dota?q=player|wl|recent|pheroes&id=86745912 -> профиль игрока, победы/поражения, последние матчи, герои
+//   GET /api/dota?q=pmatches&id=1&off=20       -> вся история матчей игрока, по 20 штук
 //   GET /api/dota?q=match&id=8000000000        -> разбор матча (составы, KDA, предметы, график золота)
 //   GET /api/dota?q=rank&n=1..8                -> иконка ранга
 // Необязательно: OPENDOTA_API_KEY на Vercel — повышает лимиты OpenDota.
@@ -33,11 +34,12 @@ const ROUTES = {
   wl: p => `/players/${p.id}/wl`,
   recent: p => `/players/${p.id}/recentMatches`,
   pheroes: p => `/players/${p.id}/heroes`,
-  match: p => `/matches/${p.id}`
+  match: p => `/matches/${p.id}`,
+  pmatches: p => `/players/${p.id}/matches?limit=20&offset=${p.off}&project=hero_id&project=kills&project=deaths&project=assists&project=gold_per_min&project=start_time&project=duration&project=player_slot&project=radiant_win&project=game_mode`
 };
 const NEEDS_HERO = new Set(["itemPopularity", "itemTimings", "laneRoles", "matchups", "builds"]);
-const NEEDS_ID = new Set(["player", "wl", "recent", "pheroes", "match"]);
-const TTL = { items: 86400, itemIds: 86400, abilities: 86400, builds: 43200, pros: 21600, ladder: 1800, ladderTop: 1800, search: 600, player: 300, wl: 300, recent: 300, pheroes: 600, match: 86400 };
+const NEEDS_ID = new Set(["player", "wl", "recent", "pheroes", "match", "pmatches"]);
+const TTL = { items: 86400, itemIds: 86400, abilities: 86400, builds: 43200, pros: 21600, ladder: 1800, ladderTop: 1800, search: 600, player: 300, wl: 300, recent: 300, pheroes: 600, match: 86400, pmatches: 300 };
 
 const withKey = url => KEY ? url + (url.includes("?") ? "&" : "?") + "api_key=" + encodeURIComponent(KEY) : url;
 async function od(path) {
@@ -187,7 +189,7 @@ module.exports = async (req, res) => {
     else if (q === "ladder") out = JSON.stringify(await ladderOf(String(p.region)));
     else if (q === "ladderTop") out = await ladderTop();
     else {
-      const text = await od(ROUTES[q]({ hero: p.hero, id: p.id, name: String(p.name || "").trim() }));
+      const text = await od(ROUTES[q]({ hero: p.hero, id: p.id, name: String(p.name || "").trim(), off: Math.max(0, Math.min(100000, parseInt(p.off, 10) || 0)) }));
       try { out = q === "items" ? slimItems(text) : q === "heroStats" ? slimHeroes(text) : q === "match" ? slimMatch(text) : q === "search" ? JSON.stringify(JSON.parse(text).slice(0, 20)) : text; }
       catch (e) { out = text; }
     }

@@ -955,6 +955,7 @@
   .d2m-pb { display: grid; gap: 8px; } .d2m-pb > div { display: grid; gap: 4px; } .d2m-pb b { font-size: 13px; } .d2m-pb .rad b { color: #5cf07f; } .d2m-pb .dire b { color: #ff6b6b; }
   .d2m-pb div div { display: flex; flex-wrap: wrap; gap: 3px; } .d2m-pb img { width: 34px; height: 34px; border-radius: 7px; object-fit: cover; } .d2m-pb img.bn { filter: grayscale(1) brightness(.55); }
   @media (max-width: 760px) { .d2m-p { grid-template-columns: 52px minmax(0, 1fr) 70px 52px; } .d2m-p .d2m-s:not(.gold) { display: none; } .d2m-it { grid-column: 1 / -1; } .d2m-score { font-size: 32px; } .d2m-head { padding: 18px 14px 4px; } }
+  .d2-mmore { display: block; width: 100%; margin-top: 8px; }
   .d2-ml { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
   .d2-ml a { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 12px; background: var(--bg-soft); border: 1px solid var(--line); border-left: 3px solid #ff6b6b; color: inherit; text-decoration: none; }
   .d2-ml li.w a { border-left-color: #5cf07f; } .d2-ml img { width: 34px; height: 34px; border-radius: 8px; object-fit: cover; }
@@ -1629,7 +1630,7 @@
         <div class="thgrid" id="thGrid"></div>
       </div>
     </div>
-    <a class="logo" href="#top" id="logoBtn"><span class="mark">1×6</span><span class="lt">1x6 Билды</span></a>
+    <a class="logo" href="/" id="logoBtn" title="Обновить сайт"><span class="mark">1×6</span><span class="lt">1x6 Билды</span></a>
     <div class="curw"><button type="button" class="curbtn" id="curBtn" aria-label="Валюта" aria-expanded="false" aria-controls="curPop" translate="no"></button><div class="langpop curpop" id="curPop" role="menu" hidden translate="no"></div></div>
     <div class="langw"><button type="button" class="langbtn" id="langBtn" aria-label="Язык сайта" aria-expanded="false" aria-controls="langPop"></button><div class="langpop" id="langPop" role="menu" hidden></div></div>
     <button type="button" class="pbtn" id="pBtn" aria-label="Профиль"><span>Войти</span></button>
@@ -3124,7 +3125,7 @@ const PROF = (() => {
   const money = (v, fine) => { const c = CUR[cur()]; const s = v % 1 || (fine && c[2][0] < 5) ? v.toFixed(2).replace(".", ",") : String(Math.round(v)); return c[0] === "$" || c[0] === "€" ? c[0] + s : s + " " + c[0]; };
   const priceOf = p => CUR[cur()][2][PLANS.indexOf(p)];
   const PERKS = [["👑", "Значок и золотой ник", "Везде: в ленте, рейтинге, профиле и статистике"], ["✨", "Сияющий профиль и посты", "Золотая подсветка твоих постов и анимированная обложка профиля — видят все"], ["💠", "3 эксклюзивные рамки", "Корона, Аегис и Сияние — только для 1x6+"], ["🎨", "5 премиум-тем сайта", "Золото, Аркана, Лёд, Инферно и Неон"], ["⚡", "Опыт ×1.5 и бонус ×2", "Уровни и награды открываются быстрее"], ["✍️", "Длинные посты", "До 1000 символов и 120 постов в день вместо 280 и 40"], ["📈", "Разбор твоих игр в Dota 2", "Сильные герои, герои-ловушки и кого брать на твоём ранге и роли"], ["🧩", "50 билдов CHC в истории", "Вместо 6 — храни все удачные комбинации"]];
-  const CMP = [["Значок 👑 и золотой ник", "—", "✓"], ["Подсветка постов и профиля", "—", "✓"], ["Рамки аватарки", "6", "9"], ["Темы сайта", "54 героя", "+5 премиум"], ["Опыт за действия", "×1", "×1.5"], ["Ежедневный бонус", "×1", "×2"], ["Длина поста", "280", "1000"], ["Постов в день", "40", "120"], ["Разбор игр Dota 2", "форма", "полный"], ["История матчей", "30", "вся"], ["История билдов CHC", "6", "50"]];
+  const CMP = [["Значок 👑 и золотой ник", "—", "✓"], ["Подсветка постов и профиля", "—", "✓"], ["Рамки аватарки", "6", "9"], ["Темы сайта", "54 героя", "+5 премиум"], ["Опыт за действия", "×1", "×1.5"], ["Ежедневный бонус", "×1", "×2"], ["Длина поста", "280", "1000"], ["Постов в день", "40", "120"], ["История матчей", "30", "вся"], ["История билдов CHC", "6", "50"]];
   let payInfo = null, premPlan = "y1", premPoll = 0;
   const untilTxt = uid => new Date(PREM.get(uid)).toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
   // пробные 3 дня и приглашения друзей
@@ -5190,17 +5191,27 @@ const D2 = (() => {
     const heroes = (Array.isArray(hs) ? hs : []).filter(x => x.games > 0).slice(0, 10);
     const matches = Array.isArray(rec) ? rec : [];
     const isMe = myId() === String(id);
+    const mrow = m => { const rad = m.player_slot < 128, win = rad === !!m.radiant_win, h = H(m.hero_id);
+      return `<li class="${win ? "w" : "l"}"><a href="?d2m=${m.match_id}" data-mid="${m.match_id}">${h ? `<img alt="" loading="lazy" src="${esc(hicon(h))}">` : ""}<span><b>${h ? esc(h.localized_name) : "Герой"}</b><small>${ago(m.start_time)} · ${dur(m.duration)}</small></span><span class="d2-kda">${m.kills}/${m.deaths}/${m.assists}<small>${m.gold_per_min} GPM</small></span><em>${win ? "Победа" : "Поражение"}</em></a></li>`; };
     g.querySelector(".d2h").innerHTML = `
       <div class="d2h-top"><img class="d2-pav" alt="" src="${esc(p.avatarfull || "")}"><div><h3>${esc(p.personaname || "Без имени")}${p.plus ? ` <span title="Dota Plus">➕</span>` : ""}</h3><small>${isMe && (() => { try { return localStorage.getItem("ub-stream") === "1"; } catch(e) { return false; } })() ? "ID скрыт (режим стримера)" : "ID " + esc(p.account_id)}${pr.leaderboard_rank ? ` · топ-${pr.leaderboard_rank} мира` : ""}</small>
         ${med ? `<div class="d2-medal"><img alt="" src="/api/dota?q=rank&n=${med}" onerror="this.onerror=null;this.src='https://www.opendota.com/assets/images/dota2/rank_icons/rank_icon_${med}.png'"><b>${RANK_RU[med]}${med < 8 && stars ? " " + stars : ""}</b></div>` : `<div class="d2-medal"><b>Без ранга</b></div>`}</div></div>
       <div class="pstats d2-kpi"><div class="pstat"><b>${(W + L).toLocaleString("ru-RU")}</b><span>матчей</span></div><div class="pstat"><b class="db-wr ${wrCls(wr)}">${W + L ? f1(wr) + "%" : "—"}</b><span>винрейт</span></div><div class="pstat"><b>${W.toLocaleString("ru-RU")}</b><span>побед</span></div></div>
       ${W + L ? `<div class="psec"><div class="db-wl"><span style="flex:${W || .001}" class="w">${W} побед</span><span style="flex:${L || .001}" class="l">${L} поражений</span></div></div>` : ""}
       <div class="psec"><h4>📈 Персональный разбор</h4><div id="d2Ins"></div></div>
-      <div class="psec"><h4>Последние матчи</h4>${matches.length ? `<ul class="d2-ml">${matches.map(m => { const rad = m.player_slot < 128, win = rad === !!m.radiant_win, h = H(m.hero_id);
-        return `<li class="${win ? "w" : "l"}"><a href="?d2m=${m.match_id}" data-mid="${m.match_id}">${h ? `<img alt="" loading="lazy" src="${esc(hicon(h))}">` : ""}<span><b>${h ? esc(h.localized_name) : "Герой"}</b><small>${ago(m.start_time)} · ${dur(m.duration)}</small></span><span class="d2-kda">${m.kills}/${m.deaths}/${m.assists}<small>${m.gold_per_min} GPM</small></span><em>${win ? "Победа" : "Поражение"}</em></a></li>`; }).join("")}</ul>` : `<div class="pnone">Матчей нет — возможно, история матчей скрыта.</div>`}</div>
+      <div class="psec"><h4>Последние матчи</h4>${matches.length ? `<ul class="d2-ml" id="d2ML">${matches.map(mrow).join("")}</ul><button type="button" class="btn btn-ghost d2-mmore" id="d2MMore">Показать ещё 20 матчей</button>` : `<div class="pnone">Матчей нет — возможно, история матчей скрыта.</div>`}</div>
       <div class="psec"><h4>Любимые герои</h4>${heroes.length ? `<div class="db-tw"><table class="db-t"><thead><tr><th>Герой</th><th>Матчи</th><th>Винрейт</th><th>Последний</th></tr></thead><tbody>${heroes.map(x => { const h = H(x.hero_id), v = pct(x.win, x.games); return h ? `<tr data-h="${h.id}"><td class="db-hc"><span class="d2-hi"><img alt="" loading="lazy" src="${esc(himg(h))}"></span><span>${esc(h.localized_name)}</span></td><td><b>${x.games}</b></td><td class="db-wr ${wrCls(v)}"><b>${f1(v)}%</b></td><td>${x.last_played ? ago(x.last_played) : "—"}</td></tr>` : ""; }).join("")}</tbody></table></div>` : `<div class="pnone">Нет данных</div>`}</div>
       <div class="pacts"><button type="button" class="btn ${isMe ? "btn-ghost" : "btn-primary"}" id="d2SetMe">${isMe ? "✓ Это мой профиль" : "⭐ Это я — запомнить"}</button><button type="button" class="btn btn-ghost" id="d2PSh">📤 Поделиться</button></div><div style="height:20px"></div>`;
-    g.querySelectorAll("[data-mid]").forEach(a => a.onclick = e => { e.preventDefault(); match(a.dataset.mid); });
+    const ml = g.querySelector("#d2ML");
+    if (ml) ml.onclick = e => { const a = e.target.closest("[data-mid]"); if (a){ e.preventDefault(); match(a.dataset.mid); } };
+    const mm = g.querySelector("#d2MMore"); let off = matches.length;
+    if (mm){ if (matches.length < 20) mm.hidden = true;
+      mm.onclick = async () => { mm.disabled = true; mm.textContent = "Загружаем…";
+        try { const more = await fetch(`/api/dota?q=pmatches&id=${id}&off=${off}`).then(r => r.ok ? r.json() : []);
+          const list = (Array.isArray(more) ? more : []).filter(x => !ml.querySelector(`[data-mid="${x.match_id}"]`));
+          ml.insertAdjacentHTML("beforeend", list.map(mrow).join("")); off += Array.isArray(more) ? more.length : 0;
+          if (!Array.isArray(more) || more.length < 20) mm.hidden = true; } catch(e) {}
+        mm.disabled = false; mm.textContent = "Показать ещё 20 матчей"; }; }
     g.querySelector("#d2PSh").onclick = () => shareLink(`${SITE_URL}/?d2p=${p.account_id}`, `${p.personaname || "Игрок"} — профиль Dota 2`, "Матчи, винрейт и любимые герои");
     g.querySelectorAll("tr[data-h]").forEach(tr => tr.onclick = () => hero(+tr.dataset.h));
     insights(g.querySelector("#d2Ins"), hs, matches, med);
@@ -5263,9 +5274,9 @@ const D2 = (() => {
     box.querySelector("#d2MSh").onclick = () => shareLink(`${SITE_URL}/?d2m=${m.id}`, `Матч ${m.id} — ${tname(true)} vs ${tname(false)}`, `Счёт ${m.rs}:${m.ds}, ${dur(m.dur)}`);
   }
 
-  // ---------- персональный разбор игрока (фишка 1x6+) ----------
+  // ---------- персональный разбор игрока ----------
   function insights(el, hs, matches, med){
-    const prem = typeof PROF !== "undefined" && PROF.isPremMe && PROF.isPremMe();
+    const prem = true; // разбор игрока бесплатный для всех
     const br = med >= 1 && med <= 8 && HEROES_D2.some(x => pw(x, String(med))[0] > 0) ? String(med) : "all";
     const H = id => HEROES_D2.find(x => x.id === +id);
     const metaWr = h => { const [p, w] = pw(h, br); return p ? pct(w, p) : 50; };
@@ -5818,7 +5829,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=5").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=6").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
@@ -6189,7 +6200,7 @@ menu.querySelector(".tgmi").addEventListener("click", () => closeMenu());
 const fxT = document.getElementById("fxToggle"); fxT.checked = !NOFX;
 fxT.onchange = () => { NOFX = !fxT.checked; try { localStorage.setItem("ub-nofx", NOFX ? "1" : "0"); } catch(e) {}
   document.documentElement.classList.toggle("nofx", NOFX); render(); };
-document.getElementById("logoBtn").onclick = e => { e.preventDefault(); window.scrollTo({top: 0, behavior: REDUCED ? "auto" : "smooth"}); };
+document.getElementById("logoBtn").onclick = e => { e.preventDefault(); location.href = location.pathname === "/" || location.pathname === "/index.html" ? "/" : location.pathname; };
 const topbar = document.getElementById("topbar"); let tbS = false;
 addEventListener("scroll", () => { const s = scrollY > 8; if (s !== tbS) { tbS = s; topbar.classList.toggle("scrolled", s); } }, {passive: true});
 
