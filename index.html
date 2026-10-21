@@ -967,6 +967,34 @@
   .su-card { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; align-items: start; padding: 16px; margin-bottom: 12px; border-radius: 18px; border: 1px solid color-mix(in srgb, var(--t1) 55%, var(--line)); background: linear-gradient(135deg, color-mix(in srgb, var(--t1) 18%, var(--bg-soft)), var(--bg-soft)); }
   .su-ic { font-size: 34px; line-height: 1; grid-row: span 2; } .su-b b { font-size: 15.5px; } .su-b ul { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 3px; font-size: 13px; color: var(--muted); }
   .su-go { grid-column: 1 / -1; margin-top: 8px; width: 100%; } .su-n { grid-column: 1 / -1; text-align: center; font-size: 11.5px; color: var(--muted); }
+  /* ---- чат поддержки ---- */
+  .sup-fab { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 40; width: 54px; height: 54px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--t1) 60%, var(--line)); background: linear-gradient(135deg, color-mix(in srgb, var(--t1) 55%, #15151b), #15151b); color: #fff; font-size: 24px; cursor: pointer; box-shadow: 0 12px 30px -10px rgba(0,0,0,.7), 0 0 0 4px rgba(0,0,0,.25); display: grid; place-items: center; transition: transform .3s cubic-bezier(.2,.8,.2,1), opacity .3s; }
+  .sup-fab:hover { transform: translateY(-3px) scale(1.04); } .sup-fab:active { transform: scale(.95); }
+  .sup-fab b { position: absolute; top: -3px; right: -3px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 99px; background: #ff4d6d; color: #fff; font-size: 11px; font-weight: 800; display: none; place-items: center; box-shadow: 0 0 0 2px var(--bg); }
+  .sup-fab.has b { display: grid; } .sup-fab.has { animation: supPing 2.4s ease-in-out infinite; }
+  @keyframes supPing { 0%, 100% { box-shadow: 0 12px 30px -10px rgba(0,0,0,.7), 0 0 0 0 rgba(255,77,109,.5); } 50% { box-shadow: 0 12px 30px -10px rgba(0,0,0,.7), 0 0 0 10px rgba(255,77,109,0); } }
+  body.locked .sup-fab, body.menu-open .sup-fab { opacity: 0; pointer-events: none; transform: scale(.6); }
+  .mi[data-act="support"] em:not([hidden]) { background: #ff4d6d; color: #fff; border-radius: 99px; padding: 1px 7px; font-style: normal; font-size: 11px; font-weight: 800; }
+  .sup-head { padding: 18px 22px 0; } .sup-head h3 { margin: 4px 0 2px; font-family: var(--display); font-size: 22px; } .sup-head small { color: var(--muted); font-size: 13px; line-height: 1.4; display: block; }
+  .sup-back { border: 0; background: none; color: var(--muted); font: inherit; font-size: 13px; font-weight: 700; padding: 0; cursor: pointer; }
+  .prof.sup .pcover.plain, .prof .pcover.plain { height: 44px; }
+  .sup-list { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; margin: 12px 0 0; min-height: 240px; max-height: min(56vh, 520px); overflow-y: auto; overscroll-behavior: contain; background: color-mix(in srgb, var(--bg) 70%, transparent); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .sup-msg { max-width: 82%; padding: 9px 12px 6px; border-radius: 16px; background: var(--bg-soft); border: 1px solid var(--line); align-self: flex-start; animation: supIn .3s ease; }
+  @keyframes supIn { from { opacity: 0; transform: translateY(6px); } }
+  .sup-msg.me { align-self: flex-end; background: linear-gradient(135deg, color-mix(in srgb, var(--t1) 45%, var(--bg-soft)), color-mix(in srgb, var(--t2) 30%, var(--bg-soft))); border-color: transparent; border-bottom-right-radius: 5px; }
+  .sup-msg.them { border-bottom-left-radius: 5px; } .sup-msg.them.adm { border-color: color-mix(in srgb, var(--t1) 45%, var(--line)); }
+  .sup-msg p { margin: 0; font-size: 14.5px; line-height: 1.45; white-space: normal; word-wrap: break-word; } .sup-msg small { display: block; margin-top: 3px; font-size: 10.5px; color: var(--muted); text-align: right; }
+  .sup-who { display: block; font-size: 11px; font-weight: 800; color: var(--muted); margin-bottom: 2px; }
+  .sup-form { display: flex; gap: 8px; align-items: flex-end; padding: 12px 16px calc(16px + env(safe-area-inset-bottom)); }
+  .sup-form textarea { flex: 1; min-width: 0; resize: none; max-height: 140px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg-soft); color: var(--fg); font: inherit; font-size: 15px; padding: 11px 14px; line-height: 1.35; }
+  .sup-form .btn { flex: none; width: 46px; height: 46px; padding: 0; border-radius: 50%; font-size: 18px; }
+  .sup-err { margin: -6px 16px 14px; font-size: 13px; color: #ff9b9b; }
+  .sup-threads { display: grid; gap: 6px; }
+  .sup-th { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg-soft); color: inherit; font: inherit; text-align: left; cursor: pointer; }
+  .sup-th.new { border-color: color-mix(in srgb, #ff4d6d 55%, var(--line)); }
+  .sup-th .ga { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; flex: none; } .sup-th .ga img { width: 100%; height: 100%; object-fit: cover; }
+  .sup-thb { flex: 1; min-width: 0; } .sup-thb b { display: block; font-size: 14px; } .sup-thb small { display: block; font-size: 12.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sup-thm { display: grid; justify-items: end; gap: 4px; } .sup-thm small { font-size: 11px; color: var(--muted); white-space: nowrap; } .sup-thm em { font-style: normal; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 99px; background: #ff4d6d; color: #fff; font-size: 11px; font-weight: 800; display: grid; place-items: center; }
   /* ---- подписка 1x6+ ---- */
   .pbadge { display: inline-block; margin-left: 4px; font-size: .85em; filter: drop-shadow(0 0 6px rgba(243,195,90,.7)); vertical-align: 1px; }
   .gn .pbadge { margin: 0 4px 0 0; }
@@ -1431,11 +1459,13 @@
   <button type="button" class="mi" data-act="lasthit"><span style="width:21px;text-align:center">🗡️</span><span>Ластхит</span></button>
   <button type="button" class="mi" data-act="invoker"><span style="width:21px;text-align:center">🔮</span><span>Инвокер</span></button>
   <div class="menu-l">Ещё</div>
+  <button type="button" class="mi" data-act="support"><span style="width:21px;text-align:center">💬</span><span>Поддержка</span><em hidden></em></button>
   <button type="button" class="mi mprem" data-act="premium"><span style="width:21px;text-align:center">👑</span><span>Подписка 1x6+</span><em>new</em></button>
   <a class="mi tgmi" href="https://t.me/+swCyihkKvwU4NTBi" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.9 4.3 18.8 19c-.2 1-.8 1.3-1.7.8l-4.7-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.8 8.8-7.9c.4-.3-.1-.5-.6-.2L6.8 13l-4.7-1.5c-1-.3-1-1 .2-1.5L20.6 3c.9-.3 1.6.2 1.3 1.3z"/></svg><span>Наш Telegram-канал</span><em>↗</em></a>
   <label class="mi mt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 12h3l3-7 6 14 3-7h3"/></svg><span>Живые анимации</span><input type="checkbox" id="fxToggle" checked><i class="sw"></i></label>
   <p class="menu-f">Выключи анимации, если сайт тормозит на телефоне.</p>
 </aside>
+<button type="button" class="sup-fab" id="supFab" aria-label="Поддержка"><span>💬</span><b></b></button>
 <div class="modal" id="modal" hidden></div>
 
 <script>
@@ -2233,7 +2263,7 @@ const PROF = (() => {
 
   async function loadUser(u){
     U = u || null;
-    if (!U){ P = null; ST = null; claimedFor = null; IS_ADMIN = false; topbar(); if (typeof CHC !== "undefined") CHC.cta(); feedLoaded = false; if (typeof curTab !== "undefined" && curTab === "feed") setTimeout(() => feedOpen(true), 0); return; }
+    if (!U){ P = null; ST = null; claimedFor = null; IS_ADMIN = false; topbar(); supInit(); if (typeof CHC !== "undefined") CHC.cta(); feedLoaded = false; if (typeof curTab !== "undefined" && curTab === "feed") setTimeout(() => feedOpen(true), 0); return; }
     const { data, error } = await sb.from("profiles").select("*").eq("id", U.id).maybeSingle();
     if (error){ P = null; topbar(); return; }
     if (data){
@@ -2244,7 +2274,7 @@ const PROF = (() => {
       if (FAV.size !== server.length) syncFavs();
     } else P = null;
     topbar(); if (typeof CHC !== "undefined") CHC.cta();
-    checkAdmin(); feedLoaded = false; if (typeof curTab !== "undefined" && curTab === "feed") setTimeout(() => feedOpen(true), 0);
+    checkAdmin().then(supInit); feedLoaded = false; if (typeof curTab !== "undefined" && curTab === "feed") setTimeout(() => feedOpen(true), 0);
     if (P) claimDaily(); else { try { const r0 = await sb.from("user_stats").select("xp,streak,best_streak").eq("user_id", U.id).maybeSingle(); if (r0.data) ST = r0.data; } catch(e) {} }
     let pending = false; try { pending = sessionStorage.getItem("ub-auth-pending") === "1"; sessionStorage.removeItem("ub-auth-pending"); } catch(e) {}
     if (!P && !autoOpened && (pending || HAD_CODE)){ autoOpened = true; edit(true); }
@@ -2773,6 +2803,98 @@ const PROF = (() => {
     if (opts && opts.wait && U) { say("Проверяем оплату…"); watch(); }
   }
 
+  /* ---------- чат поддержки (игрок ↔ админ, всё на сайте) ---------- */
+  let supCh = null, supView = null, supNoSetup = false;
+  const supErr = m => /relation|does not exist|schema cache/i.test(m || "") ? "Чат поддержки ещё не настроен на сервере." : /rate_limit_minute/.test(m || "") ? "Слишком часто — подожди минуту." : /rate_limit_day/.test(m || "") ? "На сегодня лимит сообщений исчерпан." : "Не удалось отправить. Попробуй ещё раз.";
+  function supBadge(n){
+    const f = document.getElementById("supFab"); if (f){ f.querySelector("b").textContent = n > 9 ? "9+" : n || ""; f.classList.toggle("has", n > 0); }
+    const mi = document.querySelector('.mi[data-act="support"] em'); if (mi){ mi.textContent = n || ""; mi.hidden = !n; }
+  }
+  async function supCount(){
+    if (!CLOUD || !U || supNoSetup){ supBadge(0); return; }
+    try {
+      const q = IS_ADMIN ? sb.from("support_messages").select("id", { count: "exact", head: true }).eq("sender", "user").eq("read", false)
+        : sb.from("support_messages").select("id", { count: "exact", head: true }).eq("user_id", U.id).eq("sender", "admin").eq("read", false);
+      const { count, error } = await q;
+      if (error){ if (/relation|does not exist|schema cache/i.test(error.message)) supNoSetup = true; supBadge(0); return; }
+      supBadge(count || 0);
+    } catch(e) {}
+  }
+  function supInit(){
+    try { if (supCh){ sb.removeChannel(supCh); supCh = null; } } catch(e) {}
+    supNoSetup = false; supCount();
+    if (!CLOUD || !U) return;
+    try {
+      supCh = sb.channel("support-" + U.id).on("postgres_changes", Object.assign({ event: "INSERT", schema: "public", table: "support_messages" }, IS_ADMIN ? {} : { filter: `user_id=eq.${U.id}` }), p => supNew(p.new)).subscribe();
+    } catch(e) {}
+  }
+  function supNew(m){
+    if (!m) return;
+    if (supView && supView.uid === m.user_id && supView.box.isConnected){ supView.reload(); return; }
+    const fromOther = IS_ADMIN ? m.sender === "user" : m.sender === "admin";
+    if (fromOther){ supCount(); toast(`<span class="tic">💬</span><span><b>${IS_ADMIN ? "Новое обращение в поддержку" : "Ответ от поддержки"}</b><small>${esc(String(m.body).slice(0, 60))}</small></span>`, "", 4000); }
+  }
+  function support(){
+    if (!CLOUD){ shell("", `<div class="sup-head"><h3>💬 Поддержка</h3><small>Чат поддержки работает на сайте 1x6-eta.vercel.app</small></div><div style="height:24px"></div>`, "Поддержка"); return; }
+    if (!U){
+      const box = shell("", `<div class="sup-head"><h3>💬 Поддержка 1x6</h3><small>Вопрос, баг или идея — напиши нам, ответим прямо здесь.</small></div>
+        <div class="psec">${signupCard ? `<div class="su-card"><div class="su-ic">💬</div><div class="su-b"><b>Войди, чтобы написать в поддержку</b><ul><li>Ответ придёт сюда же, в чат на сайте</li><li>Вся переписка сохранится</li></ul></div><button type="button" class="btn btn-primary su-go">Войти или зарегистрироваться</button><small class="su-n">Google, Discord, Telegram или почта. Бесплатно.</small></div>` : ""}</div><div style="height:12px"></div>`, "Поддержка");
+      box.querySelector(".su-go").onclick = () => auth("in"); return;
+    }
+    if (IS_ADMIN) return inbox();
+    thread(U.id, false);
+  }
+  async function inbox(){
+    const box = shell("", `<div class="sup-head"><h3>📥 Обращения</h3><small>Все диалоги игроков с поддержкой. Нажми, чтобы ответить.</small></div><div class="psec" id="supIn"><div class="feed-sk"></div><div class="feed-sk"></div></div><div style="height:20px"></div>`, "Обращения");
+    supView = null;
+    const el = box.querySelector("#supIn");
+    const { data, error } = await sb.from("support_threads").select("*").order("last_at", { ascending: false }).limit(100);
+    if (!box.isConnected) return;
+    if (error){ el.innerHTML = `<div class="gempty">${supErr(error.message)}</div>`; return; }
+    const rows = (data || []).sort((a, b) => (b.unread > 0) - (a.unread > 0) || new Date(b.last_at) - new Date(a.last_at));
+    el.innerHTML = rows.length ? `<div class="sup-threads">${rows.map(r => `<button type="button" class="sup-th${r.unread ? " new" : ""}" data-u="${esc(r.user_id)}"><span class="ga${frameCls(r.frame)}"><img alt="" loading="lazy" src="${esc(avatarOf(r.avatar))}"></span><span class="sup-thb"><b>${esc(r.nick || "Игрок без профиля")}${premBadge(r.user_id)}</b><small>${r.last_sender === "admin" ? "Ты: " : ""}${esc(String(r.last_body || "").slice(0, 80))}</small></span><span class="sup-thm"><small>${ago(r.last_at)}</small>${r.unread ? `<em>${r.unread}</em>` : ""}</span></button>`).join("")}</div>` : `<div class="gempty">Обращений пока нет 🎉</div>`;
+    el.querySelectorAll("[data-u]").forEach(b => b.onclick = () => thread(b.dataset.u, true));
+  }
+  async function thread(uid, asAdmin){
+    let nick = "", av = "";
+    if (asAdmin){ try { const { data } = await sb.from("profiles").select("nick,avatar,frame").eq("id", uid).maybeSingle(); if (data){ nick = data.nick; av = data.avatar; } } catch(e) {} }
+    const box = shell("", `<div class="sup-head">${asAdmin ? `<button type="button" class="sup-back" id="supBack">← Все обращения</button><h3>${esc(nick || "Игрок")}</h3><small>Ответ увидит только этот игрок.</small>` : `<h3>💬 Поддержка 1x6</h3><small>Вопрос, баг или идея — пиши. Ответим здесь же, обычно в течение дня.</small>`}</div>
+      <div class="sup-list" id="supList"><div class="feed-sk"></div></div>
+      <form class="sup-form" id="supF"><textarea maxlength="2000" rows="1" placeholder="${asAdmin ? "Ответ игроку…" : "Напиши сообщение…"}"></textarea><button type="submit" class="btn btn-primary" aria-label="Отправить" disabled>➤</button></form>
+      <div class="sup-err" id="supE" hidden></div>`, asAdmin ? "Диалог с игроком" : "Поддержка");
+    box.classList.add("sup");
+    const list = box.querySelector("#supList"), form = box.querySelector("#supF"), ta = form.querySelector("textarea"), go = form.querySelector("button"), err = box.querySelector("#supE");
+    if (asAdmin) box.querySelector("#supBack").onclick = () => { supView = null; inbox(); };
+    let lastId = 0, n = 0;
+    const mine = m => asAdmin ? m.sender === "admin" : m.sender === "user";
+    const bubble = m => `<div class="sup-msg ${mine(m) ? "me" : "them"}${m.sender === "admin" ? " adm" : ""}">${!mine(m) ? `<span class="sup-who">${m.sender === "admin" ? "🛡️ Поддержка" : esc(nick || "Игрок")}</span>` : ""}<p>${esc(m.body).replace(/\n/g, "<br>")}</p><small>${new Date(m.created_at).toLocaleString("ru-RU", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}${mine(m) && m.read ? " · прочитано" : ""}</small></div>`;
+    async function reload(){
+      const { data, error } = await sb.from("support_messages").select("*").eq("user_id", uid).order("created_at", { ascending: true }).limit(300);
+      if (!box.isConnected) return;
+      if (error){ list.innerHTML = `<div class="gempty">${supErr(error.message)}</div>`; form.hidden = true; return; }
+      const rows = data || [], top = rows.length ? rows[rows.length - 1].id : 0;
+      if (top === lastId && rows.length === n && list.querySelector(".sup-msg, .sup-hello")) return;
+      const stick = list.scrollTop + list.clientHeight >= list.scrollHeight - 40 || !lastId;
+      lastId = top; n = rows.length;
+      list.innerHTML = (asAdmin ? "" : `<div class="sup-msg them adm sup-hello"><span class="sup-who">🛡️ Поддержка</span><p>Привет${P && P.nick ? ", " + esc(P.nick) : ""}! Опиши вопрос или проблему — что делал и что пошло не так. Ответим как можно скорее.</p></div>`) + rows.map(bubble).join("");
+      if (stick) list.scrollTop = list.scrollHeight;
+      try { await sb.rpc("support_mark_read", { p_user: asAdmin ? uid : null }); } catch(e) {}
+      supCount();
+    }
+    supView = { uid, box, reload };
+    const fit = () => { ta.style.height = "auto"; ta.style.height = Math.min(140, ta.scrollHeight) + "px"; go.disabled = !ta.value.trim(); };
+    ta.oninput = fit;
+    ta.onkeydown = e => { if (e.key === "Enter" && !e.shiftKey && matchMedia("(pointer:fine)").matches){ e.preventDefault(); form.requestSubmit(); } };
+    form.onsubmit = async e => { e.preventDefault(); const body = ta.value.trim(); if (!body) return;
+      go.disabled = true; err.hidden = true;
+      const { error } = await sb.from("support_messages").insert({ user_id: uid, sender: asAdmin ? "admin" : "user", body });
+      if (error){ err.hidden = false; err.textContent = supErr(error.message); go.disabled = false; return; }
+      ta.value = ""; fit(); await reload(); };
+    await reload();
+    const iv = setInterval(() => { if (!box.isConnected){ clearInterval(iv); if (supView && supView.box === box) supView = null; return; } reload(); }, 8000);
+    if (matchMedia("(pointer:fine)").matches) ta.focus();
+  }
+
   topbar();
   if (CLOUD){
     loadPrem();
@@ -2810,7 +2932,7 @@ const PROF = (() => {
       return { rows: data || [] };
     } catch(e) { return { error: "Нет связи с сервером." }; }
   }
-  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf, feedOpen, feedMore, openUser, me: () => P ? P.nick : null, rt: () => sb, duelReport, ratingOpen, medalHTML, statsOpen, premium, loadPlayers: q => { clearTimeout(plT); plT = setTimeout(() => loadPlayers(q), 250); } };
+  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf, feedOpen, feedMore, openUser, me: () => P ? P.nick : null, rt: () => sb, duelReport, ratingOpen, medalHTML, statsOpen, premium, support, loadPlayers: q => { clearTimeout(plT); plT = setTimeout(() => loadPlayers(q), 250); } };
 })();
 window.__favSync = () => PROF.syncFavs();
 
@@ -4898,6 +5020,7 @@ function setTab(name, opts){
 }
 document.querySelectorAll(".tab").forEach(b => b.onclick = () => setTab(b.dataset.tab));
 { const cp = document.getElementById("chcPromo"); if (cp) cp.onclick = () => setTab("custom"); }
+document.getElementById("supFab").onclick = () => PROF.support();
 addEventListener("resize", () => { const a = document.querySelector('.tab[aria-selected="true"]'); if (a) inkTo(a, true); });
 { const el = document.getElementById("panes"); let x0 = null, y0 = 0, t0 = 0;
   el.addEventListener("touchstart", e => { if (e.target.closest(".recent-row, .tt-topics, input, .pick")){ x0 = null; return; } const t = e.touches[0]; x0 = t.clientX; y0 = t.clientY; t0 = Date.now(); }, { passive: true });
@@ -4931,7 +5054,7 @@ const ACTS = {
   search(){ goBuilds(); setTimeout(() => document.getElementById("q").focus({preventScroll: true}), 450); },
   fav(){ setFilter(true, false); goBuilds(); },
   arc(){ setFilter(false, true); goBuilds(); },
-  profile(){ PROF.open(); }, feed(){ openFeed(); }, roll(){ roulette(); }, broll(){ buildRoulette(); }, quiz(){ quiz(); }, game(){ GAME.open(); }, duel(){ DUEL.open(); }, lasthit(){ MINI.lasthit(); }, invoker(){ MINI.invoker(); }, premium(){ PROF.premium(); }, chc(){ setTab("custom"); }
+  profile(){ PROF.open(); }, feed(){ openFeed(); }, roll(){ roulette(); }, broll(){ buildRoulette(); }, quiz(){ quiz(); }, game(){ GAME.open(); }, duel(){ DUEL.open(); }, lasthit(){ MINI.lasthit(); }, invoker(){ MINI.invoker(); }, premium(){ PROF.premium(); }, chc(){ setTab("custom"); }, support(){ PROF.support(); }
 };
 menu.querySelectorAll(".mi[data-act]").forEach(b => b.onclick = () => closeMenu(ACTS[b.dataset.act]));
 menu.querySelector(".tgmi").addEventListener("click", () => closeMenu());
