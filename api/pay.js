@@ -2,6 +2,7 @@
 //
 //   GET  /api/pay?info            -> какие способы оплаты включены и цены
 //   GET  /api/pay?setup=tg        -> подключить вебхук бота (один раз после деплоя)
+//   POST /api/pay?trial           -> пробные 3 дня 1x6+, один раз на аккаунт (нужен вход)
 //   POST /api/pay?create          -> { url } ссылка на оплату (нужен вход: Authorization: Bearer <токен Supabase>)
 //   POST /api/pay?hook=tg|stripe|np -> уведомления от Telegram / Stripe / NOWPayments
 //
@@ -66,6 +67,22 @@ async function grant(uid, planKey, payId, provider, amount, currency) {
   return r.json();
 }
 const untilRu = iso => new Date(iso).toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Kyiv" });
+
+// ---------- пробные 3 дня: только если у аккаунта ещё не было ни оплат, ни подписки ----------
+async function trial(req, res) {
+  if (!SECRET) return res.status(503).json({ error: "not_configured" });
+  const user = await siteUser(req);
+  if (!user) return res.status(401).json({ error: "login_required" });
+  const q = async path => { const r = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, { headers: adminHeaders() }); if (!r.ok) throw new Error("db " + r.status); return r.json(); };
+  const [pays, subs] = await Promise.all([q(`payments?select=id&user_id=eq.${user.id}&limit=1`), q(`subscriptions?select=user_id&user_id=eq.${user.id}&limit=1`)]);
+  if (pays.length || subs.length) return res.status(409).json({ error: "trial_used" });
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/grant_premium`, { method: "POST", headers: adminHeaders(),
+    body: JSON.stringify({ p_user: user.id, p_days: 3, p_pay_id: "trial:" + user.id, p_provider: "trial", p_plan: "trial", p_amount: "0", p_currency: "" }) });
+  if (!r.ok) throw new Error("grant_failed " + (await r.text()).slice(0, 200));
+  const j = await r.json();
+  if (j && j.status === "duplicate") return res.status(409).json({ error: "trial_used" });
+  return res.status(200).json({ until: j && j.until });
+}
 
 // ---------- создание оплаты ----------
 async function create(req, res, body) {
@@ -193,6 +210,7 @@ module.exports = async (req, res) => {
     try { body = JSON.parse(raw.toString("utf8") || "{}"); } catch (e) { return res.status(400).json({ error: "bad_json" }); }
     if (q.hook === "tg") return await hookTg(req, res, body);
     if (q.hook === "np") return await hookNp(req, res, body);
+    if ("trial" in q) return await trial(req, res);
     return await create(req, res, body);
   } catch (e) {
     return res.status(500).json({ error: "server_error" });

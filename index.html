@@ -3107,8 +3107,11 @@ const PROF = (() => {
       if (!error && !(data || []).length && !sd && box.isConnected){
         tEl.innerHTML = `<div class="psec"><div class="pm-trial"><b>🎁 3 дня 1x6+ бесплатно</b><small>Попробуй все плюшки прямо сейчас — без оплаты и без привязки карты. Один раз на аккаунт.</small><button type="button" class="btn pm-btn" id="pmTr">Попробовать бесплатно</button></div></div>`;
         tEl.querySelector("#pmTr").onclick = async e => { e.currentTarget.disabled = true;
-          const { error: er } = await sb.rpc("claim_trial");
-          if (er){ e.currentTarget.disabled = false; tEl.querySelector("small").textContent = /trial_used/.test(er.message) ? "Пробный период уже был на этом аккаунте." : /function|schema cache/i.test(er.message) ? "Пробный период скоро будет доступен." : "Не получилось — попробуй ещё раз."; return; }
+          const btn = e.currentTarget; let er = "";
+          try { const { data: { session } } = await sb.auth.getSession();
+            const r = await fetch("/api/pay?trial", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + (session ? session.access_token : "") }, body: "{}" });
+            if (!r.ok) er = (await r.json().catch(() => ({}))).error || "http_" + r.status; } catch(x) { er = "network"; }
+          if (er){ btn.disabled = false; tEl.querySelector("small").textContent = er === "trial_used" ? "Пробный период уже был на этом аккаунте." : er === "login_required" ? "Войди в аккаунт ещё раз." : er === "network" ? "Нет связи с сервером. Проверь интернет." : "Не получилось — попробуй ещё раз."; return; }
           await loadPrem(); toast(`<span class="tic">🎁</span><span><b>1x6+ на 3 дня включена!</b><small>Загляни в профиль — там новые рамки и темы</small></span>`, "lvl", 5000); premium(); }; } } catch(e) {} }
     // приглашения
     let n = null; try { const { count, error } = await sb.from("referrals").select("invitee", { count: "exact", head: true }).eq("inviter", U.id); if (!error) n = count || 0; } catch(e) {}
