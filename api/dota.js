@@ -23,6 +23,10 @@ const NEEDS_HERO = new Set(["itemPopularity", "itemTimings", "laneRoles", "match
 
 module.exports = async (req, res) => {
   const q = String((req.query && req.query.q) || ""), hero = String((req.query && req.query.hero) || "");
+  if (req.query && req.query.ping !== undefined) {
+    try { const r = await fetch(BASE + "/heroStats", { headers: { Accept: "application/json", "User-Agent": "1x6-builds (+https://1x6-eta.vercel.app)" } }); const t = await r.text();
+      return res.status(200).json({ status: r.status, len: t.length, head: t.slice(0, 300) }); } catch (e) { return res.status(200).json({ error: String(e && e.message) }); }
+  }
   if (!ROUTES[q]) return res.status(400).json({ error: "bad_query" });
   if (NEEDS_HERO.has(q) && !/^\d{1,3}$/.test(hero)) return res.status(400).json({ error: "bad_hero" });
   let url = BASE + ROUTES[q](hero);
