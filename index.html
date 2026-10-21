@@ -1049,6 +1049,21 @@
   .pm-cr:first-child { border-top: 0; } .pm-cr > span:nth-child(2) { color: var(--muted); text-align: center; } .pm-cr > b { text-align: center; color: #f3c35a; }
   .pm-ch { background: var(--bg-soft); font-weight: 800; font-size: 12px; } .pm-ch > span:nth-child(3) { text-align: center; color: #f3c35a; }
   .chc-hn { font-weight: 600; color: var(--muted); font-size: 12px; margin-left: 6px; } .chc-more { border: 0; background: none; color: #f3c35a; font: inherit; font-weight: 700; cursor: pointer; padding: 0; }
+  /* ---- настройки аккаунта ---- */
+  .set { display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); } .set-card { min-width: 0; } .set-f .pw { width: 100%; min-width: 0; } .set-f.col .btn { width: 100%; }
+  .set-card { padding: 14px; border-radius: 16px; background: var(--bg-soft); border: 1px solid var(--line); display: grid; gap: 10px; }
+  .set-row { display: flex; align-items: center; gap: 12px; } .set-row > div { flex: 1; min-width: 0; } .set-row b { display: block; font-size: 14.5px; } .set-row small { display: block; font-size: 12.5px; color: var(--muted); line-height: 1.4; overflow-wrap: anywhere; }
+  .set-ic { width: 38px; height: 38px; flex: none; border-radius: 12px; display: grid; place-items: center; background: var(--bg); font-size: 18px; }
+  .set-eye { width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); cursor: pointer; font-size: 16px; }
+  .set-f { display: flex; gap: 8px; } .set-f.col { flex-direction: column; } .set-f input { flex: 1; min-width: 0; height: 44px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); font: inherit; font-size: 15px; padding: 0 12px; } .set-f .pw input { width: 100%; }
+  .set-f .btn { flex: none; } .set-code { display: grid; gap: 4px; } .set-code small { font-size: 12px; color: var(--muted); }
+  .set-n { font-size: 12px; color: var(--muted); } .set-del { justify-self: start; border: 0; background: none; color: #ff8a8a; font: inherit; font-size: 12.5px; cursor: pointer; padding: 0; }
+  .set-msg { font-size: 13px; color: #ff9b9b; } .set-msg.good { color: #7ff59a; }
+  .set-tg { cursor: pointer; } .set-tg input { position: absolute; opacity: 0; pointer-events: none; }
+  .set-tg i { flex: none; width: 46px; height: 28px; border-radius: 99px; background: var(--bg); border: 1px solid var(--line); position: relative; transition: background .3s; }
+  .set-tg i::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--muted); transition: transform .3s cubic-bezier(.2,.8,.2,1), background .3s; }
+  .set-tg input:checked + i { background: color-mix(in srgb, var(--t1) 60%, var(--bg)); } .set-tg input:checked + i::after { transform: translateX(18px); background: #fff; }
+  .set-out { padding: 9px 14px; font-size: 13px; }
   /* ---- подписка 1x6+ ---- */
   .pbadge { display: inline-block; margin-left: 4px; font-size: .85em; filter: drop-shadow(0 0 6px rgba(243,195,90,.7)); vertical-align: 1px; }
   .gn .pbadge { margin: 0 4px 0 0; }
@@ -1514,6 +1529,7 @@
   <button type="button" class="mi" data-act="lasthit"><span style="width:21px;text-align:center">🗡️</span><span>Ластхит</span></button>
   <button type="button" class="mi" data-act="invoker"><span style="width:21px;text-align:center">🔮</span><span>Инвокер</span></button>
   <div class="menu-l">Ещё</div>
+  <button type="button" class="mi" data-act="settings"><span style="width:21px;text-align:center">⚙️</span><span>Настройки аккаунта</span></button>
   <button type="button" class="mi" data-act="install"><span style="width:21px;text-align:center">📲</span><span>Установить на телефон</span></button>
   <button type="button" class="mi" data-act="shareSite"><span style="width:21px;text-align:center">📤</span><span>Поделиться сайтом</span></button>
   <button type="button" class="mi" data-act="support"><span style="width:21px;text-align:center">💬</span><span>Поддержка</span><em hidden></em></button>
@@ -2209,19 +2225,20 @@ const PROF = (() => {
     let best = 0; try { best = +localStorage.getItem("ub-best") || 0; } catch(e) {}
     const fav = [...FAV], rec = (typeof RECENT !== "undefined" ? RECENT : []).slice(0, 8);
     const box = shell(bnSrc(P.bn), `
-      <div class="phead"><div class="pav${frameCls(P.frame)}"><img alt="" src="${esc(avSrc(P.av))}"></div><div class="pname"><h3>${esc(P.nick)}</h3>${P.st ? `<div class="pst">${esc(P.st)}</div>` : ""}${CLOUD && U ? `<div class="pvia">Вход: ${esc(provName(U))}${U.email && !/@1x6-eta\.vercel\.app$/.test(U.email) ? " · " + esc(U.email) : (U.user_metadata && U.user_metadata.user_name ? " · @" + esc(U.user_metadata.user_name) : "")}</div>` : ""}</div></div>
+      <div class="phead"><div class="pav${frameCls(P.frame)}"><img alt="" src="${esc(avSrc(P.av))}"></div><div class="pname"><h3>${esc(P.nick)}</h3>${P.st ? `<div class="pst">${esc(P.st)}</div>` : ""}${CLOUD && U ? `<div class="pvia">${viaLine(U)}</div>` : ""}</div></div>
       <div class="pstats"><div class="pstat"><b>${fav.length}</b><span>в избранном</span></div><div class="pstat"><b>${seen().length}</b><span>героев изучено</span></div><div class="pstat"><b>${best}</b><span>рекорд в квизе</span></div></div>
       ${CLOUD && U ? lvlBlock() : ""}
       <div class="psec"><h4>Избранные герои</h4>${faces(fav) || `<div class="pnone">Пока пусто — жми ★ на карточке героя.</div>`}</div>
       ${CLOUD && U ? `<div class="psec" id="pAch"><h4>Достижения</h4><div class="pnone">Загружаем…</div></div>` : ""}
       ${rec.length ? `<div class="psec"><h4>Недавно смотрел</h4>${faces(rec)}</div>` : ""}
-      <div class="pacts">${CLOUD ? `<button type="button" class="btn pm-btn" id="pPrem">${isPrem(U && U.id) ? "👑 1x6+ активна" : "👑 1x6+"}</button>` : ""}<button type="button" class="btn btn-primary" id="pEdit">Редактировать</button>${CLOUD && U ? `<button type="button" class="btn btn-ghost" id="pPub">Мой публичный профиль</button>` : ""}<button type="button" class="btn btn-danger" id="pOut">Выйти</button></div>
+      <div class="pacts">${CLOUD && U ? `<button type="button" class="btn btn-ghost" id="pSet">⚙️ Настройки</button>` : ""}${CLOUD ? `<button type="button" class="btn pm-btn" id="pPrem">${isPrem(U && U.id) ? "👑 1x6+ активна" : "👑 1x6+"}</button>` : ""}<button type="button" class="btn btn-primary" id="pEdit">Редактировать</button>${CLOUD && U ? `<button type="button" class="btn btn-ghost" id="pPub">Мой публичный профиль</button>` : ""}<button type="button" class="btn btn-danger" id="pOut">Выйти</button></div>
       ${CLOUD ? "" : `<p class="pnote">Профиль сохранён только на этом устройстве.</p>`}
       <div id="pConf"></div>`);
     box.querySelectorAll(".pfaces button").forEach(b => b.onclick = () => openHero(H(b.dataset.s)));
     box.querySelector("#pEdit").onclick = () => edit(false);
     if (CLOUD && U && isPrem(U.id)) box.classList.add("pglow");
     { const pp = box.querySelector("#pPrem"); if (pp) pp.onclick = () => premium(); }
+    { const ps = box.querySelector("#pSet"); if (ps) ps.onclick = () => settings(); }
     { const pb = box.querySelector("#pPub"); if (pb) pb.onclick = () => openUser(U.id); }
     if (CLOUD && U) fillAch(box);
     box.querySelector("#pOut").onclick = () => {
@@ -2256,7 +2273,7 @@ const PROF = (() => {
     const base = P || (CLOUD ? LOCAL : null);
     const d = base ? JSON.parse(JSON.stringify(base)) : { nick: "", st: "", av: { t: "hero", v: HEROES[rnd(HEROES.length)].slug }, bn: { t: "arc", v: Object.keys(ARCANA)[rnd(11)] } };
     if (!base && CLOUD && U){ const md = U.user_metadata || {}; const au = md.avatar_url || md.picture; if (au && /^https:\/\//.test(au)) d.av = { t: "url", v: au }; }
-    if (!d.nick && CLOUD && U){ const md = U.user_metadata || {}; d.nick = String(md.full_name || md.name || md.user_name || (U.email || "").split("@")[0] || "").replace(/[^\p{L}\p{N}_\-. ]/gu, "").slice(0, 20); }
+    if (!d.nick && CLOUD && U){ const md = U.user_metadata || {}; d.nick = String(md.user_name || md.name || md.full_name || "").replace(/[^\p{L}\p{N}_\-. ]/gu, "").slice(0, 20); }
     const arcs = Object.keys(ARCANA);
     const lb = t => `<span class="lb">${t}</span>`;
     const box = shell(bnSrc(d.bn), `
@@ -3009,6 +3026,67 @@ const PROF = (() => {
     if (matchMedia("(pointer:fine)").matches) ta.focus();
   }
 
+  /* ---------- настройки аккаунта ---------- */
+  const streamer = () => { try { return localStorage.getItem("ub-stream") === "1"; } catch(e) { return false; } };
+  const realEmail = u => u && u.email && !/@1x6-eta\.vercel\.app$/.test(u.email) ? u.email : "";
+  const maskEmail = e => { const [a, d] = String(e || "").split("@"); if (!d) return ""; const dot = d.lastIndexOf("."); const dn = dot > 0 ? d.slice(0, dot) : d, tld = dot > 0 ? d.slice(dot) : "";
+    return a.slice(0, 1) + "•".repeat(Math.max(3, Math.min(6, a.length - 1))) + "@" + dn.slice(0, 1) + "•".repeat(Math.max(2, Math.min(5, dn.length - 1))) + tld; };
+  const maskPhone = p => { p = String(p || ""); return p ? p.slice(0, 4) + " ••• •• " + p.slice(-2) : ""; };
+  const viaLine = u => { if (!u) return ""; const em = realEmail(u), un = u.user_metadata && u.user_metadata.user_name;
+    if (streamer()) return `Вход: ${esc(provName(u))} · 🎥 режим стримера`;
+    return `Вход: ${esc(provName(u))}${em ? " · " + esc(maskEmail(em)) : un ? " · @" + esc(un) : ""}`; };
+  function settings(){
+    if (!CLOUD || !U) return CLOUD ? auth("in") : null;
+    const em = realEmail(U), ph = (U.user_metadata && U.user_metadata.phone_contact) || "", oauth = /google|discord/.test((U.app_metadata && U.app_metadata.provider) || "") || (U.user_metadata && U.user_metadata.provider === "telegram");
+    const box = shell("", `<div class="sup-head"><h3>⚙️ Настройки аккаунта</h3><small>Эти данные видишь только ты. В профиле и ленте почта и номер не показываются.</small></div>
+      <div class="psec set">
+        <div class="set-card"><div class="set-row"><span class="set-ic">🔑</span><div><b>Способ входа</b><small>${esc(provName(U)) || "почта"}</small></div></div></div>
+
+        <div class="set-card"><div class="set-row"><span class="set-ic">✉️</span><div><b>Почта</b><small id="stEm">${em ? esc(streamer() ? "скрыта (режим стримера)" : maskEmail(em)) : "не указана"}</small></div>${em && !streamer() ? `<button type="button" class="set-eye" id="stEye" aria-label="Показать почту">👁</button>` : ""}</div>
+          <form class="set-f" id="stEmF"><input type="email" autocomplete="email" placeholder="${em ? "Новая почта" : "Добавить почту"}" required><button type="submit" class="btn btn-ghost">${em ? "Сменить" : "Добавить"}</button></form>
+          <div class="set-msg" id="stEmM" hidden></div></div>
+
+        <div class="set-card"><div class="set-row"><span class="set-ic">🔒</span><div><b>Пароль</b><small>${oauth ? "Задай пароль — сможешь входить и по почте с паролем" : "Смени пароль для входа по почте"}</small></div></div>
+          <form class="set-f col" id="stPwF"><div class="pw"><input type="password" autocomplete="new-password" placeholder="Новый пароль (от 6 символов)" id="stPw1"></div><div class="pw"><input type="password" autocomplete="new-password" placeholder="Повтори пароль" id="stPw2"></div>
+            <div class="set-code" id="stCode" hidden><input inputmode="numeric" autocomplete="one-time-code" placeholder="Код из письма" id="stNonce"><small>Для безопасности мы отправили код на твою почту.</small></div>
+            <button type="submit" class="btn btn-primary">${oauth ? "Задать пароль" : "Сменить пароль"}</button></form>
+          <div class="set-msg" id="stPwM" hidden></div></div>
+
+        <div class="set-card"><div class="set-row"><span class="set-ic">📱</span><div><b>Номер телефона</b><small id="stPh">${ph ? esc(streamer() ? "скрыт (режим стримера)" : maskPhone(ph)) : "не указан"}</small></div></div>
+          <form class="set-f" id="stPhF"><input type="tel" autocomplete="tel" placeholder="+380 XX XXX XX XX" value=""><button type="submit" class="btn btn-ghost">${ph ? "Сменить" : "Добавить"}</button></form>
+          <small class="set-n">Номер хранится в твоём аккаунте и виден только тебе. Никаких SMS и рассылок.</small>${ph ? `<button type="button" class="set-del" id="stPhDel">Удалить номер</button>` : ""}
+          <div class="set-msg" id="stPhM" hidden></div></div>
+
+        <div class="set-card"><label class="set-row set-tg"><span class="set-ic">🎥</span><div><b>Режим стримера</b><small>Полностью прячет почту, номер и Steam ID на экране — можно спокойно стримить.</small></div><input type="checkbox" id="stStream"${streamer() ? " checked" : ""}><i></i></label></div>
+
+        <div class="set-card"><div class="set-row"><span class="set-ic">🚪</span><div><b>Выйти на всех устройствах</b><small>Если заходил с чужого телефона или компьютера</small></div><button type="button" class="btn btn-danger set-out" id="stOutAll">Выйти</button></div></div>
+      </div><div style="height:16px"></div>`, "Настройки аккаунта");
+    const $ = s => box.querySelector(s);
+    const say = (el, txt, ok) => { el.hidden = !txt; el.classList.toggle("good", !!ok); el.textContent = txt || ""; };
+    const eye = $("#stEye"); if (eye) eye.onclick = () => { const s = $("#stEm"), shown = s.dataset.shown === "1"; s.textContent = shown ? maskEmail(em) : em; s.dataset.shown = shown ? "" : "1"; eye.textContent = shown ? "👁" : "🙈"; };
+    $("#stEmF").onsubmit = async e => { e.preventDefault(); const v = e.target.querySelector("input").value.trim(), m = $("#stEmM");
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return say(m, "Проверь адрес почты.");
+      const { error } = await sb.auth.updateUser({ email: v }, { emailRedirectTo: location.origin + location.pathname });
+      say(m, error ? ERR(error.message) : "Отправили письмо — открой его и подтверди смену почты.", !error); if (!error) e.target.reset(); };
+    let needNonce = false;
+    $("#stPwF").onsubmit = async e => { e.preventDefault(); const a = $("#stPw1").value, b = $("#stPw2").value, m = $("#stPwM");
+      if (a.length < 6) return say(m, "Пароль должен быть не короче 6 символов.");
+      if (a !== b) return say(m, "Пароли не совпадают.");
+      if (oauth && !em) return say(m, "Сначала добавь почту — пароль нужен для входа по почте.");
+      const payload = { password: a }; if (needNonce) payload.nonce = $("#stNonce").value.trim();
+      const { error } = await sb.auth.updateUser(payload);
+      if (error && /reauthenticat|nonce/i.test(error.message) && !needNonce){ const r = await sb.auth.reauthenticate(); needNonce = true; $("#stCode").hidden = false; return say(m, r.error ? ERR(r.error.message) : "Введи код из письма и нажми ещё раз.", !r.error); }
+      say(m, error ? ERR(error.message) : "Пароль сохранён!", !error); if (!error){ e.target.reset(); $("#stCode").hidden = true; needNonce = false; } };
+    $("#stPhF").onsubmit = async e => { e.preventDefault(); const raw = e.target.querySelector("input").value.trim(), v = raw.replace(/[^\d+]/g, ""), m = $("#stPhM");
+      if (!/^\+?\d{9,15}$/.test(v)) return say(m, "Введи номер в формате +380XXXXXXXXX.");
+      const { data, error } = await sb.auth.updateUser({ data: { phone_contact: v.startsWith("+") ? v : "+" + v } });
+      if (!error && data && data.user) U = data.user;
+      say(m, error ? ERR(error.message) : "Номер сохранён.", !error); if (!error){ e.target.reset(); $("#stPh").textContent = streamer() ? "скрыт (режим стримера)" : maskPhone(U.user_metadata.phone_contact); } };
+    const pd = $("#stPhDel"); if (pd) pd.onclick = async () => { const { data, error } = await sb.auth.updateUser({ data: { phone_contact: null } }); if (!error){ if (data && data.user) U = data.user; settings(); } else say($("#stPhM"), ERR(error.message)); };
+    $("#stStream").onchange = e => { try { localStorage.setItem("ub-stream", e.target.checked ? "1" : "0"); } catch(_) {} topbar(); settings(); };
+    $("#stOutAll").onclick = async () => { await sb.auth.signOut({ scope: "global" }).catch(() => {}); U = null; P = null; topbar(); closeModal(); };
+  }
+
   topbar();
   if (CLOUD){
     loadPrem();
@@ -3046,7 +3124,7 @@ const PROF = (() => {
       return { rows: data || [] };
     } catch(e) { return { error: "Нет связи с сервером." }; }
   }
-  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf, feedOpen, feedMore, openUser, me: () => P ? P.nick : null, rt: () => sb, duelReport, ratingOpen, medalHTML, statsOpen, premium, support, toast, isPrem, isPremMe: () => isPrem(U && U.id), loadPlayers: q => { clearTimeout(plT); plT = setTimeout(() => loadPlayers(q), 250); } };
+  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf, feedOpen, feedMore, openUser, me: () => P ? P.nick : null, rt: () => sb, duelReport, ratingOpen, medalHTML, statsOpen, premium, support, toast, settings, isPrem, isPremMe: () => isPrem(U && U.id), loadPlayers: q => { clearTimeout(plT); plT = setTimeout(() => loadPlayers(q), 250); } };
 })();
 window.__favSync = () => PROF.syncFavs();
 
@@ -4764,7 +4842,7 @@ const D2 = (() => {
     const matches = Array.isArray(rec) ? rec : [];
     const isMe = myId() === String(id);
     g.querySelector(".d2h").innerHTML = `
-      <div class="d2h-top"><img class="d2-pav" alt="" src="${esc(p.avatarfull || "")}"><div><h3>${esc(p.personaname || "Без имени")}${p.plus ? ` <span title="Dota Plus">➕</span>` : ""}</h3><small>ID ${esc(p.account_id)}${pr.leaderboard_rank ? ` · топ-${pr.leaderboard_rank} мира` : ""}</small>
+      <div class="d2h-top"><img class="d2-pav" alt="" src="${esc(p.avatarfull || "")}"><div><h3>${esc(p.personaname || "Без имени")}${p.plus ? ` <span title="Dota Plus">➕</span>` : ""}</h3><small>${isMe && (() => { try { return localStorage.getItem("ub-stream") === "1"; } catch(e) { return false; } })() ? "ID скрыт (режим стримера)" : "ID " + esc(p.account_id)}${pr.leaderboard_rank ? ` · топ-${pr.leaderboard_rank} мира` : ""}</small>
         ${med ? `<div class="d2-medal"><img alt="" src="/api/dota?q=rank&n=${med}" onerror="this.onerror=null;this.src='https://www.opendota.com/assets/images/dota2/rank_icons/rank_icon_${med}.png'"><b>${RANK_RU[med]}${med < 8 && stars ? " " + stars : ""}</b></div>` : `<div class="d2-medal"><b>Без ранга</b></div>`}</div></div>
       <div class="pstats d2-kpi"><div class="pstat"><b>${(W + L).toLocaleString("ru-RU")}</b><span>матчей</span></div><div class="pstat"><b class="db-wr ${wrCls(wr)}">${W + L ? f1(wr) + "%" : "—"}</b><span>винрейт</span></div><div class="pstat"><b>${W.toLocaleString("ru-RU")}</b><span>побед</span></div></div>
       ${W + L ? `<div class="psec"><div class="db-wl"><span style="flex:${W || .001}" class="w">${W} побед</span><span style="flex:${L || .001}" class="l">${L} поражений</span></div></div>` : ""}
@@ -5200,7 +5278,7 @@ const ACTS = {
   search(){ goBuilds(); setTimeout(() => document.getElementById("q").focus({preventScroll: true}), 450); },
   fav(){ setFilter(true, false); goBuilds(); },
   arc(){ setFilter(false, true); goBuilds(); },
-  profile(){ PROF.open(); }, feed(){ openFeed(); }, roll(){ roulette(); }, broll(){ buildRoulette(); }, quiz(){ quiz(); }, game(){ GAME.open(); }, duel(){ DUEL.open(); }, lasthit(){ MINI.lasthit(); }, invoker(){ MINI.invoker(); }, premium(){ PROF.premium(); }, chc(){ setTab("custom"); }, support(){ PROF.support(); }, install(){ installApp(); }, shareSite(){ shareLink(SITE_URL + "/", "1x6 Билды", "Сборки Dota 1x6, билды Custom Hero Chaos, мета Dota 2 и мини-игры"); }
+  profile(){ PROF.open(); }, feed(){ openFeed(); }, roll(){ roulette(); }, broll(){ buildRoulette(); }, quiz(){ quiz(); }, game(){ GAME.open(); }, duel(){ DUEL.open(); }, lasthit(){ MINI.lasthit(); }, invoker(){ MINI.invoker(); }, premium(){ PROF.premium(); }, chc(){ setTab("custom"); }, support(){ PROF.support(); }, settings(){ PROF.settings(); }, install(){ installApp(); }, shareSite(){ shareLink(SITE_URL + "/", "1x6 Билды", "Сборки Dota 1x6, билды Custom Hero Chaos, мета Dota 2 и мини-игры"); }
 };
 menu.querySelectorAll(".mi[data-act]").forEach(b => b.onclick = () => closeMenu(ACTS[b.dataset.act]));
 menu.querySelector(".tgmi").addEventListener("click", () => closeMenu());
