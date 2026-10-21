@@ -1514,6 +1514,40 @@
   @media (max-width: 600px) { .nbody { padding: 4px 16px 20px; } .ncover .close { top: max(14px, env(safe-area-inset-top, 0px)); } }
   .d2-subs .rkc { position: relative; } .d2-subs .rkc .ndot { top: -3px; right: -3px; }
   @media (max-width: 600px) { .tabs { gap: 2px; } .tab { flex: 0 1 auto; padding: 0 6px; } .tab[aria-selected="true"] { flex: 1 0 auto; padding: 0 10px; } .tab[aria-selected="false"] .ts { display: none; } }
+  /* ---------- полировка ---------- */
+  ::selection { background: color-mix(in srgb, var(--t1) 45%, transparent); color: #fff; }
+  html { scrollbar-color: color-mix(in srgb, var(--t1) 45%, #2a2a33) transparent; scrollbar-width: thin; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; } ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--t1) 40%, #2a2a33); border-radius: 99px; border: 2px solid var(--bg); }
+  ::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--t1) 65%, #2a2a33); }
+  :focus-visible { outline: 2px solid color-mix(in srgb, var(--t1) 80%, #fff); outline-offset: 2px; border-radius: 10px; }
+  h1, h2, h3 { text-wrap: balance; } p { text-wrap: pretty; }
+  /* заголовки разделов: мягкий градиент и акцентная черта */
+  .section-head h2 { background: linear-gradient(180deg, #fff 30%, color-mix(in srgb, var(--t1) 35%, #cfcfe0)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .section-head h2::after { content: ""; display: block; width: 56px; height: 4px; margin-top: 12px; border-radius: 99px; background: linear-gradient(90deg, var(--t1), var(--t2)); box-shadow: 0 0 18px -2px color-mix(in srgb, var(--t1) 70%, transparent); }
+  /* кнопки на главной ровной сеткой, без «сироты» во второй строке */
+  @media (min-width: 601px) {
+    .hero .actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; max-width: 760px; }
+    .hero .actions .btn { justify-content: center; text-align: center; display: flex; align-items: center; gap: 8px; }
+  }
+  .hero .actions .btn { transition: transform .2s, box-shadow .25s, background .25s, border-color .25s; }
+  @media (hover: hover) { .hero .actions .btn:hover { transform: translateY(-2px); } .hero .actions .btn-ghost:hover { border-color: color-mix(in srgb, var(--t1) 55%, var(--line)); box-shadow: 0 10px 26px -12px color-mix(in srgb, var(--t1) 60%, transparent); } }
+  /* вкладки: светящаяся черта под активной */
+  .tab-ink::after { content: ""; position: absolute; left: 22%; right: 22%; bottom: -1px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--t1), transparent); box-shadow: 0 0 12px var(--t1); opacity: .9; }
+  /* карточки героев: блик при наведении */
+  .card { isolation: isolate; }
+  .card::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; border-radius: inherit; background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.16) 48%, transparent 60%); transform: translateX(-120%); transition: transform .8s cubic-bezier(.22,.61,.36,1); }
+  @media (hover: hover) { .card:hover::after { transform: translateX(120%); } }
+  /* таблицы меты: подсветка строки и тонкий акцент слева */
+  .db-t tbody tr { position: relative; } .db-t tbody tr td:first-child { box-shadow: inset 3px 0 0 transparent; transition: box-shadow .25s; }
+  .db-t tbody tr:hover td:first-child { box-shadow: inset 3px 0 0 var(--t1); }
+  /* шапка при прокрутке — стекло */
+  .nav.scrolled { background: rgba(8,8,11,.78); -webkit-backdrop-filter: saturate(1.4) blur(14px); backdrop-filter: saturate(1.4) blur(14px); }
+  /* плавное появление блоков при прокрутке */
+  .rv { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s cubic-bezier(.22,.61,.36,1); }
+  .rv.in { opacity: 1; transform: none; }
+  .nofx .rv, .rv.no { opacity: 1; transform: none; transition: none; }
+  @media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; } }
 </style>
 </head>
 <body>
@@ -1791,6 +1825,12 @@ const themeOf = h => THEME[h.slug] || ["arcane","#9aa","#222"];
 
 const CAN_ANIM = (() => { try { const ua = navigator.userAgent; if (/Safari/.test(ua) && !/Chrome|Chromium|Edg|OPR|Firefox/.test(ua)) return false; return !!document.createElement('video').canPlayType('video/webm; codecs="vp9"'); } catch(e){ return false; } })();
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// плавное появление разделов при прокрутке (без анимаций — сразу видно)
+addEventListener("DOMContentLoaded", () => {
+  if (REDUCED || !("IntersectionObserver" in window)) return;
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -8% 0px" });
+  document.querySelectorAll(".tabpane .section:not(.first), .site-footer, footer").forEach(el => { if (el.getBoundingClientRect().top < innerHeight) return; el.classList.add("rv"); io.observe(el); });
+});
 let NOFX = false; try { NOFX = localStorage.getItem("ub-nofx") === "1"; } catch(e) {}
 if (NOFX) document.documentElement.classList.add("nofx");
 
