@@ -920,6 +920,53 @@
   .chc-its { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; } .chc-it { display: grid; justify-items: center; gap: 2px; width: 64px; text-align: center; } .chc-it img { width: 52px; height: 38px; border-radius: 6px; object-fit: cover; }
   .chc-it small { font-size: 10px; line-height: 1.15; color: var(--muted); max-width: 64px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; } .chc-it.txt { width: auto; padding: 6px 8px; border-radius: 8px; background: var(--bg); }
   .chc-hist { display: flex; flex-wrap: wrap; gap: 6px; } .chc-hist button { padding: 8px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-soft); color: inherit; font: inherit; cursor: pointer; text-align: left; } .chc-hist small { display: block; font-size: 11px; color: var(--muted); }
+  /* ---- Custom Hero Chaos v2 ---- */
+  .chc-ban { position: relative; overflow: hidden; padding: 26px 22px 22px; border-radius: 24px; margin-bottom: 14px; background: radial-gradient(120% 140% at 0% 0%, rgba(123,92,255,.55), transparent 55%), radial-gradient(120% 140% at 100% 100%, rgba(37,164,238,.45), transparent 55%), linear-gradient(135deg, #160f2e, #0b1a2a); border: 1px solid rgba(123,92,255,.45); box-shadow: 0 20px 60px -30px rgba(123,92,255,.8); }
+  .chc-ban small { position: relative; font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #b9a8ff; }
+  .chc-ban h2 { position: relative; margin: 6px 0 8px; font-family: var(--display); font-size: clamp(30px, 8vw, 46px); line-height: 1; letter-spacing: -1px; color: #fff; }
+  .chc-ban h2 span { background: linear-gradient(90deg, #ff6bd6, #ffb02e, #25f4ee); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .chc-ban p { position: relative; margin: 0; max-width: 520px; color: rgba(255,255,255,.78); font-size: 14.5px; line-height: 1.5; }
+  .chc-steps { position: relative; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; } .chc-steps span { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px 6px 6px; border-radius: 99px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); color: #fff; font-size: 13px; font-weight: 700; }
+  .chc-steps b { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; background: #fff; color: #1a1040; font-size: 11px; }
+  .chc-ban-fx i { position: absolute; width: 46px; height: 46px; border-radius: 12px; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.05); transform: rotate(12deg); animation: chcFloat 7s ease-in-out infinite; }
+  .chc-ban-fx i:nth-child(1) { right: 6%; top: 12%; } .chc-ban-fx i:nth-child(2) { right: 18%; top: 48%; width: 34px; height: 34px; animation-delay: -2s; } .chc-ban-fx i:nth-child(3) { right: 4%; bottom: 10%; width: 28px; height: 28px; animation-delay: -4s; }
+  .chc-ban-fx i:nth-child(4) { right: 30%; top: 8%; width: 22px; height: 22px; animation-delay: -1s; } .chc-ban-fx i:nth-child(5) { right: 28%; bottom: 8%; width: 30px; height: 30px; animation-delay: -3s; } .chc-ban-fx i:nth-child(6) { right: 12%; top: 30%; width: 18px; height: 18px; animation-delay: -5s; }
+  @keyframes chcFloat { 50% { transform: translateY(-10px) rotate(-8deg); } }
+  @media (max-width: 560px){ .chc-ban-fx { opacity: .45; } }
+  .chc-step { padding: 16px; border-radius: 18px; background: var(--bg-soft); border: 1px solid var(--line); margin-bottom: 10px; }
+  .chc-step h4 { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 15px; } .chc-step h4 > span { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(135deg, #7b5cff, #25a4ee); color: #fff; font-size: 12px; }
+  .chc-step h4 small { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--muted); } .chc-step h4 small.shake { animation: shk .4s; color: #ff6b6b; } @keyframes shk { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+  .chc-hero { display: flex; align-items: center; gap: 12px; width: 100%; padding: 8px; border-radius: 14px; border: 1.5px dashed var(--line); background: var(--bg); color: inherit; font: inherit; cursor: pointer; text-align: left; }
+  .chc-hero img { width: 88px; height: 50px; border-radius: 10px; object-fit: cover; } .chc-hero small { display: block; font-size: 12px; color: var(--muted); } .chc-plus { width: 88px; height: 50px; display: grid; place-items: center; border-radius: 10px; background: var(--bg-soft); font-size: 24px; color: var(--muted); }
+  .chc-slots { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; }
+  @media (max-width: 560px){ .chc-slots { grid-template-columns: repeat(4, 1fr); } }
+  .chc-slot { position: relative; aspect-ratio: 1; border-radius: 12px; border: 1.5px dashed var(--line); background: var(--bg); display: block; padding: 0; overflow: hidden; }
+  .chc-slot[data-x] { opacity: .5; }
+  .chc-slot.on { border: 1.5px solid #7b5cff; box-shadow: 0 0 16px -4px rgba(123,92,255,.9); cursor: pointer; animation: slotIn .35s cubic-bezier(.2,.8,.2,1); }
+  @keyframes slotIn { from { transform: scale(.6); opacity: 0; } }
+  .chc-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .chc-slot i { position: absolute; top: 3px; right: 3px; width: 18px; height: 18px; border-radius: 50%; background: rgba(0,0,0,.7); color: #fff; font-style: normal; font-size: 10px; display: grid; place-items: center; }
+  .chc-slot span { position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 3px 3px; font-size: 9px; font-weight: 700; color: #fff; background: linear-gradient(transparent, rgba(0,0,0,.85)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
+  .chc-find { margin: 12px 0 8px; }
+  .chc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 6px; max-height: 360px; overflow-y: auto; padding: 4px 2px 8px; overscroll-behavior: contain; scrollbar-width: thin; }
+  .chc-gh { grid-column: 1 / -1; font-size: 11px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; color: var(--muted); margin-top: 6px; position: sticky; top: -4px; background: var(--bg-soft); padding: 4px 0; z-index: 1; }
+  .chc-ic { display: grid; gap: 3px; justify-items: center; padding: 0; border: 0; background: none; color: inherit; font: inherit; cursor: pointer; }
+  .chc-ic img { width: 100%; aspect-ratio: 1; border-radius: 10px; object-fit: cover; background: var(--bg); border: 2px solid transparent; transition: transform .2s, border-color .2s, filter .2s; }
+  .chc-ic:hover img { transform: translateY(-2px); } .chc-ic.on img { border-color: #7b5cff; box-shadow: 0 0 14px -2px rgba(123,92,255,.9); filter: saturate(1.2); }
+  .chc-ic span { font-size: 9.5px; line-height: 1.15; color: var(--muted); text-align: center; max-width: 100%; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .chc-ic.on span { color: var(--fg); font-weight: 700; }
+  .chc-hint { margin: 6px 0 0; font-size: 12px; color: var(--muted); }
+  .chc-step textarea { width: 100%; resize: vertical; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); font: inherit; font-size: 14px; padding: 10px 12px; }
+  #chcAI .ai-btn { padding: 16px; font-size: 16px; border-radius: 16px; box-shadow: 0 14px 40px -16px rgba(123,92,255,.9); }
+  .chc-pr li { align-items: center !important; } .chc-pn { width: 22px; flex: none; font-weight: 800; color: #b9a8ff; text-align: center; }
+  .chc-hist button { display: grid; gap: 2px; } .chc-hi { display: flex; gap: 3px; margin-bottom: 4px; } .chc-hi img { width: 26px; height: 26px; border-radius: 6px; object-fit: cover; }
+  .chc-promo { display: flex; align-items: center; gap: 14px; width: 100%; margin: 4px 0 18px; padding: 14px 16px; border-radius: 18px; border: 1px solid rgba(123,92,255,.5); background: linear-gradient(110deg, rgba(123,92,255,.28), rgba(37,164,238,.16)); color: inherit; font: inherit; text-align: left; cursor: pointer; transition: transform .25s, box-shadow .25s; position: relative; z-index: 1; }
+  .chc-promo:hover { transform: translateY(-2px); box-shadow: 0 14px 40px -18px rgba(123,92,255,.9); }
+  .chc-promo-ic { font-size: 30px; } .chc-promo b { display: block; font-size: 15px; } .chc-promo small { display: block; font-size: 12.5px; color: var(--muted); } .chc-promo > span:nth-child(2) { flex: 1; } .chc-promo em { font-style: normal; font-weight: 800; font-size: 13px; color: #b9a8ff; white-space: nowrap; }
+  @media (max-width: 480px){ .chc-promo em { display: none; } }
+  .su-card { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; align-items: start; padding: 16px; margin-bottom: 12px; border-radius: 18px; border: 1px solid color-mix(in srgb, var(--t1) 55%, var(--line)); background: linear-gradient(135deg, color-mix(in srgb, var(--t1) 18%, var(--bg-soft)), var(--bg-soft)); }
+  .su-ic { font-size: 34px; line-height: 1; grid-row: span 2; } .su-b b { font-size: 15.5px; } .su-b ul { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 3px; font-size: 13px; color: var(--muted); }
+  .su-go { grid-column: 1 / -1; margin-top: 8px; width: 100%; } .su-n { grid-column: 1 / -1; text-align: center; font-size: 11.5px; color: var(--muted); }
   /* ---- подписка 1x6+ ---- */
   .pbadge { display: inline-block; margin-left: 4px; font-size: .85em; filter: drop-shadow(0 0 6px rgba(243,195,90,.7)); vertical-align: 1px; }
   .gn .pbadge { margin: 0 4px 0 0; }
@@ -1265,11 +1312,11 @@
 
   <div class="tabs" role="tablist" aria-label="Разделы">
     <button type="button" class="tab" role="tab" data-tab="1x6" aria-selected="true"><span class="tab-ic">1×6</span><span class="tl">Dota 1x6</span><span class="ts">Сборки</span></button>
+    <button type="button" class="tab" role="tab" data-tab="custom" aria-selected="false"><span class="tab-ic">🧩</span><span class="tl">Hero Chaos</span><span class="ts">CHC</span></button>
     <button type="button" class="tab" role="tab" data-tab="dota" aria-selected="false"><span class="tab-ic d2ic">D2</span><span class="tl">Dota 2</span><span class="ts">Мета</span></button>
     <button type="button" class="tab" role="tab" data-tab="games" aria-selected="false"><span class="tab-ic">🎮</span><span class="tl">Мини-игры</span><span class="ts">Игры</span></button>
     <button type="button" class="tab" role="tab" data-tab="feed" aria-selected="false"><span class="tab-ic">💬</span><span>Лента</span></button>
     <button type="button" class="tab" role="tab" data-tab="rating" aria-selected="false"><span class="tab-ic">🏆</span><span class="tl">Рейтинг</span><span class="ts">Топ</span></button>
-    <button type="button" class="tab" role="tab" data-tab="custom" aria-selected="false"><span class="tab-ic">🧩</span><span class="tl">Кастомки</span><span class="ts">CHC</span></button>
     <i class="tab-ink" id="tabInk"></i>
   </div>
   <div class="panes" id="panes">
@@ -1278,6 +1325,7 @@
     <div class="hero-th" id="heroTh" aria-hidden="true"><img alt="" id="heroThImg"></div>
     <h1>Сборки для кастомки Dota 1×6</h1>
     <p>54 героя, у каждого готовая сборка предметов по этапам игры: начало, ранняя, середина и поздняя. У 11 героев можно посмотреть аркану.</p>
+    <button type="button" class="chc-promo" id="chcPromo"><span class="chc-promo-ic">🧩</span><span><b>Custom Hero Chaos — AI-билды</b><small>Отметь выпавшие способности — AI придумает билд под комбинацию</small></span><em>Попробовать →</em></button>
     <div class="actions">
       <button class="btn btn-primary" id="toBuilds">Смотреть сборки</button>
       <button class="btn btn-ghost" id="randomBtn">Рулетка героя</button>
@@ -1347,7 +1395,11 @@
   </div>
   <div class="tabpane" data-pane="custom" role="tabpanel" hidden>
     <section class="section first">
-      <div class="section-head"><h2>Custom Hero Chaos — AI-билд</h2><p>Отметь способности, которые тебе выпали, — AI придумает билд именно под эту комбинацию: что качать первым, какие предметы собирать и как играть.</p></div>
+      <div class="chc-ban"><div class="chc-ban-fx" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <small>Кастомка Dota 2</small><h2>Custom Hero <span>Chaos</span></h2>
+        <p>Выпали способности? Отметь их иконками — AI соберёт билд под твою комбинацию: порядок прокачки, предметы и план на игру.</p>
+        <div class="chc-steps"><span><b>1</b>Герой</span><span><b>2</b>Способности</span><span><b>3</b>🧠 AI-билд</span></div></div>
+      <div id="chcCta"></div>
       <div id="chcBox"></div>
       <div class="soon" style="margin-top:22px">
         <a class="soonc cta" href="https://t.me/+swCyihkKvwU4NTBi" target="_blank" rel="noopener"><span>✉️</span><b>Предложить кастомку</b><small>Какую кастомку добавить следующей? Напиши в Telegram-канал «сборки dota 1x6»</small></a>
@@ -1374,6 +1426,7 @@
   <button type="button" class="mi" data-act="broll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg><span>Рулетка билдов</span></button>
   <button type="button" class="mi" data-act="quiz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.3 9a2.8 2.8 0 0 1 5.4 1c0 2-2.7 2.4-2.7 4"/><circle cx="12" cy="17.3" r=".6" fill="currentColor"/></svg><span>Угадай героя</span></button>
   <button type="button" class="mi" data-act="game"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="7" width="19" height="11" rx="4"/><path d="M7 10.5v4M5 12.5h4"/><circle cx="15.5" cy="11.5" r="1" fill="currentColor"/><circle cx="18" cy="14" r="1" fill="currentColor"/></svg><span>Мини-игра: арена</span><em>топ</em></button>
+  <button type="button" class="mi" data-act="chc"><span style="width:21px;text-align:center">🧩</span><span>Custom Hero Chaos · AI</span><em>new</em></button>
   <button type="button" class="mi" data-act="duel"><span style="width:21px;text-align:center">🃏</span><span>Дуэль 1x6</span><em>new</em></button>
   <button type="button" class="mi" data-act="lasthit"><span style="width:21px;text-align:center">🗡️</span><span>Ластхит</span></button>
   <button type="button" class="mi" data-act="invoker"><span style="width:21px;text-align:center">🔮</span><span>Инвокер</span></button>
@@ -2180,7 +2233,7 @@ const PROF = (() => {
 
   async function loadUser(u){
     U = u || null;
-    if (!U){ P = null; ST = null; claimedFor = null; IS_ADMIN = false; topbar(); feedLoaded = false; if (typeof curTab !== "undefined" && curTab === "feed") setTimeout(() => feedOpen(true), 0); return; }
+    if (!U){ P = null; ST = null; claimedFor = null; IS_ADMIN = false; topbar(); if (typeof CHC !== "undefined") CHC.cta(); feedLoaded = false; if (typeof curTab !== "undefined" && curTab === "feed") setTimeout(() => feedOpen(true), 0); return; }
     const { data, error } = await sb.from("profiles").select("*").eq("id", U.id).maybeSingle();
     if (error){ P = null; topbar(); return; }
     if (data){
@@ -2190,7 +2243,7 @@ const PROF = (() => {
       if (FAV.size !== before){ try { localStorage.setItem("ub-fav", JSON.stringify([...FAV])); } catch(e) {} updFavN(); if (typeof render === "function") render(); }
       if (FAV.size !== server.length) syncFavs();
     } else P = null;
-    topbar();
+    topbar(); if (typeof CHC !== "undefined") CHC.cta();
     checkAdmin(); feedLoaded = false; if (typeof curTab !== "undefined" && curTab === "feed") setTimeout(() => feedOpen(true), 0);
     if (P) claimDaily(); else { try { const r0 = await sb.from("user_stats").select("xp,streak,best_streak").eq("user_id", U.id).maybeSingle(); if (r0.data) ST = r0.data; } catch(e) {} }
     let pending = false; try { pending = sessionStorage.getItem("ub-auth-pending") === "1"; sessionStorage.removeItem("ub-auth-pending"); } catch(e) {}
@@ -4491,7 +4544,7 @@ const D2 = (() => {
   function pickerView(){
     const el = document.getElementById("d2Picker");
     const slot = (side, i) => { const h = PK[side][i]; return `<button type="button" class="d2-slot${h ? " on" : ""}" data-side="${side}" data-i="${i}">${h ? `<img alt="" src="${esc(himg(h))}"><span>${esc(h.localized_name)}</span><i>✕</i>` : `<span>＋</span>`}</button>`; };
-    el.innerHTML = `<p class="db-note">Добавь врагов (и союзников, если знаешь), выбери свою роль — пикер посчитает по статистике матчапов, кто сильнее всего против этого драфта. AI объяснит выбор и подскажет план на игру.</p>
+    el.innerHTML = `${PROF.user() ? "" : signupCard("d2")}<p class="db-note">Добавь врагов (и союзников, если знаешь), выбери свою роль — пикер посчитает по статистике матчапов, кто сильнее всего против этого драфта. AI объяснит выбор и подскажет план на игру.</p>
       <div class="d2-draft"><h5>Враги</h5><div class="d2-slots en">${[0, 1, 2, 3, 4].map(i => slot("enemies", i)).join("")}</div><h5>Союзники</h5><div class="d2-slots al">${[0, 1, 2, 3].map(i => slot("allies", i)).join("")}</div>
       <h5>Моя роль</h5><div class="rkchips sub" id="d2PkR">${ROLES.map(r => `<button type="button" class="rkc" data-role="${r[0]}" aria-pressed="${r[0] === PK.role}">${r[0] ? r[1] : "Любая"}</button>`).join("")}</div></div>
       <div class="pacts" style="padding:0;margin:14px 0"><button type="button" class="btn btn-primary" id="d2PkGo"${PK.enemies.length ? "" : " disabled"}>Подобрать героя</button>${PK.enemies.length || PK.allies.length ? `<button type="button" class="btn btn-ghost" id="d2PkClr">Очистить</button>` : ""}</div>
@@ -4503,6 +4556,7 @@ const D2 = (() => {
     el.querySelectorAll("#d2PkR [data-role]").forEach(b => b.onclick = () => { PK.role = b.dataset.role; pickerView(); });
     const clr = el.querySelector("#d2PkClr"); if (clr) clr.onclick = () => { PK.allies = []; PK.enemies = []; pickerView(); };
     el.querySelector("#d2PkGo").onclick = () => suggest(el.querySelector("#d2PkOut"));
+    { const sg = el.querySelector(".su-go"); if (sg) sg.onclick = () => PROF.open(); }
   }
   async function suggest(out){
     out.innerHTML = `<div class="feed-sk"></div><div class="feed-sk"></div>`;
@@ -4584,76 +4638,107 @@ const AI = (() => {
 /* ---------- Кастомки: Custom Hero Chaos — AI-билд под выпавшие способности ---------- */
 const CHC = (() => {
   const esc = AI.esc;
-  const S = { hero: null, ab: [], note: "" };
+  const S = { hero: null, ab: [], note: "", q: "", hf: "" };
+  const MAX = 8;
   let ABIL = null;
   const hist = () => { try { return JSON.parse(localStorage.getItem("chc-hist") || "[]"); } catch(e) { return []; } };
   const saveHist = h => { try { localStorage.setItem("chc-hist", JSON.stringify(h.slice(0, 6))); } catch(e) {} };
+  const heroName = hk => { const h = (D2.heroes() || []).find(x => String(x.name).replace("npc_dota_hero_", "") === hk); return h ? h.localized_name : hk; };
   async function open(){
     const el = document.getElementById("chcBox"); if (!el) return;
+    cta();
     if (el.dataset.ready) return; el.dataset.ready = "1";
-    el.innerHTML = `<div class="chc">
-      <div class="chc-row"><button type="button" class="chc-hero" id="chcHero"></button><small>Герой необязателен — главное способности.</small></div>
-      <label class="d2-search chc-q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="chcQ" placeholder="Какие способности выпали? Например: Meat Hook" autocomplete="off" disabled></label>
-      <div class="chc-sug" id="chcSug"></div>
-      <div class="chc-sel" id="chcSel"></div>
-      <textarea id="chcNote" maxlength="200" rows="2" placeholder="Пожелание (необязательно): хочу играть от магии, нужен танк, есть 2 реролла…"></textarea>
-      <div id="chcAI"></div><div id="chcHist"></div></div>`;
-    const q = el.querySelector("#chcQ"), sug = el.querySelector("#chcSug");
-    el.querySelector("#chcHero").onclick = () => D2.pickHero("Твой герой в CHC", S.hero ? [S.hero.id] : [], h => { S.hero = h; draw(); });
+    el.innerHTML = `
+      <div class="chc-step"><h4><span>1</span>Твой герой <small>необязательно</small></h4><button type="button" class="chc-hero" id="chcHero"></button></div>
+      <div class="chc-step"><h4><span>2</span>Выпавшие способности <small id="chcCnt">0/${MAX}</small></h4>
+        <div class="chc-slots" id="chcSel"></div>
+        <div class="chc-find"><label class="d2-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="chcQ" placeholder="Название способности или героя" autocomplete="off" disabled></label></div>
+        <div class="chc-grid" id="chcGrid"><div class="feed-sk"></div></div>
+        <p class="chc-hint">Нажми на иконку, чтобы добавить способность. Ещё раз — убрать.</p></div>
+      <div class="chc-step"><h4><span>3</span>Пожелание <small>необязательно</small></h4><textarea id="chcNote" maxlength="200" rows="2" placeholder="Хочу играть от магии, нужен танк, осталось 2 реролла…"></textarea></div>
+      <div id="chcAI"></div><div id="chcHist"></div>`;
+    const q = el.querySelector("#chcQ");
+    el.querySelector("#chcHero").onclick = () => D2.pickHero("Твой герой в CHC", S.hero ? [S.hero.id] : [], h => { S.hero = h; draw(); grid(); });
     el.querySelector("#chcNote").oninput = e => { S.note = e.target.value; };
-    q.oninput = () => suggest(q.value);
-    q.onkeydown = e => { if (e.key === "Enter"){ e.preventDefault(); const f = sug.querySelector("[data-k]"); if (f) f.click(); } };
-    draw(); D2.loadHeroes().catch(() => {});
-    try { ABIL = await D2.get("abilities"); q.disabled = false; } catch(e) { q.placeholder = "Не удалось загрузить способности — обнови страницу"; }
+    let qt = 0; q.oninput = () => { clearTimeout(qt); qt = setTimeout(() => { S.q = q.value.trim().toLowerCase(); grid(); }, 120); };
+    draw();
+    D2.loadHeroes().then(() => { draw(); grid(); }).catch(() => {});
+    try { ABIL = await D2.get("abilities"); q.disabled = false; grid(); } catch(e) { el.querySelector("#chcGrid").innerHTML = `<div class="pnone">Не удалось загрузить способности — обнови страницу</div>`; }
     D2.itemsMeta().catch(() => {});
     AI.button(el.querySelector("#chcAI"), "🧠 Придумать билд (AI)", () => {
       if (S.ab.length < 2){ el.querySelector("#chcAI .ai-out").innerHTML = `<div class="ai-msg">Добавь хотя бы 2 способности.</div>`; return null; }
       return { kind: "chc", hero: S.hero ? S.hero.localized_name : "", abilities: S.ab.map(a => `${a.n} (${heroName(a.h)})`), note: S.note };
-    }, renderBuild, (res) => { const h = hist(); h.unshift({ t: Date.now(), hero: S.hero ? S.hero.id : null, ab: S.ab.map(a => a.k), res }); saveHist(h); drawHist(); });
+    }, renderBuild, (res, out) => { const h = hist(); h.unshift({ t: Date.now(), hero: S.hero ? S.hero.id : null, ab: S.ab.map(a => a.k), res }); saveHist(h); drawHist(); out.scrollIntoView({ behavior: "smooth", block: "start" }); });
     drawHist();
   }
-  const heroName = hk => { const h = (D2.heroes() || []).find(x => String(x.name).replace("npc_dota_hero_", "") === hk); return h ? h.localized_name : hk; };
-  function suggest(v){
-    const sug = document.getElementById("chcSug"); v = String(v || "").trim().toLowerCase();
-    if (!ABIL || v.length < 2){ sug.innerHTML = ""; return; }
-    const have = new Set(S.ab.map(a => a.k));
-    const rs = ABIL.filter(a => !have.has(a.k) && (a.n.toLowerCase().includes(v) || heroName(a.h).toLowerCase().includes(v))).slice(0, 8);
-    sug.innerHTML = rs.length ? rs.map(a => `<button type="button" data-k="${esc(a.k)}"><img alt="" loading="lazy" src="${esc(D2.img(a.i))}"><span><b>${esc(a.n)}</b><small>${esc(heroName(a.h))}</small></span></button>`).join("") : `<div class="pnone">Не нашли такую способность</div>`;
-    sug.querySelectorAll("[data-k]").forEach(b => b.onclick = () => { if (S.ab.length >= 8) return; const a = ABIL.find(x => x.k === b.dataset.k); if (a) S.ab.push(a); const q = document.getElementById("chcQ"); q.value = ""; sug.innerHTML = ""; draw(); q.focus(); });
+  // приглашение зарегистрироваться
+  function cta(){
+    const c = document.getElementById("chcCta"); if (!c) return;
+    if (PROF.user()){ c.innerHTML = ""; return; }
+    c.innerHTML = signupCard("chc");
+    c.querySelector(".su-go").onclick = () => PROF.open();
+  }
+  function grid(){
+    const g = document.getElementById("chcGrid"); if (!g || !ABIL) return;
+    const have = new Set(S.ab.map(a => a.k)), q = S.q, hk = S.hero ? String(S.hero.name).replace("npc_dota_hero_", "") : "";
+    let rs = ABIL.filter(a => !q || a.n.toLowerCase().includes(q) || heroName(a.h).toLowerCase().includes(q));
+    // способности своего героя — первыми
+    if (hk && !q) rs = rs.filter(a => a.h === hk).concat(rs.filter(a => a.h !== hk));
+    let last = "";
+    g.innerHTML = rs.length ? rs.map(a => { const head = !q && a.h !== last ? `<div class="chc-gh">${esc(heroName(a.h))}</div>` : ""; last = a.h;
+      return `${head}<button type="button" class="chc-ic${have.has(a.k) ? " on" : ""}" data-k="${esc(a.k)}" title="${esc(a.n)} — ${esc(heroName(a.h))}${a.d ? "\n" + esc(a.d) : ""}"><img alt="${esc(a.n)}" loading="lazy" src="${esc(D2.img(a.i))}"><span>${esc(a.n)}</span></button>`; }).join("")
+      : `<div class="pnone">Не нашли такую способность</div>`;
+    g.querySelectorAll("[data-k]").forEach(b => b.onclick = () => toggle(b.dataset.k));
+  }
+  function toggle(k){
+    const i = S.ab.findIndex(a => a.k === k);
+    if (i >= 0) S.ab.splice(i, 1);
+    else { if (S.ab.length >= MAX){ const c = document.getElementById("chcCnt"); c.classList.remove("shake"); void c.offsetWidth; c.classList.add("shake"); return; } const a = ABIL.find(x => x.k === k); if (a) S.ab.push(a); }
+    draw(); const b = document.querySelector(`#chcGrid [data-k="${CSS.escape(k)}"]`); if (b) b.classList.toggle("on", S.ab.some(a => a.k === k));
   }
   function draw(){
-    const hb = document.getElementById("chcHero");
-    hb.innerHTML = S.hero ? `<img alt="" src="${esc(D2.img(S.hero.img))}"><span>${esc(S.hero.localized_name)}</span><i>сменить</i>` : `<span>＋ Выбрать героя</span>`;
+    const hb = document.getElementById("chcHero"); if (!hb) return;
+    hb.innerHTML = S.hero ? `<img alt="" src="${esc(D2.img(S.hero.img))}"><span><b>${esc(S.hero.localized_name)}</b><small>нажми, чтобы сменить</small></span>` : `<span class="chc-plus">＋</span><span><b>Выбрать героя</b><small>AI учтёт его характеристики</small></span>`;
     const sel = document.getElementById("chcSel");
-    sel.innerHTML = S.ab.length ? S.ab.map((a, i) => `<button type="button" class="chc-ab" data-i="${i}" title="${esc(a.d || "")}"><img alt="" src="${esc(D2.img(a.i))}"><span><b>${esc(a.n)}</b><small>${esc(heroName(a.h))}</small></span><i>✕</i></button>`).join("") + `<small class="chc-n">${S.ab.length}/8</small>` : `<div class="pnone">Добавь способности, которые тебе выпали (от 2 до 8).</div>`;
-    sel.querySelectorAll("[data-i]").forEach(b => b.onclick = () => { S.ab.splice(+b.dataset.i, 1); draw(); });
+    sel.innerHTML = Array.from({ length: MAX }, (_, i) => { const a = S.ab[i];
+      return a ? `<button type="button" class="chc-slot on" data-i="${i}" title="${esc(a.n)} — ${esc(heroName(a.h))}"><img alt="" src="${esc(D2.img(a.i))}"><i>✕</i><span>${esc(a.n)}</span></button>` : `<span class="chc-slot"${i >= 6 ? ' data-x="1"' : ""}></span>`; }).join("");
+    sel.querySelectorAll("[data-i]").forEach(b => b.onclick = () => toggle(S.ab[+b.dataset.i].k));
+    document.getElementById("chcCnt").textContent = `${S.ab.length}/${MAX}`;
   }
   function itemRow(keys){
     const IT = D2.items() || {};
     return `<div class="chc-its">${(Array.isArray(keys) ? keys : []).map(k => { const it = IT[k]; return it ? `<span class="chc-it" title="${esc(it.dname)}"><img alt="" loading="lazy" src="${esc(D2.img(it.img))}"><small>${esc(it.dname)}</small></span>` : `<span class="chc-it txt"><small>${esc(String(k).replace(/_/g, " "))}</small></span>`; }).join("")}</div>`;
   }
   function renderBuild(r){
-    const abIcon = name => { const a = (ABIL || []).find(x => x.n.toLowerCase() === String(name || "").toLowerCase().replace(/\s*\(.*\)$/, "")); return a ? `<img alt="" src="${esc(D2.img(a.i))}">` : `<span class="chc-noi">✦</span>`; };
+    const find = name => (ABIL || []).find(x => x.n.toLowerCase() === String(name || "").toLowerCase().replace(/\s*\(.*\)$/, ""));
     const it = r.items || {};
     return `<div class="ai-card chc-res"><div class="ai-best"><div><small>AI-билд</small><b>${esc(r.title || "Билд")}</b></div></div>
       ${r.idea ? `<p>${esc(r.idea)}</p>` : ""}
-      ${Array.isArray(r.priority) && r.priority.length ? `<h5>Порядок прокачки</h5><ol class="chc-pr">${r.priority.map(p => `<li>${abIcon(p.ability)}<span><b>${esc(p.ability || "")}</b><small>${esc(p.why || "")}</small></span></li>`).join("")}</ol>` : ""}
+      ${Array.isArray(r.priority) && r.priority.length ? `<h5>Порядок прокачки</h5><ol class="chc-pr">${r.priority.map((p, i) => { const a = find(p.ability); return `<li><span class="chc-pn">${i + 1}</span>${a ? `<img alt="" src="${esc(D2.img(a.i))}">` : `<span class="chc-noi">✦</span>`}<span><b>${esc(p.ability || "")}</b><small>${esc(p.why || "")}</small></span></li>`; }).join("")}</ol>` : ""}
       <h5>Предметы</h5>${[["start", "Старт"], ["early", "Ранние"], ["core", "Основные"], ["late", "Поздние"]].filter(([k]) => Array.isArray(it[k]) && it[k].length).map(([k, t]) => `<div class="chc-st"><small>${t}</small>${itemRow(it[k])}</div>`).join("")}
       ${Array.isArray(r.tips) && r.tips.length ? `<h5>Как играть</h5><ul>${r.tips.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
       ${r.weak ? `<p class="ai-warn">⚠️ Слабое место: ${esc(r.weak)}</p>` : ""}${r.reroll ? `<p class="ai-tip">🎲 Реролл: ${esc(r.reroll)}</p>` : ""}</div>`;
   }
   function drawHist(){
     const el = document.getElementById("chcHist"); if (!el) return; const h = hist();
-    el.innerHTML = h.length ? `<h5 class="d2-h5">Прошлые билды</h5><div class="chc-hist">${h.map((x, i) => `<button type="button" data-i="${i}"><b>${esc((x.res && x.res.title) || "Билд")}</b><small>${new Date(x.t).toLocaleDateString("ru-RU", { day: "numeric", month: "short" })} · ${x.ab.length} способн.</small></button>`).join("")}</div>` : "";
+    const icons = x => x.ab.slice(0, 4).map(k => { const a = (ABIL || []).find(y => y.k === k); return a ? `<img alt="" src="${esc(D2.img(a.i))}">` : ""; }).join("");
+    el.innerHTML = h.length ? `<h5 class="d2-h5">Прошлые билды</h5><div class="chc-hist">${h.map((x, i) => `<button type="button" data-i="${i}"><span class="chc-hi">${icons(x)}</span><b>${esc((x.res && x.res.title) || "Билд")}</b><small>${new Date(x.t).toLocaleDateString("ru-RU", { day: "numeric", month: "short" })} · ${x.ab.length} способн.</small></button>`).join("")}</div>` : "";
     el.querySelectorAll("[data-i]").forEach(b => b.onclick = () => { const x = h[+b.dataset.i];
-      S.ab = x.ab.map(k => (ABIL || []).find(a => a.k === k)).filter(Boolean); S.hero = x.hero ? (D2.heroes() || []).find(hh => hh.id === x.hero) || null : null; draw();
-      document.querySelector("#chcAI .ai-out").innerHTML = renderBuild(x.res || {}); document.getElementById("chcAI").scrollIntoView({ behavior: "smooth", block: "start" }); });
+      S.ab = x.ab.map(k => (ABIL || []).find(a => a.k === k)).filter(Boolean); S.hero = x.hero ? (D2.heroes() || []).find(hh => hh.id === x.hero) || null : null; draw(); grid();
+      const out = document.querySelector("#chcAI .ai-out"); out.innerHTML = renderBuild(x.res || {}); out.scrollIntoView({ behavior: "smooth", block: "start" }); });
   }
-  return { open };
+  return { open, cta };
 })();
 
+/* приглашение зарегистрироваться (общая карточка) */
+function signupCard(kind){
+  const P = { chc: ["Сохрани свои билды и получи AI-помощника", ["🧠 5 AI-билдов CHC в день бесплатно", "💾 История билдов и избранные герои на всех устройствах", "🏆 Рейтинг, дуэли, лента и уровни с наградами"]],
+    d2: ["Войди — и AI объяснит любой драфт", ["🧠 AI-пикер и AI-билды бесплатно", "⭐ Запомни свой профиль Dota 2", "🏆 Рейтинг, дуэли, лента и уровни"]] }[kind] || ["Создай аккаунт", []];
+  return `<div class="su-card"><div class="su-ic">🎮</div><div class="su-b"><b>${P[0]}</b><ul>${P[1].map(x => `<li>${x}</li>`).join("")}</ul></div><button type="button" class="btn btn-primary su-go">Зарегистрироваться — 10 секунд</button><small class="su-n">Google, Discord, Telegram или почта. Бесплатно.</small></div>`;
+}
+
 /* ---------- вкладки ---------- */
-const TABS = ["1x6", "dota", "games", "feed", "rating", "custom"];
+const TABS = ["1x6", "custom", "dota", "games", "feed", "rating"];
 let curTab = "1x6";
 function inkTo(btn, instant){ const ink = document.getElementById("tabInk"), bar = btn.parentElement; if (!ink) return;
   if (instant){ ink.style.transition = "none"; requestAnimationFrame(() => ink.style.transition = ""); }
@@ -4672,6 +4757,7 @@ function setTab(name, opts){
   if (prev !== name && !opts.noScroll){ const tb = document.querySelector(".tabs"); const y = tb.getBoundingClientRect().top + scrollY - 70; if (scrollY > y) window.scrollTo({ top: y, behavior: REDUCED ? "auto" : "smooth" }); }
 }
 document.querySelectorAll(".tab").forEach(b => b.onclick = () => setTab(b.dataset.tab));
+{ const cp = document.getElementById("chcPromo"); if (cp) cp.onclick = () => setTab("custom"); }
 addEventListener("resize", () => { const a = document.querySelector('.tab[aria-selected="true"]'); if (a) inkTo(a, true); });
 { const el = document.getElementById("panes"); let x0 = null, y0 = 0, t0 = 0;
   el.addEventListener("touchstart", e => { if (e.target.closest(".recent-row, .tt-topics, input, .pick")){ x0 = null; return; } const t = e.touches[0]; x0 = t.clientX; y0 = t.clientY; t0 = Date.now(); }, { passive: true });
@@ -4705,7 +4791,7 @@ const ACTS = {
   search(){ goBuilds(); setTimeout(() => document.getElementById("q").focus({preventScroll: true}), 450); },
   fav(){ setFilter(true, false); goBuilds(); },
   arc(){ setFilter(false, true); goBuilds(); },
-  profile(){ PROF.open(); }, feed(){ openFeed(); }, roll(){ roulette(); }, broll(){ buildRoulette(); }, quiz(){ quiz(); }, game(){ GAME.open(); }, duel(){ DUEL.open(); }, lasthit(){ MINI.lasthit(); }, invoker(){ MINI.invoker(); }, premium(){ PROF.premium(); }
+  profile(){ PROF.open(); }, feed(){ openFeed(); }, roll(){ roulette(); }, broll(){ buildRoulette(); }, quiz(){ quiz(); }, game(){ GAME.open(); }, duel(){ DUEL.open(); }, lasthit(){ MINI.lasthit(); }, invoker(){ MINI.invoker(); }, premium(){ PROF.premium(); }, chc(){ setTab("custom"); }
 };
 menu.querySelectorAll(".mi[data-act]").forEach(b => b.onclick = () => closeMenu(ACTS[b.dataset.act]));
 menu.querySelector(".tgmi").addEventListener("click", () => closeMenu());
