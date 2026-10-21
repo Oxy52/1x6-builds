@@ -1409,6 +1409,47 @@
   }
   @media (max-width: 480px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .card { min-height: 220px; } .card .name { font-size: 17px; } .skin { left: 12px; bottom: 14px; } .arc-name { display: none; } }
   @media (prefers-reduced-motion: reduce) { .scene * { animation: none !important; } * { transition: none !important; } }
+  /* ---------- новости ---------- */
+  .tab .ndot { position: absolute; top: 9px; right: 9px; width: 8px; height: 8px; border-radius: 50%; background: #ff3b5c; box-shadow: 0 0 0 2px var(--bg-soft), 0 0 10px rgba(255,59,92,.7); }
+  .hnews { display: inline-flex; align-items: center; gap: 9px; max-width: 100%; margin: 0 0 18px; padding: 7px 14px 7px 7px; border-radius: 999px; border: 1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.28); color: var(--fg); font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; text-align: left; transition: border-color .2s, transform .2s; animation: inUp .8s cubic-bezier(.2,.8,.2,1) calc(var(--ib) + 0s) backwards; }
+  .hnews:hover { border-color: color-mix(in srgb, var(--t1) 60%, transparent); transform: translateY(-1px); }
+  .hnews b { flex: none; font-size: 10.5px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase; padding: 4px 9px; border-radius: 99px; color: #fff; background: #ff3b5c; }
+  .hnews span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .hnews i { flex: none; font-style: normal; color: var(--muted); }
+  .npatch { position: relative; overflow: hidden; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 22px; align-items: center; margin-top: 22px; padding: clamp(18px, 3vw, 26px); border-radius: 22px; border: 1px solid color-mix(in srgb, var(--t1) 35%, transparent);
+    background: radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--t1) 24%, transparent), transparent 60%), radial-gradient(120% 140% at 100% 100%, color-mix(in srgb, var(--t2) 55%, transparent), transparent 60%), var(--bg-soft); }
+  .npatch .nv { grid-row: span 2; font-family: var(--display); font-weight: 800; font-size: clamp(44px, 9vw, 72px); line-height: .9; letter-spacing: -2px; background: linear-gradient(135deg, #fff, var(--t1)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .npatch .nl { font-size: 12px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; color: var(--muted); }
+  .npatch h3 { margin: 2px 0 0; font-family: var(--display); font-weight: 800; font-size: clamp(18px, 3vw, 22px); letter-spacing: -.3px; line-height: 1.25; }
+  .npatch .nst { grid-column: 1 / -1; display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .npatch .nst span { font-size: 12.5px; font-weight: 600; padding: 6px 11px; border-radius: 99px; background: rgba(0,0,0,.3); border: 1px solid var(--line); }
+  .npatch .nst b { color: var(--gold); }
+  .nchips { margin-top: 18px; }
+  .rkc em { font-style: normal; font-size: 12px; color: var(--muted-2); margin-left: 4px; font-variant-numeric: tabular-nums; }
+  .nlist { display: grid; gap: 10px; margin-top: 14px; }
+  .ngrp { margin: 14px 2px 2px; font-size: 12px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; color: var(--muted-2); }
+  .ngrp:first-child { margin-top: 0; }
+  .ncard { --nc: #58b6ff; position: relative; display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 14px; padding: 16px 18px 16px 16px; border-radius: 18px; border: 1px solid var(--line); overflow: hidden;
+    background: linear-gradient(100deg, color-mix(in srgb, var(--nc) 8%, transparent), transparent 45%), var(--bg-soft); animation: inUp .6s cubic-bezier(.22,.61,.36,1) both; animation-delay: calc(var(--i, 0) * 40ms); }
+  .ncard::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 0 3px 3px 0; background: var(--nc); box-shadow: 0 0 12px var(--nc); }
+  .ncard.patch { --nc: #ffb547; } .ncard.players { --nc: #c47bff; } .ncard.events { --nc: #4ade80; } .ncard.community { --nc: #ff6b8b; }
+  .nic { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-size: 21px; background: color-mix(in srgb, var(--nc) 16%, transparent); border: 1px solid color-mix(in srgb, var(--nc) 35%, transparent); }
+  button.nic { padding: 0; overflow: hidden; cursor: pointer; border: 2px solid var(--c1); background: var(--c2); transition: transform .2s; }
+  button.nic:hover { transform: scale(1.08); }
+  button.nic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .nmeta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12.5px; color: var(--muted-2); }
+  .ntag { font-size: 10.5px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; color: var(--nc); background: color-mix(in srgb, var(--nc) 14%, transparent); }
+  .nnew { font-size: 10px; font-weight: 800; letter-spacing: .6px; padding: 3px 7px; border-radius: 6px; color: #fff; background: #ff3b5c; }
+  .ncard h3 { margin: 5px 0 0; font-family: var(--display); font-weight: 800; font-size: 16.5px; letter-spacing: -.2px; line-height: 1.3; }
+  .ncard p { margin: 5px 0 0; color: var(--muted); font-size: 14.5px; line-height: 1.5; }
+  .ncard p b { color: var(--fg); font-weight: 600; }
+  .nhero { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 6px 12px 6px 6px; border-radius: 99px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); font: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: border-color .2s; }
+  .nhero:hover { border-color: var(--c1); }
+  .nhero img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; }
+  .nfoot { margin-top: 16px; color: var(--muted-2); font-size: 12.5px; }
+  @media (max-width: 600px) { .npatch { grid-template-columns: 1fr; } .npatch .nv { grid-row: auto; } .ncard { grid-template-columns: 40px minmax(0, 1fr); gap: 12px; padding: 14px 14px 14px 14px; } .nic { width: 40px; height: 40px; font-size: 18px; } .hnews { font-size: 12.5px; } .tab .ndot { top: 6px; right: 6px; } }
+
+  .d2-subs .rkc { position: relative; } .d2-subs .rkc .ndot { top: -3px; right: -3px; }
 </style>
 </head>
 <body>
@@ -1446,6 +1487,7 @@
   <div class="tabpane" data-pane="1x6" role="tabpanel">
   <section class="hero">
     <div class="hero-th" id="heroTh" aria-hidden="true"><img alt="" id="heroThImg"></div>
+    <button type="button" class="hnews" id="hNews"><b>Свежее</b><span id="hNewsT">Новости патча и про-сцены</span><i>→</i></button>
     <h1>Сборки для кастомки Dota 1×6</h1>
     <p>54 героя, у каждого готовая сборка предметов по этапам игры: начало, ранняя, середина и поздняя. У 11 героев можно посмотреть аркану.</p>
     <button type="button" class="chc-promo" id="chcPromo"><span class="chc-promo-ic">🧩</span><span><b>Custom Hero Chaos — билды</b><small>Отметь выпавшие способности — получи готовую сборку под комбинацию</small></span><em>Попробовать →</em></button>
@@ -1543,6 +1585,8 @@
   <button type="button" class="mi" data-act="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Поиск героя</span></button>
   <button type="button" class="mi" data-act="fav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1.1 5.8L12 16.8l-5.3 2.8 1.1-5.8-4.3-4.1 5.9-.8z"/></svg><span>Избранное</span><em id="menuFavN"></em></button>
   <button type="button" class="mi" data-act="arc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12l3 6-9 12L3 9z"/><path d="M3 9h18M12 21 8 9l4-6 4 6z"/></svg><span>Герои с арканой</span><em>11</em></button>
+  <div class="menu-l">Dota 2</div>
+  <button type="button" class="mi" data-act="news"><span style="width:21px;text-align:center">📰</span><span>Новости и патчи</span><em>new</em></button>
   <div class="menu-l">Развлечения</div>
   <button type="button" class="mi" data-act="feed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="m10.5 9.5 4 2.5-4 2.5z" fill="currentColor"/></svg><span>Лента героев</span></button>
   <button type="button" class="mi" data-act="roll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.3" fill="currentColor"/></svg><span>Рулетка героя</span></button>
@@ -4673,12 +4717,13 @@ const D2 = (() => {
     const pane = document.getElementById("d2Pane"); if (!pane) return;
     if (pane.dataset.ready) return draw();
     pane.dataset.ready = "1";
-    pane.innerHTML = `<div class="rkchips d2-subs"><button type="button" class="rkc" data-sub2="heroes" aria-pressed="true">📊 Герои</button><button type="button" class="rkc" data-sub2="players" aria-pressed="false">👤 Игроки</button><button type="button" class="rkc" data-sub2="picker" aria-pressed="false">🎯 Пикер</button></div><div id="d2Heroes"><div class="d2-bar">
+    pane.innerHTML = `<div class="rkchips d2-subs"><button type="button" class="rkc" data-sub2="heroes" aria-pressed="true">📊 Герои</button><button type="button" class="rkc" data-sub2="players" aria-pressed="false">👤 Игроки</button><button type="button" class="rkc" data-sub2="picker" aria-pressed="false">🎯 Пикер</button><button type="button" class="rkc" data-sub2="news" aria-pressed="false">📰 Новости</button></div><div id="d2Heroes"><div class="d2-bar">
         <div class="rkchips d2-ranks">${RANKS.map(r => `<button type="button" class="rkc d2-rc" data-r="${r[0]}" aria-pressed="${r[0] === st.rank}">${rankIc(r[0])}${r[1]}</button>`).join("")}</div>
         <div class="rkchips sub d2-roles">${ROLES.map(r => `<button type="button" class="rkc" data-role="${r[0]}" aria-pressed="${r[0] === st.role}">${r[1]}</button>`).join("")}</div>
         <label class="d2-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="d2Q" placeholder="Найти героя" autocomplete="off"></label>
       </div><div id="d2Sum"></div><div id="d2List"><div class="feed-sk"></div><div class="feed-sk"></div><div class="feed-sk"></div></div>
-      <p class="db-note">Данные — открытая статистика публичных матчей <a href="https://www.opendota.com" target="_blank" rel="noopener">OpenDota</a>, обновляются раз в несколько часов. Нажми на героя — откроются винрейт по рангам и линиям, сборка предметов и контрпики.</p></div><div id="d2Players" hidden></div><div id="d2Picker" hidden></div>`;
+      <p class="db-note">Данные — открытая статистика публичных матчей <a href="https://www.opendota.com" target="_blank" rel="noopener">OpenDota</a>, обновляются раз в несколько часов. Нажми на героя — откроются винрейт по рангам и линиям, сборка предметов и контрпики.</p></div><div id="d2Players" hidden></div><div id="d2Picker" hidden></div><div id="d2News" hidden></div>`;
+    NEWS.dot();
     pane.querySelectorAll("[data-sub2]").forEach(b => b.onclick = () => sub(b.dataset.sub2));
     pane.querySelectorAll("[data-r]").forEach(b => b.onclick = () => { st.rank = b.dataset.r; pane.querySelectorAll("[data-r]").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); });
     pane.querySelectorAll("[data-role]").forEach(b => b.onclick = () => { st.role = b.dataset.role; pane.querySelectorAll("[data-role]").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); });
@@ -4992,8 +5037,9 @@ const D2 = (() => {
   function sub(name){
     const pane = document.getElementById("d2Pane"); if (!pane) return;
     pane.querySelectorAll("[data-sub2]").forEach(b => b.setAttribute("aria-pressed", b.dataset.sub2 === name));
-    ["Heroes", "Players", "Picker"].forEach(k => { const el = document.getElementById("d2" + k); if (el) el.hidden = k.toLowerCase() !== name; });
+    ["Heroes", "Players", "Picker", "News"].forEach(k => { const el = document.getElementById("d2" + k); if (el) el.hidden = k.toLowerCase() !== name; });
     if (name === "players") playersView();
+    if (name === "news") NEWS.open();
     if (name === "picker"){ if (HEROES_D2) pickerView(); else get("heroStats").then(r => { HEROES_D2 = r; pickerView(); }).catch(() => {}); }
   }
   // открыть героя по слагу сайта (crystalmaiden и т.п.)
@@ -5507,6 +5553,101 @@ const I18N = (() => {
   return { init, set, get: () => lang, t: s => lang === "ru" ? s : (tr(lang, s) || s) };
 })();
 
+/* ---------- новости: патч и про-сцена ---------- */
+const NEWS = (() => {
+  const UPDATED = "21 октября 2026";
+  const CATS = { patch: "Патч", players: "Игроки", events: "Турниры", community: "Комьюнити" };
+  // id растёт с каждой новостью — по нему считаем «новое с прошлого визита»
+  const ITEMS = [
+    { id: 38, w: "20–21 октября", d: "21 окт", cat: "events", ic: "👋", hl: 1, t: "Evil Geniuses уходит из киберспорта", x: "Легендарная организация, через которую прошли SumaiL и Arteezy, закрывается 2 ноября 2026. Причина — мало спонсоров и растущие расходы. Все игроки EG уже могут договариваться с другими командами." },
+    { id: 37, w: "20–21 октября", d: "21 окт", cat: "players", ic: "🧢", t: "Stray собирает Budka Team", x: "В его стаке засветились <b>Collapse</b> и <b>Miposhka</b>. Подробностей пока нет." },
+    { id: 36, w: "20–21 октября", d: "20 окт", cat: "players", hero: "pudge", t: "Xinq тестирует лесного Пуджа", x: "Про-игрок обкатывает Пуджа через лес — со своим стартовым закупом и докупкой. Пабы, держитесь." },
+    { id: 35, w: "20–21 октября", d: "20 окт", cat: "players", ic: "🎧", t: "Malr1ne: коллить в пабах не обязательно", x: "По его словам, коллы имеют смысл ближе к девяти тысячам, да и там их часто не слушают. Совет — просто играть на чуйке." },
+    { id: 34, w: "12–18 октября", d: "18 окт", cat: "patch", ic: "⏳", hl: 1, t: "7.41 идёт на рекорд", x: "С последнего большого обновления прошло <b>208 дней</b> — это второй по длительности патч в истории. Если Valve промолчит ещё 32 дня, 7.41 обгонит рекордсмена 7.32, который продержался <b>240 дней</b>." },
+    { id: 33, w: "12–18 октября", d: "18 окт", cat: "players", ic: "🧠", t: "Yatoro: тренер важнее нового игрока", x: "Керри считает, что смена тренера меняет команду сильнее, чем замена игрока: тренер задаёт и драфт, и перемещения, и то, как команда видит игру." },
+    { id: 32, w: "12–18 октября", d: "18 окт", cat: "players", ic: "🏠", t: "Saksa о провалах Team Yandex в онлайне", x: "Саппорт признал, что дома не все относятся к онлайн-турнирам серьёзно — отсюда и поражения. На ланах результат у команды есть." },
+    { id: 31, w: "12–18 октября", d: "19 окт", cat: "players", ic: "🐲", t: "Rue рассказал, как попал в Team Spirit", x: "Никакого секрета: просто играл, и его позвали в команду. Дальше, говорит, «попёрло». А Korb3n добавил, что побеждает не мотивация, а подготовка." },
+    { id: 30, w: "12–18 октября", d: "18 окт", cat: "players", ic: "🌍", t: "Korb3n: почему СНГ — сильнейший регион", x: "Тренер разобрал, за счёт чего СНГ сейчас впереди и какой регион мог бы составить ему конкуренцию." },
+    { id: 29, w: "12–18 октября", d: "18 окт", cat: "community", ic: "🎮", t: "Фанат делает браузерную Доту в пикселях", x: "Разработчик с Reddit показал прототип 2D-Доты прямо в браузере. Кстати, у нас есть своя пиксельная <b>Арена 1x6</b> во вкладке «Игры»." },
+    { id: 28, w: "12–18 октября", d: "18 окт", cat: "community", ic: "🏅", t: "TopSon — номинант The Streamer Awards", x: "Его выдвинули на звание лучшего MOBA-стримера года." },
+    { id: 27, w: "12–18 октября", d: "18 окт", cat: "community", ic: "🐉", t: "Cr1t ушёл с турнира по WoW на $100 000", x: "Бывший игрок Falcons проиграл первую дуэль, пожаловался на разговоры организаторов в Discord, полтора часа ждал следующего матча — и просто покинул турнир." },
+    { id: 26, w: "12–18 октября", d: "19 окт", cat: "community", ic: "⏱️", t: "iLTW: Дота стала проще", x: "Бывший про-игрок считает, что сейчас ничего придумывать не нужно — достаточно играть по таймингам." },
+    { id: 25, w: "20–21 октября", d: "20 окт", cat: "patch", ic: "🛠️", t: "Подсказка в додж-листе", x: "В клиенте обновили додж-лист: теперь сразу видно, сколько в нём свободных слотов." },
+    { id: 24, w: "12–18 октября", d: "16 окт", cat: "patch", hero: "primalbeast", t: "Primal Beast получил слоты под эффекты способностей", x: "Теперь на способности зверя можно ставить отдельные косметические эффекты." },
+    { id: 23, w: "12–18 октября", d: "15 окт", cat: "patch", hero: "snapfire", t: "Починили Lil' Shredder у Snapfire", x: "Исправили баг со снарядами Lil' Shredder, а заодно просадки FPS." },
+    { id: 22, w: "12–18 октября", d: "13 окт", cat: "patch", ic: "🐉", t: "Фиксы арканы Tidehunter и Baby Roshan", x: "Поправили анимации новой арканы Tidehunter и модель Baby Roshan." },
+    { id: 21, w: "12–18 октября", d: "неделя", cat: "patch", ic: "📕", t: "Necronomicon может вернуться", x: "Сообщество вовсю обсуждает возвращение Necronomicon со старым рецептом. Официально Valve это пока не подтверждала." },
+    { id: 20, w: "12–18 октября", d: "неделя", cat: "patch", ic: "🎯", also: ["emberspirit", "puck"], t: "Bounty Hunter — король меты", x: "В пабах BH — единоличный лидер высшего тира, а на BLAST Slam VIII его пикали или банили в <b>95%</b> драфтов. У про-игроков ещё в моде Rubick, Batrider, Puck, Ember Spirit, Tiny и Clockwerk." },
+    { id: 19, w: "12–18 октября", d: "неделя", cat: "players", ic: "🔁", hl: 1, t: "Malr1ne официально в Team Liquid", x: "Переход больше не слух. С ним Liquid может навязать борьбу Team Yandex, PARIVISION и Team Spirit. Что будет с Nisha — пока неясно." },
+    { id: 18, w: "12–18 октября", d: "неделя", cat: "players", ic: "🗣️", t: "Team Spirit хотела забрать Noticed", x: "По словам Korb3n, после ухода Collapse Spirit пыталась подписать Noticed, но сделка не сложилась — в итоге команда взяла <b>batyuk</b>." },
+    { id: 17, w: "12–18 октября", d: "неделя", cat: "players", ic: "😮‍💨", t: "MinD_ContRoL устал от Доты", x: "Чемпион TI признался, что выгорел и хочет уйти из про-сцены. Роль тренера в сильной команде он готов рассмотреть." },
+    { id: 16, w: "12–18 октября", d: "неделя", cat: "players", ic: "🌙", t: "Nightfall нашёл новый стак", x: "Он играет вместе с Lorenof и DM. На PARI Universe состав выступает под названием <b>Astra Invicta</b>." },
+    { id: 15, w: "12–18 октября", d: "неделя", cat: "community", ic: "🎙️", t: "Nix поработает на Worlds по League of Legends", x: "Комментатор едет на чемпионат мира по LoL — Riot позвала его как стримера сообщества." },
+    { id: 14, w: "12–18 октября", d: "неделя", cat: "events", ic: "🏆", t: "DreamLeague Season 30: кто прошёл квалификации", x: "Западная Европа — <b>OG</b> и <b>Team Lynx</b>, Восточная — <b>Yellow Submarine</b>, Китай — <b>Team Resilience</b>, ЮВА — стак MidOne, Ghost и Royal Bear, Америка — микс Parker и <b>Skyreavers</b>. Последние три слота разыграют на DreamLeague Division 2." },
+    { id: 13, w: "12–18 октября", d: "неделя", cat: "events", ic: "🎫", t: "Xtreme Gaming едет на BLAST SLAM IX", x: "XG обыграла Team Resilience в последнем китайском отборе и забрала слот." },
+    { id: 12, w: "12–18 октября", d: "18 окт", cat: "events", ic: "💰", t: "Стартовал EPL Masters III", x: "Турнир идёт с 18 октября по 5 ноября, призовой фонд — <b>$100 000</b>." },
+    { id: 11, w: "5–11 октября", d: "10 окт", cat: "patch", ic: "🎁", t: "Наборы из Trove of Terror можно дарить", x: "Valve разрешила дарить наборы из сокровищницы, а за дубликаты выдала дополнительные сундуки." },
+    { id: 10, w: "5–11 октября", d: "10 окт", cat: "community", ic: "📈", t: "Больше миллиона игроков онлайн", x: "Пиковый онлайн Dota 2 перевалил за миллион человек." },
+    { id: 9, w: "5–11 октября", d: "8 окт", cat: "patch", hero: "terrorblade", t: "Новый сет Terrorblade подружили с арканой", x: "Исправили конфликт нового набора Terrorblade с арканой Fractal Horns of Inner Abysm." },
+    { id: 8, w: "5–11 октября", d: "7 окт", cat: "patch", hero: "drowranger", hl: 1, t: "Вышла сокровищница Trove of Terror", x: "Внутри 15 Immortal-наборов, <b>новая аркана на Tidehunter</b> и переиздание ранее эксклюзивной арканы на Drow Ranger." },
+    { id: 7, w: "5–11 октября", d: "6 окт", cat: "patch", hero: "lina", t: "Фиксы Lina и эффекта телепорта", x: "Исправили баг способности Lina и кастомного эффекта телепортации." },
+    { id: 6, w: "5–11 октября", d: "неделя", cat: "patch", ic: "💸", t: "В файлах игры нашли персональные скидки", x: "Датамайнеры откопали намёки на персональные предложения и скидки на платный контент. Как это будет работать — пока неизвестно." },
+    { id: 5, w: "5–11 октября", d: "неделя", cat: "events", ic: "🥇", hl: 1, t: "Team Yandex — чемпион BLAST SLAM VIII", x: "Призёры повторили расклад The International 2026. Yandex называют главным претендентом на доминирование в новом сезоне." },
+    { id: 4, w: "5–11 октября", d: "неделя", cat: "players", ic: "🔁", t: "PARIVISION выкупила Satanic у Team Spirit", x: "Один из самых громких трансферов межсезонья." },
+    { id: 3, w: "5–11 октября", d: "неделя", cat: "players", ic: "🐉", t: "Team Tidebound вернулась в Доту", x: "В составе — <b>xiao8</b>, <b>nothingtosay</b> и <b>shiro</b>." },
+    { id: 2, w: "5–11 октября", d: "неделя", cat: "players", ic: "✍️", t: "Трансферы недели", x: "PlayTime взяла в аренду <b>bottega</b> — игрок едет за практикой в интернациональный микс. <b>343</b>, раньше тренировавший OG, возглавил Xipto Esports." },
+    { id: 1, w: "Сентябрь", d: "15 сен", cat: "patch", ic: "📜", t: "Патч 7.41f", x: "Правки Treant Protector, Bounty Hunter и Earth Spirit. Больше нельзя прятаться в текстурах пещеры у верхнего Рошана, починили Big Game Hunter у Bounty Hunter, а следом — ещё 11 старых багов." },
+    { id: 0, w: "Сентябрь", d: "10 сен", cat: "patch", ic: "🧳", t: "Осенние «Диковинки Квортеро»", x: "Новый сезон с наборами на Clockwerk, Treant Protector и Windranger." }
+  ];
+  const TOP = ITEMS.reduce((m, n) => Math.max(m, n.id), 0);
+  const H = slug => HEROES.find(h => h.slug === slug);
+  let seen = -1; try { const v = localStorage.getItem("ub-news"); seen = v == null ? -1 : +v; } catch(e) {}
+  const firstVisit = seen < 0;
+  let cat = "all", wired = false;
+
+  function dot(){ document.querySelectorAll('.tab[data-tab="dota"], [data-sub2="news"]').forEach(tb => { let d = tb.querySelector(".ndot");
+    if (TOP > seen && !d){ d = document.createElement("i"); d.className = "ndot"; d.setAttribute("aria-hidden", "true"); tb.appendChild(d); } else if (TOP <= seen && d) d.remove(); }); }
+  function go(){ setTab("dota"); D2.sub("news"); }
+  function icon(n){ const h = n.hero && H(n.hero);
+    return h ? `<button type="button" class="nic" data-s="${h.slug}" style="${vars(h)}" aria-label="Сборка ${h.en}" title="Сборка ${h.en}"><img alt="" loading="lazy" src="face/${h.slug}.webp"></button>` : `<span class="nic" aria-hidden="true">${n.ic || "📰"}</span>`; }
+  function chips(n){ const list = [n.hero, ...(n.also || [])].map(H).filter(Boolean); if (!list.length) return "";
+    return list.map(h => `<button type="button" class="nhero" data-s="${h.slug}" style="${vars(h)}"><img alt="" loading="lazy" src="face/${h.slug}.webp">Сборка ${h.en}</button>`).join(" "); }
+  function card(n, i){
+    const fresh = !firstVisit && n.id > seen;
+    return `<article class="ncard ${n.cat}" style="--i:${Math.min(i, 10)}">${icon(n)}<div><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span><span>${n.d}</span>${fresh ? `<span class="nnew">NEW</span>` : ""}</div>
+      <h3>${n.t}</h3><p>${n.x}</p>${chips(n)}</div></article>`;
+  }
+  function draw(){
+    const list = ITEMS.filter(n => cat === "all" || n.cat === cat);
+    const cnt = k => k === "all" ? ITEMS.length : ITEMS.filter(n => n.cat === k).length;
+    document.getElementById("nChips").innerHTML = [["all", "Всё"], ["patch", "🛠️ Патч"], ["players", "🧑‍💻 Игроки"], ["events", "🏆 Турниры"], ["community", "🎉 Комьюнити"]]
+      .map(([k, l]) => `<button type="button" class="rkc" data-c="${k}" aria-pressed="${cat === k}">${l}<em>${cnt(k)}</em></button>`).join("");
+    let html = "", w = "", i = 0;
+    list.forEach(n => { if (n.w !== w){ w = n.w; html += `<div class="ngrp">${w}</div>`; } html += card(n, i++); });
+    document.getElementById("nList").innerHTML = html;
+  }
+  function open(){
+    const box = document.getElementById("d2News"); if (!box) return;
+    if (!wired){ wired = true;
+      box.innerHTML = `<div class="npatch" id="nPatch"></div><div class="rkchips nchips" id="nChips"></div><div class="nlist" id="nList"></div><p class="nfoot" id="nFoot"></p>`;
+      document.getElementById("nPatch").innerHTML = `<span class="nv">7.41f</span><span class="nl">Текущий патч</span><h3>Второй по длительности патч в истории — и идёт на рекорд</h3>
+        <div class="nst"><span><b>211</b> дней без большого обновления</span><span>Рекорд 7.32: <b>240</b> дней</span><span>Последние правки: <b>15 сен</b></span><span>Мета: <b>Bounty Hunter</b></span></div>`;
+      document.getElementById("nFoot").textContent = `Обновлено ${UPDATED}.`;
+      document.getElementById("nChips").onclick = e => { const b = e.target.closest(".rkc"); if (!b) return; cat = b.dataset.c; draw(); };
+      document.getElementById("nList").onclick = e => { const b = e.target.closest("[data-s]"); if (b){ const h = H(b.dataset.s); if (h) openHero(h); } };
+    }
+    draw();
+    seen = TOP; try { localStorage.setItem("ub-news", String(TOP)); } catch(e) {} dot();
+  }
+  /* бегущая строка «Свежее» в шапке */
+  (() => { const hl = ITEMS.filter(n => n.hl), el = document.getElementById("hNewsT"), b = document.getElementById("hNews"); if (!el || !b) return;
+    let k = 0; el.textContent = hl[0].t; b.onclick = go;
+    if (hl.length > 1 && !REDUCED) setInterval(() => { if (document.hidden) return; k = (k + 1) % hl.length; el.style.opacity = 0; setTimeout(() => { el.textContent = hl[k].t; el.style.opacity = 1; }, 250); }, 4500);
+    el.style.transition = "opacity .25s ease"; })();
+  dot();
+  return { open, go, dot };
+})();
+
 /* ---------- вкладки ---------- */
 const TABS = ["1x6", "custom", "dota", "games", "feed", "rating"];
 let curTab = "1x6";
@@ -5563,7 +5704,7 @@ const ACTS = {
   search(){ goBuilds(); setTimeout(() => document.getElementById("q").focus({preventScroll: true}), 450); },
   fav(){ setFilter(true, false); goBuilds(); },
   arc(){ setFilter(false, true); goBuilds(); },
-  profile(){ PROF.open(); }, feed(){ openFeed(); }, roll(){ roulette(); }, broll(){ buildRoulette(); }, quiz(){ quiz(); }, game(){ GAME.open(); }, duel(){ DUEL.open(); }, lasthit(){ MINI.lasthit(); }, invoker(){ MINI.invoker(); }, premium(){ PROF.premium(); }, chc(){ setTab("custom"); }, support(){ PROF.support(); }, settings(){ PROF.settings(); }, install(){ installApp(); }, shareSite(){ shareLink(SITE_URL + "/", "1x6 Билды", "Сборки Dota 1x6, билды Custom Hero Chaos, мета Dota 2 и мини-игры"); }
+  news(){ NEWS.go(); }, profile(){ PROF.open(); }, feed(){ openFeed(); }, roll(){ roulette(); }, broll(){ buildRoulette(); }, quiz(){ quiz(); }, game(){ GAME.open(); }, duel(){ DUEL.open(); }, lasthit(){ MINI.lasthit(); }, invoker(){ MINI.invoker(); }, premium(){ PROF.premium(); }, chc(){ setTab("custom"); }, support(){ PROF.support(); }, settings(){ PROF.settings(); }, install(){ installApp(); }, shareSite(){ shareLink(SITE_URL + "/", "1x6 Билды", "Сборки Dota 1x6, билды Custom Hero Chaos, мета Dota 2 и мини-игры"); }
 };
 menu.querySelectorAll(".mi[data-act]").forEach(b => b.onclick = () => closeMenu(ACTS[b.dataset.act]));
 menu.querySelector(".tgmi").addEventListener("click", () => closeMenu());
