@@ -1634,6 +1634,24 @@
   @keyframes hbDown { from { transform: translateY(-50%); } to { transform: translateY(0); } }
   @media (prefers-reduced-motion: reduce) { .hb-col { animation: none; } }
   @media (max-width: 600px) { .hero > .hero-bg { width: 70%; right: -22%; } .hb-col img { opacity: .28; } }
+
+  /* ---------- пиксельный герой слева вверху: клик — следующий герой и тема ---------- */
+  .pxw { position: relative; flex: none; }
+  .pxh { position: relative; display: block; width: 46px; height: 46px; padding: 0; border: 0; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .pxh::after { content: ""; position: absolute; left: 18%; right: 18%; bottom: 1px; height: 6px; border-radius: 50%; background: radial-gradient(closest-side, color-mix(in srgb, var(--t1) 70%, transparent), transparent); opacity: .8; transition: background .6s; }
+  .pxh i, .pxi { position: absolute; inset: 0; z-index: 1; background-repeat: no-repeat; background-size: 200% 100%; animation: pxIdle .9s infinite; }
+  .pxh:hover i { filter: drop-shadow(0 0 6px color-mix(in srgb, var(--t1) 80%, transparent)); }
+  .pxh.jump i { animation: pxIdle .9s infinite, pxJump .5s cubic-bezier(.3,1.5,.5,1); }
+  @keyframes pxIdle { 0%, 49.9% { background-position: 0 0; } 50%, 100% { background-position: 100% 0; } }
+  @keyframes pxJump { 0% { transform: translateY(0) scale(1, 1); } 25% { transform: translateY(2px) scale(1.12, .86); } 55% { transform: translateY(-12px) scale(.94, 1.08); } 100% { transform: translateY(0) scale(1, 1); } }
+  .pxpop { position: absolute; top: calc(100% + 8px); left: 0; z-index: 60; width: 300px; padding: 12px; border-radius: 18px; background: var(--panel); border: 1px solid var(--line); box-shadow: 0 20px 50px rgba(0,0,0,.55); }
+  .pxpop b { display: block; font-family: var(--display); font-size: 14px; margin: 0 0 2px; } .pxpop small { display: block; color: var(--muted); font-size: 12px; margin-bottom: 10px; }
+  .pxgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .pxo { position: relative; aspect-ratio: 1; border-radius: 12px; border: 1px solid var(--line); background: radial-gradient(70% 60% at 50% 85%, color-mix(in srgb, var(--c) 40%, transparent), transparent 70%), rgba(255,255,255,.03); cursor: pointer; padding: 0; }
+  .pxo .pxi { inset: 6%; animation-play-state: paused; } .pxo:hover .pxi, .pxo[aria-pressed="true"] .pxi { animation-play-state: running; }
+  .pxo[aria-pressed="true"] { border-color: var(--c); box-shadow: 0 0 0 1px var(--c) inset; }
+  @media (prefers-reduced-motion: reduce) { .pxh i, .pxi { animation: none !important; } }
+  @media (max-width: 600px) { .pxh { width: 40px; height: 40px; } .pxpop { position: fixed; top: 64px; left: 12px; right: 12px; width: auto; } }
 </style>
 </head>
 <body>
@@ -1653,6 +1671,7 @@
       </div>
     </div>
     <a class="logo" href="/" id="logoBtn" title="Обновить сайт"><span class="mark lg"><img src="/logo.png" alt="" width="64" height="64"></span><span class="lt">Aegis</span></a>
+    <div class="pxw"><button type="button" class="pxh" id="pxHero" aria-label="Пиксельный герой: сменить тему" title="Клик — следующий герой и тема. Правый клик — выбрать" aria-expanded="false" aria-controls="pxPop"><i></i></button><div class="pxpop" id="pxPop" role="dialog" aria-label="Пиксельные герои" hidden><b>Пиксельные герои</b><small>Каждый герой — своя тема сайта</small><div class="pxgrid" id="pxGrid"></div></div></div>
     <div class="curw"><button type="button" class="curbtn" id="curBtn" aria-label="Валюта" aria-expanded="false" aria-controls="curPop" translate="no"></button><div class="langpop curpop" id="curPop" role="menu" hidden translate="no"></div></div>
     <div class="langw"><button type="button" class="langbtn" id="langBtn" aria-label="Язык сайта" aria-expanded="false" aria-controls="langPop"></button><div class="langpop" id="langPop" role="menu" hidden></div></div>
     <button type="button" class="pbtn" id="pBtn" aria-label="Профиль"><span>Войти</span></button>
@@ -2302,6 +2321,7 @@ document.getElementById("gameBtn").onclick = () => GAME.open();
     btn.innerHTML = `<img alt="" src="face/${h.slug}.webp">`; if (anim) { btn.classList.remove("pop"); void btn.offsetWidth; btn.classList.add("pop"); }
     hth.classList.remove("on"); himg.onload = () => requestAnimationFrame(() => hth.classList.add("on")); himg.src = art(h);
     const meta = document.querySelector('meta[name="theme-color"]'); if (meta) meta.content = c2;
+    if (window.__pxSync) window.__pxSync(slug);
   }
   let cur = ""; try { cur = localStorage.getItem("ub-theme") || ""; } catch(e) {}
   apply(cur, false);
@@ -2316,7 +2336,35 @@ document.getElementById("gameBtn").onclick = () => GAME.open();
   ptEl.onclick = e => { const b = e.target.closest(".thp"); if (!b) return;
     if (!premMe()){ close(); PROF.premium(); return; }
     cur = "p:" + b.dataset.p; try { localStorage.setItem("ub-theme", cur); } catch(_) {} apply(cur, true); setTimeout(close, 180); };
+  window.__thSet = slug => { cur = slug; try { localStorage.setItem("ub-theme", slug); } catch(_) {} apply(slug, true); };
   window.__thCheck = () => { if (/^p:/.test(cur) && !premMe()){ cur = ""; try { localStorage.removeItem("ub-theme"); } catch(_) {} apply("", false); } };
+})();
+/* ---------- пиксельный герой: клик — следующий герой и тема сайта ---------- */
+(() => {
+  const PX = ["juggernaut", "pudge", "invoker", "crystalmaiden", "axe", "lina", "sven", "slark"];
+  const btn = document.getElementById("pxHero"), pop = document.getElementById("pxPop"), grid = document.getElementById("pxGrid");
+  if (!btn) return;
+  const img = s => `url(pixel/${s}.webp)`;
+  let i = 0; try { const t = localStorage.getItem("ub-theme") || localStorage.getItem("ub-px") || ""; if (PX.includes(t)) i = PX.indexOf(t); } catch(e) {}
+  const show = (k, jump) => { i = (k + PX.length) % PX.length; btn.firstElementChild.style.backgroundImage = img(PX[i]);
+    try { localStorage.setItem("ub-px", PX[i]); } catch(e) {}
+    grid.querySelectorAll(".pxo").forEach(b => b.setAttribute("aria-pressed", b.dataset.s === PX[i]));
+    if (jump){ btn.classList.remove("jump"); void btn.offsetWidth; btn.classList.add("jump"); }
+    new Image().src = `pixel/${PX[(i + 1) % PX.length]}.webp`; };
+  grid.innerHTML = PX.map(s => `<button type="button" class="pxo" data-s="${s}" style="--c:${(THEME[s] || [])[1] || "#888"}" aria-label="${s}"><span class="pxi" style="background-image:${img(s)}"></span></button>`).join("");
+  const pick = k => { show(k, true); if (window.__thSet) window.__thSet(PX[i]); };
+  window.__pxSync = slug => { if (PX.includes(slug) && PX[i] !== slug) show(PX.indexOf(slug), true); };
+  const open = () => { pop.hidden = false; btn.setAttribute("aria-expanded", "true"); }, close = () => { pop.hidden = true; btn.setAttribute("aria-expanded", "false"); };
+  let lp = 0, longed = false;
+  btn.addEventListener("pointerdown", () => { longed = false; clearTimeout(lp); lp = setTimeout(() => { longed = true; open(); }, 480); });
+  ["pointerup", "pointerleave", "pointercancel"].forEach(ev => btn.addEventListener(ev, () => clearTimeout(lp)));
+  btn.addEventListener("contextmenu", e => { e.preventDefault(); open(); });
+  btn.onclick = e => { e.stopPropagation(); if (longed){ longed = false; return; } if (!pop.hidden) return close(); pick(i + 1); };
+  grid.onclick = e => { const b = e.target.closest(".pxo"); if (!b) return; pick(PX.indexOf(b.dataset.s)); setTimeout(close, 220); };
+  pop.addEventListener("click", e => e.stopPropagation());
+  document.addEventListener("click", () => { if (!pop.hidden) close(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !pop.hidden) close(); });
+  show(i, false);
 })();
 /* ---------- заставка ---------- */
 (() => { const sp = document.getElementById("splash"); if (!sp) return;
