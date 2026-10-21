@@ -5470,11 +5470,12 @@ const I18N = (() => {
   }
   function walk(root){
     if (!root) return;
-    if (root.nodeType === 3){ const pe = root.parentElement; if (pe && pe.closest('[translate="no"]')) return; return trText(root); }
-    if (root.nodeType !== 1 || /^(SCRIPT|STYLE|TEXTAREA|CANVAS|SVG)$/i.test(root.nodeName) || root.closest('[translate="no"]')) return;
+    if (root.nodeType === 3){ const pe = root.parentElement; if (pe && (pe.nodeName === "TEXTAREA" || pe.closest('[translate="no"]'))) return; return trText(root); }
+    if (root.nodeType !== 1 || /^(SCRIPT|STYLE|CANVAS|SVG)$/i.test(root.nodeName) || root.closest('[translate="no"]')) return;
+    if (root.nodeName === "TEXTAREA"){ trEl(root); return; }
     trEl(root);
-    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT, { acceptNode: n => n.nodeType === 1 && (/^(SCRIPT|STYLE|TEXTAREA)$/i.test(n.nodeName) || n.getAttribute("translate") === "no") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
-    let n; while ((n = w.nextNode())) n.nodeType === 3 ? trText(n) : trEl(n);
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT, { acceptNode: n => n.nodeType === 1 && (/^(SCRIPT|STYLE)$/i.test(n.nodeName) || n.getAttribute("translate") === "no") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+    let n; while ((n = w.nextNode())) n.nodeType === 3 ? (n.parentNode.nodeName !== "TEXTAREA" && trText(n)) : trEl(n);
   }
   let pend = new Set(), raf = 0;
   const obs = new MutationObserver(ms => { if (lang === "ru" && !document.documentElement.dataset.trd) return; ms.forEach(m => { if (m.type === "characterData") pend.add(m.target); m.addedNodes && m.addedNodes.forEach(x => pend.add(x)); });
