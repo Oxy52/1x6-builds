@@ -3,6 +3,8 @@
 //   GET /api/dota?q=items                      -> предметы (название, картинка, цена, компоненты, характеристики)
 //   GET /api/dota?q=itemIds                    -> id -> ключ предмета
 //   GET /api/dota?q=abilities                  -> способности героев (для Custom Hero Chaos)
+//   GET /api/dota?q=ladder&region=europe       -> официальный рейтинг Valve (europe|americas|se_asia|china), места 1–5000
+//   GET /api/dota?q=ladderTop                  -> топ-3 каждого региона
 //   GET /api/dota?q=pros                       -> топ про-игроков за полгода (матчи, винрейт, KDA, GPM, команда, любимые герои)
 //   GET /api/dota?q=builds&hero=1              -> разные сборки героя с винрейтом (по закупкам в про-матчах)
 //   GET /api/dota?q=itemPopularity&hero=1      -> популярные предметы по стадиям игры
@@ -33,7 +35,7 @@ const ROUTES = {
 };
 const NEEDS_HERO = new Set(["itemPopularity", "itemTimings", "laneRoles", "matchups", "builds"]);
 const NEEDS_ID = new Set(["player", "wl", "recent", "pheroes"]);
-const TTL = { items: 86400, itemIds: 86400, abilities: 86400, builds: 43200, pros: 21600, search: 600, player: 300, wl: 300, recent: 300, pheroes: 600 };
+const TTL = { items: 86400, itemIds: 86400, abilities: 86400, builds: 43200, pros: 21600, ladder: 1800, ladderTop: 1800, search: 600, player: 300, wl: 300, recent: 300, pheroes: 600 };
 
 const withKey = url => KEY ? url + (url.includes("?") ? "&" : "?") + "api_key=" + encodeURIComponent(KEY) : url;
 async function od(path) {
@@ -125,6 +127,19 @@ async function builds(hero) {
   return JSON.stringify({ n, since, patch: since === PATCH_START, builds: out });
 }
 
+// ---------- рейтинг Valve (лидерборд) ----------
+const REGIONS = ["europe", "americas", "se_asia", "china"];
+async function ladderOf(region) {
+  const r = await fetch(`https://www.dota2.com/webapi/ILeaderboard/GetDivisionLeaderboard/v0001?division=${region}&leaderboard=0`, { signal: AbortSignal.timeout(9000), headers: { "User-Agent": UA["User-Agent"], Accept: "application/json" } });
+  if (!r.ok) { const e = new Error("upstream"); e.status = r.status; throw e; }
+  const j = await r.json();
+  return { t: j.time_posted || 0, next: j.next_scheduled_post_time || 0, list: (j.leaderboard || []).map(p => [p.rank, String(p.name || ""), p.team_tag || "", p.team_id || 0]) };
+}
+async function ladderTop() {
+  const all = await Promise.all(REGIONS.map(r => ladderOf(r).then(x => ({ r, t: x.t, top: x.list.slice(0, 3) })).catch(() => ({ r, t: 0, top: [] }))));
+  return JSON.stringify(all);
+}
+
 // ---------- топ про-игроков: про- и премиум-лиги за последние 180 дней ----------
 async function pros() {
   const since = Math.floor(Date.now() / 1000) - 180 * 86400;
@@ -138,7 +153,7 @@ module.exports = async (req, res) => {
   const p = req.query || {}, q = String(p.q || "");
   const fail = (code, err) => { res.setHeader("Cache-Control", "public, s-maxage=30"); return res.status(code).json({ error: err }); };
   if (q === "rank") {
-    if (!/^[1-8]$/.test(String(p.n || ""))) return fail(400, "bad_rank");
+    if (!/^([1-8]|8b|8c)$/.test(String(p.n || ""))) return fail(400, "bad_rank");
     try {
       const r = await fetch(`https://www.opendota.com/assets/images/dota2/rank_icons/rank_icon_${p.n}.png`, { signal: AbortSignal.timeout(8000) });
       if (!r.ok) return res.status(502).end();
@@ -147,8 +162,9 @@ module.exports = async (req, res) => {
       return res.status(200).send(Buffer.from(await r.arrayBuffer()));
     } catch (e) { return res.status(502).end(); }
   }
-  if (q !== "abilities" && q !== "builds" && q !== "pros" && !ROUTES[q]) return fail(400, "bad_query");
+  if (q !== "abilities" && q !== "builds" && q !== "pros" && q !== "ladder" && q !== "ladderTop" && !ROUTES[q]) return fail(400, "bad_query");
   if (NEEDS_HERO.has(q) && !/^\d{1,3}$/.test(String(p.hero || ""))) return fail(400, "bad_hero");
+  if (q === "ladder" && !REGIONS.includes(String(p.region || ""))) return fail(400, "bad_region");
   if (NEEDS_ID.has(q) && !/^\d{1,12}$/.test(String(p.id || ""))) return fail(400, "bad_id");
   if (q === "search" && !(String(p.name || "").trim().length >= 2 && String(p.name).length <= 40)) return fail(400, "bad_name");
   try {
@@ -156,6 +172,8 @@ module.exports = async (req, res) => {
     if (q === "abilities") out = await abilities();
     else if (q === "builds") out = await builds(+p.hero);
     else if (q === "pros") out = await pros();
+    else if (q === "ladder") out = JSON.stringify(await ladderOf(String(p.region)));
+    else if (q === "ladderTop") out = await ladderTop();
     else {
       const text = await od(ROUTES[q]({ hero: p.hero, id: p.id, name: String(p.name || "").trim() }));
       try { out = q === "items" ? slimItems(text) : q === "heroStats" ? slimHeroes(text) : q === "search" ? JSON.stringify(JSON.parse(text).slice(0, 20)) : text; }

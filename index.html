@@ -1514,6 +1514,39 @@
   @media (max-width: 600px) { .nbody { padding: 4px 16px 20px; } .ncover .close { top: max(14px, env(safe-area-inset-top, 0px)); } }
   .d2-subs .rkc { position: relative; } .d2-subs .rkc .ndot { top: -3px; right: -3px; }
   @media (max-width: 600px) { .tabs { gap: 2px; } .tab { flex: 0 1 auto; padding: 0 6px; } .tab[aria-selected="true"] { flex: 1 0 auto; padding: 0 10px; } .tab[aria-selected="false"] .ts { display: none; } }
+  /* ---------- топ MMR ---------- */
+  .lad-tops { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+  .lad-top { display: grid; gap: 4px; text-align: left; padding: 12px 14px; border-radius: 16px; border: 1px solid color-mix(in srgb, #f3c35a 30%, var(--line)); background: radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, #f3c35a 14%, transparent), transparent 60%), var(--bg-soft); color: inherit; font: inherit; cursor: pointer; min-width: 0; transition: transform .2s, border-color .2s; }
+  .lad-top:hover { transform: translateY(-2px); border-color: #f3c35a; }
+  .lad-top-r { font-size: 11px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; color: var(--muted); }
+  .lad-top-n { display: flex; align-items: center; gap: 7px; min-width: 0; } .lad-top-n b:last-child { font-size: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lad-top-n img { width: 22px; height: 22px; object-fit: contain; flex: none; } .lad-top small { color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lad-one { font-family: var(--display); color: #f3c35a; font-size: 15px; flex: none; }
+  .lad-regs { margin: 4px 0 10px; }
+  .lad-pod { display: grid; grid-template-columns: 1fr 1.15fr 1fr; align-items: end; gap: 10px; margin: 18px 0 6px; }
+  .lad-pc { position: relative; display: grid; justify-items: center; gap: 2px; padding: 16px 10px 0; border-radius: 18px 18px 6px 6px; border: 1px solid var(--line); background: var(--bg-soft); text-align: center; min-width: 0; overflow: hidden; }
+  .lad-pc[role="button"] { cursor: pointer; }
+  .lad-pc.p1 { --pc: #f3c35a; padding-top: 22px; } .lad-pc.p2 { --pc: #cfd6e4; } .lad-pc.p3 { --pc: #d8935a; }
+  .lad-pc { border-color: color-mix(in srgb, var(--pc) 45%, var(--line)); background: linear-gradient(180deg, color-mix(in srgb, var(--pc) 16%, transparent), transparent 70%), var(--bg-soft); }
+  .lad-pc-m .lad-md { width: 54px; height: 54px; } .lad-pc.p1 .lad-pc-m .lad-md { width: 68px; height: 68px; filter: drop-shadow(0 0 14px color-mix(in srgb, #f3c35a 60%, transparent)); }
+  .lad-pc-n { font-family: var(--display); font-size: 22px; color: var(--pc); line-height: 1; } .lad-pc.p1 .lad-pc-n { font-size: 30px; }
+  .lad-pc-name { font-size: 16px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .lad-pc small { color: var(--muted); font-size: 12px; min-height: 16px; }
+  .lad-pc-bar { display: block; width: 100%; height: 26px; margin-top: 10px; background: linear-gradient(180deg, color-mix(in srgb, var(--pc) 35%, transparent), transparent); } .lad-pc.p1 .lad-pc-bar { height: 44px; }
+  .lad-upd { margin: 6px 0 12px; font-size: 12.5px; color: var(--muted); text-align: center; }
+  .lad-list { display: grid; gap: 5px; }
+  .lad-row { display: flex; align-items: center; gap: 10px; padding: 7px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-soft); min-width: 0; }
+  .lad-row.pro { cursor: pointer; transition: border-color .2s; } .lad-row.pro:hover { border-color: color-mix(in srgb, var(--t1) 55%, var(--line)); }
+  .lad-n { width: 44px; flex: none; font-family: var(--display); font-weight: 800; font-size: 16px; text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+  .lad-row.p1 .lad-n, .lad-row.p2 .lad-n, .lad-row.p3 .lad-n { color: #f3c35a; }
+  .lad-md { width: 34px; height: 34px; object-fit: contain; flex: none; }
+  .lad-m { flex: 1; min-width: 0; } .lad-m b { display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .lad-m small { display: block; color: var(--muted); font-size: 12px; min-height: 0; }
+  .lad-m small:empty { display: none; }
+  .lad-pro { flex: none; font-size: 10.5px; font-weight: 800; letter-spacing: .5px; padding: 2px 7px; border-radius: 6px; color: #fff; background: linear-gradient(90deg, var(--t1), var(--t2)); }
+  .lad-tag { flex: none; font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 6px; border: 1px solid; }
+  .lad-tag.t10 { color: #f3c35a; border-color: color-mix(in srgb, #f3c35a 50%, transparent); } .lad-tag.t100 { color: #cfd6e4; border-color: color-mix(in srgb, #cfd6e4 35%, transparent); }
+  .lad-more { display: block; width: 100%; margin-top: 10px; }
+  @media (max-width: 760px) { .lad-tops { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .lad-pod { gap: 6px; } .lad-pc-name { font-size: 13.5px; } .lad-pc-m .lad-md { width: 40px; height: 40px; } .lad-pc.p1 .lad-pc-m .lad-md { width: 52px; height: 52px; } .lad-n { width: 36px; font-size: 14px; } .lad-tag { display: none; } }
   /* ---------- полировка ---------- */
   ::selection { background: color-mix(in srgb, var(--t1) 45%, transparent); color: #fff; }
   html { scrollbar-color: color-mix(in srgb, var(--t1) 45%, #2a2a33) transparent; scrollbar-width: thin; }
@@ -1576,6 +1609,7 @@
   <div class="tabs" role="tablist" aria-label="Разделы">
     <button type="button" class="tab" role="tab" data-tab="dota" aria-selected="false"><span class="tab-ic d2ic">D2</span><span class="tl">Dota 2</span><span class="ts">Мета</span></button>
     <button type="button" class="tab" role="tab" data-tab="news" aria-selected="false" aria-label="Новости"><span class="tab-ic">📰</span><span class="tl">Новости</span><span class="ts">Новости</span></button>
+    <button type="button" class="tab" role="tab" data-tab="ladder" aria-selected="false" aria-label="Топ MMR"><span class="tab-ic">🥇</span><span class="tl">Топ MMR</span><span class="ts">Топ MMR</span></button>
     <button type="button" class="tab" role="tab" data-tab="1x6" aria-selected="true"><span class="tab-ic">1×6</span><span class="tl">Dota 1x6</span><span class="ts">Сборки</span></button>
     <button type="button" class="tab" role="tab" data-tab="custom" aria-selected="false"><span class="tab-ic">🧩</span><span class="tl">Hero Chaos</span><span class="ts">CHC</span></button>
     <button type="button" class="tab" role="tab" data-tab="games" aria-selected="false"><span class="tab-ic">🎮</span><span class="tl">Мини-игры</span><span class="ts">Игры</span></button>
@@ -1647,6 +1681,12 @@
       <div id="feedCmp"></div>
       <div class="feedlist" id="feedList"></div>
       <button type="button" class="btn btn-ghost feedmore" id="feedMore" hidden>Загрузить ещё</button>
+    </section>
+  </div>
+  <div class="tabpane" data-pane="ladder" role="tabpanel" hidden>
+    <section class="section first">
+      <div class="section-head"><h2>Топ MMR Dota 2</h2><p>Официальный рейтинг Valve: лучшие игроки мира по MMR в каждом регионе — места с 1 по 5000. Нажми на про-игрока — откроется его профиль.</p></div>
+      <div id="ladBox"></div>
     </section>
   </div>
   <div class="tabpane" data-pane="rating" role="tabpanel" hidden>
@@ -5688,7 +5728,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=3").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=4").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
@@ -5929,8 +5969,68 @@ const NEWS = (() => {
   return { open, go, dot, fromHash };
 })();
 
+/* ---------- топ MMR: рейтинг Valve ---------- */
+const LADDER = (() => {
+  const REG = [["europe", "Европа", "🌍"], ["americas", "Америка", "🌎"], ["se_asia", "Юго-Восточная Азия", "🌏"], ["china", "Китай", "🏮"]];
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const regDef = () => { const l = typeof I18N !== "undefined" ? I18N.get() : "ru"; return ["en", "es", "pt"].includes(l) ? "americas" : l === "zh" ? "china" : ["ja", "ko"].includes(l) ? "se_asia" : "europe"; };
+  const st = { reg: "", q: "", show: 100 };
+  const data = {}; let top = null, pros = null, wired = false;
+  const J = q => fetch("/api/dota?q=" + q).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
+  const medal = n => { const v = n <= 10 ? "8c" : n <= 100 ? "8b" : "8"; return `<img class="lad-md" alt="" loading="lazy" src="/api/dota?q=rank&n=${v}" onerror="this.onerror=null;this.src='https://www.opendota.com/assets/images/dota2/rank_icons/rank_icon_${v}.png'">`; };
+  const proOf = name => pros && pros.get(String(name).toLowerCase());
+  const ago = t => { const m = Math.max(1, Math.round((Date.now() / 1000 - t) / 60)); return m < 60 ? m + " мин назад" : Math.round(m / 60) + " ч назад"; };
+  function open(){
+    const box = document.getElementById("ladBox"); if (!box) return;
+    if (!st.reg) st.reg = regDef();
+    if (!wired){ wired = true;
+      box.innerHTML = `<div class="lad-tops" id="ladTops"><div class="feed-sk"></div></div>
+        <div class="rkchips lad-regs" id="ladRegs" role="group" aria-label="Регион">${REG.map(([k, t, f]) => `<button type="button" class="rkc" data-r="${k}" aria-pressed="${k === st.reg}"><span aria-hidden="true">${f}</span> ${t}</button>`).join("")}</div>
+        <div class="d2-bar"><label class="d2-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="ladQ" placeholder="Найти игрока по нику в топ-5000" autocomplete="off"></label></div>
+        <div id="ladPod"></div><div id="ladList"><div class="feed-sk"></div><div class="feed-sk"></div></div>
+        <p class="db-note">Данные — официальный лидерборд Valve, обновляется несколько раз в день. Valve не показывает сами цифры MMR — только место игрока: место 1 — самый высокий MMR в регионе. Значок: топ-10, топ-100 и Титан.</p>`;
+      box.querySelector("#ladRegs").onclick = e => { const b = e.target.closest("[data-r]"); if (!b) return; st.reg = b.dataset.r; st.show = 100; box.querySelectorAll("[data-r]").forEach(x => x.setAttribute("aria-pressed", x === b)); load(); };
+      let t = 0; box.querySelector("#ladQ").oninput = e => { clearTimeout(t); t = setTimeout(() => { st.q = e.target.value.trim().toLowerCase(); st.show = 100; draw(); }, 150); };
+      box.onclick = e => { const p = e.target.closest("[data-acc]"); if (p){ D2.player(p.dataset.acc); return; } if (e.target.closest("#ladMore")){ st.show += 100; draw(); } const r = e.target.closest("[data-goreg]"); if (r){ box.querySelector(`[data-r="${r.dataset.goreg}"]`).click(); } };
+      D2.get("pros").then(list => { pros = new Map((Array.isArray(list) ? list : []).map(p => [String(p.n).toLowerCase(), p])); if (data[st.reg]) draw(); drawTops(); }).catch(() => {});
+      J("ladderTop").then(x => { top = x; drawTops(); }).catch(() => { const el = box.querySelector("#ladTops"); if (el) el.innerHTML = ""; });
+    }
+    load();
+  }
+  function drawTops(){
+    const el = document.getElementById("ladTops"); if (!el || !top) return;
+    el.innerHTML = top.map(r => { const R = REG.find(x => x[0] === r.r), p = r.top[0]; if (!p) return "";
+      const pr = proOf(p[1]);
+      return `<button type="button" class="lad-top" data-goreg="${r.r}"><span class="lad-top-r">${R[2]} Топ-1 · ${R[1]}</span><span class="lad-top-n"><b class="lad-one">#1</b>${pr && pr.logo ? `<img alt="" loading="lazy" src="${esc(pr.logo)}" onerror="this.remove()">` : ""}<b translate="no">${esc(p[1])}</b></span><small translate="no">${p[2] ? esc(p[2]) : ""}${r.top[1] ? ` · #2 ${esc(r.top[1][1])}` : ""}</small></button>`; }).join("");
+  }
+  async function load(){
+    const reg = st.reg, list = document.getElementById("ladList");
+    if (!data[reg]){ list.innerHTML = `<div class="feed-sk"></div><div class="feed-sk"></div><div class="feed-sk"></div>`; document.getElementById("ladPod").innerHTML = "";
+      try { data[reg] = await J("ladder&region=" + reg); } catch(e) { if (st.reg === reg) list.innerHTML = `<div class="gempty">Не удалось загрузить рейтинг Valve. Попробуй чуть позже.</div>`; return; } }
+    if (st.reg === reg) draw();
+  }
+  function row(p){
+    const pr = proOf(p[1]), n = p[0];
+    return `<div class="lad-row${n <= 3 ? " p" + n : ""}${pr ? " pro" : ""}"${pr ? ` data-acc="${pr.id}" role="button" tabindex="0"` : ""}><span class="lad-n">${n}</span>${medal(n)}
+      <span class="lad-m"><b translate="no">${esc(p[1].trim()) || "—"}</b><small translate="no">${p[2] ? esc(p[2]) : ""}${pr && pr.team ? (p[2] ? " · " : "") + esc(pr.team) : ""}</small></span>
+      ${pr ? `<span class="lad-pro">PRO</span>` : ""}${n <= 10 ? `<span class="lad-tag t10">ТОП-10</span>` : n <= 100 ? `<span class="lad-tag t100">ТОП-100</span>` : ""}</div>`;
+  }
+  function draw(){
+    const d = data[st.reg]; if (!d) return;
+    const pod = document.getElementById("ladPod"), list = document.getElementById("ladList");
+    const rows = st.q ? d.list.filter(p => p[1].toLowerCase().includes(st.q) || p[2].toLowerCase() === st.q) : d.list;
+    if (!st.q && d.list.length >= 3){ const R = REG.find(x => x[0] === st.reg);
+      pod.innerHTML = `<div class="lad-pod">${[1, 0, 2].map(i => { const p = d.list[i], pr = proOf(p[1]); return `<div class="lad-pc p${i + 1}"${pr ? ` data-acc="${pr.id}" role="button" tabindex="0"` : ""}><span class="lad-pc-m">${medal(p[0])}</span><b class="lad-pc-n">#${p[0]}</b><b class="lad-pc-name" translate="no">${esc(p[1])}</b><small translate="no">${p[2] ? esc(p[2]) : pr && pr.team ? esc(pr.team) : ""}</small><i class="lad-pc-bar"></i></div>`; }).join("")}</div>
+        <p class="lad-upd">${R[2]} ${R[1]} · обновлено ${d.t ? ago(d.t) : ""} · всего мест: ${d.list.length.toLocaleString("ru-RU")}</p>`; }
+    else pod.innerHTML = "";
+    const from = st.q ? 0 : 3, part = rows.slice(from, from + st.show);
+    list.innerHTML = rows.length ? `<div class="lad-list">${part.map(row).join("")}</div>${rows.length > from + st.show ? `<button type="button" class="btn btn-ghost lad-more" id="ladMore">Показать ещё 100 · места ${from + st.show + 1}–${Math.min(rows.length, from + st.show + 100)}</button>` : ""}` : `<div class="gempty">Такого ника нет в топ-5000 этого региона</div>`;
+  }
+  return { open };
+})();
+
 /* ---------- вкладки ---------- */
-const TABS = ["dota", "news", "1x6", "custom", "games", "feed", "rating"];
+const TABS = ["dota", "news", "ladder", "1x6", "custom", "games", "feed", "rating"];
 let curTab = "1x6";
 function inkTo(btn, instant){ const ink = document.getElementById("tabInk"), bar = btn.parentElement; if (!ink) return;
   if (instant){ ink.style.transition = "none"; requestAnimationFrame(() => ink.style.transition = ""); }
@@ -5946,6 +6046,7 @@ function setTab(name, opts){
   if (name === "dota") D2.open();
   if (name === "custom") CHC.open();
   if (name === "news") NEWS.open();
+  if (name === "ladder") LADDER.open();
   if (!opts.keepHash){ try { history.replaceState(null, "", name === "1x6" ? location.pathname + location.search : "#" + name); } catch(e) {} }
   if (prev !== name && !opts.noScroll){ const tb = document.querySelector(".tabs"); const y = tb.getBoundingClientRect().top + scrollY - 70; if (scrollY > y) window.scrollTo({ top: y, behavior: REDUCED ? "auto" : "smooth" }); }
 }
