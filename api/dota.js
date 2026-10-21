@@ -41,9 +41,21 @@ module.exports = async (req, res) => {
       return res.status(502).json({ error: "upstream", status: r.status });
     }
     const long = q === "items" || q === "itemIds";
+    let out = text;
+    try {
+      if (q === "items") {
+        const j = JSON.parse(text), slim = {};
+        for (const k of Object.keys(j)) { const it = j[k] || {}; slim[k] = { dname: it.dname || k, img: it.img || "", cost: it.cost || 0 }; }
+        out = JSON.stringify(slim);
+      } else if (q === "heroStats") {
+        const keep = ["id", "name", "localized_name", "primary_attr", "attack_type", "roles", "img", "icon", "turbo_picks", "turbo_wins", "pro_pick", "pro_win", "pro_ban", "pub_pick", "pub_win"];
+        for (let i = 1; i <= 8; i++) keep.push(i + "_pick", i + "_win");
+        out = JSON.stringify(JSON.parse(text).map(h => Object.fromEntries(keep.filter(k => k in h).map(k => [k, h[k]]))));
+      }
+    } catch (e) { out = text; }
     res.setHeader("Content-Type", "application/json; charset=utf-8");
     res.setHeader("Cache-Control", `public, max-age=600, s-maxage=${long ? 86400 : 21600}, stale-while-revalidate=86400`);
-    return res.status(200).send(text);
+    return res.status(200).send(out);
   } catch (e) {
     return res.status(502).json({ error: "upstream_unreachable" });
   }

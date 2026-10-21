@@ -593,7 +593,7 @@
   .soonc span { font-size: 28px; } .soonc b { font-family: var(--display); font-size: 17px; } .soonc small { color: var(--muted); font-size: 13.5px; }
   .soonc.cta { border-style: solid; border-color: rgba(34,158,217,.4); background: radial-gradient(120% 120% at 0% 0%, rgba(34,158,217,.2), transparent 60%), var(--bg-soft); }
   .tab .ts { display: none; }
-  @media (max-width: 600px) { .tabs { overflow: hidden; } .tab { flex: 1 1 0; min-width: 0; padding: 0 6px; gap: 6px; font-size: 13.5px; } .tab .tl { display: none; } .tab .ts { display: inline; } .tab-ic { min-width: 22px; font-size: 10px; } .gcards { grid-template-columns: 1fr 1fr; } .gcard { min-height: 140px; padding: 14px; } .gcard b { font-size: 15.5px; } .gcard.big b { font-size: 14px; } }
+  @media (max-width: 600px) { .tabs { overflow-x: auto; overscroll-behavior-x: contain; } .tab { flex: 1 0 auto; min-width: 0; padding: 0 10px; gap: 6px; font-size: 13.5px; } .tab .tl { display: none; } .tab .ts { display: inline; } .tab-ic { min-width: 22px; font-size: 10px; } .gcards { grid-template-columns: 1fr 1fr; } .gcard { min-height: 140px; padding: 14px; } .gcard b { font-size: 15.5px; } .gcard.big b { font-size: 14px; } }
 
   /* ---------- лента ---------- */
   .plbox { margin-top: 18px; display: grid; gap: 10px; }
@@ -801,6 +801,48 @@
   .rkchips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
   .rkc { border: 1px solid var(--line); background: var(--bg-soft); color: var(--muted); font: inherit; font-weight: 700; font-size: 14px; padding: 10px 16px; border-radius: 99px; cursor: pointer; transition: all .3s; }
   .rkc[aria-pressed="true"] { color: var(--fg); background: linear-gradient(135deg, color-mix(in srgb, var(--t1) 35%, var(--bg-soft)), var(--bg-soft)); border-color: color-mix(in srgb, var(--t1) 60%, transparent); }
+  /* ---- Dota 2 мета ---- */
+  .d2ic { display: inline-grid; place-items: center; min-width: 26px; height: 20px; padding: 0 4px; border-radius: 6px; font-size: 10.5px; font-weight: 900; letter-spacing: .3px; color: #fff; background: linear-gradient(135deg, #e8564a, #8a1c12); }
+  .d2-bar { display: grid; gap: 8px; margin-bottom: 12px; }
+  .d2-ranks { margin-top: 0; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; } .d2-ranks::-webkit-scrollbar { display: none; }
+  .d2-ranks .rkc { flex: none; font-size: 13px; padding: 8px 13px; }
+  .d2-roles { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; } .d2-roles::-webkit-scrollbar { display: none; } .d2-roles .rkc { flex: none; }
+  .d2-search { display: flex; align-items: center; gap: 8px; padding: 0 14px; height: 44px; border-radius: 12px; background: var(--bg-soft); border: 1px solid var(--line); color: var(--muted); }
+  .d2-search svg { width: 18px; height: 18px; flex: none; } .d2-search input { flex: 1; min-width: 0; border: 0; background: none; color: var(--fg); font: inherit; font-size: 15px; outline: none; }
+  .d2-sum { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 4px; }
+  @media (max-width: 560px){ .d2-sum { grid-template-columns: 1fr; } }
+  .d2-sc { padding: 10px; border-radius: 14px; background: var(--bg-soft); border: 1px solid var(--line); display: grid; gap: 4px; }
+  .d2-sc small { font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--muted); padding: 0 4px 2px; }
+  .d2-sc button, .d2-mu { display: flex; align-items: center; gap: 10px; padding: 5px 6px; border: 0; border-radius: 10px; background: none; color: inherit; font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; text-align: left; width: 100%; }
+  .d2-sc button:hover, .d2-mu:hover { background: color-mix(in srgb, var(--t1) 10%, transparent); }
+  .d2-sc img, .d2-mu img { width: 30px; height: 30px; border-radius: 8px; object-fit: cover; flex: none; } .d2-sc span, .d2-mu span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .d2-hi { width: 56px; height: 32px; border-radius: 7px; overflow: hidden; flex: none; background: #111; } .d2-hi img { width: 100%; height: 100%; object-fit: cover; }
+  .d2-t .db-hc small { display: block; font-size: 11px; font-weight: 500; color: var(--muted); }
+  .d2-t td:first-child { min-width: 170px; }
+  @media (max-width: 480px){ .d2-hi { width: 44px; height: 26px; } .d2-t td:first-child { min-width: 140px; } }
+  .d2h-top { display: flex; gap: 14px; align-items: center; padding: 22px 22px 0; }
+  .d2h-top img { width: 128px; height: 72px; border-radius: 12px; object-fit: cover; flex: none; box-shadow: 0 0 0 2px color-mix(in srgb, var(--ac) 60%, transparent), 0 10px 30px -10px var(--ac); }
+  .d2h-top h3 { margin: 0; font-family: var(--display); font-size: 24px; } .d2h-top small { color: var(--muted); }
+  .d2-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; } .d2-tags span { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 99px; background: var(--bg-soft); border: 1px solid var(--line); }
+  @media (max-width: 480px){ .d2h-top img { width: 96px; height: 54px; } .d2h-top h3 { font-size: 20px; } }
+  .d2-kpi { grid-template-columns: repeat(3, 1fr); }
+  .d2-ranksbar { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; align-items: end; height: 150px; padding: 8px; border-radius: 14px; background: var(--bg-soft); border: 1px solid var(--line); }
+  .d2-rb { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 3px; min-width: 0; }
+  .d2-rb b { font-size: 11px; font-variant-numeric: tabular-nums; } .d2-rb i { width: 70%; max-width: 26px; border-radius: 5px 5px 2px 2px; background: var(--muted); min-height: 0; transition: height .6s cubic-bezier(.2,.8,.2,1); }
+  .d2-rb.up i { background: #5cf07f; } .d2-rb.dn i { background: #ff6b6b; } .d2-rb.up b { color: #5cf07f; } .d2-rb.dn b { color: #ff6b6b; }
+  .d2-rb span { font-size: 14px; line-height: 1; } .d2-rb small { font-size: 9px; color: var(--muted); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  @media (max-width: 480px){ .d2-rb small { display: none; } .d2-rb b { font-size: 9.5px; } }
+  .d2-lanes { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+  .d2-lane { padding: 10px 12px; border-radius: 12px; background: var(--bg-soft); border: 1px solid var(--line); display: grid; gap: 2px; }
+  .d2-lane b { font-size: 13px; } .d2-lane > span { font-family: var(--display); font-size: 22px; font-weight: 800; } .d2-lane small { font-size: 11px; color: var(--muted); }
+  .d2-ph { margin-bottom: 12px; } .d2-ph h5 { margin: 0 0 6px; font-size: 13px; }
+  .d2-its { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 6px; }
+  .d2-it { display: grid; justify-items: center; gap: 3px; padding: 8px 4px; border-radius: 12px; background: var(--bg-soft); border: 1px solid var(--line); text-align: center; min-width: 0; }
+  .d2-it img { width: 52px; height: 38px; border-radius: 6px; object-fit: cover; } .d2-it span { font-size: 11px; line-height: 1.2; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .d2-it b { font-size: 13px; font-variant-numeric: tabular-nums; } .d2-it .db-bar { width: 80%; min-width: 0; } .d2-na { color: var(--muted); }
+  .d2-mus { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } .d2-mus h5 { margin: 0 0 4px; font-size: 13px; }
+  @media (max-width: 480px){ .d2-mus { grid-template-columns: 1fr; } }
+  .d2link { padding: 0 22px 22px; } .d2link .btn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
   /* ---- подписка 1x6+ ---- */
   .pbadge { display: inline-block; margin-left: 4px; font-size: .85em; filter: drop-shadow(0 0 6px rgba(243,195,90,.7)); vertical-align: 1px; }
   .gn .pbadge { margin: 0 4px 0 0; }
@@ -1146,6 +1188,7 @@
 
   <div class="tabs" role="tablist" aria-label="Разделы">
     <button type="button" class="tab" role="tab" data-tab="1x6" aria-selected="true"><span class="tab-ic">1×6</span><span class="tl">Dota 1x6</span><span class="ts">Сборки</span></button>
+    <button type="button" class="tab" role="tab" data-tab="dota" aria-selected="false"><span class="tab-ic d2ic">D2</span><span class="tl">Dota 2</span><span class="ts">Мета</span></button>
     <button type="button" class="tab" role="tab" data-tab="games" aria-selected="false"><span class="tab-ic">🎮</span><span class="tl">Мини-игры</span><span class="ts">Игры</span></button>
     <button type="button" class="tab" role="tab" data-tab="feed" aria-selected="false"><span class="tab-ic">💬</span><span>Лента</span></button>
     <button type="button" class="tab" role="tab" data-tab="rating" aria-selected="false"><span class="tab-ic">🏆</span><span class="tl">Рейтинг</span><span class="ts">Топ</span></button>
@@ -1217,6 +1260,12 @@
       <div id="rkMe" class="rkme"></div>
       <div id="rkList"></div>
       <details class="drules"><summary>Медали MMR</summary><p class="medals">🪖 Рекрут · 🛡️ Страж 900 · ⚔️ Рыцарь 1000 · 🦸 Герой 1100 · 🌟 Легенда 1200 · 👑 Властелин 1300 · ✨ Божество 1400 · 🏆 Титан 1550</p><p>Старт — 1000 MMR. За победу +5…45 в зависимости от силы соперника. Засчитывается, только если оба игрока вошли в аккаунт; не больше 5 рейтинговых игр с одним соперником в день.</p></details>
+    </section>
+  </div>
+  <div class="tabpane" data-pane="dota" role="tabpanel" hidden>
+    <section class="section first">
+      <div class="section-head"><h2>Dota 2 — мета и сборки</h2><p>Все герои обычной Доты: винрейт и пикрейт по рангам и ролям, сборки предметов с винрейтом и контрпики — как на Dotabuff.</p></div>
+      <div id="d2Pane"></div>
     </section>
   </div>
   <div class="tabpane" data-pane="soon" role="tabpanel" hidden>
@@ -1487,6 +1536,8 @@ function openHero(h, startK){
     b.onclick = () => { bn.classList.remove("show-arc"); b.setAttribute("aria-pressed","true"); a.setAttribute("aria-pressed","false"); };
   }
   renderVariants(h, startK);
+  modal.querySelector(".sheet").insertAdjacentHTML("beforeend", `<div class="d2link"><button type="button" class="btn btn-ghost" id="d2Go"><span class="d2ic">D2</span> ${h.en} в обычной Доте: винрейт и сборка</button></div>`);
+  modal.querySelector("#d2Go").onclick = async e => { e.currentTarget.disabled = true; const ok = await D2.heroBySlug(h.slug); if (!ok){ e.currentTarget.disabled = false; e.currentTarget.textContent = "Не нашли героя в статистике Dota 2"; } };
 }
 const STAGES = [["Начало игры","~4 мин"],["Ранняя игра","~12 мин"],["Середина игры","~25 мин"],["Поздняя игра","31+ мин"]];
 function vbtnIcon(h, k, s){ return `<span class="fi" style="background-image:url(build/${h.slug}-${k}.webp);background-position:${(s*110/(1184-110)*100).toFixed(3)}% 100%"></span>`; }
@@ -3918,8 +3969,143 @@ const DUEL = (() => {
   return { open };
 })();
 
+/* ---------- Dota 2: мета, винрейты и сборки (данные OpenDota) ---------- */
+const D2 = (() => {
+  const CDN = "https://cdn.cloudflare.steamstatic.com";
+  const RANKS = [["all", "Все ранги"], ["1", "Рекрут"], ["2", "Страж"], ["3", "Рыцарь"], ["4", "Герой"], ["5", "Легенда"], ["6", "Властелин"], ["7", "Божество"], ["8", "Титан"], ["turbo", "Турбо"], ["pro", "Про-сцена"]];
+  const RANK_IC = { "1": "🪖", "2": "🛡️", "3": "⚔️", "4": "🦸", "5": "🌟", "6": "👑", "7": "✨", "8": "🏆", turbo: "⚡", pro: "🎙️" };
+  const ROLES = [["", "Все роли"], ["Carry", "Керри"], ["Support", "Саппорт"], ["Nuker", "Нюкер"], ["Disabler", "Контроль"], ["Initiator", "Инициатор"], ["Durable", "Танк"], ["Escape", "Мобильный"], ["Pusher", "Пушер"]];
+  const ROLE_RU = Object.fromEntries(ROLES.filter(r => r[0]).concat([["Jungler", "Лесник"]]));
+  const ATTR = { str: ["Сила", "#e8564a"], agi: ["Ловкость", "#5cf07f"], int: ["Интеллект", "#5aa8ff"], all: ["Универсал", "#c97bff"] };
+  const LANES = { 1: "Лёгкая линия", 2: "Мид", 3: "Сложная линия", 4: "Лес" };
+  const PHASES = [["start_game_items", "Стартовые"], ["early_game_items", "Ранние"], ["mid_game_items", "Основные"], ["late_game_items", "Поздние"]];
+  const st = { rank: "all", role: "", q: "", sort: ["wr", -1] };
+  const cache = {};
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const num = v => Number(v) || 0;
+  const pct = (a, b) => b ? a * 100 / b : 0;
+  const f1 = v => (Math.round(v * 10) / 10).toFixed(1);
+  const wrCls = p => p >= 52 ? "up" : p <= 48 ? "dn" : "";
+  function get(q, hero){
+    const k = q + (hero || "");
+    if (!cache[k]) cache[k] = fetch(`/api/dota?q=${q}${hero ? "&hero=" + hero : ""}`).then(r => { if (!r.ok) throw new Error("http " + r.status); return r.json(); }).catch(e => { delete cache[k]; throw e; });
+    return cache[k];
+  }
+  const pw = (h, r) => {
+    if (r === "turbo") return [num(h.turbo_picks), num(h.turbo_wins)];
+    if (r === "pro") return [num(h.pro_pick), num(h.pro_win)];
+    if (r === "all"){ if (num(h.pub_pick)) return [num(h.pub_pick), num(h.pub_win)]; let p = 0, w = 0; for (let i = 1; i <= 8; i++){ p += num(h[i + "_pick"]); w += num(h[i + "_win"]); } return [p, w]; }
+    return [num(h[r + "_pick"]), num(h[r + "_win"])];
+  };
+  const img = p => p ? CDN + p : "";
+  const himg = h => img(h.img), hicon = h => img(h.icon);
+  const dbSlug = h => String(h.localized_name || "").toLowerCase().replace(/'/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const norm = s => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  let HEROES_D2 = null;
+
+  async function open(){
+    const pane = document.getElementById("d2Pane"); if (!pane) return;
+    if (pane.dataset.ready) return draw();
+    pane.dataset.ready = "1";
+    pane.innerHTML = `<div class="d2-bar">
+        <div class="rkchips d2-ranks">${RANKS.map(r => `<button type="button" class="rkc" data-r="${r[0]}" aria-pressed="${r[0] === st.rank}">${RANK_IC[r[0]] ? RANK_IC[r[0]] + " " : ""}${r[1]}</button>`).join("")}</div>
+        <div class="rkchips sub d2-roles">${ROLES.map(r => `<button type="button" class="rkc" data-role="${r[0]}" aria-pressed="${r[0] === st.role}">${r[1]}</button>`).join("")}</div>
+        <label class="d2-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="d2Q" placeholder="Найти героя" autocomplete="off"></label>
+      </div><div id="d2Sum"></div><div id="d2List"><div class="feed-sk"></div><div class="feed-sk"></div><div class="feed-sk"></div></div>
+      <p class="db-note">Данные — открытая статистика публичных матчей <a href="https://www.opendota.com" target="_blank" rel="noopener">OpenDota</a>, обновляются раз в несколько часов. Нажми на героя — откроются винрейт по рангам и линиям, сборка предметов и контрпики.</p>`;
+    pane.querySelectorAll("[data-r]").forEach(b => b.onclick = () => { st.rank = b.dataset.r; pane.querySelectorAll("[data-r]").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); });
+    pane.querySelectorAll("[data-role]").forEach(b => b.onclick = () => { st.role = b.dataset.role; pane.querySelectorAll("[data-role]").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); });
+    let qt = 0; pane.querySelector("#d2Q").oninput = e => { clearTimeout(qt); qt = setTimeout(() => { st.q = e.target.value.trim().toLowerCase(); draw(); }, 150); };
+    try { HEROES_D2 = await get("heroStats"); if (!Array.isArray(HEROES_D2)) throw 0;
+      pane.querySelectorAll("[data-r]").forEach(b => { if (b.dataset.r !== "all" && !HEROES_D2.some(h => pw(h, b.dataset.r)[0] > 0)) b.hidden = true; });
+      draw(); }
+    catch(e) { pane.dataset.ready = ""; document.getElementById("d2List").innerHTML = `<div class="gempty">Не удалось загрузить статистику Dota 2. Попробуй позже.<br><button type="button" class="btn btn-ghost" id="d2Retry" style="margin-top:12px">Повторить</button></div>`; document.getElementById("d2Retry").onclick = open; }
+  }
+  function rows(){
+    let tot = 0; const all = HEROES_D2.map(h => { const [p, w] = pw(h, st.rank); tot += p; return { h, p, w }; });
+    const matches = tot / 10 || 1;
+    return { list: all.map(o => ({ ...o, wr: o.p ? pct(o.w, o.p) : 0, pr: pct(o.p, matches), name: o.h.localized_name })), matches: Math.round(tot / 10) };
+  }
+  function draw(){
+    const list = document.getElementById("d2List"); if (!list || !HEROES_D2) return;
+    const { list: all, matches } = rows();
+    let rs = all.filter(o => o.p > 0 && (!st.role || (o.h.roles || []).includes(st.role)) && (!st.q || o.name.toLowerCase().includes(st.q)));
+    const [sk, sd] = st.sort;
+    rs.sort((a, b) => sk === "name" ? a.name.localeCompare(b.name) * sd : ((a[sk] - b[sk]) * sd) || b.p - a.p);
+    const ok = all.filter(o => o.p >= 50 && (!st.role || (o.h.roles || []).includes(st.role)));
+    const best = ok.slice().sort((a, b) => b.wr - a.wr).slice(0, 3), pop = ok.slice().sort((a, b) => b.p - a.p).slice(0, 3);
+    const rn = RANKS.find(r => r[0] === st.rank)[1];
+    document.getElementById("d2Sum").innerHTML = ok.length ? `<div class="d2-sum"><div class="d2-sc"><small>Лучший винрейт · ${esc(rn)}</small>${best.map(o => `<button type="button" data-h="${o.h.id}"><img alt="" loading="lazy" src="${esc(hicon(o.h))}"><span>${esc(o.name)}</span><b class="db-wr ${wrCls(o.wr)}">${f1(o.wr)}%</b></button>`).join("")}</div>
+      <div class="d2-sc"><small>Чаще всего берут</small>${pop.map(o => `<button type="button" data-h="${o.h.id}"><img alt="" loading="lazy" src="${esc(hicon(o.h))}"><span>${esc(o.name)}</span><b>${f1(o.pr)}%</b></button>`).join("")}</div></div>` : "";
+    const maxP = Math.max(...rs.map(o => o.p), 1);
+    const cols = [["name", "Герой"], ["wr", "Винрейт"], ["pr", "Пикрейт"], ["p", "Матчи"]];
+    list.innerHTML = rs.length ? `<p class="db-note">${esc(rn)}${st.role ? " · " + esc(ROLE_RU[st.role]) : ""} · около ${matches.toLocaleString("ru-RU")} матчей в выборке. Нажми на заголовок, чтобы отсортировать.</p>
+      <div class="db-tw"><table class="db-t d2-t"><thead><tr>${cols.map(([k, t]) => `<th data-k="${k}" class="${k === sk ? (sd > 0 ? "asc" : "desc") : ""}">${t}</th>`).join("")}</tr></thead><tbody>${rs.map(o => `<tr data-h="${o.h.id}">
+        <td class="db-hc"><span class="d2-hi"><img alt="" loading="lazy" src="${esc(himg(o.h))}"></span><span>${esc(o.name)}<small>${(o.h.roles || []).slice(0, 3).map(r => ROLE_RU[r] || r).join(" · ")}</small></span></td>
+        <td class="db-wr ${wrCls(o.wr)}"><b>${f1(o.wr)}%</b><i class="db-bar"><i style="width:${Math.max(0, Math.min(100, (o.wr - 35) * 100 / 30))}%"></i></i></td>
+        <td>${f1(o.pr)}%</td><td>${o.p.toLocaleString("ru-RU")}<i class="db-bar"><i style="width:${Math.round(o.p * 100 / maxP)}%"></i></i></td></tr>`).join("")}</tbody></table></div>`
+      : `<div class="gempty">Никого не нашли</div>`;
+    list.querySelectorAll("th[data-k]").forEach(th => th.onclick = () => { const k = th.dataset.k; st.sort = [k, st.sort[0] === k ? -st.sort[1] : (k === "name" ? 1 : -1)]; draw(); });
+    document.querySelectorAll("#d2Pane [data-h]").forEach(el => el.onclick = () => hero(+el.dataset.h));
+  }
+
+  // ---------- страница героя ----------
+  let ITEMS = null, IDS = null;
+  async function itemsMeta(){ if (!ITEMS){ const [a, b] = await Promise.all([get("items"), get("itemIds")]); ITEMS = a || {}; IDS = b || {}; } }
+  const itemOf = key => { const it = ITEMS && ITEMS[key]; return it ? { key, name: it.dname || key, img: img(it.img), cost: it.cost } : null; };
+  async function hero(id){
+    if (!HEROES_D2){ try { HEROES_D2 = await get("heroStats"); } catch(e) { return; } }
+    const h = HEROES_D2.find(x => x.id === id); if (!h) return;
+    const [p, w] = pw(h, st.rank), at = ATTR[h.primary_attr] || ["", "#888"];
+    const g = openPanel(`<div class="d2h">
+      <div class="d2h-top" style="--ac:${at[1]}"><img alt="" src="${esc(himg(h))}"><div><h3>${esc(h.localized_name)}</h3><small>${esc(at[0])}${h.attack_type ? " · " + (h.attack_type === "Melee" ? "ближний бой" : "дальний бой") : ""}</small><div class="d2-tags">${(h.roles || []).map(r => `<span>${esc(ROLE_RU[r] || r)}</span>`).join("")}</div></div></div>
+      <div class="pstats d2-kpi"><div class="pstat"><b class="db-wr ${wrCls(pct(w, p))}">${p ? f1(pct(w, p)) + "%" : "—"}</b><span>винрейт · ${esc(RANKS.find(r => r[0] === st.rank)[1])}</span></div><div class="pstat"><b>${p.toLocaleString("ru-RU")}</b><span>матчей</span></div><div class="pstat"><b>${num(h.pro_pick)}</b><span>пиков на про-сцене</span></div></div>
+      <div class="psec"><h4>Винрейт по рангам</h4><div class="d2-ranksbar">${RANKS.slice(1).filter(r => HEROES_D2.some(x => pw(x, r[0])[0] > 0)).map(r => { const [pp, ww] = pw(h, r[0]), v = pp ? pct(ww, pp) : 0; return `<div class="d2-rb ${wrCls(v)}" title="${esc(r[1])}: ${pp ? f1(v) + "%, " + pp + " матчей" : "нет данных"}"><b>${pp ? f1(v) : "—"}</b><i style="height:${pp ? Math.max(4, Math.min(100, (v - 35) * 100 / 30)) : 0}%"></i><span>${RANK_IC[r[0]]}</span><small>${esc(r[1])}</small></div>`; }).join("")}</div></div>
+      <div class="psec"><h4>По линиям</h4><div id="d2Lanes"><div class="feed-sk"></div></div></div>
+      <div class="psec"><h4>Сборка предметов</h4><div id="d2Items"><div class="feed-sk"></div><div class="feed-sk"></div></div></div>
+      <div class="psec"><h4>Контрпики</h4><div id="d2Mu"><div class="feed-sk"></div></div></div>
+      <div class="pacts"><a class="btn btn-ghost" href="https://www.dotabuff.com/heroes/${esc(dbSlug(h))}" target="_blank" rel="noopener">Открыть на Dotabuff ↗</a></div>
+      <p class="db-note" style="padding:0 22px 20px">Сборка — самые популярные предметы в публичных матчах на этом герое. Винрейт предмета — как часто побеждают, когда его покупают; это зависит и от времени покупки, так что смотри на него вместе с популярностью.</p></div>`);
+    const $ = s => g.querySelector(s);
+    // линии
+    get("laneRoles", id).then(rs => {
+      const agg = {}; (Array.isArray(rs) ? rs : []).forEach(r => { const k = num(r.lane_role); if (!LANES[k]) return; const o = agg[k] || (agg[k] = { g: 0, w: 0 }); o.g += num(r.games); o.w += num(r.wins); });
+      const tot = Object.values(agg).reduce((s, o) => s + o.g, 0);
+      $("#d2Lanes").innerHTML = tot ? `<div class="d2-lanes">${Object.keys(LANES).filter(k => agg[k] && agg[k].g).map(k => { const o = agg[k], v = pct(o.w, o.g); return `<div class="d2-lane"><b>${LANES[k]}</b><span class="db-wr ${wrCls(v)}">${f1(v)}%</span><small>${f1(pct(o.g, tot))}% игр · ${o.g.toLocaleString("ru-RU")}</small><i class="db-bar"><i style="width:${pct(o.g, tot)}%"></i></i></div>`; }).join("")}</div>` : `<div class="pnone">Нет данных по линиям</div>`;
+    }).catch(() => { if ($("#d2Lanes")) $("#d2Lanes").innerHTML = `<div class="pnone">Не удалось загрузить</div>`; });
+    // предметы
+    Promise.all([get("itemPopularity", id), get("itemTimings", id).catch(() => []), itemsMeta()]).then(([pop, tim]) => {
+      const iw = {}; (Array.isArray(tim) ? tim : []).forEach(r => { const o = iw[r.item] || (iw[r.item] = { g: 0, w: 0, t: [] }); o.g += num(r.games); o.w += num(r.wins); o.t.push([num(r.time), num(r.games), num(r.wins)]); });
+      const cell = (key, cnt, max) => { const it = itemOf(key); if (!it) return ""; const s = iw[key], v = s && s.g >= 20 ? pct(s.w, s.g) : null;
+        const bt = s ? s.t.filter(x => x[1] >= 15).sort((a, b) => b[2] / b[1] - a[2] / a[1])[0] : null;
+        return `<div class="d2-it" title="${esc(it.name)}${it.cost ? " · " + it.cost + " золота" : ""}${bt ? " · лучше всего до " + Math.round(bt[0] / 60) + " мин (" + f1(pct(bt[2], bt[1])) + "%)" : ""}"><img alt="" loading="lazy" src="${esc(it.img)}"><span>${esc(it.name)}</span>${v != null ? `<b class="db-wr ${wrCls(v)}">${f1(v)}%</b>` : `<b class="d2-na">—</b>`}<i class="db-bar"><i style="width:${Math.round(cnt * 100 / max)}%"></i></i></div>`; };
+      const html = PHASES.map(([k, t]) => { const obj = (pop && pop[k]) || {}; const list = Object.entries(obj).map(([iid, c]) => [IDS[iid] || iid, num(c)]).filter(x => ITEMS[x[0]]).sort((a, b) => b[1] - a[1]).slice(0, k === "start_game_items" ? 6 : 6);
+        if (!list.length) return ""; const max = list[0][1];
+        return `<div class="d2-ph"><h5>${t}</h5><div class="d2-its">${list.map(([key, c]) => cell(key, c, max)).join("")}</div></div>`; }).join("");
+      const top = Object.entries(iw).filter(([k, s]) => s.g >= 100 && ITEMS[k] && (ITEMS[k].cost || 0) >= 1000).map(([k, s]) => [k, pct(s.w, s.g), s.g]).sort((a, b) => b[1] - a[1]).slice(0, 6);
+      $("#d2Items").innerHTML = (html || `<div class="pnone">Нет данных о предметах</div>`) + (top.length ? `<div class="d2-ph"><h5>Самый высокий винрейт</h5><div class="d2-its">${top.map(([k, v, gg]) => { const it = itemOf(k); return `<div class="d2-it" title="${esc(it.name)} · ${gg} покупок"><img alt="" loading="lazy" src="${esc(it.img)}"><span>${esc(it.name)}</span><b class="db-wr ${wrCls(v)}">${f1(v)}%</b></div>`; }).join("")}</div></div>` : "");
+    }).catch(() => { if ($("#d2Items")) $("#d2Items").innerHTML = `<div class="pnone">Не удалось загрузить сборку</div>`; });
+    // контрпики
+    get("matchups", id).then(ms => {
+      const rs = (Array.isArray(ms) ? ms : []).map(m => ({ h: HEROES_D2.find(x => x.id === num(m.hero_id)), g: num(m.games_played), w: num(m.wins) })).filter(m => m.h && m.g >= 10).map(m => ({ ...m, v: pct(m.w, m.g) }));
+      if (rs.length < 6){ $("#d2Mu").innerHTML = `<div class="pnone">Мало данных</div>`; return; }
+      rs.sort((a, b) => b.v - a.v);
+      const row = (m) => `<button type="button" class="d2-mu" data-h="${m.h.id}"><img alt="" loading="lazy" src="${esc(hicon(m.h))}"><span>${esc(m.h.localized_name)}</span><b class="db-wr ${wrCls(m.v)}">${f1(m.v)}%</b></button>`;
+      $("#d2Mu").innerHTML = `<div class="d2-mus"><div><h5>Сильнее против</h5>${rs.slice(0, 5).map(row).join("")}</div><div><h5>Слабее против</h5>${rs.slice(-5).reverse().map(row).join("")}</div></div><p class="db-note">Винрейт ${esc(h.localized_name)} против героя по матчам из выборки OpenDota.</p>`;
+      $("#d2Mu").querySelectorAll("[data-h]").forEach(b => b.onclick = () => hero(+b.dataset.h));
+    }).catch(() => { if ($("#d2Mu")) $("#d2Mu").innerHTML = `<div class="pnone">Не удалось загрузить</div>`; });
+  }
+  // открыть героя по слагу сайта (crystalmaiden и т.п.)
+  async function heroBySlug(slug){
+    try { if (!HEROES_D2) HEROES_D2 = await get("heroStats"); } catch(e) { return false; }
+    const s = norm(slug), h = HEROES_D2.find(x => norm(x.localized_name) === s || norm(String(x.name).replace("npc_dota_hero_", "")) === s);
+    if (!h) return false; hero(h.id); return true;
+  }
+  return { open, hero, heroBySlug };
+})();
+
 /* ---------- вкладки ---------- */
-const TABS = ["1x6", "games", "feed", "rating", "soon"];
+const TABS = ["1x6", "dota", "games", "feed", "rating", "soon"];
 let curTab = "1x6";
 function inkTo(btn, instant){ const ink = document.getElementById("tabInk"), bar = btn.parentElement; if (!ink) return;
   if (instant){ ink.style.transition = "none"; requestAnimationFrame(() => ink.style.transition = ""); }
@@ -3932,6 +4118,7 @@ function setTab(name, opts){
     if (on && prev !== name && !opts.instant && !REDUCED){ void p.offsetWidth; p.classList.add(dir > 0 ? "in-l" : "in-r"); } });
   if (name === "feed") PROF.feedOpen();
   if (name === "rating") PROF.ratingOpen();
+  if (name === "dota") D2.open();
   if (!opts.keepHash){ try { history.replaceState(null, "", name === "1x6" ? location.pathname + location.search : "#" + name); } catch(e) {} }
   if (prev !== name && !opts.noScroll){ const tb = document.querySelector(".tabs"); const y = tb.getBoundingClientRect().top + scrollY - 70; if (scrollY > y) window.scrollTo({ top: y, behavior: REDUCED ? "auto" : "smooth" }); }
 }
