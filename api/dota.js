@@ -63,7 +63,10 @@ async function abilities() {
     for (const k of list) {
       if (!k || /generic_hidden|_empty|^special_bonus/.test(k)) continue;
       const a = all[k]; if (!a || !a.dname) continue;
-      out.push({ k, n: a.dname, i: a.img || "", h: hk.replace("npc_dota_hero_", ""), d: clean(a.desc).slice(0, 220), u: /ultimate/i.test(String(a.behavior || "")) || undefined });
+      const first = v => { const s = Array.isArray(v) ? v[0] : String(v == null ? "" : v).split(/[\s/]+/)[0]; const n = parseFloat(s); return isFinite(n) ? n : 0; };
+      const beh = (Array.isArray(a.behavior) ? a.behavior : [a.behavior]).filter(Boolean).map(String);
+      out.push({ k, n: a.dname, i: a.img || "", h: hk.replace("npc_dota_hero_", ""), d: clean(a.desc).slice(0, 260),
+        t: a.dmg_type ? String(a.dmg_type).slice(0, 1) : undefined, b: beh.length ? beh : undefined, cd: first(a.cd) || undefined, mc: first(a.mc) || undefined });
     }
   }
   return JSON.stringify(out);
