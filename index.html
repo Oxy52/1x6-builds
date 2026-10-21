@@ -1432,7 +1432,7 @@
   .ncard { --nc: #58b6ff; position: relative; display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 14px; padding: 16px 18px 16px 16px; border-radius: 18px; border: 1px solid var(--line); overflow: hidden;
     background: linear-gradient(100deg, color-mix(in srgb, var(--nc) 8%, transparent), transparent 45%), var(--bg-soft); animation: inUp .6s cubic-bezier(.22,.61,.36,1) both; animation-delay: calc(var(--i, 0) * 40ms); }
   .ncard::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 0 3px 3px 0; background: var(--nc); box-shadow: 0 0 12px var(--nc); }
-  .ncard.patch { --nc: #ffb547; } .ncard.players { --nc: #c47bff; } .ncard.events { --nc: #4ade80; } .ncard.community { --nc: #ff6b8b; }
+  .ncard.patch { --nc: #ffb547; } .ncard.players { --nc: #c47bff; } .ncard.events { --nc: #4ade80; } .ncard.community { --nc: #ff6b8b; } .ncard.leaks { --nc: #2ee6d6; }
   .nic { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-size: 21px; background: color-mix(in srgb, var(--nc) 16%, transparent); border: 1px solid color-mix(in srgb, var(--nc) 35%, transparent); }
   button.nic { padding: 0; overflow: hidden; cursor: pointer; border: 2px solid var(--c1); background: var(--c2); transition: transform .2s; }
   button.nic:hover { transform: scale(1.08); }
@@ -1450,6 +1450,7 @@
   @media (max-width: 600px) { .npatch { grid-template-columns: 1fr; } .npatch .nv { grid-row: auto; } .ncard { grid-template-columns: 40px minmax(0, 1fr); gap: 12px; padding: 14px 14px 14px 14px; } .nic { width: 40px; height: 40px; font-size: 18px; } .hnews { font-size: 12.5px; } .tab .ndot { top: 6px; right: 6px; } }
 
   .d2-subs .rkc { position: relative; } .d2-subs .rkc .ndot { top: -3px; right: -3px; }
+  @media (max-width: 600px) { .tabs { gap: 2px; } .tab { flex: 0 1 auto; padding: 0 6px; } .tab[aria-selected="true"] { flex: 1 0 auto; padding: 0 10px; } .tab[aria-selected="false"] .ts { display: none; } }
 </style>
 </head>
 <body>
@@ -1475,11 +1476,12 @@
   </nav>
 
   <div class="tabs" role="tablist" aria-label="Разделы">
+    <button type="button" class="tab" role="tab" data-tab="dota" aria-selected="false"><span class="tab-ic d2ic">D2</span><span class="tl">Dota 2</span><span class="ts">Мета</span></button>
+    <button type="button" class="tab" role="tab" data-tab="news" aria-selected="false" aria-label="Новости"><span class="tab-ic">📰</span><span class="tl">Новости</span><span class="ts">Новости</span></button>
     <button type="button" class="tab" role="tab" data-tab="1x6" aria-selected="true"><span class="tab-ic">1×6</span><span class="tl">Dota 1x6</span><span class="ts">Сборки</span></button>
     <button type="button" class="tab" role="tab" data-tab="custom" aria-selected="false"><span class="tab-ic">🧩</span><span class="tl">Hero Chaos</span><span class="ts">CHC</span></button>
-    <button type="button" class="tab" role="tab" data-tab="dota" aria-selected="false"><span class="tab-ic d2ic">D2</span><span class="tl">Dota 2</span><span class="ts">Мета</span></button>
     <button type="button" class="tab" role="tab" data-tab="games" aria-selected="false"><span class="tab-ic">🎮</span><span class="tl">Мини-игры</span><span class="ts">Игры</span></button>
-    <button type="button" class="tab" role="tab" data-tab="feed" aria-selected="false"><span class="tab-ic">💬</span><span>Лента</span></button>
+    <button type="button" class="tab" role="tab" data-tab="feed" aria-selected="false"><span class="tab-ic">💬</span><span class="tl">Лента</span><span class="ts">Лента</span></button>
     <button type="button" class="tab" role="tab" data-tab="rating" aria-selected="false"><span class="tab-ic">🏆</span><span class="tl">Рейтинг</span><span class="ts">Топ</span></button>
     <i class="tab-ink" id="tabInk"></i>
   </div>
@@ -1517,6 +1519,12 @@
     <div class="count" id="count"></div>
     <div class="grid" id="grid"></div>
   </section>
+  </div>
+  <div class="tabpane" data-pane="news" role="tabpanel" hidden>
+    <section class="section first">
+      <div class="section-head"><h2>Новости Dota 2</h2><p>Патчи, находки датамайнеров, трансферы и турниры. Жми на героя — откроется его сборка для 1x6.</p></div>
+      <div id="newsBox"></div>
+    </section>
   </div>
   <div class="tabpane" data-pane="games" role="tabpanel" hidden>
     <section class="section first">
@@ -4717,13 +4725,12 @@ const D2 = (() => {
     const pane = document.getElementById("d2Pane"); if (!pane) return;
     if (pane.dataset.ready) return draw();
     pane.dataset.ready = "1";
-    pane.innerHTML = `<div class="rkchips d2-subs"><button type="button" class="rkc" data-sub2="heroes" aria-pressed="true">📊 Герои</button><button type="button" class="rkc" data-sub2="players" aria-pressed="false">👤 Игроки</button><button type="button" class="rkc" data-sub2="picker" aria-pressed="false">🎯 Пикер</button><button type="button" class="rkc" data-sub2="news" aria-pressed="false">📰 Новости</button></div><div id="d2Heroes"><div class="d2-bar">
+    pane.innerHTML = `<div class="rkchips d2-subs"><button type="button" class="rkc" data-sub2="heroes" aria-pressed="true">📊 Герои</button><button type="button" class="rkc" data-sub2="players" aria-pressed="false">👤 Игроки</button><button type="button" class="rkc" data-sub2="picker" aria-pressed="false">🎯 Пикер</button></div><div id="d2Heroes"><div class="d2-bar">
         <div class="rkchips d2-ranks">${RANKS.map(r => `<button type="button" class="rkc d2-rc" data-r="${r[0]}" aria-pressed="${r[0] === st.rank}">${rankIc(r[0])}${r[1]}</button>`).join("")}</div>
         <div class="rkchips sub d2-roles">${ROLES.map(r => `<button type="button" class="rkc" data-role="${r[0]}" aria-pressed="${r[0] === st.role}">${r[1]}</button>`).join("")}</div>
         <label class="d2-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="d2Q" placeholder="Найти героя" autocomplete="off"></label>
       </div><div id="d2Sum"></div><div id="d2List"><div class="feed-sk"></div><div class="feed-sk"></div><div class="feed-sk"></div></div>
-      <p class="db-note">Данные — открытая статистика публичных матчей <a href="https://www.opendota.com" target="_blank" rel="noopener">OpenDota</a>, обновляются раз в несколько часов. Нажми на героя — откроются винрейт по рангам и линиям, сборка предметов и контрпики.</p></div><div id="d2Players" hidden></div><div id="d2Picker" hidden></div><div id="d2News" hidden></div>`;
-    NEWS.dot();
+      <p class="db-note">Данные — открытая статистика публичных матчей <a href="https://www.opendota.com" target="_blank" rel="noopener">OpenDota</a>, обновляются раз в несколько часов. Нажми на героя — откроются винрейт по рангам и линиям, сборка предметов и контрпики.</p></div><div id="d2Players" hidden></div><div id="d2Picker" hidden></div>`;
     pane.querySelectorAll("[data-sub2]").forEach(b => b.onclick = () => sub(b.dataset.sub2));
     pane.querySelectorAll("[data-r]").forEach(b => b.onclick = () => { st.rank = b.dataset.r; pane.querySelectorAll("[data-r]").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); });
     pane.querySelectorAll("[data-role]").forEach(b => b.onclick = () => { st.role = b.dataset.role; pane.querySelectorAll("[data-role]").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); });
@@ -5037,9 +5044,8 @@ const D2 = (() => {
   function sub(name){
     const pane = document.getElementById("d2Pane"); if (!pane) return;
     pane.querySelectorAll("[data-sub2]").forEach(b => b.setAttribute("aria-pressed", b.dataset.sub2 === name));
-    ["Heroes", "Players", "Picker", "News"].forEach(k => { const el = document.getElementById("d2" + k); if (el) el.hidden = k.toLowerCase() !== name; });
+    ["Heroes", "Players", "Picker"].forEach(k => { const el = document.getElementById("d2" + k); if (el) el.hidden = k.toLowerCase() !== name; });
     if (name === "players") playersView();
-    if (name === "news") NEWS.open();
     if (name === "picker"){ if (HEROES_D2) pickerView(); else get("heroStats").then(r => { HEROES_D2 = r; pickerView(); }).catch(() => {}); }
   }
   // открыть героя по слагу сайта (crystalmaiden и т.п.)
@@ -5556,9 +5562,13 @@ const I18N = (() => {
 /* ---------- новости: патч и про-сцена ---------- */
 const NEWS = (() => {
   const UPDATED = "21 октября 2026";
-  const CATS = { patch: "Патч", players: "Игроки", events: "Турниры", community: "Комьюнити" };
+  const CATS = { patch: "Патч", players: "Игроки", events: "Турниры", leaks: "Датамайн", community: "Комьюнити" };
   // id растёт с каждой новостью — по нему считаем «новое с прошлого визита»
   const ITEMS = [
+    { id: 43, w: "20–21 октября", d: "октябрь", cat: "leaks", ic: "🗓️", hl: 1, t: "Когда ждать 7.42", x: "Официальной даты нет. Трекеры патчей дают высокий шанс на выход в октябре–ноябре. Сообщество гадает между Хэллоуином (31 октября) и периодом перед DreamLeague Season 30 (2–13 декабря)." },
+    { id: 42, w: "20–21 октября", d: "октябрь", cat: "leaks", ic: "🗺️", t: "В клиенте нашли новые карты", x: "В файлах игры появились карты <b>dota_mid</b> и <b>dota_keen</b>, а на главной реке — объект-дверь. Для чего они, пока неизвестно." },
+    { id: 41, w: "20–21 октября", d: "слух", cat: "leaks", ic: "🦸", t: "Новый герой Arjun — пока только слух", x: "Самый обсуждаемый слух сезона. Рядом с ним упоминают мини-игру <b>Item Battler</b>. Valve героя не анонсировала: ни арта, ни даты нет." },
+    { id: 40, w: "5–11 октября", d: "9 окт", cat: "leaks", ic: "🎪", t: "Намёки на второй акт «Тёмного карнавала»", x: "В экспериментальном клиенте нашли альтернативные модели крипов, девять новых билетов с названиями карт Таро (Колесница, Луна, Башня…), предмет <b>Cog</b> для улучшения предметов или способностей и инструмент создания вагонов. Даты Valve не называла." },
     { id: 38, w: "20–21 октября", d: "21 окт", cat: "events", ic: "👋", hl: 1, t: "Evil Geniuses уходит из киберспорта", x: "Легендарная организация, через которую прошли SumaiL и Arteezy, закрывается 2 ноября 2026. Причина — мало спонсоров и растущие расходы. Все игроки EG уже могут договариваться с другими командами." },
     { id: 37, w: "20–21 октября", d: "21 окт", cat: "players", ic: "🧢", t: "Stray собирает Budka Team", x: "В его стаке засветились <b>Collapse</b> и <b>Miposhka</b>. Подробностей пока нет." },
     { id: 36, w: "20–21 октября", d: "20 окт", cat: "players", hero: "pudge", t: "Xinq тестирует лесного Пуджа", x: "Про-игрок обкатывает Пуджа через лес — со своим стартовым закупом и докупкой. Пабы, держитесь." },
@@ -5576,7 +5586,7 @@ const NEWS = (() => {
     { id: 24, w: "12–18 октября", d: "16 окт", cat: "patch", hero: "primalbeast", t: "Primal Beast получил слоты под эффекты способностей", x: "Теперь на способности зверя можно ставить отдельные косметические эффекты." },
     { id: 23, w: "12–18 октября", d: "15 окт", cat: "patch", hero: "snapfire", t: "Починили Lil' Shredder у Snapfire", x: "Исправили баг со снарядами Lil' Shredder, а заодно просадки FPS." },
     { id: 22, w: "12–18 октября", d: "13 окт", cat: "patch", ic: "🐉", t: "Фиксы арканы Tidehunter и Baby Roshan", x: "Поправили анимации новой арканы Tidehunter и модель Baby Roshan." },
-    { id: 21, w: "12–18 октября", d: "неделя", cat: "patch", ic: "📕", t: "Necronomicon может вернуться", x: "Сообщество вовсю обсуждает возвращение Necronomicon со старым рецептом. Официально Valve это пока не подтверждала." },
+    { id: 21, w: "5–11 октября", d: "7 окт", cat: "leaks", ic: "📕", t: "Necronomicon может вернуться", x: "Вместе с Trove of Terror в файлах игры обновился рецепт Necronomicon: теперь это <b>Staff of Wizardry + Belt of Strength</b> вместо двух Sage's Mask. Сам предмет убрали ещё в 7.29 (2021). Valve возвращение не подтверждала." },
     { id: 20, w: "12–18 октября", d: "неделя", cat: "patch", ic: "🎯", also: ["emberspirit", "puck"], t: "Bounty Hunter — король меты", x: "В пабах BH — единоличный лидер высшего тира, а на BLAST Slam VIII его пикали или банили в <b>95%</b> драфтов. У про-игроков ещё в моде Rubick, Batrider, Puck, Ember Spirit, Tiny и Clockwerk." },
     { id: 19, w: "12–18 октября", d: "неделя", cat: "players", ic: "🔁", hl: 1, t: "Malr1ne официально в Team Liquid", x: "Переход больше не слух. С ним Liquid может навязать борьбу Team Yandex, PARIVISION и Team Spirit. Что будет с Nisha — пока неясно." },
     { id: 18, w: "12–18 октября", d: "неделя", cat: "players", ic: "🗣️", t: "Team Spirit хотела забрать Noticed", x: "По словам Korb3n, после ухода Collapse Spirit пыталась подписать Noticed, но сделка не сложилась — в итоге команда взяла <b>batyuk</b>." },
@@ -5591,7 +5601,7 @@ const NEWS = (() => {
     { id: 9, w: "5–11 октября", d: "8 окт", cat: "patch", hero: "terrorblade", t: "Новый сет Terrorblade подружили с арканой", x: "Исправили конфликт нового набора Terrorblade с арканой Fractal Horns of Inner Abysm." },
     { id: 8, w: "5–11 октября", d: "7 окт", cat: "patch", hero: "drowranger", hl: 1, t: "Вышла сокровищница Trove of Terror", x: "Внутри 15 Immortal-наборов, <b>новая аркана на Tidehunter</b> и переиздание ранее эксклюзивной арканы на Drow Ranger." },
     { id: 7, w: "5–11 октября", d: "6 окт", cat: "patch", hero: "lina", t: "Фиксы Lina и эффекта телепорта", x: "Исправили баг способности Lina и кастомного эффекта телепортации." },
-    { id: 6, w: "5–11 октября", d: "неделя", cat: "patch", ic: "💸", t: "В файлах игры нашли персональные скидки", x: "Датамайнеры откопали намёки на персональные предложения и скидки на платный контент. Как это будет работать — пока неизвестно." },
+    { id: 6, w: "5–11 октября", d: "неделя", cat: "leaks", ic: "💸", t: "В файлах игры нашли персональные скидки", x: "Датамайнеры откопали намёки на персональные предложения и скидки на платный контент. Как это будет работать — пока неизвестно." },
     { id: 5, w: "5–11 октября", d: "неделя", cat: "events", ic: "🥇", hl: 1, t: "Team Yandex — чемпион BLAST SLAM VIII", x: "Призёры повторили расклад The International 2026. Yandex называют главным претендентом на доминирование в новом сезоне." },
     { id: 4, w: "5–11 октября", d: "неделя", cat: "players", ic: "🔁", t: "PARIVISION выкупила Satanic у Team Spirit", x: "Один из самых громких трансферов межсезонья." },
     { id: 3, w: "5–11 октября", d: "неделя", cat: "players", ic: "🐉", t: "Team Tidebound вернулась в Доту", x: "В составе — <b>xiao8</b>, <b>nothingtosay</b> и <b>shiro</b>." },
@@ -5605,9 +5615,9 @@ const NEWS = (() => {
   const firstVisit = seen < 0;
   let cat = "all", wired = false;
 
-  function dot(){ document.querySelectorAll('.tab[data-tab="dota"], [data-sub2="news"]').forEach(tb => { let d = tb.querySelector(".ndot");
+  function dot(){ document.querySelectorAll('.tab[data-tab="news"]').forEach(tb => { let d = tb.querySelector(".ndot");
     if (TOP > seen && !d){ d = document.createElement("i"); d.className = "ndot"; d.setAttribute("aria-hidden", "true"); tb.appendChild(d); } else if (TOP <= seen && d) d.remove(); }); }
-  function go(){ setTab("dota"); D2.sub("news"); }
+  function go(){ setTab("news"); }
   function icon(n){ const h = n.hero && H(n.hero);
     return h ? `<button type="button" class="nic" data-s="${h.slug}" style="${vars(h)}" aria-label="Сборка ${h.en}" title="Сборка ${h.en}"><img alt="" loading="lazy" src="face/${h.slug}.webp"></button>` : `<span class="nic" aria-hidden="true">${n.ic || "📰"}</span>`; }
   function chips(n){ const list = [n.hero, ...(n.also || [])].map(H).filter(Boolean); if (!list.length) return "";
@@ -5618,16 +5628,17 @@ const NEWS = (() => {
       <h3>${n.t}</h3><p>${n.x}</p>${chips(n)}</div></article>`;
   }
   function draw(){
-    const list = ITEMS.filter(n => cat === "all" || n.cat === cat);
+    const wk = ["20–21 октября", "12–18 октября", "5–11 октября", "Сентябрь"]; // неизвестная (новая) неделя встанет первой
+    const list = ITEMS.filter(n => cat === "all" || n.cat === cat).sort((a, b) => wk.indexOf(a.w) - wk.indexOf(b.w) || b.id - a.id);
     const cnt = k => k === "all" ? ITEMS.length : ITEMS.filter(n => n.cat === k).length;
-    document.getElementById("nChips").innerHTML = [["all", "Всё"], ["patch", "🛠️ Патч"], ["players", "🧑‍💻 Игроки"], ["events", "🏆 Турниры"], ["community", "🎉 Комьюнити"]]
+    document.getElementById("nChips").innerHTML = [["all", "Всё"], ["patch", "🛠️ Патч"], ["players", "🧑‍💻 Игроки"], ["leaks", "🔍 Датамайн"], ["events", "🏆 Турниры"], ["community", "🎉 Комьюнити"]]
       .map(([k, l]) => `<button type="button" class="rkc" data-c="${k}" aria-pressed="${cat === k}">${l}<em>${cnt(k)}</em></button>`).join("");
     let html = "", w = "", i = 0;
     list.forEach(n => { if (n.w !== w){ w = n.w; html += `<div class="ngrp">${w}</div>`; } html += card(n, i++); });
     document.getElementById("nList").innerHTML = html;
   }
   function open(){
-    const box = document.getElementById("d2News"); if (!box) return;
+    const box = document.getElementById("newsBox"); if (!box) return;
     if (!wired){ wired = true;
       box.innerHTML = `<div class="npatch" id="nPatch"></div><div class="rkchips nchips" id="nChips"></div><div class="nlist" id="nList"></div><p class="nfoot" id="nFoot"></p>`;
       document.getElementById("nPatch").innerHTML = `<span class="nv">7.41f</span><span class="nl">Текущий патч</span><h3>Второй по длительности патч в истории — и идёт на рекорд</h3>
@@ -5649,7 +5660,7 @@ const NEWS = (() => {
 })();
 
 /* ---------- вкладки ---------- */
-const TABS = ["1x6", "custom", "dota", "games", "feed", "rating"];
+const TABS = ["dota", "news", "1x6", "custom", "games", "feed", "rating"];
 let curTab = "1x6";
 function inkTo(btn, instant){ const ink = document.getElementById("tabInk"), bar = btn.parentElement; if (!ink) return;
   if (instant){ ink.style.transition = "none"; requestAnimationFrame(() => ink.style.transition = ""); }
@@ -5664,6 +5675,7 @@ function setTab(name, opts){
   if (name === "rating") PROF.ratingOpen();
   if (name === "dota") D2.open();
   if (name === "custom") CHC.open();
+  if (name === "news") NEWS.open();
   if (!opts.keepHash){ try { history.replaceState(null, "", name === "1x6" ? location.pathname + location.search : "#" + name); } catch(e) {} }
   if (prev !== name && !opts.noScroll){ const tb = document.querySelector(".tabs"); const y = tb.getBoundingClientRect().top + scrollY - 70; if (scrollY > y) window.scrollTo({ top: y, behavior: REDUCED ? "auto" : "smooth" }); }
 }
