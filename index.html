@@ -855,6 +855,17 @@
   .d2-lanes { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
   .d2-lane { padding: 10px 12px; border-radius: 12px; background: var(--bg-soft); border: 1px solid var(--line); display: grid; gap: 2px; }
   .d2-lane b { font-size: 13px; } .d2-lane > span { font-family: var(--display); font-size: 22px; font-weight: 800; } .d2-lane small { font-size: 11px; color: var(--muted); }
+  .d2-blds { display: grid; gap: 8px; } .d2-bsort { margin: 0 0 8px; }
+  .d2-bld { padding: 10px 12px; border-radius: 14px; background: var(--bg-soft); border: 1px solid var(--line); display: grid; gap: 8px; }
+  .d2-bld.best { border-color: color-mix(in srgb, #5cf07f 45%, var(--line)); }
+  .d2-bld-h { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; min-width: 0; }
+  .d2-bld-c { display: flex; align-items: center; gap: 3px; } .d2-bld-c img { width: 44px; height: 32px; border-radius: 6px; object-fit: cover; } .d2-bld-c i { font-style: normal; color: var(--muted); font-size: 12px; }
+  .d2-bld-h > div:nth-child(2) { min-width: 0; } .d2-bld-h b.t { display: block; font-size: 14px; line-height: 1.25; } .d2-bld-h small { color: var(--muted); font-size: 12px; }
+  .d2-bld-w { text-align: right; } .d2-bld-w b { display: block; font-size: 18px; font-variant-numeric: tabular-nums; } .d2-bld-w small { font-size: 11px; }
+  .d2-bld-p { display: flex; flex-wrap: wrap; gap: 6px 14px; } .d2-bld-s { display: grid; gap: 3px; } .d2-bld-s > small { color: var(--muted); font-size: 11px; }
+  .d2-bld-s > div { display: flex; gap: 4px; flex-wrap: wrap; } .d2-bld-s span { position: relative; display: grid; justify-items: center; font-size: 10px; font-variant-numeric: tabular-nums; color: var(--muted); }
+  .d2-bld-s img { width: 36px; height: 26px; border-radius: 5px; object-fit: cover; } .d2-bld-s span.up { color: #5cf07f; } .d2-bld-s span.dn { color: #ff6b6b; }
+  .d2-bld-few { font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 0 5px; margin-left: 4px; }
   .d2-ph { margin-bottom: 12px; } .d2-ph h5 { margin: 0 0 6px; font-size: 13px; }
   .d2-its { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 6px; }
   .d2-it { display: grid; justify-items: center; gap: 3px; padding: 8px 4px; border-radius: 12px; background: var(--bg-soft); border: 1px solid var(--line); text-align: center; min-width: 0; }
@@ -4816,12 +4827,34 @@ const D2 = (() => {
       <div class="pstats d2-kpi"><div class="pstat"><b class="db-wr ${wrCls(pct(w, p))}">${p ? f1(pct(w, p)) + "%" : "—"}</b><span>винрейт · ${esc(RANKS.find(r => r[0] === st.rank)[1])}</span></div><div class="pstat"><b>${p.toLocaleString("ru-RU")}</b><span>матчей</span></div><div class="pstat"><b>${num(h.pro_pick)}</b><span>пиков на про-сцене</span></div></div>
       <div class="psec"><h4>Винрейт по рангам</h4><div class="d2-ranksbar">${RANKS.slice(1).filter(r => HEROES_D2.some(x => pw(x, r[0])[0] > 0)).map(r => { const [pp, ww] = pw(h, r[0]), v = pp ? pct(ww, pp) : 0; return `<div class="d2-rb ${wrCls(v)}" title="${esc(r[1])}: ${pp ? f1(v) + "%, " + pp + " матчей" : "нет данных"}"><b>${pp ? f1(v) : "—"}</b><i style="height:${pp ? Math.max(4, Math.min(100, (v - 35) * 100 / 30)) : 0}%"></i>${rankIc(r[0], "bar")}<small>${esc(r[1])}</small></div>`; }).join("")}</div></div>
       <div class="psec"><h4>По линиям</h4><div id="d2Lanes"><div class="feed-sk"></div></div></div>
+      <div class="psec"><h4>Разные сборки</h4><div class="rkchips sub d2-bsort" role="group" aria-label="Сортировка"><button type="button" class="rkc" data-bs="g" aria-pressed="true">Популярные</button><button type="button" class="rkc" data-bs="w" aria-pressed="false">По винрейту</button></div><div id="d2Builds"><div class="feed-sk"></div><div class="feed-sk"></div></div></div>
       <div class="psec"><h4>Сборка предметов</h4>${posOf(h).length ? `<div class="rkchips sub d2-hroles" role="group" aria-label="Роль">${posOf(h).map(p => `<button type="button" class="rkc" data-hp="${p}" aria-pressed="false">${POS_SHORT[p]}</button>`).join("")}<button type="button" class="rkc" data-hp="0" aria-pressed="false">Все роли</button></div><div class="d2-rnote" id="d2RNote"></div>` : ""}<div id="d2Items"><div class="feed-sk"></div><div class="feed-sk"></div></div></div>
       <div class="psec"><h4>Контрпики</h4><div id="d2Mu"><div class="feed-sk"></div></div></div>
       <div class="pacts"><button type="button" class="btn btn-primary" id="d2Sh">📤 Поделиться</button><a class="btn btn-ghost" href="https://www.dotabuff.com/heroes/${esc(dbSlug(h))}" target="_blank" rel="noopener">Открыть на Dotabuff ↗</a></div>
       <p class="db-note" style="padding:0 22px 20px">Сборка — самые популярные предметы в публичных матчах на этом герое. Винрейт предмета — как часто побеждают, когда его покупают; это зависит и от времени покупки, так что смотри на него вместе с популярностью.</p></div>`);
     const $ = s => g.querySelector(s);
     $("#d2Sh").onclick = () => shareLink(`${SITE_URL}/dota2?d2h=${h.id}`, `${h.localized_name} — мета Dota 2`, `Винрейт, сборка и контрпики ${h.localized_name}`);
+    // разные сборки
+    Promise.all([get("builds", id), itemsMeta()]).then(([b]) => {
+      const box = $("#d2Builds"); if (!box) return;
+      const list = (b && b.builds || []).filter(x => x.items.every(([k]) => ITEMS[k]));
+      if (!list.length){ box.innerHTML = `<div class="pnone">Пока мало про-матчей на этом герое, чтобы выделить сборки</div>`; g.querySelector(".d2-bsort").hidden = true; return; }
+      const ic = (k, extra, cls) => { const it = itemOf(k); return it ? `<span${cls ? ` class="${cls}"` : ""} title="${esc(it.name)}${extra ? " · " + esc(extra) : ""}"><img alt="" loading="lazy" src="${esc(it.img)}">${extra && cls != null ? esc(extra.split(" ")[0]) : ""}</span>` : ""; };
+      const step = (t, html) => html ? `<div class="d2-bld-s"><small>${t}</small><div>${html}</div></div>` : "";
+      const bestW = Math.max(...list.filter(x => x.g >= 20).map(x => x.w / x.g), 0);
+      const draw = by => {
+        g.querySelectorAll("[data-bs]").forEach(el => el.setAttribute("aria-pressed", el.dataset.bs === by));
+        const rows = list.slice().sort((x, y) => by === "w" ? (y.g >= 20) - (x.g >= 20) || y.w / y.g - x.w / x.g : y.g - x.g);
+        box.innerHTML = `<div class="d2-blds">${rows.map(x => { const v = pct(x.w, x.g), names = x.items.map(([k]) => itemOf(k).name);
+          return `<div class="d2-bld${x.g >= 20 && x.w / x.g === bestW && list.length > 1 ? " best" : ""}"><div class="d2-bld-h"><div class="d2-bld-c">${x.items.map(([k]) => `<img alt="" loading="lazy" src="${esc(itemOf(k).img)}">`).join("<i>→</i>")}</div>
+            <div><b class="t">${esc(names.join(" → "))}</b><small>${LANES[x.ln] ? esc(LANES[x.ln]) + " · " : ""}${x.g.toLocaleString("ru-RU")} игр · ${f1(pct(x.g, b.n))}% матчей${x.g < 20 ? `<em class="d2-bld-few">мало игр</em>` : ""}</small></div>
+            <div class="d2-bld-w"><b class="db-wr ${wrCls(v)}">${f1(v)}%</b><small>винрейт</small></div></div>
+            <div class="d2-bld-p">${step("Сапоги", x.boots.map(([k, c]) => ic(k, Math.round(c * 100 / x.g) + "% игр")).join(""))}${step("Сначала", x.early.map(([k, c]) => ic(k, Math.round(c * 100 / x.g) + "% игр")).join(""))}${step("Основа", x.items.map(([k, t]) => ic(k, t + "′ в среднем", "")).join(""))}${step("Потом", x.next.map(([k, c, w]) => ic(k, f1(pct(w, c)) + "% · " + c + " игр", wrCls(pct(w, c)))).join(""))}</div></div>`; }).join("")}</div>
+          <p class="db-note">Сборки собраны из закупок в про-матчах ${b.patch ? "патча 7.41" : "за последний год"} (${b.n.toLocaleString("ru-RU")} игр на герое): матчи сгруппированы по первым двум крупным предметам. Винрейт — доля побед с такой сборкой; у сборок с малым числом игр он неточный.</p>`;
+      };
+      g.querySelectorAll("[data-bs]").forEach(el => el.onclick = () => draw(el.dataset.bs));
+      draw("g");
+    }).catch(() => { if ($("#d2Builds")) $("#d2Builds").innerHTML = `<div class="pnone">Не удалось загрузить сборки</div>`; });
     // линии
     let LAGG = null, renderRole = null;
     get("laneRoles", id).then(rs => {

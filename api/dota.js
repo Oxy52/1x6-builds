@@ -3,6 +3,7 @@
 //   GET /api/dota?q=items                      -> предметы (название, картинка, цена, компоненты, характеристики)
 //   GET /api/dota?q=itemIds                    -> id -> ключ предмета
 //   GET /api/dota?q=abilities                  -> способности героев (для Custom Hero Chaos)
+//   GET /api/dota?q=builds&hero=1              -> разные сборки героя с винрейтом (по закупкам в про-матчах)
 //   GET /api/dota?q=itemPopularity&hero=1      -> популярные предметы по стадиям игры
 //   GET /api/dota?q=itemTimings&hero=1         -> винрейт предметов по времени покупки
 //   GET /api/dota?q=laneRoles&hero=1           -> винрейт по линиям
@@ -29,9 +30,9 @@ const ROUTES = {
   recent: p => `/players/${p.id}/recentMatches`,
   pheroes: p => `/players/${p.id}/heroes`
 };
-const NEEDS_HERO = new Set(["itemPopularity", "itemTimings", "laneRoles", "matchups"]);
+const NEEDS_HERO = new Set(["itemPopularity", "itemTimings", "laneRoles", "matchups", "builds"]);
 const NEEDS_ID = new Set(["player", "wl", "recent", "pheroes"]);
-const TTL = { items: 86400, itemIds: 86400, abilities: 86400, search: 600, player: 300, wl: 300, recent: 300, pheroes: 600 };
+const TTL = { items: 86400, itemIds: 86400, abilities: 86400, builds: 43200, search: 600, player: 300, wl: 300, recent: 300, pheroes: 600 };
 
 const withKey = url => KEY ? url + (url.includes("?") ? "&" : "?") + "api_key=" + encodeURIComponent(KEY) : url;
 async function od(path) {
@@ -75,6 +76,54 @@ async function abilities() {
   return JSON.stringify(out);
 }
 
+// ---------- сборки: про-матчи с текущего патча, группируем по первым двум крупным предметам ----------
+const PATCH_START = 1774310400; // 24.03.2026 — выход 7.41
+const BOOTS = new Set("power_treads phase_boots arcane_boots tranquil_boots boots_of_bearing guardian_greaves travel_boots travel_boots_2".split(" "));
+// дорогие компоненты — сами по себе это ещё не сборка
+const PARTS = new Set("ultimate_orb demon_edge eagle reaver relic hyperstone mystic_staff kaya sange yasha soul_booster lesser_crit platemail talisman_of_evasion".split(" "));
+const JUNK = "'tpscroll','tango','flask','clarity','ward_observer','ward_sentry','ward_dispenser','smoke_of_deceit','dust','enchanted_mango','faerie_fire','blood_grenade','aegis','cheese','refresher_shard'";
+let ITEMS_C = null;
+async function builds(hero) {
+  if (!ITEMS_C) ITEMS_C = JSON.parse(await od("/constants/items"));
+  const sql = since => `SELECT (SELECT string_agg((e->>'key')||':'||(e->>'time'), ' ' ORDER BY (e->>'time')::int) FROM unnest(pm.purchase_log) e WHERE (e->>'key') NOT LIKE 'recipe%' AND (e->>'key') NOT IN (${JUNK})) pl, pm.lane_role ln, ((pm.player_slot<128)=m.radiant_win) win FROM player_matches pm JOIN matches m USING(match_id) WHERE pm.hero_id=${hero} AND m.start_time > ${since} AND pm.purchase_log IS NOT NULL ORDER BY m.start_time DESC LIMIT 1500`;
+  const run = async since => { const j = JSON.parse(await od("/explorer?sql=" + encodeURIComponent(sql(since)))); if (j.err) throw new Error(j.err); return j.rows || []; };
+  let since = PATCH_START, rows = await run(since);
+  if (rows.length < 40) { since = Math.floor(Date.now() / 1000) - 365 * 86400; rows = await run(since); }
+  const cost = k => (ITEMS_C[k] && ITEMS_C[k].cost) || 0, comps = k => (ITEMS_C[k] && ITEMS_C[k].components) || [];
+  const groups = {}; let n = 0;
+  for (const r of rows) {
+    const pl = String(r.pl || "").split(" ").filter(Boolean).map(x => { const i = x.lastIndexOf(":"); return { k: x.slice(0, i), t: +x.slice(i + 1) || 0 }; });
+    if (!pl.length) continue; n++;
+    const core = [], early = []; let boots = null;
+    pl.forEach((p, i) => {
+      if (BOOTS.has(p.k)) { if (!boots) boots = p.k; return; }
+      const c = cost(p.k); if (p.k === "boots" || c < 400) return;
+      if (pl.slice(i + 1).some(q => comps(q.k).includes(p.k))) return; // компонент, позже собранный во что-то большее
+      if (c >= 2000 && !PARTS.has(p.k)) { if (!core.some(x => x.k === p.k)) core.push(p); }
+      else if (c < 2000 && !core.length && !early.includes(p.k)) early.push(p.k);
+    });
+    if (core.length < 2) continue;
+    const pair = core.slice(0, 2), key = pair.map(p => p.k).sort().join("+");
+    const g = groups[key] || (groups[key] = { g: 0, w: 0, t: {}, ln: {}, boots: {}, early: {}, next: {} });
+    g.g++; if (r.win) g.w++;
+    pair.forEach(p => { const o = g.t[p.k] || (g.t[p.k] = [0, 0]); o[0] += p.t; o[1]++; });
+    g.ln[r.ln] = (g.ln[r.ln] || 0) + 1;
+    if (boots) g.boots[boots] = (g.boots[boots] || 0) + 1;
+    early.slice(0, 4).forEach(e => g.early[e] = (g.early[e] || 0) + 1);
+    core.slice(2, 6).forEach(c => { const o = g.next[c.k] || (g.next[c.k] = [0, 0]); o[0]++; if (r.win) o[1]++; });
+  }
+  const top = (o, k) => Object.entries(o).sort((a, b) => b[1] - a[1]).slice(0, k);
+  const min = Math.max(5, Math.round(n * 0.03));
+  const out = Object.values(groups).filter(g => g.g >= min).sort((a, b) => b.g - a.g).slice(0, 6).map(g => ({
+    items: Object.entries(g.t).map(([k, o]) => [k, Math.round(o[0] / o[1] / 60)]).sort((a, b) => a[1] - b[1]),
+    g: g.g, w: g.w, ln: +top(g.ln, 1)[0][0] || 0,
+    boots: top(g.boots, 2).filter(x => x[1] >= g.g * 0.15),
+    early: top(g.early, 3).filter(x => x[1] >= g.g * 0.2),
+    next: Object.entries(g.next).filter(([, o]) => o[0] >= Math.max(2, g.g * 0.12)).sort((a, b) => b[1][0] - a[1][0]).slice(0, 4).map(([k, o]) => [k, o[0], o[1]])
+  }));
+  return JSON.stringify({ n, since, patch: since === PATCH_START, builds: out });
+}
+
 module.exports = async (req, res) => {
   const p = req.query || {}, q = String(p.q || "");
   const fail = (code, err) => { res.setHeader("Cache-Control", "public, s-maxage=30"); return res.status(code).json({ error: err }); };
@@ -88,13 +137,14 @@ module.exports = async (req, res) => {
       return res.status(200).send(Buffer.from(await r.arrayBuffer()));
     } catch (e) { return res.status(502).end(); }
   }
-  if (q !== "abilities" && !ROUTES[q]) return fail(400, "bad_query");
+  if (q !== "abilities" && q !== "builds" && !ROUTES[q]) return fail(400, "bad_query");
   if (NEEDS_HERO.has(q) && !/^\d{1,3}$/.test(String(p.hero || ""))) return fail(400, "bad_hero");
   if (NEEDS_ID.has(q) && !/^\d{1,12}$/.test(String(p.id || ""))) return fail(400, "bad_id");
   if (q === "search" && !(String(p.name || "").trim().length >= 2 && String(p.name).length <= 40)) return fail(400, "bad_name");
   try {
     let out;
     if (q === "abilities") out = await abilities();
+    else if (q === "builds") out = await builds(+p.hero);
     else {
       const text = await od(ROUTES[q]({ hero: p.hero, id: p.id, name: String(p.name || "").trim() }));
       try { out = q === "items" ? slimItems(text) : q === "heroStats" ? slimHeroes(text) : q === "search" ? JSON.stringify(JSON.parse(text).slice(0, 20)) : text; }
