@@ -1,4 +1,4 @@
-// Вход через Telegram для 1x6 Билды.
+// Вход через Telegram для DotaSix.
 // GET  /api/telegram          -> { enabled, bot_id }  (публичные данные для кнопки)
 // POST /api/telegram {user}   -> { token_hash }        (проверяет подпись Telegram и выдаёт одноразовый вход в Supabase)
 //
