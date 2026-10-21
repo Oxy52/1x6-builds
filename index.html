@@ -4575,10 +4575,32 @@ const D2 = (() => {
       <p class="db-note">Число справа — насколько в среднем этот герой выигрывает чаще против выбранных врагов (по матчам из выборки OpenDota). Иконки — преимущество против каждого врага.</p>
       <div class="d2-ai" id="d2PkAI"></div>`;
     out.querySelectorAll(".d2-sg").forEach(b => b.onclick = () => hero(+b.dataset.h));
-    AI.button(out.querySelector("#d2PkAI"), "🧠 Объяснить пик (AI)", () => ({ kind: "pick", role: PK.role ? ROLES.find(r => r[0] === PK.role)[1] : "", allies: PK.allies.map(h => h.localized_name), enemies: PK.enemies.map(h => h.localized_name), candidates: cands.map(c => ({ hero: c.h.localized_name, score: c.adv })) }), r => `
-      <div class="ai-card"><div class="ai-best">${(() => { const h = HEROES_D2.find(x => x.localized_name === r.best); return h ? `<img alt="" src="${esc(himg(h))}">` : ""; })()}<div><small>AI советует</small><b>${esc(r.best || "")}</b></div></div>
+    AI.button(out.querySelector("#d2PkAI"), "🧠 Разобрать пик", () => ({ kind: "pick", role: PK.role ? ROLES.find(r => r[0] === PK.role)[1] : "", allies: PK.allies.map(h => h.localized_name), enemies: PK.enemies.map(h => h.localized_name), candidates: cands.map(c => ({ hero: c.h.localized_name, score: c.adv })) }), r => `
+      <div class="ai-card"><div class="ai-best">${(() => { const h = HEROES_D2.find(x => x.localized_name === r.best); return h ? `<img alt="" src="${esc(himg(h))}">` : ""; })()}<div><small>Лучший пик</small><b>${esc(r.best || "")}</b></div></div>
       <p>${esc(r.why || "")}</p>${Array.isArray(r.alts) && r.alts.length ? `<h5>Запасные варианты</h5><ul>${r.alts.map(a => `<li><b>${esc(a.hero || "")}</b> — ${esc(a.why || "")}</li>`).join("")}</ul>` : ""}
-      ${r.plan ? `<h5>План на игру</h5><p>${esc(r.plan)}</p>` : ""}${r.avoid ? `<p class="ai-warn">⚠️ ${esc(r.avoid)}</p>` : ""}</div>`);
+      ${r.plan ? `<h5>План на игру</h5><p>${esc(r.plan)}</p>` : ""}${r.avoid ? `<p class="ai-warn">⚠️ ${esc(r.avoid)}</p>` : ""}</div>`, null, () => statPick(cands));
+  }
+  // разбор пика по статистике (работает и без AI-ключа)
+  async function statPick(cands){
+    const name = h => h.localized_name, best = cands[0];
+    const vs = c => c.per.filter(x => x.v != null).sort((a, b) => b.v - a.v);
+    const fmt = x => `${name(x.e)} ${x.v >= 0 ? "+" : ""}${f1(x.v)}%`;
+    const bv = vs(best), good = bv.filter(x => x.v > 0), bad = bv.filter(x => x.v < 0);
+    const [pp, ww] = pw(best.h, st.rank), base = pp ? pct(ww, pp) : 0;
+    let why = good.length ? `Лучше всех против этого драфта: ${good.slice(0, 3).map(fmt).join(", ")}.` : `Меньше всех проигрывает этим врагам.`;
+    why += ` В среднем ${best.adv >= 0 ? "+" : ""}${f1(best.adv)}% к винрейту против выбранных врагов${pp ? `, общий винрейт героя ${f1(base)}%` : ""}.`;
+    if (bad.length) why += ` Осторожно с ${bad.map(x => name(x.e)).join(", ")}.`;
+    let plan = "";
+    try {
+      const [pop] = await Promise.all([get("itemPopularity", best.h.id), itemsMeta()]);
+      const top = k => Object.entries((pop && pop[k]) || {}).map(([iid, c]) => [IDS[iid] || iid, num(c)]).filter(x => ITEMS[x[0]] && (!PK.role || roleOk(x[0], +PK.role))).sort((a, b) => b[1] - a[1]).slice(0, 3).map(x => ITEMS[x[0]].dname);
+      const early = top("early_game_items"), core = top("mid_game_items"), late = top("late_game_items");
+      plan = [early.length ? `На линии: ${early.join(", ")}.` : "", core.length ? `Основа сборки: ${core.join(", ")}.` : "", late.length ? `Позже: ${late.join(", ")}.` : ""].filter(Boolean).join(" ");
+    } catch(e) {}
+    const worst = cands.slice(3).sort((a, b) => a.adv - b.adv)[0];
+    return { best: name(best.h), why, plan: plan || "Открой страницу героя — там популярная сборка и винрейт предметов.",
+      alts: cands.slice(1, 3).map(c => { const v = vs(c)[0]; return { hero: name(c.h), why: v && v.v > 0 ? `сильнее всего против ${fmt(v)}` : `в среднем ${c.adv >= 0 ? "+" : ""}${f1(c.adv)}% против этих врагов` }; }),
+      avoid: worst && worst.adv < 0 ? `${name(worst.h)} в среднем проигрывает этим врагам (${f1(worst.adv)}%).` : "" };
   }
   function sub(name){
     const pane = document.getElementById("d2Pane"); if (!pane) return;
@@ -4618,14 +4640,16 @@ const AI = (() => {
       return j;
     } catch(e) { return { error: "fail" }; }
   }
-  function button(el, label, getPayload, render, onResult){
+  function button(el, label, getPayload, render, onResult, fallback){
     el.innerHTML = `<button type="button" class="btn ai-btn">${label}</button><div class="ai-out"></div>`;
     const btn = el.querySelector(".ai-btn"), out = el.querySelector(".ai-out");
     btn.onclick = async () => {
-      if (!PROF.user()){ out.innerHTML = `<div class="ai-msg">Чтобы спросить AI, войди в аккаунт — это бесплатно. <button type="button" class="btn btn-ghost" id="aiIn">Войти</button></div>`; out.querySelector("#aiIn").onclick = () => PROF.open(); return; }
+      if (!PROF.user() && !(fallback && !(await enabled()))){ out.innerHTML = `<div class="ai-msg">Чтобы спросить AI, войди в аккаунт — это бесплатно. <button type="button" class="btn btn-ghost" id="aiIn">Войти</button></div>`; out.querySelector("#aiIn").onclick = () => PROF.open(); return; }
       const payload = getPayload(); if (!payload) return;
       btn.disabled = true; out.innerHTML = `<div class="ai-think"><span></span><span></span><span></span><b>AI думает…</b></div>`;
-      if (!(await enabled())){ btn.disabled = false; out.innerHTML = `<div class="ai-msg">🧠 AI-помощник скоро заработает — осталось подключить его на сервере.</div>`; return; }
+      if (!(await enabled())){
+        if (fallback){ try { const fr = await fallback(); btn.disabled = false; out.innerHTML = render(fr) + `<p class="ai-left">Разбор по статистике матчей. Подробные советы AI скоро будут доступны.</p>`; if (onResult) onResult(fr, out); return; } catch(e) {} }
+        btn.disabled = false; out.innerHTML = `<div class="ai-msg">🧠 AI-помощник скоро заработает — осталось подключить его на сервере.</div>`; return; }
       const r = await call(payload); btn.disabled = false;
       if (r.error){ out.innerHTML = `<div class="ai-msg">${r.error === "limit" ? "На сегодня запросы к AI закончились. С подпиской 👑 1x6+ — 40 запросов в день. <button type=\"button\" class=\"btn btn-ghost\" id=\"aiPrem\">1x6+</button>" : r.error === "login" ? "Войди в аккаунт ещё раз." : r.error === "off" ? "🧠 AI-помощник скоро заработает." : "AI не ответил. Попробуй ещё раз через минуту."}</div>`; const pb = out.querySelector("#aiPrem"); if (pb) pb.onclick = () => PROF.premium(); return; }
       out.innerHTML = render(r.result || {}) + (r.left != null ? `<p class="ai-left">Осталось запросов к AI сегодня: ${r.left}</p>` : "");
