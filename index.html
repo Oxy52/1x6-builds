@@ -909,6 +909,18 @@
   .d2-hgrid img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; background: #111; } .d2-hgrid span { font-size: 10.5px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .d2-psearch { display: flex; gap: 8px; } .d2-psearch .d2-search { flex: 1; min-width: 0; } .d2-psearch .btn { flex: none; }
   .d2-meb { margin-top: 8px; border: 1px solid color-mix(in srgb, var(--t1) 50%, var(--line)); background: color-mix(in srgb, var(--t1) 12%, transparent); color: var(--fg); font: inherit; font-weight: 700; padding: 9px 14px; border-radius: 12px; cursor: pointer; }
+  .d2-pros { display: grid; gap: 6px; } #d2ProR, #d2ProS { margin: 8px 0; }
+  .d2-pro { display: grid; grid-template-columns: 28px 34px minmax(0, 1fr) auto 70px 50px 50px; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg-soft); color: inherit; font: inherit; text-align: left; cursor: pointer; transition: border-color .2s, transform .15s; }
+  .d2-pro:hover { border-color: color-mix(in srgb, var(--t1) 50%, var(--line)); } .d2-pro:active { transform: scale(.99); }
+  .d2-pro-n { font-family: var(--display); font-weight: 800; font-size: 15px; color: var(--muted); text-align: center; }
+  .d2-pro.top1 .d2-pro-n { color: #f3c35a; } .d2-pro.top2 .d2-pro-n { color: #cfd6e4; } .d2-pro.top3 .d2-pro-n { color: #d8935a; }
+  .d2-pro.top1 { border-color: color-mix(in srgb, #f3c35a 40%, var(--line)); background: linear-gradient(90deg, color-mix(in srgb, #f3c35a 9%, var(--bg-soft)), var(--bg-soft) 60%); }
+  .d2-pro-t { width: 34px; height: 34px; border-radius: 9px; background: rgba(255,255,255,.04); display: grid; place-items: center; overflow: hidden; } .d2-pro-t img { width: 30px; height: 30px; object-fit: contain; }
+  .d2-pro-m { min-width: 0; } .d2-pro-m b { display: flex; align-items: center; gap: 6px; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .d2-pro-m small { display: block; color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .d2-pro-f { width: 18px; height: 13px; border-radius: 2px; object-fit: cover; flex: none; }
+  .d2-pro-h { display: flex; gap: 3px; } .d2-pro-h img { width: 30px; height: 30px; border-radius: 7px; object-fit: cover; }
+  .d2-pro-s, .d2-pro-x { display: grid; text-align: right; } .d2-pro-s b, .d2-pro-x b { font-size: 14px; font-variant-numeric: tabular-nums; } .d2-pro-s small, .d2-pro-x small { color: var(--muted); font-size: 11px; }
+  @media (max-width: 700px) { .d2-pro { grid-template-columns: 22px 30px minmax(0, 1fr) 64px; gap: 8px; padding: 8px 10px; } .d2-pro-h, .d2-pro-x { display: none; } .d2-pro-t { width: 30px; height: 30px; } }
   .d2-plist { display: grid; gap: 6px; } .d2-plist button { display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-soft); color: inherit; font: inherit; cursor: pointer; text-align: left; }
   .d2-plist img { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; } .d2-plist small { display: block; color: var(--muted); font-size: 12px; }
   .d2-pav { width: 72px; height: 72px; border-radius: 16px; object-fit: cover; flex: none; } .d2-pav.sk { background: var(--bg-soft); }
@@ -1076,6 +1088,11 @@
   .set-tg input:checked + i { background: color-mix(in srgb, var(--t1) 60%, var(--bg)); } .set-tg input:checked + i::after { transform: translateX(18px); background: #fff; }
   .set-out { padding: 9px 14px; font-size: 13px; }
   /* ---- языки ---- */
+  .curw { position: relative; margin-left: auto; } .curw + .langw { margin-left: 8px; }
+  .curbtn { height: 40px; min-width: 40px; padding: 0 10px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-soft); color: inherit; font: inherit; font-size: 13px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+  .curbtn i { font-style: normal; color: #f3c35a; font-size: 15px; } .curbtn:hover, .langbtn:hover { border-color: color-mix(in srgb, var(--t1) 50%, var(--line)); }
+  .curpop { width: min(240px, calc(100vw - 24px)); grid-template-columns: 1fr; } .curpop button i { font-style: normal; width: 22px; text-align: center; color: #f3c35a; font-size: 16px; } .curpop button small { margin-left: auto; color: var(--muted); font-weight: 500; font-size: 12px; }
+  @media (max-width: 600px) { .curbtn { padding: 0; width: 40px; justify-content: center; } .curbtn span { display: none; } }
   .langw { position: relative; margin-left: auto; }
   .langw + .pbtn { margin-left: 8px; } .langw + .pbtn ~ .burger { flex: none; }
   .langbtn { width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-soft); display: grid; place-items: center; cursor: pointer; padding: 0; }
@@ -1516,6 +1533,7 @@
       </div>
     </div>
     <a class="logo" href="#top" id="logoBtn"><span class="mark">1×6</span><span class="lt">1x6 Билды</span></a>
+    <div class="curw"><button type="button" class="curbtn" id="curBtn" aria-label="Валюта" aria-expanded="false" aria-controls="curPop" translate="no"></button><div class="langpop curpop" id="curPop" role="menu" hidden translate="no"></div></div>
     <div class="langw"><button type="button" class="langbtn" id="langBtn" aria-label="Язык сайта" aria-expanded="false" aria-controls="langPop"></button><div class="langpop" id="langPop" role="menu" hidden></div></div>
     <button type="button" class="pbtn" id="pBtn" aria-label="Профиль"><span>Войти</span></button>
     <button type="button" class="burger" id="burger" aria-label="Меню" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
@@ -2175,6 +2193,31 @@ document.getElementById("gameBtn").onclick = () => GAME.open();
 })();
 
 /* ---------- профиль: облако (Supabase) на сайте, локально — в превью ---------- */
+/* ---------- валюта цен (как язык: кнопка в шапке) ---------- */
+const CURSEL = (() => {
+  const LIST = [["uah", "₴", "UAH", "Гривна"], ["usd", "$", "USD", "Доллар"], ["rub", "₽", "RUB", "Рубль"], ["eur", "€", "EUR", "Евро"]];
+  const saved = () => { try { const c = localStorage.getItem("ub-cur"); return LIST.some(x => x[0] === c) ? c : ""; } catch(e) { return ""; } };
+  const auto = () => { const l = typeof I18N !== "undefined" ? I18N.get() : "ru"; return l === "uk" ? "uah" : l === "ru" || l === "be" || l === "kk" ? "rub" : ["de", "es", "fr", "it", "pl", "nl", "pt"].includes(l) ? "eur" : "usd"; };
+  const get = () => saved() || auto();
+  function draw(){ const b = document.getElementById("curBtn"); if (!b) return; const c = LIST.find(x => x[0] === get());
+    b.innerHTML = `<i>${c[1]}</i><span>${c[2]}</span>`; b.title = c[3];
+    const pop = document.getElementById("curPop"); if (pop) pop.querySelectorAll("[data-c]").forEach(x => x.setAttribute("aria-pressed", x.dataset.c === c[0])); }
+  function set(c){ try { localStorage.setItem("ub-cur", c); } catch(e) {} draw(); document.dispatchEvent(new CustomEvent("curchange", { detail: c })); }
+  function init(){
+    const b = document.getElementById("curBtn"), pop = document.getElementById("curPop"); if (!b || !pop) return;
+    pop.innerHTML = LIST.map(([k, sym, code, name]) => `<button type="button" data-c="${k}"><i>${sym}</i><span>${code}</span><small>${name}</small></button>`).join("");
+    const close = () => { pop.hidden = true; b.setAttribute("aria-expanded", "false"); };
+    const place = () => { const r = b.getBoundingClientRect(), w = pop.offsetWidth; pop.style.top = (r.bottom + 8) + "px"; pop.style.left = Math.max(12, Math.min(innerWidth - w - 12, r.right - w)) + "px"; };
+    b.onclick = e => { e.stopPropagation(); pop.hidden = !pop.hidden; b.setAttribute("aria-expanded", String(!pop.hidden)); if (!pop.hidden) place(); };
+    addEventListener("scroll", () => { if (!pop.hidden) place(); }, { passive: true });
+    pop.onclick = e => { e.stopPropagation(); const x = e.target.closest("[data-c]"); if (!x) return; set(x.dataset.c); close(); };
+    document.addEventListener("click", () => { if (!pop.hidden) close(); });
+    document.addEventListener("langchange", () => { if (!saved()) { draw(); document.dispatchEvent(new CustomEvent("curchange", { detail: get() })); } });
+    draw();
+  }
+  return { init, get, set };
+})();
+
 const PROF = (() => {
   const LKEY = "ub-profile";
   const sb = (window.supabase && window.SB_CONF && window.SB_CONF.url) ? (() => { try { return window.supabase.createClient(window.SB_CONF.url, window.SB_CONF.key, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: "pkce" } }); } catch(e) { return null; } })() : null;
@@ -2966,8 +3009,8 @@ const PROF = (() => {
   const PLANS = [{ k: "m1", t: "1 месяц", mo: 1, rub: 99, stars: 59, usd: 1.25 }, { k: "m6", t: "6 месяцев", mo: 6, rub: 499, stars: 299, usd: 6.25, off: "−16%" }, { k: "y1", t: "1 год", mo: 12, rub: 799, stars: 499, usd: 9.99, off: "−33%", best: 1 }];
   const CUR = { uah: ["₴", "грн", [49, 249, 399]], rub: ["₽", "руб", [99, 499, 799]], eur: ["€", "евро", [1.19, 5.99, 9.49]], usd: ["$", "долл", [1.25, 6.25, 9.99]] };
   const curDef = () => { const l = typeof I18N !== "undefined" ? I18N.get() : "ru"; return l === "uk" ? "uah" : l === "ru" ? "rub" : ["de", "es", "fr", "it", "pl"].includes(l) ? "eur" : "usd"; };
-  let curK = (() => { try { const c = localStorage.getItem("ub-cur"); return CUR[c] ? c : ""; } catch(e) { return ""; } })();
-  const cur = () => CUR[curK] ? curK : curDef();
+  const cur = () => { const c = CURSEL.get(); return CUR[c] ? c : curDef(); };
+  let pmOpen = null; document.addEventListener("curchange", () => { if (pmOpen && pmOpen.isConnected) premium(); });
   const money = (v, fine) => { const c = CUR[cur()]; const s = v % 1 || (fine && c[2][0] < 5) ? v.toFixed(2).replace(".", ",") : String(Math.round(v)); return c[0] === "$" || c[0] === "€" ? c[0] + s : s + " " + c[0]; };
   const priceOf = p => CUR[cur()][2][PLANS.indexOf(p)];
   const PERKS = [["👑", "Значок и золотой ник", "Везде: в ленте, рейтинге, профиле и статистике"], ["✨", "Сияющий профиль и посты", "Золотая подсветка твоих постов и анимированная обложка профиля — видят все"], ["💠", "3 эксклюзивные рамки", "Корона, Аегис и Сияние — только для 1x6+"], ["🎨", "5 премиум-тем сайта", "Золото, Аркана, Лёд, Инферно и Неон"], ["⚡", "Опыт ×1.5 и бонус ×2", "Уровни и награды открываются быстрее"], ["✍️", "Длинные посты", "До 1000 символов и 120 постов в день вместо 280 и 40"], ["📈", "Разбор твоих игр в Dota 2", "Сильные герои, герои-ловушки и кого брать на твоём ранге и роли"], ["🧩", "50 билдов CHC в истории", "Вместо 6 — храни все удачные комбинации"]];
@@ -3020,10 +3063,10 @@ const PROF = (() => {
       <div class="psec"><h4>Бесплатно и с 1x6+</h4><div class="pm-cmp"><div class="pm-cr pm-ch"><span></span><span>Бесплатно</span><span>1x6+</span></div>${CMP.map(r => `<div class="pm-cr"><span>${r[0]}</span><span>${r[1]}</span><b>${r[2]}</b></div>`).join("")}</div></div>
       <div id="pmRef"></div>
       <div class="psec"><h4>Срок</h4><div class="pm-plans">${PLANS.map(p => `<button type="button" class="pm-plan${p.best ? " best" : ""}" data-k="${p.k}" aria-pressed="${p.k === premPlan}">${p.best ? `<em>Выгоднее всего</em>` : ""}<b>${p.t}</b><span class="pm-rub">${money(priceOf(p))}</span><small>${p.mo > 1 ? money(Math.round(priceOf(p) / p.mo * 100) / 100, true) + " в месяц" : "&nbsp;"}${p.off ? ` <i>${p.off}</i>` : ""}</small></button>`).join("")}</div>
-        <div class="pm-cur" role="group" aria-label="Валюта">${Object.keys(CUR).map(k => `<button type="button" data-c="${k}" aria-pressed="${k === cur()}">${CUR[k][0]} ${CUR[k][1]}</button>`).join("")}</div></div>
+        <div class="pm-cur" role="group" aria-label="Валюта" translate="no">${Object.keys(CUR).map(k => `<button type="button" data-c="${k}" aria-pressed="${k === cur()}">${CUR[k][0]} ${k.toUpperCase()}</button>`).join("")}</div></div>
       <div class="psec"><h4>Оплата</h4><div id="pmPay"></div><div class="pm-msg" id="pmMsg" hidden></div>
         <p class="pm-note">Цены в гривнах, рублях и евро — примерные: звёзды покупаются в Telegram, карта и крипта списываются в долларах. Подписка сама не продлевается — никаких автосписаний.</p></div>`, "Подписка 1x6+");
-    box.classList.add("pm");
+    box.classList.add("pm"); pmOpen = box;
     const payEl = box.querySelector("#pmPay"), msg = box.querySelector("#pmMsg");
     premExtras(box, on);
     const say = (t, cls) => { msg.hidden = !t; msg.className = "pm-msg" + (cls ? " " + cls : ""); msg.innerHTML = t || ""; };
@@ -3035,7 +3078,7 @@ const PROF = (() => {
       payEl.innerHTML = `<div class="pm-ways">${m.map(w => `<button type="button" class="pm-way" data-p="${w[0]}"${payInfo && !en[w[0]] ? " disabled" : ""}><span class="pm-wi">${w[1]}</span><span class="pm-wt">${w[2]}${payInfo && !en[w[0]] ? "<small>скоро</small>" : ""}</span><b>${w[3]}</b></button>`).join("")}</div>`;
       payEl.querySelectorAll(".pm-way").forEach(b => b.onclick = () => pay(b.dataset.p, b));
     };
-    box.querySelectorAll(".pm-cur [data-c]").forEach(b => b.onclick = () => { curK = b.dataset.c; try { localStorage.setItem("ub-cur", curK); } catch(e) {} premium(); });
+    box.querySelectorAll(".pm-cur [data-c]").forEach(b => b.onclick = () => CURSEL.set(b.dataset.c));
     box.querySelectorAll(".pm-plan").forEach(b => b.onclick = () => { premPlan = b.dataset.k; box.querySelectorAll(".pm-plan").forEach(x => x.setAttribute("aria-pressed", x === b)); drawPay(); });
     drawPay();
     if (CLOUD && !payInfo){ try { const r = await fetch("/api/pay?info"); payInfo = r.ok ? await r.json() : { enabled: {} }; } catch(e) { payInfo = { enabled: {} }; } if (box.isConnected) drawPay(); }
@@ -4771,12 +4814,12 @@ const D2 = (() => {
     const pane = document.getElementById("d2Pane"); if (!pane) return;
     if (pane.dataset.ready) return draw();
     pane.dataset.ready = "1";
-    pane.innerHTML = `<div class="rkchips d2-subs"><button type="button" class="rkc" data-sub2="heroes" aria-pressed="true">📊 Герои</button><button type="button" class="rkc" data-sub2="players" aria-pressed="false">👤 Игроки</button><button type="button" class="rkc" data-sub2="picker" aria-pressed="false">🎯 Пикер</button></div><div id="d2Heroes"><div class="d2-bar">
+    pane.innerHTML = `<div class="rkchips d2-subs"><button type="button" class="rkc" data-sub2="heroes" aria-pressed="true">📊 Герои</button><button type="button" class="rkc" data-sub2="pros" aria-pressed="false">🏆 Про-игроки</button><button type="button" class="rkc" data-sub2="players" aria-pressed="false">👤 Игроки</button><button type="button" class="rkc" data-sub2="picker" aria-pressed="false">🎯 Пикер</button></div><div id="d2Heroes"><div class="d2-bar">
         <div class="rkchips d2-ranks">${RANKS.map(r => `<button type="button" class="rkc d2-rc" data-r="${r[0]}" aria-pressed="${r[0] === st.rank}">${rankIc(r[0])}${r[1]}</button>`).join("")}</div>
         <div class="rkchips sub d2-roles">${ROLES.map(r => `<button type="button" class="rkc" data-role="${r[0]}" aria-pressed="${r[0] === st.role}">${r[1]}</button>`).join("")}</div>
         <label class="d2-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="d2Q" placeholder="Найти героя" autocomplete="off"></label>
       </div><div id="d2Sum"></div><div id="d2List"><div class="feed-sk"></div><div class="feed-sk"></div><div class="feed-sk"></div></div>
-      <p class="db-note">Данные — открытая статистика публичных матчей <a href="https://www.opendota.com" target="_blank" rel="noopener">OpenDota</a>, обновляются раз в несколько часов. Нажми на героя — откроются винрейт по рангам и линиям, сборка предметов и контрпики.</p></div><div id="d2Players" hidden></div><div id="d2Picker" hidden></div>`;
+      <p class="db-note">Данные — открытая статистика публичных матчей <a href="https://www.opendota.com" target="_blank" rel="noopener">OpenDota</a>, обновляются раз в несколько часов. Нажми на героя — откроются винрейт по рангам и линиям, сборка предметов и контрпики.</p></div><div id="d2Pros" hidden></div><div id="d2Players" hidden></div><div id="d2Picker" hidden></div>`;
     pane.querySelectorAll("[data-sub2]").forEach(b => b.onclick = () => sub(b.dataset.sub2));
     pane.querySelectorAll("[data-r]").forEach(b => b.onclick = () => { st.rank = b.dataset.r; pane.querySelectorAll("[data-r]").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); });
     pane.querySelectorAll("[data-role]").forEach(b => b.onclick = () => { st.role = b.dataset.role; pane.querySelectorAll("[data-role]").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); });
@@ -4964,6 +5007,46 @@ const D2 = (() => {
     if (/^\d{3,12}$/.test(v)) return v;
     return null;
   }
+  // ---------- топ про-игроков ----------
+  const PRO_ROLES = [["", "Все"], ["1", "Керри"], ["2", "Мид"], ["3", "Оффлейн"], ["s", "Саппорты"]];
+  const PRO_SORT = [["top", "Топ"], ["g", "Матчи"], ["wr", "Винрейт"], ["kda", "KDA"], ["gpm", "GPM"]];
+  const proRole = p => p.gpm < 520 ? "s" : String(p.ln);
+  const wilson = (w, n) => { if (!n) return 0; const z = 1.96, ph = w / n; return (ph + z * z / (2 * n) - z * Math.sqrt((ph * (1 - ph) + z * z / (4 * n)) / n)) / (1 + z * z / n); };
+  const kdaOf = p => (p.k + p.a) / Math.max(1, p.d);
+  const pst = { role: "", sort: "top", q: "" };
+  let PROS = null;
+  async function prosView(){
+    const el = document.getElementById("d2Pros"); if (!el) return;
+    if (!el.dataset.ready){ el.dataset.ready = "1";
+      el.innerHTML = `<div class="d2-bar"><label class="d2-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="d2ProQ" placeholder="Игрок или команда" autocomplete="off"></label></div>
+        <div class="rkchips sub" id="d2ProR" role="group" aria-label="Роль">${PRO_ROLES.map(([k, t]) => `<button type="button" class="rkc" data-pr="${k}" aria-pressed="${k === pst.role}">${t}</button>`).join("")}</div>
+        <div class="rkchips sub" id="d2ProS" role="group" aria-label="Сортировка">${PRO_SORT.map(([k, t]) => `<button type="button" class="rkc" data-ps="${k}" aria-pressed="${k === pst.sort}">${t}</button>`).join("")}</div>
+        <div id="d2ProL"><div class="feed-sk"></div><div class="feed-sk"></div><div class="feed-sk"></div></div>
+        <p class="db-note">Официальные матчи профессиональных и премиум-лиг за последние полгода (данные OpenDota). «Топ» учитывает и винрейт, и число матчей: игроку с 70% на 150 играх верим больше, чем с 80% на 25. Нажми на игрока — откроется его профиль.</p>`;
+      el.querySelector("#d2ProQ").oninput = e => { pst.q = e.target.value.trim().toLowerCase(); drawPros(); };
+      el.querySelectorAll("[data-pr]").forEach(b => b.onclick = () => { pst.role = b.dataset.pr; el.querySelectorAll("[data-pr]").forEach(x => x.setAttribute("aria-pressed", x === b)); drawPros(); });
+      el.querySelectorAll("[data-ps]").forEach(b => b.onclick = () => { pst.sort = b.dataset.ps; el.querySelectorAll("[data-ps]").forEach(x => x.setAttribute("aria-pressed", x === b)); drawPros(); });
+    }
+    if (PROS) return drawPros();
+    try { const [list] = await Promise.all([get("pros"), HEROES_D2 ? null : get("heroStats").then(r => { HEROES_D2 = r; })]); PROS = Array.isArray(list) ? list : []; drawPros(); }
+    catch(e) { const l = el.querySelector("#d2ProL"); if (l) l.innerHTML = `<div class="gempty">Не удалось загрузить про-игроков. Попробуй чуть позже.</div>`; }
+  }
+  function drawPros(){
+    const box = document.getElementById("d2ProL"); if (!box || !PROS) return;
+    const key = { top: p => wilson(p.w, p.g), g: p => p.g, wr: p => p.w / p.g, kda: kdaOf, gpm: p => p.gpm }[pst.sort];
+    const rows = PROS.filter(p => (!pst.role || proRole(p) === pst.role) && (!pst.q || (p.n + " " + p.team + " " + p.tag).toLowerCase().includes(pst.q)) && (pst.sort !== "wr" || p.g >= 40))
+      .sort((a, b) => key(b) - key(a)).slice(0, 100);
+    const hIc = id => { const h = HEROES_D2 && HEROES_D2.find(x => x.id === id); return h ? `<img alt="" loading="lazy" src="${esc(hicon(h))}" title="${esc(h.localized_name)}">` : ""; };
+    const RL = { "1": "Керри", "2": "Мид", "3": "Оффлейн", s: "Саппорт" };
+    box.innerHTML = rows.length ? `<div class="d2-pros">${rows.map((p, i) => { const v = pct(p.w, p.g);
+      return `<button type="button" class="d2-pro${i < 3 ? " top" + (i + 1) : ""}" data-id="${p.id}"><span class="d2-pro-n">${i + 1}</span>
+        <span class="d2-pro-t">${p.logo ? `<img alt="" loading="lazy" src="${esc(p.logo)}" onerror="this.remove()">` : ""}</span>
+        <span class="d2-pro-m"><b translate="no">${esc(p.n)}</b><small><span translate="no">${esc(p.team || "без команды")}</span> · ${RL[proRole(p)] || ""}</small></span>
+        <span class="d2-pro-h">${p.h.map(x => hIc(x[0])).join("")}</span>
+        <span class="d2-pro-s"><b class="db-wr ${wrCls(v)}">${f1(v)}%</b><small>${p.g} матчей</small></span>
+        <span class="d2-pro-x"><b>${kdaOf(p).toFixed(1)}</b><small>KDA</small></span><span class="d2-pro-x"><b>${p.gpm}</b><small>GPM</small></span></button>`; }).join("")}</div>` : `<div class="gempty">Никого не нашли</div>`;
+    box.querySelectorAll("[data-id]").forEach(b => b.onclick = () => player(b.dataset.id));
+  }
   function playersView(){
     const el = document.getElementById("d2Players"); if (el.dataset.ready) return; el.dataset.ready = "1";
     const me = myId();
@@ -5112,8 +5195,9 @@ const D2 = (() => {
   function sub(name){
     const pane = document.getElementById("d2Pane"); if (!pane) return;
     pane.querySelectorAll("[data-sub2]").forEach(b => b.setAttribute("aria-pressed", b.dataset.sub2 === name));
-    ["Heroes", "Players", "Picker"].forEach(k => { const el = document.getElementById("d2" + k); if (el) el.hidden = k.toLowerCase() !== name; });
+    ["Heroes", "Pros", "Players", "Picker"].forEach(k => { const el = document.getElementById("d2" + k); if (el) el.hidden = k.toLowerCase() !== name; });
     if (name === "players") playersView();
+    if (name === "pros") prosView();
     if (name === "picker"){ if (HEROES_D2) pickerView(); else get("heroStats").then(r => { HEROES_D2 = r; pickerView(); }).catch(() => {}); }
   }
   // открыть героя по слагу сайта (crystalmaiden и т.п.)
@@ -5811,6 +5895,7 @@ document.querySelectorAll(".tab").forEach(b => b.onclick = () => setTab(b.datase
 { const cp = document.getElementById("chcPromo"); if (cp) cp.onclick = () => setTab("custom"); }
 document.getElementById("supFab").onclick = () => PROF.support();
 I18N.init();
+CURSEL.init();
 addEventListener("resize", () => { const a = document.querySelector('.tab[aria-selected="true"]'); if (a) inkTo(a, true); });
 /* листание вкладок свайпом отключено — переключение только кнопками */
 document.querySelectorAll(".gcard").forEach(c => c.onclick = () => ({ arena: () => GAME.open(), quiz: () => quiz(), roll: () => roulette(), broll: () => buildRoulette(), feed: () => openFeed(), top: () => GAME.open("top"), lasthit: () => MINI.lasthit(), duel: () => DUEL.open(), invoker: () => MINI.invoker() })[c.dataset.g]());

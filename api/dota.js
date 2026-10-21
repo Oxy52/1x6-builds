@@ -3,6 +3,7 @@
 //   GET /api/dota?q=items                      -> предметы (название, картинка, цена, компоненты, характеристики)
 //   GET /api/dota?q=itemIds                    -> id -> ключ предмета
 //   GET /api/dota?q=abilities                  -> способности героев (для Custom Hero Chaos)
+//   GET /api/dota?q=pros                       -> топ про-игроков за полгода (матчи, винрейт, KDA, GPM, команда, любимые герои)
 //   GET /api/dota?q=builds&hero=1              -> разные сборки героя с винрейтом (по закупкам в про-матчах)
 //   GET /api/dota?q=itemPopularity&hero=1      -> популярные предметы по стадиям игры
 //   GET /api/dota?q=itemTimings&hero=1         -> винрейт предметов по времени покупки
@@ -32,7 +33,7 @@ const ROUTES = {
 };
 const NEEDS_HERO = new Set(["itemPopularity", "itemTimings", "laneRoles", "matchups", "builds"]);
 const NEEDS_ID = new Set(["player", "wl", "recent", "pheroes"]);
-const TTL = { items: 86400, itemIds: 86400, abilities: 86400, builds: 43200, search: 600, player: 300, wl: 300, recent: 300, pheroes: 600 };
+const TTL = { items: 86400, itemIds: 86400, abilities: 86400, builds: 43200, pros: 21600, search: 600, player: 300, wl: 300, recent: 300, pheroes: 600 };
 
 const withKey = url => KEY ? url + (url.includes("?") ? "&" : "?") + "api_key=" + encodeURIComponent(KEY) : url;
 async function od(path) {
@@ -124,6 +125,15 @@ async function builds(hero) {
   return JSON.stringify({ n, since, patch: since === PATCH_START, builds: out });
 }
 
+// ---------- топ про-игроков: про- и премиум-лиги за последние 180 дней ----------
+async function pros() {
+  const since = Math.floor(Date.now() / 1000) - 180 * 86400;
+  const j = JSON.parse(await od("/explorer?sql=" + encodeURIComponent(`WITH pm AS (SELECT pm.account_id, pm.hero_id, pm.kills, pm.deaths, pm.assists, pm.gold_per_min, pm.lane_role, ((pm.player_slot<128)=m.radiant_win) win, m.start_time, CASE WHEN pm.player_slot<128 THEN m.radiant_team_id ELSE m.dire_team_id END tid FROM player_matches pm JOIN matches m USING(match_id) JOIN leagues l USING(leagueid) WHERE m.start_time > ${since} AND l.tier IN ('premium','professional')), agg AS (SELECT account_id, count(*) g, sum(win::int) w, round(avg(kills),1) k, round(avg(deaths),1) d, round(avg(assists),1) a, round(avg(gold_per_min)) gpm, mode() WITHIN GROUP (ORDER BY lane_role) ln, (array_agg(tid ORDER BY start_time DESC))[1] tid, max(start_time) lt FROM pm GROUP BY account_id HAVING count(*) >= 25), hh AS (SELECT account_id, hero_id, count(*) hg, sum(win::int) hw, row_number() OVER (PARTITION BY account_id ORDER BY count(*) DESC) rn FROM pm GROUP BY account_id, hero_id) SELECT agg.*, np.name, np.country_code cc, t.name team, t.tag, t.logo_url logo, (SELECT json_agg(json_build_array(hero_id, hg, hw) ORDER BY rn) FROM hh WHERE hh.account_id = agg.account_id AND rn <= 3) heroes FROM agg JOIN notable_players np USING(account_id) LEFT JOIN teams t ON t.team_id = agg.tid ORDER BY agg.g DESC LIMIT 400`)));
+  if (j.err) throw new Error(j.err);
+  return JSON.stringify((j.rows || []).map(r => ({ id: r.account_id, n: r.name, cc: r.cc || "", g: +r.g, w: +r.w, k: +r.k, d: +r.d, a: +r.a, gpm: +r.gpm, ln: +r.ln || 0,
+    team: r.team || "", tag: r.tag || "", logo: r.logo || "", lt: +r.lt, h: r.heroes || [] })));
+}
+
 module.exports = async (req, res) => {
   const p = req.query || {}, q = String(p.q || "");
   const fail = (code, err) => { res.setHeader("Cache-Control", "public, s-maxage=30"); return res.status(code).json({ error: err }); };
@@ -137,7 +147,7 @@ module.exports = async (req, res) => {
       return res.status(200).send(Buffer.from(await r.arrayBuffer()));
     } catch (e) { return res.status(502).end(); }
   }
-  if (q !== "abilities" && q !== "builds" && !ROUTES[q]) return fail(400, "bad_query");
+  if (q !== "abilities" && q !== "builds" && q !== "pros" && !ROUTES[q]) return fail(400, "bad_query");
   if (NEEDS_HERO.has(q) && !/^\d{1,3}$/.test(String(p.hero || ""))) return fail(400, "bad_hero");
   if (NEEDS_ID.has(q) && !/^\d{1,12}$/.test(String(p.id || ""))) return fail(400, "bad_id");
   if (q === "search" && !(String(p.name || "").trim().length >= 2 && String(p.name).length <= 40)) return fail(400, "bad_name");
@@ -145,6 +155,7 @@ module.exports = async (req, res) => {
     let out;
     if (q === "abilities") out = await abilities();
     else if (q === "builds") out = await builds(+p.hero);
+    else if (q === "pros") out = await pros();
     else {
       const text = await od(ROUTES[q]({ hero: p.hero, id: p.id, name: String(p.name || "").trim() }));
       try { out = q === "items" ? slimItems(text) : q === "heroStats" ? slimHeroes(text) : q === "search" ? JSON.stringify(JSON.parse(text).slice(0, 20)) : text; }
