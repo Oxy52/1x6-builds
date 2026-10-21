@@ -925,6 +925,36 @@
   .d2-plist img { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; } .d2-plist small { display: block; color: var(--muted); font-size: 12px; }
   .d2-pav { width: 72px; height: 72px; border-radius: 16px; object-fit: cover; flex: none; } .d2-pav.sk { background: var(--bg-soft); }
   .d2-medal { display: flex; align-items: center; gap: 6px; margin-top: 6px; } .d2-medal img { width: 34px; height: 34px; object-fit: contain; } .d2-medal b { font-size: 14px; }
+  .d2m-head { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; padding: 22px 22px 6px; }
+  .d2m-side { display: grid; justify-items: center; gap: 6px; text-align: center; min-width: 0; opacity: .75; } .d2m-side.win { opacity: 1; }
+  .d2m-side img { width: 48px; height: 48px; object-fit: contain; } .d2m-side b { font-size: 15px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .d2m-side.rad b { color: #5cf07f; } .d2m-side.dire b { color: #ff6b6b; }
+  .d2m-score { display: grid; grid-template-columns: auto auto auto; align-items: baseline; gap: 6px; font-family: var(--display); font-weight: 800; font-size: 40px; line-height: 1; }
+  .d2m-score .r { color: #5cf07f; } .d2m-score .d { color: #ff6b6b; } .d2m-score i { font-style: normal; color: var(--muted); }
+  .d2m-score small { grid-column: 1 / -1; text-align: center; font-family: var(--body); font-size: 13px; font-weight: 600; color: var(--muted); margin-top: 6px; }
+  .d2m-meta { text-align: center; color: var(--muted); font-size: 13px; margin: 6px 22px 4px; }
+  .d2m-gold { width: 100%; height: 140px; display: block; border-radius: 12px; background: var(--bg-soft); border: 1px solid var(--line); }
+  .d2m-gold .gr { fill: rgba(92,240,127,.22); } .d2m-gold .gd { fill: rgba(255,107,107,.22); } .d2m-gold .gl { fill: none; stroke: #e8e8f0; stroke-width: 1.6; vector-effect: non-scaling-stroke; }
+  .d2m-gold .g0 { stroke: rgba(255,255,255,.25); vector-effect: non-scaling-stroke; } .d2m-gold .gt { stroke: rgba(255,255,255,.07); vector-effect: non-scaling-stroke; }
+  .d2m-gold text { fill: var(--muted); font-size: 10px; } .d2m-gold .glr { fill: #5cf07f; } .d2m-gold .gld { fill: #ff6b6b; }
+  .d2m-gn { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin: 6px 2px 0; } .d2m-gn .r { color: #5cf07f; } .d2m-gn .d { color: #ff6b6b; }
+  .d2m-team { display: grid; gap: 4px; margin-bottom: 14px; } .d2m-th { display: flex; align-items: center; gap: 8px; padding: 2px 2px 4px; flex-wrap: wrap; }
+  .d2m-th img { width: 24px; height: 24px; object-fit: contain; } .d2m-th b { font-size: 15px; } .d2m-team.rad .d2m-th b { color: #5cf07f; } .d2m-team.dire .d2m-th b { color: #ff6b6b; }
+  .d2m-th em { font-style: normal; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 6px; background: rgba(92,240,127,.16); color: #5cf07f; } .d2m-th small { margin-left: auto; color: var(--muted); font-size: 12px; }
+  .d2m-p { display: grid; grid-template-columns: 58px minmax(90px, 1fr) 72px 58px 74px 56px 52px auto; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 12px; background: var(--bg-soft); border: 1px solid var(--line); border-left: 3px solid; }
+  .d2m-team.rad .d2m-p { border-left-color: #5cf07f; } .d2m-team.dire .d2m-p { border-left-color: #ff6b6b; }
+  .d2m-p.link { cursor: pointer; transition: border-color .2s; } .d2m-p.link:hover { border-color: color-mix(in srgb, var(--t1) 55%, var(--line)); }
+  .d2m-h { position: relative; } .d2m-h img { width: 58px; height: 33px; border-radius: 6px; object-fit: cover; display: block; }
+  .d2m-h b { position: absolute; right: 2px; bottom: 1px; font-size: 10px; padding: 0 4px; border-radius: 4px; background: rgba(0,0,0,.75); }
+  .d2m-n { min-width: 0; } .d2m-n b { display: block; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .d2m-n small { display: block; color: var(--muted); font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .d2m-k, .d2m-s { display: grid; text-align: center; } .d2m-k b, .d2m-s b { font-size: 13.5px; font-variant-numeric: tabular-nums; white-space: nowrap; } .d2m-k i, .d2m-s i { font-style: normal; color: var(--muted); margin: 0 1px; }
+  .d2m-k small, .d2m-s small { font-size: 10px; color: var(--muted); } .d2m-s.gold b { color: #f3c35a; }
+  .d2m-it { display: flex; align-items: center; gap: 2px; flex-wrap: nowrap; } .d2m-it img, .d2m-it i.e { width: 30px; height: 22px; border-radius: 4px; object-fit: cover; display: block; }
+  .d2m-it i.e { background: rgba(255,255,255,.05); } .d2m-it .nt { width: 22px; height: 22px; border-radius: 50%; margin-left: 3px; }
+  .d2m-it .agh { display: grid; place-items: center; width: 16px; height: 16px; border-radius: 4px; font-size: 10px; font-weight: 800; background: #3b82f6; color: #fff; margin-left: 2px; } .d2m-it .agh.sh { background: #6366f1; }
+  .d2m-pb { display: grid; gap: 8px; } .d2m-pb > div { display: grid; gap: 4px; } .d2m-pb b { font-size: 13px; } .d2m-pb .rad b { color: #5cf07f; } .d2m-pb .dire b { color: #ff6b6b; }
+  .d2m-pb div div { display: flex; flex-wrap: wrap; gap: 3px; } .d2m-pb img { width: 34px; height: 34px; border-radius: 7px; object-fit: cover; } .d2m-pb img.bn { filter: grayscale(1) brightness(.55); }
+  @media (max-width: 760px) { .d2m-p { grid-template-columns: 52px minmax(0, 1fr) 70px 52px; } .d2m-p .d2m-s:not(.gold) { display: none; } .d2m-it { grid-column: 1 / -1; } .d2m-score { font-size: 32px; } .d2m-head { padding: 18px 14px 4px; } }
   .d2-ml { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
   .d2-ml a { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 12px; background: var(--bg-soft); border: 1px solid var(--line); border-left: 3px solid #ff6b6b; color: inherit; text-decoration: none; }
   .d2-ml li.w a { border-left-color: #5cf07f; } .d2-ml img { width: 34px; height: 34px; border-radius: 8px; object-fit: cover; }
@@ -4956,7 +4986,7 @@ const D2 = (() => {
       <div class="psec"><h4>Разные сборки</h4><div class="rkchips sub d2-bsort" role="group" aria-label="Сортировка"><button type="button" class="rkc" data-bs="g" aria-pressed="true">Популярные</button><button type="button" class="rkc" data-bs="w" aria-pressed="false">По винрейту</button></div><div id="d2Builds"><div class="feed-sk"></div><div class="feed-sk"></div></div></div>
       <div class="psec"><h4>Сборка предметов</h4>${posOf(h).length ? `<div class="rkchips sub d2-hroles" role="group" aria-label="Роль">${posOf(h).map(p => `<button type="button" class="rkc" data-hp="${p}" aria-pressed="false">${POS_SHORT[p]}</button>`).join("")}<button type="button" class="rkc" data-hp="0" aria-pressed="false">Все роли</button></div><div class="d2-rnote" id="d2RNote"></div>` : ""}<div id="d2Items"><div class="feed-sk"></div><div class="feed-sk"></div></div></div>
       <div class="psec"><h4>Контрпики</h4><div id="d2Mu"><div class="feed-sk"></div></div></div>
-      <div class="pacts"><button type="button" class="btn btn-primary" id="d2Sh">📤 Поделиться</button><a class="btn btn-ghost" href="https://www.dotabuff.com/heroes/${esc(dbSlug(h))}" target="_blank" rel="noopener">Открыть на Dotabuff ↗</a></div>
+      <div class="pacts"><button type="button" class="btn btn-primary" id="d2Sh">📤 Поделиться</button></div>
       <p class="db-note" style="padding:0 22px 20px">Сборка — самые популярные предметы в публичных матчах на этом герое. Винрейт предмета — как часто побеждают, когда его покупают; это зависит и от времени покупки, так что смотри на него вместе с популярностью.</p></div>`);
     const $ = s => g.querySelector(s);
     $("#d2Sh").onclick = () => shareLink(`${SITE_URL}/dota2?d2h=${h.id}`, `${h.localized_name} — мета Dota 2`, `Винрейт, сборка и контрпики ${h.localized_name}`);
@@ -5133,7 +5163,7 @@ const D2 = (() => {
   function playersView(){
     const el = document.getElementById("d2Players"); if (el.dataset.ready) return; el.dataset.ready = "1";
     const me = myId();
-    el.innerHTML = `<form class="d2-psearch" id="d2PF"><label class="d2-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="d2PQ" placeholder="Ник, Steam ID или ссылка Dotabuff" autocomplete="off"></label><button type="submit" class="btn btn-primary">Найти</button></form>
+    el.innerHTML = `<form class="d2-psearch" id="d2PF"><label class="d2-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="d2PQ" placeholder="Ник, Steam ID или ссылка на профиль" autocomplete="off"></label><button type="submit" class="btn btn-primary">Найти</button></form>
       ${me ? `<button type="button" class="d2-meb" id="d2Me">⭐ Мой профиль Dota 2</button>` : ""}
       <p class="db-note">Статистика публичных матчей из OpenDota, как профиль на Dotabuff. Если профиль закрыт, включи в Доте «Общедоступная история матчей» (Настройки → Социальное).</p><div id="d2PR"></div>`;
     const out = el.querySelector("#d2PR");
@@ -5167,14 +5197,71 @@ const D2 = (() => {
       ${W + L ? `<div class="psec"><div class="db-wl"><span style="flex:${W || .001}" class="w">${W} побед</span><span style="flex:${L || .001}" class="l">${L} поражений</span></div></div>` : ""}
       <div class="psec"><h4>📈 Персональный разбор</h4><div id="d2Ins"></div></div>
       <div class="psec"><h4>Последние матчи</h4>${matches.length ? `<ul class="d2-ml">${matches.map(m => { const rad = m.player_slot < 128, win = rad === !!m.radiant_win, h = H(m.hero_id);
-        return `<li class="${win ? "w" : "l"}"><a href="https://www.dotabuff.com/matches/${m.match_id}" target="_blank" rel="noopener">${h ? `<img alt="" loading="lazy" src="${esc(hicon(h))}">` : ""}<span><b>${h ? esc(h.localized_name) : "Герой"}</b><small>${ago(m.start_time)} · ${dur(m.duration)}</small></span><span class="d2-kda">${m.kills}/${m.deaths}/${m.assists}<small>${m.gold_per_min} GPM</small></span><em>${win ? "Победа" : "Поражение"}</em></a></li>`; }).join("")}</ul>` : `<div class="pnone">Матчей нет — возможно, история матчей скрыта.</div>`}</div>
+        return `<li class="${win ? "w" : "l"}"><a href="?d2m=${m.match_id}" data-mid="${m.match_id}">${h ? `<img alt="" loading="lazy" src="${esc(hicon(h))}">` : ""}<span><b>${h ? esc(h.localized_name) : "Герой"}</b><small>${ago(m.start_time)} · ${dur(m.duration)}</small></span><span class="d2-kda">${m.kills}/${m.deaths}/${m.assists}<small>${m.gold_per_min} GPM</small></span><em>${win ? "Победа" : "Поражение"}</em></a></li>`; }).join("")}</ul>` : `<div class="pnone">Матчей нет — возможно, история матчей скрыта.</div>`}</div>
       <div class="psec"><h4>Любимые герои</h4>${heroes.length ? `<div class="db-tw"><table class="db-t"><thead><tr><th>Герой</th><th>Матчи</th><th>Винрейт</th><th>Последний</th></tr></thead><tbody>${heroes.map(x => { const h = H(x.hero_id), v = pct(x.win, x.games); return h ? `<tr data-h="${h.id}"><td class="db-hc"><span class="d2-hi"><img alt="" loading="lazy" src="${esc(himg(h))}"></span><span>${esc(h.localized_name)}</span></td><td><b>${x.games}</b></td><td class="db-wr ${wrCls(v)}"><b>${f1(v)}%</b></td><td>${x.last_played ? ago(x.last_played) : "—"}</td></tr>` : ""; }).join("")}</tbody></table></div>` : `<div class="pnone">Нет данных</div>`}</div>
-      <div class="pacts"><button type="button" class="btn ${isMe ? "btn-ghost" : "btn-primary"}" id="d2SetMe">${isMe ? "✓ Это мой профиль" : "⭐ Это я — запомнить"}</button><a class="btn btn-ghost" href="https://www.dotabuff.com/players/${esc(p.account_id)}" target="_blank" rel="noopener">Dotabuff ↗</a></div><div style="height:20px"></div>`;
+      <div class="pacts"><button type="button" class="btn ${isMe ? "btn-ghost" : "btn-primary"}" id="d2SetMe">${isMe ? "✓ Это мой профиль" : "⭐ Это я — запомнить"}</button><button type="button" class="btn btn-ghost" id="d2PSh">📤 Поделиться</button></div><div style="height:20px"></div>`;
+    g.querySelectorAll("[data-mid]").forEach(a => a.onclick = e => { e.preventDefault(); match(a.dataset.mid); });
+    g.querySelector("#d2PSh").onclick = () => shareLink(`${SITE_URL}/?d2p=${p.account_id}`, `${p.personaname || "Игрок"} — профиль Dota 2`, "Матчи, винрейт и любимые герои");
     g.querySelectorAll("tr[data-h]").forEach(tr => tr.onclick = () => hero(+tr.dataset.h));
     insights(g.querySelector("#d2Ins"), hs, matches, med);
     g.querySelector("#d2SetMe").onclick = e => { try { localStorage.setItem("d2-me", String(p.account_id)); } catch(_) {} e.currentTarget.textContent = "✓ Это мой профиль"; e.currentTarget.className = "btn btn-ghost"; const pl = document.getElementById("d2Players"); if (pl){ pl.dataset.ready = ""; } };
   }
 
+
+  // ---------- страница матча ----------
+  const MODES = { 1: "All Pick", 2: "Captains Mode", 3: "Random Draft", 4: "Single Draft", 5: "All Random", 16: "Captains Draft", 18: "Ability Draft", 22: "Ranked All Pick", 23: "Турбо" };
+  function goldSvg(adv){
+    if (!adv || adv.length < 2) return "";
+    const W = 600, Hh = 140, max = Math.max(1000, ...adv.map(Math.abs)), x = i => i * W / (adv.length - 1), y = v => Hh / 2 - v / max * (Hh / 2 - 6);
+    const line = adv.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+    const area = `${line} L${W},${Hh / 2} L0,${Hh / 2} Z`;
+    const ticks = []; for (let m = 10; m < adv.length; m += 10) ticks.push(`<line x1="${x(m)}" x2="${x(m)}" y1="0" y2="${Hh}" class="gt"/><text x="${x(m) + 3}" y="${Hh - 4}">${m}′</text>`);
+    return `<svg class="d2m-gold" viewBox="0 0 ${W} ${Hh}" preserveAspectRatio="none" role="img" aria-label="Преимущество по золоту">
+      <defs><clipPath id="gcR"><rect x="0" y="0" width="${W}" height="${Hh / 2}"/></clipPath><clipPath id="gcD"><rect x="0" y="${Hh / 2}" width="${W}" height="${Hh / 2}"/></clipPath></defs>
+      ${ticks.join("")}<line x1="0" x2="${W}" y1="${Hh / 2}" y2="${Hh / 2}" class="g0"/>
+      <path d="${area}" class="gr" clip-path="url(#gcR)"/><path d="${area}" class="gd" clip-path="url(#gcD)"/><path d="${line}" class="gl"/>
+      <text x="6" y="14" class="glr">+${(max / 1000).toFixed(1)}k</text><text x="6" y="${Hh - 18}" class="gld">−${(max / 1000).toFixed(1)}k</text></svg>`;
+  }
+  async function match(id){
+    id = String(id).replace(/\D/g, ""); if (!id) return;
+    if (!HEROES_D2){ try { HEROES_D2 = await get("heroStats"); } catch(e) {} }
+    const g = openPanel(`<div class="d2h d2m"><div class="d2h-top"><div><h3>Матч ${esc(id)}</h3><small>Загружаем…</small></div></div><div class="psec"><div class="feed-sk"></div><div class="feed-sk"></div><div class="feed-sk"></div></div></div>`);
+    let m = null; try { [m] = await Promise.all([fetch(`/api/dota?q=match&id=${id}`).then(r => r.ok ? r.json() : null), itemsMeta()]); } catch(e) {}
+    if (!g.isConnected) return;
+    const box = g.querySelector(".d2m");
+    if (!m || !m.players){ box.innerHTML = `<div class="d2h-top"><div><h3>Матч ${esc(id)}</h3><small>Не удалось загрузить матч. Возможно, он ещё не обработан — попробуй через пару минут.</small></div></div>`; return; }
+    const H = hid => HEROES_D2 && HEROES_D2.find(x => x.id === +hid);
+    const it = iid => { if (!iid) return null; const key = IDS && IDS[iid]; return key ? itemOf(key) : null; };
+    const slot = (iid, cls) => { const o = it(iid); return o ? `<img class="${cls || ""}" alt="" loading="lazy" src="${esc(o.img)}" title="${esc(o.name)}">` : `<i class="${cls || ""} e"></i>`; };
+    const k = v => v >= 1000 ? (v / 1000).toFixed(1) + "k" : String(v || 0);
+    const side = rad => m.players.filter(p => (p.player_slot < 128) === rad);
+    const tname = rad => { const t = rad ? m.rt : m.dt; return t && t.name ? t.name : rad ? "Свет" : "Тьма"; };
+    const tlogo = rad => { const t = rad ? m.rt : m.dt; return t && t.logo ? `<img alt="" src="${esc(t.logo)}" onerror="this.remove()">` : ""; };
+    const row = p => { const h = H(p.hero_id), nm = p.name || p.personaname || "Аноним", can = p.account_id && p.account_id !== 4294967295;
+      return `<div class="d2m-p${can ? " link" : ""}"${can ? ` data-acc="${p.account_id}" role="button" tabindex="0"` : ""}>
+        <span class="d2m-h">${h ? `<img alt="" loading="lazy" src="${esc(himg(h))}">` : ""}<b>${p.level || ""}</b></span>
+        <span class="d2m-n"><b translate="no">${esc(nm)}</b><small>${h ? esc(h.localized_name) : ""}</small></span>
+        <span class="d2m-k"><b>${p.kills}<i>/</i>${p.deaths}<i>/</i>${p.assists}</b><small>K/D/A</small></span>
+        <span class="d2m-s"><b>${p.last_hits}<i>/</i>${p.denies}</b><small>LH/DN</small></span>
+        <span class="d2m-s"><b>${p.gold_per_min}<i>/</i>${p.xp_per_min}</b><small>GPM/XPM</small></span>
+        <span class="d2m-s gold"><b>${k(p.net_worth)}</b><small>ценность</small></span>
+        <span class="d2m-s"><b>${k(p.hero_damage)}</b><small>урон</small></span>
+        <span class="d2m-it">${[0, 1, 2, 3, 4, 5].map(i => slot(p["item_" + i])).join("")}${slot(p.item_neutral, "nt")}${p.aghanims_scepter ? `<span class="agh" title="Aghanim's Scepter">A</span>` : ""}${p.aghanims_shard ? `<span class="agh sh" title="Aghanim's Shard">S</span>` : ""}</span></div>`; };
+    const team = rad => { const ps = side(rad), win = rad === !!m.rw, sum = f => ps.reduce((a, p) => a + (p[f] || 0), 0);
+      return `<div class="d2m-team ${rad ? "rad" : "dire"}${win ? " win" : ""}"><div class="d2m-th">${tlogo(rad)}<b translate="no">${esc(tname(rad))}</b>${win ? `<em>Победа</em>` : ""}<small>${sum("kills")} убийств · ${k(sum("net_worth"))} золота</small></div>${ps.map(row).join("")}</div>`; };
+    const pb = (m.pb || []).length ? `<div class="psec"><h4>Драфт</h4><div class="d2m-pb">${[0, 1].map(t => `<div class="${t ? "dire" : "rad"}"><b translate="no">${esc(tname(!t))}</b><div>${m.pb.filter(x => x[2] === t).sort((a, b) => a[3] - b[3]).map(x => { const h = H(x[0]); return h ? `<img class="${x[1] ? "pk" : "bn"}" alt="" loading="lazy" src="${esc(hicon(h))}" title="${esc(h.localized_name)}${x[1] ? "" : " (бан)"}">` : ""; }).join("")}</div></div>`).join("")}</div></div>` : "";
+    const fin = m.gold && m.gold.length ? m.gold[m.gold.length - 1] : 0;
+    box.innerHTML = `<div class="d2m-head">
+        <div class="d2m-side rad${m.rw ? " win" : ""}">${tlogo(true)}<b translate="no">${esc(tname(true))}</b></div>
+        <div class="d2m-score"><span class="r">${m.rs ?? "—"}</span><i>:</i><span class="d">${m.ds ?? "—"}</span><small>${dur(m.dur)}</small></div>
+        <div class="d2m-side dire${m.rw ? "" : " win"}">${tlogo(false)}<b translate="no">${esc(tname(false))}</b></div></div>
+      <p class="d2m-meta">${m.rw ? "Победа Света" : "Победа Тьмы"} · ${esc(MODES[m.mode] || "Матч")}${m.league ? ` · <span translate="no">${esc(m.league)}</span>` : ""} · ${ago(m.start)}${m.fb ? ` · первая кровь ${dur(m.fb)}` : ""}</p>
+      ${m.gold && m.gold.length > 1 ? `<div class="psec"><h4>Преимущество по золоту</h4>${goldSvg(m.gold)}<p class="d2m-gn"><span class="r">▲ Свет</span><span>в конце: ${fin >= 0 ? "Свет" : "Тьма"} +${k(Math.abs(fin))}</span><span class="d">▼ Тьма</span></p></div>` : ""}
+      <div class="psec">${team(true)}${team(false)}</div>${pb}
+      <div class="pacts"><button type="button" class="btn btn-primary" id="d2MSh">📤 Поделиться матчем</button></div><div style="height:20px"></div>`;
+    box.querySelectorAll("[data-acc]").forEach(el => { const go = () => player(el.dataset.acc); el.onclick = go; el.onkeydown = e => { if (e.key === "Enter"){ e.preventDefault(); go(); } }; });
+    box.querySelector("#d2MSh").onclick = () => shareLink(`${SITE_URL}/?d2m=${m.id}`, `Матч ${m.id} — ${tname(true)} vs ${tname(false)}`, `Счёт ${m.rs}:${m.ds}, ${dur(m.dur)}`);
+  }
 
   // ---------- персональный разбор игрока (фишка 1x6+) ----------
   function insights(el, hs, matches, med){
@@ -5291,7 +5378,7 @@ const D2 = (() => {
   }
   const loadHeroes = async () => { if (!HEROES_D2) HEROES_D2 = await get("heroStats"); return HEROES_D2; };
   const pickHeroSafe = async (title, ex, cb) => { try { await loadHeroes(); } catch(e) { return; } pickHero(title, ex, cb); };
-  return { open, hero, heroBySlug, player, sub, get, img, itemsMeta, items: () => ITEMS, heroes: () => HEROES_D2, loadHeroes, pickHero: pickHeroSafe };
+  return { open, hero, heroBySlug, player, match, sub, get, img, itemsMeta, items: () => ITEMS, heroes: () => HEROES_D2, loadHeroes, pickHero: pickHeroSafe };
 })();
 
 /* ---------- AI-помощник (запросы к /api/ai) ---------- */
@@ -5731,7 +5818,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=4").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=5").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
@@ -6067,7 +6154,10 @@ document.getElementById("plQ").addEventListener("input", e => PROF.loadPlayers(e
 { let h = (location.hash || "").slice(1); if (h === "soon") h = "custom"; if (!TABS.includes(h) && window.START_TAB) h = window.START_TAB; setTab(TABS.includes(h) ? h : "1x6", { instant: true, keepHash: true, noScroll: true }); }
 { const qs = new URLSearchParams(location.search), hs = qs.get("h"), dh = qs.get("d2h");
   if (hs){ const h = HEROES.find(x => x.slug === hs); if (h) setTimeout(() => openHero(h), 700); }
-  if (dh && /^\d{1,3}$/.test(dh)) setTimeout(() => { setTab("dota", { noScroll: true }); D2.hero(+dh); }, 700); }
+  if (dh && /^\d{1,3}$/.test(dh)) setTimeout(() => { setTab("dota", { noScroll: true }); D2.hero(+dh); }, 700);
+  const dm = qs.get("d2m"), dp = qs.get("d2p");
+  if (dm && /^\d{5,12}$/.test(dm)) setTimeout(() => { setTab("dota", { noScroll: true }); D2.match(dm); }, 700);
+  if (dp && /^\d{1,12}$/.test(dp)) setTimeout(() => { setTab("dota", { noScroll: true }); D2.player(dp); }, 700); }
 if (/^#news-\d+$/.test(location.hash)) setTimeout(NEWS.fromHash, 500);
 addEventListener("hashchange", () => { const h = (location.hash || "").slice(1); if (TABS.includes(h) && h !== curTab) setTab(h, { keepHash: true }); if (/^news-\d+$/.test(h)) NEWS.fromHash(); if (/^premium/.test(h)) PROF.premium({ wait: h === "premium-ok" }); });
 if (/^#premium/.test(location.hash)) setTimeout(() => { PROF.premium({ wait: location.hash === "#premium-ok" }); try { history.replaceState(null, "", location.pathname); } catch(e) {} }, 1200);

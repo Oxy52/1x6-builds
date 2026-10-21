@@ -13,6 +13,7 @@
 //   GET /api/dota?q=matchups&hero=1            -> против каких героев
 //   GET /api/dota?q=search&name=Miracle        -> поиск игроков по нику
 //   GET /api/dota?q=player|wl|recent|pheroes&id=86745912 -> профиль игрока, победы/поражения, последние матчи, герои
+//   GET /api/dota?q=match&id=8000000000        -> разбор матча (составы, KDA, предметы, график золота)
 //   GET /api/dota?q=rank&n=1..8                -> иконка ранга
 // Необязательно: OPENDOTA_API_KEY на Vercel — повышает лимиты OpenDota.
 const BASE = "https://api.opendota.com/api";
@@ -31,11 +32,12 @@ const ROUTES = {
   player: p => `/players/${p.id}`,
   wl: p => `/players/${p.id}/wl`,
   recent: p => `/players/${p.id}/recentMatches`,
-  pheroes: p => `/players/${p.id}/heroes`
+  pheroes: p => `/players/${p.id}/heroes`,
+  match: p => `/matches/${p.id}`
 };
 const NEEDS_HERO = new Set(["itemPopularity", "itemTimings", "laneRoles", "matchups", "builds"]);
-const NEEDS_ID = new Set(["player", "wl", "recent", "pheroes"]);
-const TTL = { items: 86400, itemIds: 86400, abilities: 86400, builds: 43200, pros: 21600, ladder: 1800, ladderTop: 1800, search: 600, player: 300, wl: 300, recent: 300, pheroes: 600 };
+const NEEDS_ID = new Set(["player", "wl", "recent", "pheroes", "match"]);
+const TTL = { items: 86400, itemIds: 86400, abilities: 86400, builds: 43200, pros: 21600, ladder: 1800, ladderTop: 1800, search: 600, player: 300, wl: 300, recent: 300, pheroes: 600, match: 86400 };
 
 const withKey = url => KEY ? url + (url.includes("?") ? "&" : "?") + "api_key=" + encodeURIComponent(KEY) : url;
 async function od(path) {
@@ -53,6 +55,16 @@ function slimItems(text) {
     slim[k] = { dname: it.dname || k, img: it.img || "", cost: it.cost || 0, comp: Array.isArray(it.components) ? it.components : null,
       attr: Array.isArray(it.attrib) ? it.attrib.map(attr).filter(s => /[A-Za-z]/.test(s)).slice(0, 8) : [], cd: it.cd || 0, mc: it.mc || 0 }; }
   return JSON.stringify(slim);
+}
+function slimMatch(text) {
+  const m = JSON.parse(text);
+  if (!m || !m.match_id) return text;
+  const keep = ["account_id", "personaname", "name", "player_slot", "hero_id", "kills", "deaths", "assists", "last_hits", "denies", "gold_per_min", "xp_per_min", "net_worth", "hero_damage", "tower_damage", "hero_healing", "level", "item_0", "item_1", "item_2", "item_3", "item_4", "item_5", "backpack_0", "backpack_1", "backpack_2", "item_neutral", "rank_tier", "aghanims_scepter", "aghanims_shard", "moonshard", "lane_role"];
+  const team = t => t ? { name: t.name || "", tag: t.tag || "", logo: t.logo_url || "" } : null;
+  return JSON.stringify({ id: m.match_id, start: m.start_time, dur: m.duration, rw: m.radiant_win, rs: m.radiant_score, ds: m.dire_score, mode: m.game_mode, lobby: m.lobby_type,
+    league: m.league && m.league.name || "", rt: team(m.radiant_team) || (m.radiant_name ? { name: m.radiant_name, tag: "", logo: m.radiant_logo || "" } : null), dt: team(m.dire_team) || (m.dire_name ? { name: m.dire_name, tag: "", logo: m.dire_logo || "" } : null),
+    pb: (m.picks_bans || []).map(x => [x.hero_id, x.is_pick ? 1 : 0, x.team, x.order]), gold: m.radiant_gold_adv || [], xp: m.radiant_xp_adv || [], fb: m.first_blood_time || 0,
+    players: (m.players || []).map(p => Object.fromEntries(keep.map(k => [k, p[k] == null ? null : p[k]]))) });
 }
 function slimHeroes(text) {
   const keep = ["id", "name", "localized_name", "primary_attr", "attack_type", "roles", "img", "icon", "turbo_picks", "turbo_wins", "pro_pick", "pro_win", "pro_ban", "pub_pick", "pub_win"];
@@ -176,7 +188,7 @@ module.exports = async (req, res) => {
     else if (q === "ladderTop") out = await ladderTop();
     else {
       const text = await od(ROUTES[q]({ hero: p.hero, id: p.id, name: String(p.name || "").trim() }));
-      try { out = q === "items" ? slimItems(text) : q === "heroStats" ? slimHeroes(text) : q === "search" ? JSON.stringify(JSON.parse(text).slice(0, 20)) : text; }
+      try { out = q === "items" ? slimItems(text) : q === "heroStats" ? slimHeroes(text) : q === "match" ? slimMatch(text) : q === "search" ? JSON.stringify(JSON.parse(text).slice(0, 20)) : text; }
       catch (e) { out = text; }
     }
     res.setHeader("Content-Type", "application/json; charset=utf-8");
