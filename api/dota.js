@@ -29,6 +29,15 @@ module.exports = async (req, res) => {
     try { const r = await fetch(BASE + (req.query.ping === "2" ? "/constants/item_ids" : "/heroStats"), { signal: AbortSignal.timeout(8000), headers: { Accept: "application/json", "User-Agent": "1x6-builds (+https://1x6-eta.vercel.app)" } }); const t = await r.text();
       return res.status(200).json({ status: r.status, ms: Date.now() - t0, len: t.length, head: t.slice(0, 300) }); } catch (e) { return res.status(200).json({ error: String(e && e.message), ms: Date.now() - t0 }); }
   }
+  if (q === "probe") {
+    const urls = [1, 8].flatMap(n => [
+      `https://www.opendota.com/assets/images/dota2/rank_icons/rank_icon_${n}.png`,
+      `https://www.opendota.com/assets/images/dota2/rank_icons/rank_star_${n === 8 ? 5 : n}.png`,
+      `https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/icons/ranks/rank_icon_${n}.png`]);
+    const out = {};
+    await Promise.all(urls.map(async u => { try { const r = await fetch(u, { signal: AbortSignal.timeout(6000) }); out[u] = r.status + " " + r.headers.get("content-type") + " " + r.headers.get("content-length"); } catch (e) { out[u] = "ERR " + e.message; } }));
+    return res.status(200).json(out);
+  }
   if (!ROUTES[q]) return res.status(400).json({ error: "bad_query" });
   if (NEEDS_HERO.has(q) && !/^\d{1,3}$/.test(hero)) return res.status(400).json({ error: "bad_hero" });
   let url = BASE + ROUTES[q](hero);
