@@ -1709,6 +1709,19 @@
   .gr-ci { padding: 12px; display: grid; gap: 4px; } .gr-ci small { color: var(--muted); font-size: 12px; } .gr-meta { opacity: .85; }
   .gr-ca { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; } .gr-cards .gempty, .gr-cards .feed-sk { grid-column: 1 / -1; }
   .gr-help { max-width: 760px; line-height: 1.6; } .gr-help li { margin-bottom: 10px; } .gr-help code { background: rgba(255,255,255,.07); padding: 2px 6px; border-radius: 6px; font-size: 13px; word-break: break-all; }
+  .gr-stage { background-color: #0e1a1c; background-image: radial-gradient(ellipse at 50% 38%, rgba(48,84,86,.38), transparent 70%), linear-gradient(180deg, #102022, #0a1214); background-size: auto; }
+  .gr-cat.sym { border: 0; border-radius: 0; cursor: pointer; } .gr-cat.sym.on { border: 0; box-shadow: none; }
+  .gr-cat.sym .gr-lb { position: static; font-weight: 600; line-height: 1; color: rgba(235,240,240,.92); font-family: "Segoe UI", system-ui, sans-serif; }
+  .gr-cat.sym.on .gr-lb { color: var(--gold); } .gr-cat.grp.on .gr-lb { color: #ffe08a; }
+  .gr-cat.zone { background: rgba(255,255,255,.02); }
+  .gr-ts { display: grid; padding: 0; }
+  .gr-gbox { position: absolute; border: 1px dashed var(--gold); border-radius: 6px; background: rgba(243,195,90,.06); cursor: move; z-index: 3; box-shadow: 0 0 0 9999px rgba(0,0,0,0); }
+  .gr-tools { margin: 0 0 8px; } .gr-hint { margin-top: 8px; color: var(--muted); font-size: 12.5px; }
+  .gr-b.gr-art { background: linear-gradient(135deg, rgba(243,195,90,.22), rgba(232,86,74,.18)); border-color: rgba(243,195,90,.45); }
+  .gr-warn { color: #ffb36b; }
+  .gr-src { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; } .gr-src select { min-width: 200px; }
+  .gr-pv { width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); display: block; }
+  .gr-box { width: min(900px, 100%); }
   @media (max-width: 860px) { .gr-wrap { grid-template-columns: 1fr; } .gr-pal { position: static; order: -1; } .gr-ph { grid-template-columns: repeat(auto-fill, minmax(54px, 1fr)); max-height: 210px; } .gr-bar input { width: 120px; } }
 
   /* ---------- появление пиксельного героя в окне сборки (как спавн с высоким тиром в Доте) ---------- */
