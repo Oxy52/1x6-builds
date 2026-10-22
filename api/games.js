@@ -3,7 +3,9 @@
 //   GET /api/games?q=csTeam&p=<details path> -> последние матчи команды из отчёта Valve
 //   GET /api/games?q=csMatches               -> последние матчи топ-16 команд
 //   GET /api/games?q=dlHeroes&lang=ru        -> герои Deadlock: имя, картинки, винрейт, пикрейт
-//   GET /api/games?q=dlHero&id=1&lang=ru     -> сборка героя по статистике: основа (частые предметы) и лучшие по винрейту в каждом тире
+//   GET /api/games?q=dlItems&lang=ru         -> предметы магазина: id -> имя, картинка, слот, тир
+//   GET /api/games?q=dlHero&id=1             -> сборка героя по статистике: основа и лучшие по винрейту
+//   GET /api/games?q=dlOrder&id=1&lang=ru    -> самый частый порядок прокачки умений
 // Новости CS2 и Deadlock: /api/news?app=cs|deadlock
 const UA = { Accept: "application/json", "User-Agent": "1x6-builds (+https://1x6-eta.vercel.app)" };
 const VRS = "ValveSoftware/counter-strike_regional_standings";
@@ -12,7 +14,7 @@ const DL = "https://api.deadlock-api.com/v1";
 // язык сайта -> язык Valve в Deadlock (как в api/news.js)
 const LNG = { ru: "russian", uk: "ukrainian", en: "english", es: "spanish", pt: "brazilian", de: "german", pl: "polish", tr: "turkish",
   fr: "french", it: "italian", kk: "russian", be: "russian", nl: "english", zh: "schinese", ja: "japanese", ko: "koreana" };
-const TTL = { csTeams: 21600, csTeam: 21600, csMatches: 21600, dlHeroes: 21600, dlHero: 10800 };
+const TTL = { csTeams: 21600, csTeam: 21600, csMatches: 21600, dlHeroes: 21600, dlHero: 21600, dlOrder: 43200, dlItems: 86400 };
 
 async function get(url, type = "json") {
   const r = await fetch(url, { headers: UA, signal: AbortSignal.timeout(20000) });
@@ -71,18 +73,33 @@ async function dlHeroes(lang) {
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
-async function dlHero(id, lang) {
-  const [items, ist, hs] = await Promise.all([get(`${DL}/assets/items/by-type/upgrade?language=${lang}`), get(`${DL}/analytics/item-stats?hero_id=${id}&min_matches=300`), get(`${DL}/analytics/hero-stats`).catch(() => [])]);
-  const I = new Map(items.filter(i => i.shopable).map(i => [i.id, { id: i.id, name: clean(i.name), img: i.shop_image_webp || i.shop_image || i.image_webp || i.image || "", cost: i.cost, slot: i.item_slot_type, tier: i.item_tier }]));
+// все предметы магазина на языке сайта — отдельно и с долгим кешем (это 2 МБ у источника)
+async function dlItems(lang) {
+  const items = await get(`${DL}/assets/items/by-type/upgrade?language=${lang}`);
+  return Object.fromEntries(items.filter(i => i.shopable).map(i => [i.id, { name: clean(i.name), img: i.shop_image_webp || i.shop_image || i.image_webp || i.image || "", slot: i.item_slot_type, tier: i.item_tier }]));
+}
+
+// сборка героя по статистике: основа и лучшие предметы по тирам
+async function dlHero(id) {
+  const [ist, hs] = await Promise.all([get(`${DL}/analytics/item-stats?hero_id=${id}&min_matches=300`), get(`${DL}/analytics/hero-stats`).catch(() => [])]);
   // доля — от всех матчей героя (если статистика героя недоступна — от самого частого предмета)
   const tot = (hs.find(x => x.hero_id === id) || {}).matches || Math.max(...ist.map(x => x.matches), 1);
-  const all = ist.filter(x => I.has(x.item_id)).map(x => ({ ...I.get(x.item_id), wr: +(x.wins / x.matches * 100).toFixed(1), pick: Math.round(x.matches / tot * 100), t: Math.round(x.avg_buy_time_s / 60) }));
-  // основа: что берут чаще всего, по времени покупки; по тирам: самые выигрышные среди не совсем редких (от 4% матчей)
+  const all = ist.map(x => ({ id: x.item_id, wr: +(x.wins / x.matches * 100).toFixed(1), pick: Math.round(x.matches / tot * 100), t: Math.round(x.avg_buy_time_s / 60) }));
   const core = all.filter(i => i.pick >= 30).sort((a, b) => a.t - b.t).slice(0, 12);
-  const best = {};
-  for (const it of all) if (it.pick >= 4) (best[it.tier] = best[it.tier] || []).push(it);
-  for (const t in best) best[t] = best[t].sort((a, b) => b.wr - a.wr).slice(0, 6);
+  const best = all.filter(i => i.pick >= 4).sort((a, b) => b.wr - a.wr);
   return { core, best };
+}
+
+// самый частый порядок прокачки умений (у источника медленный запрос — отдельно, чтобы предметы показывались сразу)
+async function dlOrder(id, lang) {
+  const [ao, hero, hs] = await Promise.all([get(`${DL}/analytics/ability-order-stats?hero_id=${id}&min_matches=200`), get(`${DL}/assets/heroes/${id}?language=${lang}`), get(`${DL}/analytics/hero-stats`).catch(() => [])]);
+  const tot = (hs.find(x => x.hero_id === id) || {}).matches || 1;
+  const top = [...ao].filter(o => (o.abilities || []).length >= 10).sort((a, b) => (b.wins + b.losses) - (a.wins + a.losses))[0];
+  const sig = hero ? ["signature1", "signature2", "signature3", "signature4"].map(k => hero.items?.[k]).filter(Boolean) : [];
+  const ab = (await Promise.all(sig.map(c => get(`${DL}/assets/items/${c}?language=${lang}`).catch(() => null)))).filter(Boolean)
+    .map((a, i) => ({ id: a.id, n: i + 1, name: clean(a.name), img: a.image_webp || a.image || "" }));
+  const order = top ? { steps: top.abilities.slice(0, 16), wr: +(top.wins / (top.wins + top.losses) * 100).toFixed(1), share: Math.round((top.wins + top.losses) / tot * 100) } : null;
+  return { order: ab.length ? order : null, abil: ab };
 }
 
 module.exports = async (req, res) => {
@@ -95,7 +112,8 @@ module.exports = async (req, res) => {
     else if (q === "csMatches") out = await csMatches();
     else if (q === "csTeam") out = await csTeam(String(req.query.p || ""));
     else if (q === "dlHeroes") out = await dlHeroes(lang);
-    else { const id = +req.query.id; if (!(id > 0 && id < 1000)) return fail(400, "bad_id"); out = await dlHero(id, lang); }
+    else if (q === "dlItems") out = await dlItems(lang);
+    else { const id = +req.query.id; if (!(id > 0 && id < 1000)) return fail(400, "bad_id"); out = q === "dlOrder" ? await dlOrder(id, lang) : await dlHero(id); }
     res.setHeader("Cache-Control", `public, s-maxage=${TTL[q]}, stale-while-revalidate=86400`);
     res.status(200).json(out);
   } catch (e) { fail(e.code === 400 ? 400 : 502, "upstream"); }

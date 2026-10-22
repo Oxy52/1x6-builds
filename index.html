@@ -1594,20 +1594,25 @@
   @media (hover: hover) { .hero .actions .btn:hover { transform: translateY(-2px); } .hero .actions .btn-ghost:hover { border-color: color-mix(in srgb, var(--t1) 55%, var(--line)); box-shadow: 0 10px 26px -12px color-mix(in srgb, var(--t1) 60%, transparent); } }
   /* вкладки: светящаяся черта под активной */
   .tabs-wrap { position: relative; }
-  .gsw { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 6px 0 12px; }
-  .gsw-c { --g: #ff4d3d; position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 210px; padding: 16px 18px; border-radius: 22px; border: 1px solid var(--line); background: radial-gradient(90% 75% at 50% 38%, color-mix(in srgb, var(--g) 22%, transparent), transparent 70%), linear-gradient(180deg, color-mix(in srgb, var(--g) 7%, var(--bg-soft)), var(--bg-soft)); color: var(--muted); font: inherit; text-align: left; cursor: pointer; overflow: hidden; transition: border-color .3s, transform .3s cubic-bezier(.22,.61,.36,1), box-shadow .3s; }
-  .gsw-c.cs { --g: #f5a524; } .gsw-c.dl { --g: #e8d9b0; }
-  .gsw-c:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--g) 45%, var(--line)); }
-  .gsw-c[aria-pressed="true"] { border-color: color-mix(in srgb, var(--g) 70%, var(--line)); box-shadow: 0 0 0 1px color-mix(in srgb, var(--g) 25%, transparent), 0 18px 40px -20px var(--g); }
-  .gsw-lg { flex: 1; display: grid; place-items: center; padding: 6px 0 12px; }
-  .gsw-lg img { max-width: 62%; max-height: 92px; object-fit: contain; filter: drop-shadow(0 8px 22px color-mix(in srgb, var(--g) 45%, transparent)); transition: transform .4s cubic-bezier(.22,.61,.36,1); }
-  .gsw-c.cs .gsw-lg img { max-width: 80%; }
-  .gsw-c:hover .gsw-lg img { transform: scale(1.06); }
-  .gsw-c:not([aria-pressed="true"]) .gsw-lg img { opacity: .8; }
-  .gsw-c > span:last-child { min-width: 0; } .gsw-c b { display: block; font-family: var(--display); font-size: 18px; color: var(--fg); }
-  .gsw-c small { display: block; margin-top: 3px; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .gsw { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 8px 0 16px; }
+  .gsw-c { --g: #ff4d3d; position: relative; isolation: isolate; display: flex; flex-direction: column; min-width: 0; min-height: 300px; padding: 20px 22px; border-radius: 26px; border: 1px solid color-mix(in srgb, var(--g) 22%, var(--line)); background: radial-gradient(80% 60% at 50% 40%, color-mix(in srgb, var(--g) 30%, transparent), transparent 72%), linear-gradient(165deg, color-mix(in srgb, var(--g) 22%, #101016) 0%, #0d0d12 70%); color: var(--muted); font: inherit; text-align: left; cursor: pointer; overflow: hidden; transition: border-color .35s, transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .35s; }
+  .gsw-c::before { content: ""; position: absolute; inset: 0; z-index: -1; background: repeating-linear-gradient(135deg, rgba(255,255,255,.025) 0 2px, transparent 2px 16px); }
+  .gsw-c::after { content: ""; position: absolute; inset: -40% -60%; z-index: -1; background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.07) 50%, transparent 60%); transform: translateX(-60%); transition: transform .9s cubic-bezier(.22,.61,.36,1); }
+  .gsw-c:hover::after { transform: translateX(60%); }
+  .gsw-c.cs { --g: #f5a524; } .gsw-c.dl { --g: #d9c48f; }
+  .gsw-c:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--g) 55%, var(--line)); box-shadow: 0 24px 50px -28px var(--g); }
+  .gsw-c[aria-pressed="true"] { border-color: color-mix(in srgb, var(--g) 80%, var(--line)); box-shadow: 0 0 0 1px color-mix(in srgb, var(--g) 35%, transparent), 0 26px 60px -26px var(--g); }
+  .gsw-c[aria-pressed="true"]::before { background: repeating-linear-gradient(135deg, rgba(255,255,255,.035) 0 2px, transparent 2px 16px), radial-gradient(60% 40% at 50% 100%, color-mix(in srgb, var(--g) 25%, transparent), transparent); }
+  .gsw-lg { flex: 1; display: grid; place-items: center; padding: 10px 0 18px; }
+  .gsw-lg img { width: auto; max-width: 70%; height: 128px; object-fit: contain; filter: drop-shadow(0 14px 30px color-mix(in srgb, var(--g) 55%, transparent)); transition: transform .5s cubic-bezier(.22,.61,.36,1), opacity .35s; }
+  .gsw-c.cs .gsw-lg img { height: auto; max-width: 84%; max-height: 96px; }
+  .gsw-c:hover .gsw-lg img { transform: scale(1.07) translateY(-3px); }
+  .gsw-c:not([aria-pressed="true"]) .gsw-lg img { opacity: .78; } .gsw-c:hover .gsw-lg img { opacity: 1; }
+  .gsw-c > span:last-child { min-width: 0; } .gsw-c b { display: block; font-family: var(--display); font-size: 21px; letter-spacing: -.3px; color: var(--fg); }
+  .gsw-c small { display: block; margin-top: 4px; font-size: 13.5px; line-height: 1.4; }
   .gsw-c .gs { display: none; }
-  @media (max-width: 600px) { .gsw { gap: 6px; } .gsw-c { min-height: 0; padding: 10px 6px; border-radius: 16px; text-align: center; } .gsw-lg { padding: 2px 0 6px; } .gsw-lg img { max-height: 40px; } .gsw-c b { font-size: 14px; } .gsw-c small, .gsw-c .gl { display: none; } .gsw-c .gs { display: inline; } }
+  @media (max-width: 760px) { .gsw-c { min-height: 230px; padding: 16px; } .gsw-lg img { height: 92px; } .gsw-c b { font-size: 17px; } }
+  @media (max-width: 600px) { .gsw { gap: 8px; } .gsw-c { min-height: 0; padding: 12px 6px 10px; border-radius: 18px; text-align: center; } .gsw-lg { padding: 4px 0 8px; } .gsw-lg img { height: 46px; } .gsw-c.cs .gsw-lg img { max-height: 34px; } .gsw-c b { font-size: 14px; } .gsw-c small, .gsw-c .gl { display: none; } .gsw-c .gs { display: inline; } }
   body[data-game="cs"] .tabs-wrap, body[data-game="deadlock"] .tabs-wrap { display: none; }
   .g-sub { margin: 18px 0 14px; } .g-news { color: inherit; text-decoration: none; }
   [data-pane="cs"] .ncard { --nc: #f5a524; } [data-pane="deadlock"] .ncard { --nc: #4fd1b5; }
@@ -1620,13 +1625,33 @@
   .g-up { color: #4ade80; } .g-dn { color: #ff7a7a; }
   .dl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 8px; margin-top: 12px; }
   .dl-h { position: relative; display: block; padding: 0; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--bg-soft); font: inherit; color: var(--fg); cursor: pointer; aspect-ratio: 280 / 380; transition: transform .25s, border-color .25s; }
-  .dl-h:hover { transform: translateY(-2px); border-color: color-mix(in srgb, #4fd1b5 55%, var(--line)); }
+  .dl-h:hover { transform: translateY(-3px); border-color: color-mix(in srgb, #4fd1b5 60%, var(--line)); box-shadow: 0 16px 30px -18px #4fd1b5; }
+  .dl-h img { transition: transform .5s cubic-bezier(.22,.61,.36,1); } .dl-h:hover img { transform: scale(1.06); }
   .dl-h img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .dl-h > span { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 8px 7px; background: linear-gradient(transparent, rgba(0,0,0,.85)); text-align: left; }
   .dl-h b { display: block; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .dl-h small { font-size: 12px; font-weight: 700; }
   .dl-back { margin-bottom: 12px; }
-  .dl-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; } .dl-head img { width: 64px; height: 64px; border-radius: 16px; background: var(--bg-soft); }
-  .dl-head h3 { margin: 0; font-family: var(--display); font-size: 24px; } .dl-head small { color: var(--muted); font-size: 14px; }
+  .dl-hero { position: relative; display: flex; align-items: flex-end; gap: 18px; padding: 18px; margin-bottom: 12px; border-radius: 22px; overflow: hidden; border: 1px solid color-mix(in srgb, #4fd1b5 30%, var(--line)); background: radial-gradient(70% 120% at 0% 100%, color-mix(in srgb, #4fd1b5 22%, transparent), transparent 70%), var(--bg-soft); }
+  .dl-hero-card { flex: none; width: 118px; aspect-ratio: 280 / 380; object-fit: cover; border-radius: 16px; box-shadow: 0 14px 30px -12px rgba(0,0,0,.7); }
+  .dl-hero-i h3 { margin: 0 0 10px; font-family: var(--display); font-size: clamp(24px, 4vw, 34px); letter-spacing: -.5px; }
+  .dl-stats { display: flex; gap: 10px; flex-wrap: wrap; } .dl-stats > span { display: grid; gap: 2px; padding: 8px 14px; border-radius: 12px; background: rgba(255,255,255,.05); border: 1px solid var(--line); }
+  .dl-stats small { color: var(--muted-2); font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; } .dl-stats b { font-size: 18px; font-variant-numeric: tabular-nums; }
+  .dl-card { padding: 14px 16px 16px; margin-top: 10px; border-radius: 18px; border: 1px solid var(--line); background: var(--bg-soft); }
+  .dl-card .dl-sub { margin-top: 0; }
+  .dl-abs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .dl-ab { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 6px; border-radius: 12px; background: rgba(255,255,255,.04); }
+  .dl-ab img { flex: none; width: 38px; height: 38px; border-radius: 10px; background: #1c1c24; } .dl-ab b { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dl-ord { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+  .dl-st { position: relative; width: 40px; height: 40px; border-radius: 10px; overflow: hidden; background: #1c1c24; border: 1px solid var(--line); }
+  .dl-st img { width: 100%; height: 100%; object-fit: cover; } .dl-st i { position: absolute; right: 2px; bottom: 1px; font-style: normal; font-size: 10px; font-weight: 800; color: #fff; text-shadow: 0 1px 3px #000; }
+  .dl-hint { margin: 10px 0 0; color: var(--muted-2); font-size: 13px; }
+  @media (max-width: 600px) { .dl-abs { grid-template-columns: 1fr 1fr; } .dl-hero-card { width: 84px; } .dl-st { width: 34px; height: 34px; } }
+  .g-full { margin-top: 10px; color: var(--muted); font-size: 15.5px; line-height: 1.65; overflow-wrap: anywhere; }
+  .g-full p { margin: 0 0 10px; } .g-full img { display: block; max-width: 100%; height: auto; margin: 12px auto; border-radius: 12px; }
+  .g-full ul { margin: 6px 0 12px; padding-left: 20px; } .g-full li { margin: 4px 0; } .g-full li p { margin: 0; }
+  .g-full h1, .g-full h2, .g-full h3 { color: var(--fg); font-family: var(--display); font-size: 18px; margin: 18px 0 8px; } .g-full b { color: var(--fg); }
+  .g-full a { color: var(--nc); } .g-full blockquote { margin: 10px 0; padding: 8px 14px; border-left: 3px solid var(--nc); background: rgba(255,255,255,.03); border-radius: 0 10px 10px 0; }
+  .g-news { cursor: pointer; }
   .dl-sub { margin: 18px 0 8px; font-size: 14px; color: var(--muted); font-weight: 700; }
   .dl-items { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 6px; }
   .dl-it { --s: #f0a040; display: flex; align-items: center; gap: 10px; padding: 6px 10px 6px 6px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-soft); min-width: 0; }
@@ -6160,7 +6185,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=7").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=8").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
@@ -6505,25 +6530,56 @@ const GAMES = (() => {
   function open(g){
     if (!wired){ wired = true;
       document.querySelectorAll(".g-sub").forEach(bar => bar.onclick = e => { const b = e.target.closest("[data-v]"); if (!b) return; const g = bar.dataset.g; st[g] = b.dataset.v; if (g === "deadlock") st.hero = 0; draw(g); });
-      document.getElementById("csBox").onclick = e => { const t = e.target.closest("[data-p]"); if (t) team(t); };
-      document.getElementById("dlBox").onclick = e => { const s = e.target.closest("[data-s]"); if (s){ st.sort = s.dataset.s; return draw("deadlock"); }
-        const h = e.target.closest("[data-h]"); if (h){ st.hero = +h.dataset.h; draw("deadlock"); h.ownerDocument.getElementById("dlBox").scrollIntoView({ block: "nearest" }); return; }
-        if (e.target.closest("#dlBack")){ st.hero = 0; draw("deadlock"); } };
+      const nw = e => { const n = e.target.closest("[data-gid]"); if (n){ openNews(n.dataset.app, n.dataset.gid); return true; } };
+      const key = e => { if ((e.key === "Enter" || e.key === " ") && e.target.matches("[data-gid], [data-p], [data-h]")){ e.preventDefault(); e.target.click(); } };
+      const csBox = document.getElementById("csBox"), dlBox = document.getElementById("dlBox");
+      csBox.onclick = e => { if (nw(e)) return; const t = e.target.closest("[data-p]"); if (t) team(t); };
+      dlBox.onclick = e => { if (nw(e)) return; const s = e.target.closest("[data-s]"); if (s){ st.sort = s.dataset.s; return draw("deadlock"); }
+        const h = e.target.closest("[data-h]"); if (h){ st.hero = +h.dataset.h; draw("deadlock"); toTop(dlBox); return; }
+        if (e.target.closest("#dlBack")){ st.hero = 0; draw("deadlock"); toTop(dlBox); } };
+      csBox.onkeydown = dlBox.onkeydown = key;
       document.addEventListener("langchange", () => { ["cs", "deadlock"].forEach(x => { if (curTab === x) draw(x); }); });
     }
     draw(g);
   }
+  const toTop = el => { const y = el.getBoundingClientRect().top + scrollY - 90; if (scrollY > y) window.scrollTo({ top: y, behavior: REDUCED ? "auto" : "smooth" }); };
   function draw(g){
     const bar = document.querySelector(`.g-sub[data-g="${g}"]`); bar.querySelectorAll("[data-v]").forEach(b => b.setAttribute("aria-pressed", b.dataset.v === st[g]));
     VIEWS[g][st[g]](document.getElementById(g === "cs" ? "csBox" : "dlBox"));
   }
 
+  const NC = { cs: "#f5a524", deadlock: "#4fd1b5" }, GN = { cs: "Counter-Strike 2", deadlock: "Deadlock" };
+  const newsUrl = app => `/api/news?app=${app}&lang=${L()}`;
   function news(el, app){
     el.innerHTML = `<div class="nlist">${sk(4)}</div>`;
-    once(`/api/news?app=${app}&lang=${L()}`).then(d => {
-      el.innerHTML = `<div class="nlist">${(d.items || []).map((n, i) => `<a class="ncard valve auto g-news" href="${esc(n.url)}" target="_blank" rel="noopener" style="--i:${Math.min(i, 10)}">${n.img ? `<span class="nic g-nimg"><img alt="" loading="lazy" src="${esc(n.img)}"></span>` : `<span class="nic">📰</span>`}<div><div class="nmeta"><span>${day(n.ts * 1000)}</span></div><h3 translate="no">${n.t}</h3>${n.x ? `<p translate="no">${n.x}</p>` : ""}</div></a>`).join("")}</div>
+    once(newsUrl(app)).then(d => {
+      el.innerHTML = `<div class="nlist">${(d.items || []).map((n, i) => `<article class="ncard valve auto g-news" data-app="${app}" data-gid="${esc(n.gid)}" role="button" tabindex="0" style="--i:${Math.min(i, 10)}">${n.img ? `<span class="nic g-nimg"><img alt="" loading="lazy" src="${esc(n.img)}"></span>` : `<span class="nic">📰</span>`}<div><div class="nmeta"><span>${day(n.ts * 1000)}</span></div><h3 translate="no">${n.t}</h3>${n.x ? `<p translate="no">${n.x}</p>` : ""}</div></article>`).join("")}</div>
         <p class="db-note">Официальные новости разработчиков из Steam. Нажми на новость — откроется полный текст.</p>`;
     }).catch(() => { el.innerHTML = err; });
+  }
+  async function openNews(app, gid){
+    let list; try { list = (await once(newsUrl(app))).items || []; } catch(e) { return; }
+    const idx = list.findIndex(x => x.gid === gid), n = list[idx]; if (!n) return;
+    const was = !modal.hidden;
+    if (modal._cleanup){ try { modal._cleanup(); } catch(e) {} modal._cleanup = null; }
+    modal.innerHTML = `<div class="sheet nsheet g-sheet" role="dialog" aria-modal="true" style="--nc:${NC[app]}">
+      <div class="ncover${n.img ? "" : " k-none"}">${n.img ? `<img alt="" src="${esc(n.img)}">` : ""}
+        <button type="button" class="navh prev" aria-label="Предыдущая новость">‹</button><button type="button" class="navh next" aria-label="Следующая новость">›</button>
+        <button type="button" class="close" aria-label="Закрыть">✕</button></div>
+      <div class="nbody"><div class="nmeta"><span class="ntag">${GN[app]}</span><span>${day(n.ts * 1000)}</span></div>
+        <h3 translate="no">${n.t}</h3><div class="g-full" translate="no">${sk(3)}</div>
+        <div class="nacts"><a class="btn btn-ghost" href="${esc(n.url)}" target="_blank" rel="noopener">Открыть в Steam ↗</a></div></div></div>`;
+    modal.classList.toggle("swap", was); modal.hidden = false; lockScroll();
+    const sh = modal.querySelector(".g-sheet"); if (was) sh.scrollTop = 0;
+    const go = d => openNews(app, list[(idx + d + list.length) % list.length].gid);
+    modal._go = go;
+    modal.querySelector(".navh.prev").onclick = () => go(-1); modal.querySelector(".navh.next").onclick = () => go(1);
+    modal.querySelector(".close").onclick = closeModal; if (!was) modal.querySelector(".close").focus({ preventScroll: true });
+    const box = sh.querySelector(".g-full");
+    try { const f = await once(newsUrl(app) + "&gid=" + encodeURIComponent(gid)); if (!sh.isConnected) return;
+      // первая картинка текста обычно та же, что в шапке
+      box.innerHTML = (f.h || n.x || "").replace(/^(<p>)?<img [^>]*>(<\/p>)?(<br>)*/, m => n.img && m.includes(n.img) ? "" : m);
+    } catch(e) { if (sh.isConnected) box.innerHTML = `<p>${n.x || ""}</p>`; }
   }
 
   function csTeams(el){
@@ -6563,15 +6619,28 @@ const GAMES = (() => {
   }
   function dlHero(el, id){
     el.innerHTML = sk(4);
-    Promise.all([once(`/api/games?q=dlHeroes&lang=${L()}`), once(`/api/games?q=dlHero&id=${id}&lang=${L()}`)]).then(([hs, d]) => {
+    Promise.all([once(`/api/games?q=dlHeroes&lang=${L()}`), once(`/api/games?q=dlHero&id=${id}`), once(`/api/games?q=dlItems&lang=${L()}`)]).then(([hs, d, IT]) => {
       const h = hs.find(x => x.id === id) || {};
+      const full = i => IT[i.id] ? { ...IT[i.id], ...i } : null;
       const it = (i, wr) => `<div class="dl-it ${esc(i.slot)}"><img alt="" loading="lazy" src="${esc(i.img)}"><span><b translate="no">${esc(i.name)}</b><small>${wr ? pct(i.wr) + " · " : ""}${i.t}′ · ${i.pick}%</small></span></div>`;
+      const core = d.core.map(full).filter(Boolean), tiers = {};
+      d.best.map(full).filter(Boolean).forEach(i => { const t = tiers[i.tier] = tiers[i.tier] || []; if (t.length < 6) t.push(i); });
       el.innerHTML = `<button type="button" class="btn btn-ghost dl-back" id="dlBack">← Все герои</button>
-        <div class="dl-head"><img alt="" src="${esc(h.img)}"><div><h3 translate="no">${esc(h.name || "")}</h3><small><span>Винрейт</span> ${pct(h.wr)}</small></div></div>
-        <h4 class="dl-sub">Основа сборки — в порядке покупки</h4><div class="dl-items">${d.core.map(i => it(i)).join("")}</div>
-        ${[1, 2, 3, 4].filter(t => d.best[t]).map(t => `<h4 class="dl-sub"><span>Тир</span> ${t} · ${[0, 800, 1600, 3200, 6400][t].toLocaleString(L())} <span>— лучшие по винрейту</span></h4><div class="dl-items">${d.best[t].map(i => it(i, 1)).join("")}</div>`).join("")}
+        <div class="dl-hero"><img class="dl-hero-card" alt="" src="${esc(h.card || h.img)}"><div class="dl-hero-i"><h3 translate="no">${esc(h.name || "")}</h3>
+          <div class="dl-stats"><span><small>Винрейт</small><b>${pct(h.wr)}</b></span><span><small>Матчей</small><b>${(h.m || 0).toLocaleString(L())}</b></span></div></div></div>
+        <section class="dl-card" id="dlOrd"><h4 class="dl-sub">Прокачка умений</h4>${sk(1)}</section>
+        <section class="dl-card"><h4 class="dl-sub">Основа сборки — в порядке покупки</h4><div class="dl-items">${core.map(i => it(i)).join("")}</div></section>
+        ${[1, 2, 3, 4].filter(t => tiers[t]).map(t => `<section class="dl-card"><h4 class="dl-sub"><span>Тир</span> ${t} · ${[0, 800, 1600, 3200, 6400][t].toLocaleString(L())} <span>— лучшие по винрейту</span></h4><div class="dl-items">${tiers[t].map(i => it(i, 1)).join("")}</div></section>`).join("")}
         <p class="db-note">Сборка посчитана по матчам за последние недели. Основа — то, что на этом герое берут чаще всего; ниже — самые выигрышные предметы каждого тира. Число со штрихом — средняя минута покупки, процент — доля матчей героя с этим предметом. Цвет рамки: оранжевый — оружие, зелёный — живучесть, фиолетовый — духовная сила.</p>`;
-    }).catch(() => { el.innerHTML = err; });
+      once(`/api/games?q=dlOrder&id=${id}&lang=${L()}`).then(o => { const box = document.getElementById("dlOrd"); if (!box || st.hero !== id) return;
+        const A = new Map((o.abil || []).map(a => [a.id, a])), order = o.order && o.order.steps.every(x => A.has(x)) ? o.order : null;
+        if (!order){ box.remove(); return; }
+        box.innerHTML = `<h4 class="dl-sub">Прокачка умений</h4>
+          <div class="dl-abs">${o.abil.map(a => `<div class="dl-ab"><img alt="" loading="lazy" src="${esc(a.img)}"><b translate="no">${esc(a.name)}</b></div>`).join("")}</div>
+          <div class="dl-ord">${order.steps.map((x, k) => `<span class="dl-st" title="${esc(A.get(x).name)}"><img alt="" loading="lazy" src="${esc(A.get(x).img)}"><i>${k + 1}</i></span>`).join("")}</div>
+          <p class="dl-hint"><span>Самый частый порядок прокачки</span> · <span>винрейт</span> ${pct(order.wr)}</p>`;
+      }).catch(() => { const box = document.getElementById("dlOrd"); if (box) box.remove(); });
+    }).catch(() => { el.innerHTML = err + `<button type="button" class="btn btn-ghost dl-back" id="dlBack">← Все герои</button>`; });
   }
   return { open };
 })();
