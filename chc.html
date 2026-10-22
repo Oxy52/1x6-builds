@@ -1550,13 +1550,6 @@
   .d2-subs .rkc { position: relative; } .d2-subs .rkc .ndot { top: -3px; right: -3px; }
   @media (max-width: 600px) { .tabs { gap: 2px; } .tab { flex: 0 1 auto; padding: 0 6px; } .tab[aria-selected="true"] { flex: 1 0 auto; padding: 0 10px; } .tab[aria-selected="false"] .ts { display: none; } }
   /* ---------- топ MMR ---------- */
-  .lad-tops { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
-  .lad-top { display: grid; gap: 4px; text-align: left; padding: 12px 14px; border-radius: 16px; border: 1px solid color-mix(in srgb, #f3c35a 30%, var(--line)); background: radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, #f3c35a 14%, transparent), transparent 60%), var(--bg-soft); color: inherit; font: inherit; cursor: pointer; min-width: 0; transition: transform .2s, border-color .2s; }
-  .lad-top:hover { transform: translateY(-2px); border-color: #f3c35a; }
-  .lad-top-r { font-size: 11px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; color: var(--muted); }
-  .lad-top-n { display: flex; align-items: center; gap: 7px; min-width: 0; } .lad-top-n b:last-child { font-size: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .lad-top-n img { width: 22px; height: 22px; object-fit: contain; flex: none; } .lad-top small { color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .lad-one { font-family: var(--display); color: #f3c35a; font-size: 15px; flex: none; }
   .lad-regs { margin: 4px 0 10px; }
   .lad-pod { display: grid; grid-template-columns: 1fr 1.15fr 1fr; align-items: end; gap: 10px; margin: 18px 0 6px; }
   .lad-pc { position: relative; display: grid; justify-items: center; gap: 2px; padding: 16px 10px 0; border-radius: 18px 18px 6px 6px; border: 1px solid var(--line); background: var(--bg-soft); text-align: center; min-width: 0; overflow: hidden; }
@@ -1578,10 +1571,7 @@
   .lad-m { flex: 1; min-width: 0; } .lad-m b { display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .lad-m small { display: block; color: var(--muted); font-size: 12px; min-height: 0; }
   .lad-m small:empty { display: none; }
   .lad-pro { flex: none; font-size: 10.5px; font-weight: 800; letter-spacing: .5px; padding: 2px 7px; border-radius: 6px; color: #fff; background: linear-gradient(90deg, var(--t1), var(--t2)); }
-  .lad-tag { flex: none; font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 6px; border: 1px solid; }
-  .lad-tag.t10 { color: #f3c35a; border-color: color-mix(in srgb, #f3c35a 50%, transparent); } .lad-tag.t100 { color: #cfd6e4; border-color: color-mix(in srgb, #cfd6e4 35%, transparent); }
   .lad-more { display: block; width: 100%; margin-top: 10px; }
-  @media (max-width: 760px) { .lad-tops { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 480px) { .lad-pod { gap: 6px; } .lad-pc-name { font-size: 13.5px; } .lad-pc-m .lad-md { width: 40px; height: 40px; } .lad-pc.p1 .lad-pc-m .lad-md { width: 52px; height: 52px; } .lad-n { width: 36px; font-size: 14px; } .lad-tag { display: none; } }
   /* ---------- полировка ---------- */
   ::selection { background: color-mix(in srgb, var(--t1) 45%, transparent); color: #fff; }
@@ -1894,7 +1884,7 @@
   </div>
   <div class="tabpane" data-pane="ladder" role="tabpanel" hidden>
     <section class="section first">
-      <div class="section-head"><h2>Топ MMR Dota 2</h2><p>Официальный рейтинг Valve: лучшие игроки мира по MMR в каждом регионе — места с 1 по 5000. Нажми на про-игрока — откроется его профиль.</p></div>
+      <div class="section-head"><h2>Топ MMR Dota 2</h2><p>Официальный рейтинг Valve, места 1–5000 в каждом регионе. Нажми на игрока — откроется профиль.</p></div>
       <div id="ladBox"></div>
     </section>
   </div>
@@ -6370,7 +6360,7 @@ const LADDER = (() => {
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const regDef = () => { const l = typeof I18N !== "undefined" ? I18N.get() : "ru"; return ["en", "es", "pt"].includes(l) ? "americas" : l === "zh" ? "china" : ["ja", "ko"].includes(l) ? "se_asia" : "europe"; };
   const st = { reg: "", q: "", show: 100 };
-  const data = {}; let top = null, pros = null, wired = false;
+  const data = {}; let pros = null, wired = false;
   const J = q => fetch("/api/dota?q=" + q).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
   const medal = n => { const v = n <= 10 ? "8c" : n <= 100 ? "8b" : "8"; return `<img class="lad-md" alt="" loading="lazy" src="/api/dota?q=rank&n=${v}" onerror="this.onerror=null;this.src='https://www.opendota.com/assets/images/dota2/rank_icons/rank_icon_${v}.png'">`; };
   const proOf = name => pros && pros.get(String(name).toLowerCase());
@@ -6379,16 +6369,14 @@ const LADDER = (() => {
     const box = document.getElementById("ladBox"); if (!box) return;
     if (!st.reg) st.reg = regDef();
     if (!wired){ wired = true;
-      box.innerHTML = `<div class="lad-tops" id="ladTops"><div class="feed-sk"></div></div>
-        <div class="rkchips lad-regs" id="ladRegs" role="group" aria-label="Регион">${REG.map(([k, t, f]) => `<button type="button" class="rkc" data-r="${k}" aria-pressed="${k === st.reg}"><span aria-hidden="true">${f}</span> ${t}</button>`).join("")}</div>
+      box.innerHTML = `<div class="rkchips lad-regs" id="ladRegs" role="group" aria-label="Регион">${REG.map(([k, t, f]) => `<button type="button" class="rkc" data-r="${k}" aria-pressed="${k === st.reg}"><span aria-hidden="true">${f}</span> ${t}</button>`).join("")}</div>
         <div class="d2-bar"><label class="d2-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="ladQ" placeholder="Найти игрока по нику в топ-5000" autocomplete="off"></label></div>
         <div id="ladPod"></div><div id="ladList"><div class="feed-sk"></div><div class="feed-sk"></div></div>
-        <p class="db-note">Данные — официальный лидерборд Valve, обновляется несколько раз в день. Valve не показывает сами цифры MMR — только место игрока: место 1 — самый высокий MMR в регионе. Значок: топ-10, топ-100 и Титан.</p>`;
+        <p class="db-note">Valve не показывает цифры MMR — только место в регионе. Обновляется несколько раз в день.</p>`;
       box.querySelector("#ladRegs").onclick = e => { const b = e.target.closest("[data-r]"); if (!b) return; st.reg = b.dataset.r; st.show = 100; box.querySelectorAll("[data-r]").forEach(x => x.setAttribute("aria-pressed", x === b)); load(); };
       let t = 0; box.querySelector("#ladQ").oninput = e => { clearTimeout(t); t = setTimeout(() => { st.q = e.target.value.trim().toLowerCase(); st.show = 100; draw(); }, 150); };
-      box.onclick = e => { const p = e.target.closest("[data-acc]"); if (p){ D2.player(p.dataset.acc); return; } const nk = e.target.closest("[data-nick]"); if (nk && nk.dataset.nick){ find(nk); return; } if (e.target.closest("#ladMore")){ st.show += 100; draw(); } const r = e.target.closest("[data-goreg]"); if (r){ box.querySelector(`[data-r="${r.dataset.goreg}"]`).click(); } };
-      D2.get("pros").then(list => { pros = new Map((Array.isArray(list) ? list : []).map(p => [String(p.n).toLowerCase(), p])); if (data[st.reg]) draw(); drawTops(); }).catch(() => {});
-      J("ladderTop").then(x => { top = x; drawTops(); }).catch(() => { const el = box.querySelector("#ladTops"); if (el) el.innerHTML = ""; });
+      box.onclick = e => { const p = e.target.closest("[data-acc]"); if (p){ D2.player(p.dataset.acc); return; } const nk = e.target.closest("[data-nick]"); if (nk && nk.dataset.nick){ find(nk); return; } if (e.target.closest("#ladMore")){ st.show += 100; draw(); } };
+      D2.get("pros").then(list => { pros = new Map((Array.isArray(list) ? list : []).map(p => [String(p.n).toLowerCase(), p])); if (data[st.reg]) draw(); }).catch(() => {});
     }
     load();
   }
@@ -6404,12 +6392,6 @@ const LADDER = (() => {
       box.innerHTML = c.length ? `<p class="db-note">Valve не даёт Steam ID игроков рейтинга. Похожие профили — свежие матчи сверху:</p><div class="d2-plist">${c.map(p => `<button type="button" data-acc="${p.account_id}"><img alt="" loading="lazy" src="${esc(p.avatarfull || "")}"><span><b translate="no">${esc(p.personaname || "—")}</b><small>ID ${p.account_id}${p.last_match_time ? " · последний матч " + new Date(p.last_match_time).toLocaleDateString("ru-RU") : ""}</small></span></button>`).join("")}</div>` : `<div class="gempty">OpenDota не знает игрока «${esc(nick)}» — скорее всего, у него закрыта история матчей.</div>`;
     } catch(_) { box.innerHTML = `<div class="gempty">Поиск сейчас не отвечает. Попробуй ещё раз.</div>`; }
   }
-  function drawTops(){
-    const el = document.getElementById("ladTops"); if (!el || !top) return;
-    el.innerHTML = top.map(r => { const R = REG.find(x => x[0] === r.r), p = r.top[0]; if (!p) return "";
-      const pr = proOf(p[1]);
-      return `<button type="button" class="lad-top" data-goreg="${r.r}"><span class="lad-top-r">${R[2]} Топ-1 · ${R[1]}</span><span class="lad-top-n"><b class="lad-one">#1</b>${pr && pr.logo ? `<img alt="" loading="lazy" src="${esc(pr.logo)}" onerror="this.remove()">` : ""}<b translate="no">${esc(p[1])}</b></span><small translate="no">${p[2] ? esc(p[2]) : ""}${r.top[1] ? ` · #2 ${esc(r.top[1][1])}` : ""}</small></button>`; }).join("");
-  }
   async function load(){
     const reg = st.reg, list = document.getElementById("ladList");
     if (!data[reg]){ list.innerHTML = `<div class="feed-sk"></div><div class="feed-sk"></div><div class="feed-sk"></div>`; document.getElementById("ladPod").innerHTML = "";
@@ -6418,9 +6400,9 @@ const LADDER = (() => {
   }
   function row(p){
     const pr = proOf(p[1]), n = p[0];
-    return `<div class="lad-row${n <= 3 ? " p" + n : ""}${pr ? " pro" : ""}"${pr ? ` data-acc="${pr.id}"` : ` data-nick="${esc(p[1].trim())}"`} role="button" tabindex="0"><span class="lad-n">${n}</span>${medal(n)}
+    return `<div class="lad-row${n <= 3 ? " p" + n : ""}${pr ? " pro" : ""}"${pr ? ` data-acc="${pr.id}"` : ` data-nick="${esc(p[1].trim())}"`} role="button" tabindex="0"><span class="lad-n">${n}</span>
       <span class="lad-m"><b translate="no">${esc(p[1].trim()) || "—"}</b><small translate="no">${p[2] ? esc(p[2]) : ""}${pr && pr.team ? (p[2] ? " · " : "") + esc(pr.team) : ""}</small></span>
-      ${pr ? `<span class="lad-pro">PRO</span>` : ""}${n <= 10 ? `<span class="lad-tag t10">ТОП-10</span>` : n <= 100 ? `<span class="lad-tag t100">ТОП-100</span>` : ""}</div>`;
+      ${pr ? `<span class="lad-pro">PRO</span>` : ""}</div>`;
   }
   function draw(){
     const d = data[st.reg]; if (!d) return;
