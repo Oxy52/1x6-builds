@@ -1593,6 +1593,13 @@
   .hero .actions .btn { transition: transform .2s, box-shadow .25s, background .25s, border-color .25s; }
   @media (hover: hover) { .hero .actions .btn:hover { transform: translateY(-2px); } .hero .actions .btn-ghost:hover { border-color: color-mix(in srgb, var(--t1) 55%, var(--line)); box-shadow: 0 10px 26px -12px color-mix(in srgb, var(--t1) 60%, transparent); } }
   /* вкладки: светящаяся черта под активной */
+  .tabs-wrap { position: relative; }
+  .tab-car { font-size: 10px; opacity: .6; margin-left: -3px; }
+  .tab-menu { position: absolute; z-index: 40; right: 0; top: calc(100% - 10px); display: grid; gap: 2px; min-width: 210px; padding: 6px; border-radius: 14px; background: var(--panel); border: 1px solid var(--line); box-shadow: 0 14px 40px rgba(0,0,0,.45); }
+  .tab-menu[hidden] { display: none; }
+  .tab-menu .tab[role] { flex: none; justify-content: flex-start; min-height: 42px; padding: 0 12px; }
+  .tab-menu .tab[role] .tab-ic { display: grid; } .tab-menu .tab[role] .tl { display: inline; } .tab-menu .tab[role] .ts { display: none; }
+  .tab-menu .tab[role]:hover, .tab-menu .tab[aria-selected="true"] { background: var(--bg-soft); color: var(--fg); }
   .tab-ink::after { content: ""; position: absolute; left: 22%; right: 22%; bottom: -1px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--t1), transparent); box-shadow: 0 0 12px var(--t1); opacity: .9; }
   /* карточки героев: блик при наведении */
   .card { isolation: isolate; }
@@ -1804,17 +1811,22 @@
     <button type="button" class="burger" id="burger" aria-label="Меню" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
   </nav>
 
-  <div class="tabs" role="tablist" aria-label="Разделы">
-    <button type="button" class="tab" role="tab" data-tab="dota" aria-selected="false"><span class="tab-ic d2ic">D2</span><span class="tl">Dota 2</span><span class="ts">Мета</span></button>
-    <button type="button" class="tab" role="tab" data-tab="grids" aria-selected="false" aria-label="Сетки героев"><span class="tab-ic">▦</span><span class="tl">Сетки</span><span class="ts">Сетки</span></button>
-    <button type="button" class="tab" role="tab" data-tab="news" aria-selected="false" aria-label="Новости"><span class="tab-ic">📰</span><span class="tl">Новости</span><span class="ts">Новости</span></button>
-    <button type="button" class="tab" role="tab" data-tab="ladder" aria-selected="false" aria-label="Топ MMR"><span class="tab-ic">🥇</span><span class="tl">Топ MMR</span><span class="ts">Топ MMR</span></button>
-    <button type="button" class="tab" role="tab" data-tab="1x6" aria-selected="true"><span class="tab-ic">1×6</span><span class="tl">Dota 1x6</span><span class="ts">Сборки</span></button>
-    <button type="button" class="tab" role="tab" data-tab="custom" aria-selected="false"><span class="tab-ic">🧩</span><span class="tl">Hero Chaos</span><span class="ts">CHC</span></button>
-    <button type="button" class="tab" role="tab" data-tab="games" aria-selected="false"><span class="tab-ic">🎮</span><span class="tl">Мини-игры</span><span class="ts">Игры</span></button>
-    <button type="button" class="tab" role="tab" data-tab="feed" aria-selected="false"><span class="tab-ic">💬</span><span class="tl">Лента</span><span class="ts">Лента</span></button>
-    <button type="button" class="tab" role="tab" data-tab="rating" aria-selected="false"><span class="tab-ic">🏆</span><span class="tl">Рейтинг</span><span class="ts">Топ</span></button>
-    <i class="tab-ink" id="tabInk"></i>
+  <div class="tabs-wrap">
+    <div class="tabs" role="tablist" aria-label="Разделы">
+      <button type="button" class="tab" role="tab" data-tab="dota" aria-selected="false"><span class="tab-ic d2ic">D2</span><span class="tl">Dota 2</span><span class="ts">Мета</span></button>
+      <button type="button" class="tab" role="tab" data-tab="grids" aria-selected="false" aria-label="Сетки героев"><span class="tab-ic">▦</span><span class="tl">Сетки</span><span class="ts">Сетки</span></button>
+      <button type="button" class="tab" role="tab" data-tab="news" aria-selected="false" aria-label="Новости"><span class="tab-ic">📰</span><span class="tl">Новости</span><span class="ts">Новости</span></button>
+      <button type="button" class="tab" role="tab" data-tab="ladder" aria-selected="false" aria-label="Топ MMR"><span class="tab-ic">🥇</span><span class="tl">Топ MMR</span><span class="ts">Топ MMR</span></button>
+      <button type="button" class="tab" role="tab" data-tab="1x6" aria-selected="true"><span class="tab-ic">1×6</span><span class="tl">Dota 1x6</span><span class="ts">Сборки</span></button>
+      <button type="button" class="tab" role="tab" data-tab="custom" aria-selected="false"><span class="tab-ic">🧩</span><span class="tl">Hero Chaos</span><span class="ts">CHC</span></button>
+      <button type="button" class="tab tab-more" id="tabMore" aria-haspopup="true" aria-expanded="false" aria-selected="false"><span class="tab-ic">⋯</span><span class="tl">Ещё</span><span class="ts">Ещё</span><span class="tab-car" aria-hidden="true">▾</span></button>
+      <i class="tab-ink" id="tabInk"></i>
+    </div>
+    <div class="tab-menu" id="tabMenu" hidden>
+      <button type="button" class="tab" role="tab" data-tab="games" aria-selected="false"><span class="tab-ic">🎮</span><span class="tl">Мини-игры</span><span class="ts">Игры</span></button>
+      <button type="button" class="tab" role="tab" data-tab="feed" aria-selected="false"><span class="tab-ic">💬</span><span class="tl">Лента</span><span class="ts">Лента</span></button>
+      <button type="button" class="tab" role="tab" data-tab="rating" aria-selected="false"><span class="tab-ic">🏆</span><span class="tl">Рейтинг</span><span class="ts">Топ</span></button>
+    </div>
   </div>
   <div class="panes" id="panes">
   <div class="tabpane" data-pane="1x6" role="tabpanel">
@@ -6428,7 +6440,8 @@ function inkTo(btn, instant){ const ink = document.getElementById("tabInk"), bar
 function setTab(name, opts){
   opts = opts || {}; if (!TABS.includes(name)) name = "1x6";
   const prev = curTab, dir = TABS.indexOf(name) - TABS.indexOf(prev); curTab = name;
-  document.querySelectorAll(".tab").forEach(b => { const on = b.dataset.tab === name; b.setAttribute("aria-selected", on); if (on){ inkTo(b, opts.instant); b.scrollIntoView({ inline: "nearest", block: "nearest" }); } });
+  document.querySelectorAll(".tab[data-tab]").forEach(b => { const on = b.dataset.tab === name; b.setAttribute("aria-selected", on); if (on){ const v = b.closest("#tabMenu") ? document.getElementById("tabMore") : b; inkTo(v, opts.instant); v.scrollIntoView({ inline: "nearest", block: "nearest" }); } });
+  document.getElementById("tabMore").setAttribute("aria-selected", !!document.querySelector('#tabMenu [aria-selected="true"]'));
   document.querySelectorAll(".tabpane").forEach(p => { const on = p.dataset.pane === name; p.hidden = !on; p.classList.remove("in-l", "in-r");
     if (on && prev !== name && !opts.instant && !REDUCED){ void p.offsetWidth; p.classList.add(dir > 0 ? "in-l" : "in-r"); } });
   if (name === "feed") PROF.feedOpen();
@@ -6441,7 +6454,13 @@ function setTab(name, opts){
   if (!opts.keepHash){ try { history.replaceState(null, "", name === "1x6" ? location.pathname + location.search : "#" + name); } catch(e) {} }
   if (prev !== name && !opts.noScroll){ const tb = document.querySelector(".tabs"); const y = tb.getBoundingClientRect().top + scrollY - 70; if (scrollY > y) window.scrollTo({ top: y, behavior: REDUCED ? "auto" : "smooth" }); }
 }
-document.querySelectorAll(".tab").forEach(b => b.onclick = () => setTab(b.dataset.tab));
+document.querySelectorAll(".tab[data-tab]").forEach(b => b.onclick = () => setTab(b.dataset.tab));
+// «Ещё»: редкие разделы в выпадающем меню
+{ const mb = document.getElementById("tabMore"), mn = document.getElementById("tabMenu");
+  const close = () => { mn.hidden = true; mb.setAttribute("aria-expanded", "false"); };
+  mb.onclick = e => { e.stopPropagation(); mn.hidden = !mn.hidden; mb.setAttribute("aria-expanded", !mn.hidden); };
+  document.addEventListener("click", e => { if (!mn.hidden && (!e.target.closest("#tabMenu") || e.target.closest(".tab"))) close(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") close(); }); }
 { const cp = document.getElementById("chcPromo"); if (cp) cp.onclick = () => setTab("custom"); }
 document.getElementById("supFab").onclick = () => PROF.support();
 I18N.init();
