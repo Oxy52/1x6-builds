@@ -1,7 +1,250 @@
-CS
-63
-{"id": "agent-4613", "name": "Bloody Darryl The Strapped | The Professionals", "description": "Before he was leader of the heist gang 'The Professionals' Sir Bloody Darryl was more simply called, Bloody Darryl. Still your friendly neighborhood psychopath in every sense of the word. Not actually Australian according to Australians. \\n\\n<i>I'm just gonna give them a bit of Razzle Dazzle.</i>", "def_index": "4613", "rarity": {"id": "rarity_legendary_character", "name": "Superior", "color": "#d32ce6"}, "collections": [{"id": "collection-set-op11-characters", "name": "Operation Riptide Agents", "image": "https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/set_icons/set_op11_characters_png.png"}], "team": {"id": "terrorists", "name": "Terrori
-DL
-44
-{"icon_hero_card": "https://assets-bucket.deadlock-api.com/assets-api-res/images/heroes/inferno_card.png", "icon_hero_card_webp": "https://assets-bucket.deadlock-api.com/assets-api-res/images/heroes/inferno_card.webp", "icon_image_small": "https://assets-bucket.deadlock-api.com/assets-api-res/images/heroes/inferno_sm.png", "icon_image_small_webp": "https://assets-bucket.deadlock-api.com/assets-api-res/images/heroes/inferno_sm.webp", "minimap_image": "https://assets-bucket.deadlock-api.com/assets-api-res/images/heroes/inferno_mm.png", "minimap_image_webp": "https://assets-bucket.deadlock-api.com/assets-api-res/images/heroes/inferno_mm.webp", "hero_card_critical": "https://assets-bucket.deadlock-api.com/assets-api-res/images/heroes/inferno_card_critical.png", "hero_card_critical_webp": "https://assets-bucket.deadlock-api.com/assets-api-res/images/heroes/inferno_card_critical.webp", "hero_card_gloat": "https://assets-bucket.deadlock-api.com/assets-api-res/images/heroes/inferno_card_gloat.png", "hero_card_gloat_webp": "https://assets-bucket.deadlock-api.com/assets-api-res/images/heroes/inferno_card_gloat.webp", "top_bar_vertical_image": "https://assets-bucket.deadlock-api.com/assets-api-res/images/heroes/inferno_vertical.png", "top_bar_vertical_image_webp": "https://assets-bucket.deadlock-api.com/assets-api-res/images/heroes/inferno_vertical.webp", "background_image": "https://assets-bucket.deadlock-api.com/assets-api-res/images/heroes/backgrounds/infernus_bg.png", "background_image_webp": "https://assets-bucket.deadlock-api.com/assets-api-res/images/heroes/backgrounds/infernus_bg.webp", "name_image": "https://assets-bucket.deadlock-api.com/assets-api-res/icons/heroes/hero_names/infernus.svg"}
-Infernus
+cs 0 Bloody Darryl The Strapped (512, 384) -> (331, 358)
+cs 1 'Blueberries' Buckshot (512, 384) -> (397, 350)
+cs 2 'Two Times' McCoy (512, 384) -> (442, 366)
+cs 3 Cmdr. Mae 'Dead Cold' Jamison (512, 384) -> (353, 352)
+cs 4 1st Lieutenant Farlow (512, 384) -> (381, 351)
+cs 5 John 'Van Healen' Kask (512, 384) -> (340, 340)
+cs 6 Bio-Haz Specialist (512, 384) -> (366, 350)
+cs 7 Sergeant Bombson (512, 384) -> (444, 341)
+cs 8 Chem-Haz Specialist (512, 384) -> (429, 352)
+cs 9 Rezan the Redshirt (512, 384) -> (353, 355)
+cs 10 Sir Bloody Miami Darryl (512, 384) -> (320, 357)
+cs 11 Safecracker Voltzmann (512, 384) -> (373, 366)
+cs 12 Little Kev (512, 384) -> (354, 358)
+cs 13 Getaway Sally (512, 384) -> (347, 354)
+cs 14 Number K (512, 384) -> (310, 350)
+cs 15 Sir Bloody Silent Darryl (512, 384) -> (320, 357)
+cs 16 Sir Bloody Skullhead Darryl (512, 384) -> (320, 357)
+cs 17 Sir Bloody Darryl Royale (512, 384) -> (320, 357)
+cs 18 Sir Bloody Loudmouth Darryl (512, 384) -> (320, 357)
+cs 19 Sous-Lieutenant Medic (512, 384) -> (353, 336)
+cs 20 Chem-Haz Capitaine (512, 384) -> (348, 356)
+cs 21 Chef d'Escadron Rouchard (512, 384) -> (366, 358)
+cs 22 Aspirant (512, 384) -> (429, 341)
+cs 23 Officer Jacques Beltram (512, 384) -> (424, 354)
+cs 24 Lieutenant 'Tree Hugger' Farlow (512, 384) -> (450, 365)
+cs 25 Cmdr. Davida 'Goggles' Fernandez (512, 384) -> (398, 360)
+cs 26 Cmdr. Frank 'Wet Sox' Baroud (512, 384) -> (463, 352)
+cs 27 Lieutenant Rex Krikey (512, 384) -> (372, 341)
+cs 28 Elite Trapper Solman (512, 384) -> (325, 341)
+cs 29 Crasswater The Forgotten (512, 384) -> (397, 362)
+  Infernus hero_card_critical (280, 380) RGBA
+  Infernus hero_card_gloat (280, 380) RGBA
+  Infernus icon_hero_card (280, 380) RGBA
+  Infernus top_bar_vertical_image (120, 200) RGBA
+dl 0 Infernus hero_card_critical -> (250, 364)
+  Seven hero_card_critical (280, 380) RGBA
+  Seven hero_card_gloat (280, 380) RGBA
+  Seven icon_hero_card (280, 380) RGBA
+  Seven top_bar_vertical_image (120, 200) RGBA
+dl 1 Seven hero_card_critical -> (280, 363)
+  Vindicta hero_card_critical (280, 380) RGBA
+  Vindicta hero_card_gloat (280, 380) RGBA
+  Vindicta icon_hero_card (280, 380) RGBA
+  Vindicta top_bar_vertical_image (120, 200) RGBA
+dl 2 Vindicta hero_card_critical -> (274, 349)
+  Lady Geist hero_card_critical (280, 380) RGBA
+  Lady Geist hero_card_gloat (280, 380) RGBA
+  Lady Geist icon_hero_card (280, 380) RGBA
+  Lady Geist top_bar_vertical_image (120, 200) RGBA
+dl 3 Lady Geist hero_card_critical -> (280, 355)
+  Abrams hero_card_critical (280, 380) RGBA
+  Abrams hero_card_gloat (280, 380) RGBA
+  Abrams icon_hero_card (280, 380) RGBA
+  Abrams top_bar_vertical_image (120, 200) RGBA
+dl 4 Abrams hero_card_critical -> (280, 360)
+  Wraith hero_card_critical (280, 380) RGBA
+  Wraith hero_card_gloat (280, 380) RGBA
+  Wraith icon_hero_card (280, 380) RGBA
+  Wraith top_bar_vertical_image (120, 200) RGBA
+dl 5 Wraith hero_card_critical -> (280, 329)
+  McGinnis hero_card_critical (280, 380) RGBA
+  McGinnis hero_card_gloat (280, 380) RGBA
+  McGinnis icon_hero_card (280, 380) RGBA
+  McGinnis top_bar_vertical_image (120, 200) RGBA
+dl 6 McGinnis hero_card_critical -> (280, 342)
+  Paradox hero_card_critical (280, 380) RGBA
+  Paradox hero_card_gloat (280, 380) RGBA
+  Paradox icon_hero_card (280, 380) RGBA
+  Paradox top_bar_vertical_image (120, 200) RGBA
+dl 7 Paradox hero_card_critical -> (280, 331)
+  Dynamo hero_card_critical (280, 380) RGBA
+  Dynamo hero_card_gloat (280, 380) RGBA
+  Dynamo icon_hero_card (280, 380) RGBA
+  Dynamo top_bar_vertical_image (120, 200) RGBA
+dl 8 Dynamo hero_card_critical -> (280, 354)
+  Kelvin hero_card_critical (280, 380) RGBA
+  Kelvin hero_card_gloat (280, 380) RGBA
+  Kelvin icon_hero_card (280, 380) RGBA
+  Kelvin top_bar_vertical_image (120, 200) RGBA
+dl 9 Kelvin hero_card_critical -> (280, 347)
+  Haze hero_card_critical (280, 380) RGBA
+  Haze hero_card_gloat (280, 380) RGBA
+  Haze icon_hero_card (280, 380) RGBA
+  Haze top_bar_vertical_image (120, 200) RGBA
+dl 10 Haze hero_card_critical -> (280, 380)
+  Holliday hero_card_critical (280, 380) RGBA
+  Holliday hero_card_gloat (280, 380) RGBA
+  Holliday icon_hero_card (280, 380) RGBA
+  Holliday top_bar_vertical_image (120, 200) RGBA
+dl 11 Holliday hero_card_critical -> (278, 353)
+  Bebop hero_card_critical (280, 380) RGBA
+  Bebop hero_card_gloat (280, 380) RGBA
+  Bebop icon_hero_card (280, 380) RGBA
+  Bebop top_bar_vertical_image (120, 200) RGBA
+dl 12 Bebop hero_card_critical -> (280, 380)
+  Calico hero_card_critical (280, 380) RGBA
+  Calico hero_card_gloat (280, 380) RGBA
+  Calico icon_hero_card (280, 380) RGBA
+  Calico top_bar_vertical_image (120, 200) RGBA
+dl 13 Calico hero_card_critical -> (279, 334)
+  Grey Talon hero_card_critical (280, 380) RGBA
+  Grey Talon hero_card_gloat (280, 380) RGBA
+  Grey Talon icon_hero_card (280, 380) RGBA
+  Grey Talon top_bar_vertical_image (120, 200) RGBA
+dl 14 Grey Talon hero_card_critical -> (280, 380)
+  Mo & Krill hero_card_critical (280, 380) RGBA
+  Mo & Krill hero_card_gloat (280, 380) RGBA
+  Mo & Krill icon_hero_card (280, 380) RGBA
+  Mo & Krill top_bar_vertical_image (120, 200) RGBA
+dl 15 Mo & Krill hero_card_critical -> (280, 375)
+  Shiv hero_card_critical (280, 380) RGBA
+  Shiv hero_card_gloat (280, 380) RGBA
+  Shiv icon_hero_card (280, 380) RGBA
+  Shiv top_bar_vertical_image (120, 200) RGBA
+dl 16 Shiv hero_card_critical -> (280, 380)
+  Ivy hero_card_critical (280, 380) RGBA
+  Ivy hero_card_gloat (280, 380) RGBA
+  Ivy icon_hero_card (280, 380) RGBA
+  Ivy top_bar_vertical_image (120, 200) RGBA
+dl 17 Ivy hero_card_critical -> (280, 376)
+  Warden hero_card_critical (280, 380) RGBA
+  Warden hero_card_gloat (280, 380) RGBA
+  Warden icon_hero_card (280, 380) RGBA
+  Warden top_bar_vertical_image (120, 200) RGBA
+dl 18 Warden hero_card_critical -> (280, 358)
+  Yamato hero_card_critical (280, 380) RGBA
+  Yamato hero_card_gloat (280, 380) RGBA
+  Yamato icon_hero_card (280, 380) RGBA
+  Yamato top_bar_vertical_image (120, 200) RGBA
+dl 19 Yamato hero_card_critical -> (263, 353)
+  Lash hero_card_critical (280, 380) RGBA
+  Lash hero_card_gloat (280, 380) RGBA
+  Lash icon_hero_card (280, 380) RGBA
+  Lash top_bar_vertical_image (120, 200) RGBA
+dl 20 Lash hero_card_critical -> (280, 325)
+  Viscous hero_card_critical (280, 380) RGBA
+  Viscous hero_card_gloat (280, 380) RGBA
+  Viscous icon_hero_card (280, 380) RGBA
+  Viscous top_bar_vertical_image (120, 200) RGBA
+dl 21 Viscous hero_card_critical -> (280, 311)
+  Pocket hero_card_critical (280, 380) RGBA
+  Pocket hero_card_gloat (280, 380) RGBA
+  Pocket icon_hero_card (280, 380) RGBA
+  Pocket top_bar_vertical_image (120, 200) RGBA
+dl 22 Pocket hero_card_critical -> (280, 370)
+  Mirage hero_card_critical (280, 380) RGBA
+  Mirage hero_card_gloat (280, 380) RGBA
+  Mirage icon_hero_card (280, 380) RGBA
+  Mirage top_bar_vertical_image (120, 200) RGBA
+dl 23 Mirage hero_card_critical -> (272, 354)
+  Vyper hero_card_critical (280, 380) RGBA
+  Vyper hero_card_gloat (280, 380) RGBA
+  Vyper icon_hero_card (280, 380) RGBA
+  Vyper top_bar_vertical_image (120, 200) RGBA
+dl 24 Vyper hero_card_critical -> (275, 332)
+  Sinclair hero_card_critical (280, 380) RGBA
+  Sinclair hero_card_gloat (280, 380) RGBA
+  Sinclair icon_hero_card (280, 380) RGBA
+  Sinclair top_bar_vertical_image (120, 200) RGBA
+dl 25 Sinclair hero_card_critical -> (280, 374)
+  Mina hero_card_critical (280, 380) RGBA
+  Mina hero_card_gloat (280, 380) RGBA
+  Mina icon_hero_card (280, 380) RGBA
+  Mina top_bar_vertical_image (120, 200) RGBA
+dl 26 Mina hero_card_critical -> (280, 350)
+  Drifter hero_card_critical (280, 380) RGBA
+  Drifter hero_card_gloat (280, 380) RGBA
+  Drifter icon_hero_card (280, 380) RGBA
+  Drifter top_bar_vertical_image (120, 200) RGBA
+dl 27 Drifter hero_card_critical -> (280, 368)
+  Venator hero_card_critical (240, 320) RGBA
+  Venator hero_card_gloat (240, 320) RGBA
+  Venator icon_hero_card (240, 320) RGBA
+  Venator top_bar_vertical_image (120, 200) RGBA
+dl 28 Venator hero_card_critical -> (240, 300)
+  Victor hero_card_critical (280, 380) RGBA
+  Victor hero_card_gloat (280, 380) RGBA
+  Victor icon_hero_card (280, 380) RGBA
+  Victor top_bar_vertical_image (120, 200) RGBA
+dl 29 Victor hero_card_critical -> (266, 341)
+  Paige hero_card_critical (280, 380) RGBA
+  Paige hero_card_gloat (280, 380) RGBA
+  Paige icon_hero_card (280, 380) RGBA
+  Paige top_bar_vertical_image (120, 200) RGBA
+dl 30 Paige hero_card_critical -> (280, 365)
+  The Doorman hero_card_critical (280, 380) RGBA
+  The Doorman hero_card_gloat (280, 380) RGBA
+  The Doorman icon_hero_card (280, 380) RGBA
+  The Doorman top_bar_vertical_image (120, 200) RGBA
+dl 31 The Doorman hero_card_critical -> (280, 375)
+  Billy hero_card_critical (280, 380) RGBA
+  Billy hero_card_gloat (280, 380) RGBA
+  Billy icon_hero_card (280, 380) RGBA
+  Billy top_bar_vertical_image (120, 200) RGBA
+dl 32 Billy hero_card_critical -> (280, 380)
+  Graves hero_card_critical (240, 320) RGBA
+  Graves hero_card_gloat (240, 320) RGBA
+  Graves icon_hero_card (240, 320) RGBA
+  Graves top_bar_vertical_image (120, 200) RGBA
+dl 33 Graves hero_card_critical -> (240, 320)
+  Apollo hero_card_critical (280, 380) RGBA
+  Apollo hero_card_gloat (280, 380) RGBA
+  Apollo icon_hero_card (280, 380) RGBA
+  Apollo top_bar_vertical_image (120, 200) RGBA
+dl 34 Apollo hero_card_critical -> (280, 332)
+  Deadman Danny hero_card_critical (280, 380) RGBA
+  Deadman Danny hero_card_gloat (280, 380) RGBA
+  Deadman Danny icon_hero_card (280, 380) RGBA
+  Deadman Danny top_bar_vertical_image (120, 200) RGBA
+dl 35 Deadman Danny hero_card_critical -> (280, 380)
+  Rem hero_card_critical (280, 380) RGBA
+  Rem hero_card_gloat (280, 380) RGBA
+  Rem icon_hero_card (280, 380) RGBA
+  Rem top_bar_vertical_image (120, 200) RGBA
+dl 36 Rem hero_card_critical -> (275, 313)
+  Silver hero_card_critical (240, 320) RGBA
+  Silver hero_card_gloat (240, 320) RGBA
+  Silver icon_hero_card (240, 320) RGBA
+  Silver top_bar_vertical_image (120, 200) RGBA
+dl 37 Silver hero_card_critical -> (240, 304)
+  Celeste hero_card_critical (280, 380) RGBA
+  Celeste hero_card_gloat (280, 380) RGBA
+  Celeste icon_hero_card (280, 380) RGBA
+  Celeste top_bar_vertical_image (120, 200) RGBA
+dl 38 Celeste hero_card_critical -> (280, 380)
+  Rat King hero_card_critical (280, 380) RGBA
+  Rat King hero_card_gloat (280, 380) RGBA
+  Rat King icon_hero_card (280, 380) RGBA
+  Rat King top_bar_vertical_image (120, 200) RGBA
+dl 39 Rat King hero_card_critical -> (280, 380)
+  Solomon hero_card_critical (280, 380) RGBA
+  Solomon hero_card_gloat (280, 380) RGBA
+  Solomon icon_hero_card (280, 380) RGBA
+  Solomon top_bar_vertical_image (120, 200) RGBA
+dl 40 Solomon hero_card_critical -> (280, 380)
+  Violet hero_card_critical (280, 380) RGBA
+  Violet hero_card_gloat (280, 380) RGBA
+  Violet icon_hero_card (280, 380) RGBA
+  Violet top_bar_vertical_image (120, 200) RGBA
+dl 41 Violet hero_card_critical -> (280, 355)
+  Nurse Harrow hero_card_critical (280, 380) RGBA
+  Nurse Harrow hero_card_gloat (280, 380) RGBA
+  Nurse Harrow icon_hero_card (280, 380) RGBA
+  Nurse Harrow top_bar_vertical_image (120, 200) RGBA
+dl 42 Nurse Harrow hero_card_critical -> (280, 380)
+  Baba hero_card_critical (280, 380) RGBA
+  Baba hero_card_gloat (280, 380) RGBA
+  Baba icon_hero_card (280, 380) RGBA
+  Baba top_bar_vertical_image (120, 200) RGBA
+dl 43 Baba hero_card_critical -> (280, 329)
