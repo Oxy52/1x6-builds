@@ -1687,7 +1687,7 @@
   .gr-num { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); } .gr-num input { width: 66px; }
   .gr-pal { position: sticky; top: 76px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); padding: 10px; display: grid; gap: 8px; }
   .gr-af { display: flex; flex-wrap: wrap; gap: 5px; } .gr-af .rkc { padding: 5px 9px; font-size: 12px; }
-  .gr-ph { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; max-height: 62vh; overflow-y: auto; overscroll-behavior: contain; padding-right: 2px; }
+  .gr-ph { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: max-content; gap: 5px; max-height: 62vh; overflow-y: auto; overscroll-behavior: contain; padding-right: 2px; }
   .gr-p { position: relative; display: block; aspect-ratio: 3 / 4; border-radius: 6px; overflow: hidden; cursor: grab; background: #222; touch-action: none; }
   .gr-p span { position: absolute; left: 0; right: 0; bottom: 0; font-size: 9.5px; font-style: normal; line-height: 1.1; padding: 8px 3px 3px; background: linear-gradient(transparent, rgba(0,0,0,.85)); color: #fff; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .gr-p.used { opacity: .4; } .gr-p:hover { outline: 2px solid var(--gold); opacity: 1; }
