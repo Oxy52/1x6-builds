@@ -1613,12 +1613,37 @@
   .gsw-c .gs { display: none; }
   @media (max-width: 760px) { .gsw-c { min-height: 230px; padding: 16px; } .gsw-lg img { height: 92px; } .gsw-c b { font-size: 17px; } }
   @media (max-width: 600px) { .gsw { gap: 8px; } .gsw-c { min-height: 0; padding: 12px 6px 10px; border-radius: 18px; text-align: center; } .gsw-lg { padding: 4px 0 8px; } .gsw-lg img { height: 46px; } .gsw-c.cs .gsw-lg img { max-height: 34px; } .gsw-c b { font-size: 14px; } .gsw-c small, .gsw-c .gl { display: none; } .gsw-c .gs { display: inline; } }
+  /* ---- главное меню: три больших квадрата игр ---- */
+  .gsw-art { display: none; }
+  .hub .gsw-c { aspect-ratio: 1 / 1; min-height: 0; justify-content: flex-end; padding: 24px; border-radius: 30px; border-width: 2px; }
+  .hub .gsw-art { display: block; position: absolute; inset: 0; z-index: -2; background-size: cover; background-position: center top; opacity: .55; transform: scale(1.04); transition: transform .8s cubic-bezier(.22,.61,.36,1), opacity .5s; }
+  .hub .gsw-c::before { z-index: -1; background: linear-gradient(180deg, transparent 25%, rgba(8,8,11,.55) 55%, rgba(8,8,11,.95) 100%), repeating-linear-gradient(135deg, rgba(255,255,255,.025) 0 2px, transparent 2px 16px); }
+  .hub .gsw-c.d2 .gsw-art { background-image: url("https://cdn.cloudflare.steamstatic.com/steam/apps/570/library_600x900_2x.jpg"); }
+  .hub .gsw-c.cs .gsw-art { background-image: url("https://cdn.cloudflare.steamstatic.com/steam/apps/730/library_600x900_2x.jpg"); }
+  .hub .gsw-c.dl .gsw-art { background-image: url("https://cdn.cloudflare.steamstatic.com/steam/apps/1422450/library_600x900_2x.jpg"); }
+  .hub .gsw-c:hover .gsw-art { transform: scale(1.12); opacity: .8; }
+  .hub .gsw-c:hover { transform: translateY(-8px) scale(1.015); box-shadow: 0 40px 80px -30px var(--g), 0 0 0 1px color-mix(in srgb, var(--g) 50%, transparent); }
+  .hub .gsw-lg { flex: 0 0 auto; place-items: start; padding: 0 0 14px; } .hub .gsw-lg img { height: 96px; max-width: 80%; opacity: 1; } .hub .gsw-c.cs .gsw-lg img { max-height: 70px; }
+  .hub .gsw-c b { font-size: 28px; } .hub .gsw-c small { font-size: 14.5px; color: rgba(255,255,255,.75); }
+  .hub .gsw-c { animation: gswIn .8s cubic-bezier(.2,.8,.2,1) both; } .hub .gsw-c:nth-child(2) { animation-delay: .1s; } .hub .gsw-c:nth-child(3) { animation-delay: .2s; }
+  .hub .hub-h { animation: gswIn .7s cubic-bezier(.2,.8,.2,1) both; }
+  @keyframes gswIn { from { opacity: 0; transform: translateY(40px) scale(.94); } }
+  /* фон главного меню: герои Dota 2, агенты CS2 и герои Deadlock плывут влево */
+  .hub-bg { display: none; }
+  .hub .hub-bg { display: flex; flex-direction: column; justify-content: center; gap: 2vh; position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; opacity: 0; transition: opacity 1.2s ease; }
+  .hub .hub-bg.on { opacity: 1; }
+  .hub-bg::after { content: ""; position: absolute; inset: 0; background: radial-gradient(70% 60% at 50% 50%, rgba(8,8,11,.55), rgba(8,8,11,.92) 80%), linear-gradient(180deg, rgba(8,8,11,.85), rgba(8,8,11,.35) 30%, rgba(8,8,11,.35) 70%, rgba(8,8,11,.9)); }
+  .hb-row { display: flex; width: max-content; gap: 2vh; animation: hbScroll var(--t, 80s) linear infinite; will-change: transform; }
+  .hb-row img { height: 30vh; width: auto; flex: none; object-fit: contain; opacity: .55; filter: saturate(1.1) drop-shadow(0 10px 20px rgba(0,0,0,.6)); }
+  .hb-row:nth-child(2) img { opacity: .45; } .hb-row:nth-child(3) img { opacity: .4; }
+  @keyframes hbScroll { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .hb-row { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { .hub .gsw-c, .hub .hub-h { animation: none; } }
   .hub-h { display: none; }
   .hub .tabs-wrap, .hub #panes { display: none !important; }
   .hub .hub-h { display: block; margin: clamp(18px, 5vh, 48px) 0 18px; font-family: var(--display); font-weight: 800; font-size: clamp(30px, 5vw, 48px); letter-spacing: -1px; text-align: center; }
-  .hub .gsw { gap: 18px; margin-bottom: 40px; } .hub .gsw-c { min-height: min(440px, 62vh); padding: 26px; } .hub .gsw-lg img { height: 150px; } .hub .gsw-c.cs .gsw-lg img { max-height: 110px; }
-  .hub .gsw-c b { font-size: 24px; } .hub .gsw-c small { font-size: 14.5px; }
-  @media (max-width: 760px) { .hub .gsw { grid-template-columns: 1fr; gap: 12px; } .hub .gsw-c { min-height: 190px; padding: 18px; text-align: left; } .hub .gsw-lg img { height: 84px; } .hub .gsw-c.cs .gsw-lg img { max-height: 64px; } .hub .gsw-c small, .hub .gsw-c .gl { display: block; } .hub .gsw-c .gs { display: none; } }
+  .hub .gsw { gap: 18px; margin-bottom: 40px; max-width: 1100px; margin-left: auto; margin-right: auto; }
+  @media (max-width: 760px) { .hub .gsw { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; } .hub .gsw-c { aspect-ratio: 1 / 1; min-height: 0; padding: 10px; border-radius: 20px; text-align: center; align-items: center; } .hub .gsw-lg { place-items: center; padding: 0 0 6px; } .hub .gsw-lg img { height: 44px; max-width: 90%; } .hub .gsw-c.cs .gsw-lg img { max-height: 30px; } .hub .gsw-c b { font-size: 15px; } .hub .gsw-c small, .hub .gsw-c .gl { display: none; } .hub .gsw-c .gs { display: inline; } .hub .hub-h { font-size: 30px; } .hb-row img { height: 22vh; } }
   /* на страницах игр — компактный переключатель */
   :root:not(.hub) .gsw-c { min-height: 0; flex-direction: row; align-items: center; gap: 14px; padding: 10px 16px; border-radius: 18px; }
   :root:not(.hub) .gsw-lg { flex: none; width: 64px; padding: 0; } :root:not(.hub) .gsw-lg img { height: 40px; max-width: 64px; } :root:not(.hub) .gsw-c.cs .gsw-lg img { max-height: 30px; }
@@ -1889,7 +1914,7 @@
 
 <div class="splash" id="splash" aria-hidden="true"><div class="sp-half sp-top"></div><div class="sp-half sp-bot"></div><div class="sp-c"><div class="sp-mark"><img src="/logo.png" alt=""></div><div class="sp-t"><span>Aegis</span></div><div class="sp-bar"><i></i></div></div></div>
 <script>try { if (sessionStorage.getItem("ub-wipe") === "1") document.documentElement.classList.add("pxcover", "fast"); } catch(e) {}</script>
-<script>try { if (localStorage.getItem("ub-intro") || sessionStorage.getItem("ub-intro")) document.documentElement.classList.add("fast"); else { localStorage.setItem("ub-intro", "1"); sessionStorage.setItem("ub-intro", "1"); } } catch(e) {}</script>
+<script>try { if (sessionStorage.getItem("ub-intro")) document.documentElement.classList.add("fast"); else sessionStorage.setItem("ub-intro", "1"); } catch(e) {}</script>
 <div class="wrap" id="top">
   <nav class="nav" id="topbar">
     <a class="logo" href="/" id="logoBtn" title="Обновить сайт"><span class="mark lg"><img src="/logo.png" alt="" width="64" height="64"></span><span class="lt">Aegis</span></a>
@@ -1911,11 +1936,12 @@
     <button type="button" class="burger" id="burger" aria-label="Меню" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
   </nav>
 
+  <div class="hub-bg" id="hubBg" aria-hidden="true"></div>
   <h1 class="hub-h">Выбери игру</h1>
   <nav class="gsw" id="gsw" aria-label="Игры">
-    <a class="gsw-c d2" href="/dota" data-g="dota" aria-current="false"><span class="gsw-lg"><img alt="" src="/games/dota.png"></span><span><b>Dota 2</b><small>Сборки 1x6, мета, топ MMR</small></span></a>
-    <a class="gsw-c cs" href="/cs" data-g="cs" aria-current="false"><span class="gsw-lg"><img alt="" src="/games/cs.png"></span><span><b><span class="gl">Counter-Strike 2</span><span class="gs">CS2</span></b><small>Цены скинов, новости, рейтинг команд</small></span></a>
-    <a class="gsw-c dl" href="/deadlock" data-g="deadlock" aria-current="false"><span class="gsw-lg"><img alt="" src="/games/deadlock.png"></span><span><b>Deadlock</b><small>Герои и сборки по статистике</small></span></a>
+    <a class="gsw-c d2" href="/dota" data-g="dota" aria-current="false"><span class="gsw-art" aria-hidden="true"></span><span class="gsw-lg"><img alt="" src="/games/dota.png"></span><span><b>Dota 2</b><small>Сборки 1x6, мета, топ MMR</small></span></a>
+    <a class="gsw-c cs" href="/cs" data-g="cs" aria-current="false"><span class="gsw-art" aria-hidden="true"></span><span class="gsw-lg"><img alt="" src="/games/cs.png"></span><span><b><span class="gl">Counter-Strike 2</span><span class="gs">CS2</span></b><small>Цены скинов, новости, рейтинг команд</small></span></a>
+    <a class="gsw-c dl" href="/deadlock" data-g="deadlock" aria-current="false"><span class="gsw-art" aria-hidden="true"></span><span class="gsw-lg"><img alt="" src="/games/deadlock.png"></span><span><b>Deadlock</b><small>Герои и сборки по статистике</small></span></a>
   </nav>
   <div class="tabs-wrap">
     <div class="tabs" role="tablist" aria-label="Разделы">
@@ -2689,6 +2715,17 @@ document.getElementById("gameBtn").onclick = () => GAME.open();
   document.addEventListener("visibilitychange", go);
 })();
 /* ---------- заставка ---------- */
+/* фон главного меню: ряды героев трёх игр, плывут влево (картинки грузятся только на главной) */
+(() => { const bg = document.getElementById("hubBg"); if (!bg) return;
+  const fill = () => { if (bg.dataset.on || !document.documentElement.classList.contains("hub")) return; bg.dataset.on = "1";
+    const pick = (dir, n) => Array.from({ length: n }, (_, i) => `/bg/${dir}/${i}.webp`).sort(() => Math.random() - .5);
+    const d2 = pick("d2", 54), cs = pick("cs", 24), dl = pick("dl", 42);
+    const mix = k => { const out = []; for (let i = 0; i < 8; i++) out.push(d2[(k * 8 + i) % d2.length], cs[(k * 8 + i) % cs.length], dl[(k * 8 + i) % dl.length]); return out; };
+    bg.innerHTML = [0, 1, 2].map(k => { const imgs = mix(k).map(u => `<img alt="" loading="lazy" decoding="async" src="${u}">`).join("");
+      return `<div class="hb-row" style="--t:${[90, 110, 100][k]}s;animation-delay:-${k * 17}s">${imgs}${imgs}</div>`; }).join("");
+    requestAnimationFrame(() => bg.classList.add("on")); };
+  if (document.readyState === "complete") fill(); else addEventListener("load", fill);
+  addEventListener("hashchange", fill); })();
 (() => { const sp = document.getElementById("splash"); if (!sp) return;
   const done = () => { document.documentElement.classList.add("introdone"); sp.remove(); };
   if (document.documentElement.classList.contains("fast")) { done(); return; }
