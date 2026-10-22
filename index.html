@@ -1569,8 +1569,9 @@
   .lad-pc-bar { display: block; width: 100%; height: 26px; margin-top: 10px; background: linear-gradient(180deg, color-mix(in srgb, var(--pc) 35%, transparent), transparent); } .lad-pc.p1 .lad-pc-bar { height: 44px; }
   .lad-upd { margin: 6px 0 12px; font-size: 12.5px; color: var(--muted); text-align: center; }
   .lad-list { display: grid; gap: 5px; }
+  .lad-pick { padding: 4px 0 8px; }
   .lad-row { display: flex; align-items: center; gap: 10px; padding: 7px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-soft); min-width: 0; }
-  .lad-row.pro { cursor: pointer; transition: border-color .2s; } .lad-row.pro:hover { border-color: color-mix(in srgb, var(--t1) 55%, var(--line)); }
+  .lad-row[role="button"] { cursor: pointer; transition: border-color .2s; } .lad-row[role="button"]:hover { border-color: color-mix(in srgb, var(--t1) 55%, var(--line)); }
   .lad-n { width: 44px; flex: none; font-family: var(--display); font-weight: 800; font-size: 16px; text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
   .lad-row.p1 .lad-n, .lad-row.p2 .lad-n, .lad-row.p3 .lad-n { color: #f3c35a; }
   .lad-md { width: 34px; height: 34px; object-fit: contain; flex: none; }
@@ -6385,11 +6386,23 @@ const LADDER = (() => {
         <p class="db-note">Данные — официальный лидерборд Valve, обновляется несколько раз в день. Valve не показывает сами цифры MMR — только место игрока: место 1 — самый высокий MMR в регионе. Значок: топ-10, топ-100 и Титан.</p>`;
       box.querySelector("#ladRegs").onclick = e => { const b = e.target.closest("[data-r]"); if (!b) return; st.reg = b.dataset.r; st.show = 100; box.querySelectorAll("[data-r]").forEach(x => x.setAttribute("aria-pressed", x === b)); load(); };
       let t = 0; box.querySelector("#ladQ").oninput = e => { clearTimeout(t); t = setTimeout(() => { st.q = e.target.value.trim().toLowerCase(); st.show = 100; draw(); }, 150); };
-      box.onclick = e => { const p = e.target.closest("[data-acc]"); if (p){ D2.player(p.dataset.acc); return; } if (e.target.closest("#ladMore")){ st.show += 100; draw(); } const r = e.target.closest("[data-goreg]"); if (r){ box.querySelector(`[data-r="${r.dataset.goreg}"]`).click(); } };
+      box.onclick = e => { const p = e.target.closest("[data-acc]"); if (p){ D2.player(p.dataset.acc); return; } const nk = e.target.closest("[data-nick]"); if (nk && nk.dataset.nick){ find(nk); return; } if (e.target.closest("#ladMore")){ st.show += 100; draw(); } const r = e.target.closest("[data-goreg]"); if (r){ box.querySelector(`[data-r="${r.dataset.goreg}"]`).click(); } };
       D2.get("pros").then(list => { pros = new Map((Array.isArray(list) ? list : []).map(p => [String(p.n).toLowerCase(), p])); if (data[st.reg]) draw(); drawTops(); }).catch(() => {});
       J("ladderTop").then(x => { top = x; drawTops(); }).catch(() => { const el = box.querySelector("#ladTops"); if (el) el.innerHTML = ""; });
     }
     load();
+  }
+  // у Valve в рейтинге нет Steam ID — ищем ник в OpenDota; один точный ник открываем сразу, иначе даём выбрать
+  async function find(el){
+    const nick = el.dataset.nick, at = el.closest(".lad-pod") || el, nx = at.nextElementSibling;
+    document.querySelectorAll(".lad-pick").forEach(x => x.remove()); if (nx && nx.classList.contains("lad-pick") && nx.dataset.nick === nick) return;
+    const box = document.createElement("div"); box.className = "lad-pick"; box.dataset.nick = nick; box.innerHTML = `<div class="feed-sk"></div>`; at.after(box);
+    try { const rs = await fetch(`/api/dota?q=search&name=${encodeURIComponent(nick)}`).then(r => { if (!r.ok) throw 0; return r.json(); });
+      const ex = rs.filter(p => String(p.personaname || "").trim().toLowerCase() === nick.toLowerCase());
+      if (ex.length === 1){ box.remove(); D2.player(ex[0].account_id); return; }
+      const c = (ex.length ? ex : rs).sort((a, b) => String(b.last_match_time || "").localeCompare(String(a.last_match_time || "")));
+      box.innerHTML = c.length ? `<p class="db-note">Valve не даёт Steam ID игроков рейтинга. Похожие профили — свежие матчи сверху:</p><div class="d2-plist">${c.map(p => `<button type="button" data-acc="${p.account_id}"><img alt="" loading="lazy" src="${esc(p.avatarfull || "")}"><span><b translate="no">${esc(p.personaname || "—")}</b><small>ID ${p.account_id}${p.last_match_time ? " · последний матч " + new Date(p.last_match_time).toLocaleDateString("ru-RU") : ""}</small></span></button>`).join("")}</div>` : `<div class="gempty">OpenDota не знает игрока «${esc(nick)}» — скорее всего, у него закрыта история матчей.</div>`;
+    } catch(_) { box.innerHTML = `<div class="gempty">Поиск сейчас не отвечает. Попробуй ещё раз.</div>`; }
   }
   function drawTops(){
     const el = document.getElementById("ladTops"); if (!el || !top) return;
@@ -6405,7 +6418,7 @@ const LADDER = (() => {
   }
   function row(p){
     const pr = proOf(p[1]), n = p[0];
-    return `<div class="lad-row${n <= 3 ? " p" + n : ""}${pr ? " pro" : ""}"${pr ? ` data-acc="${pr.id}" role="button" tabindex="0"` : ""}><span class="lad-n">${n}</span>${medal(n)}
+    return `<div class="lad-row${n <= 3 ? " p" + n : ""}${pr ? " pro" : ""}"${pr ? ` data-acc="${pr.id}"` : ` data-nick="${esc(p[1].trim())}"`} role="button" tabindex="0"><span class="lad-n">${n}</span>${medal(n)}
       <span class="lad-m"><b translate="no">${esc(p[1].trim()) || "—"}</b><small translate="no">${p[2] ? esc(p[2]) : ""}${pr && pr.team ? (p[2] ? " · " : "") + esc(pr.team) : ""}</small></span>
       ${pr ? `<span class="lad-pro">PRO</span>` : ""}${n <= 10 ? `<span class="lad-tag t10">ТОП-10</span>` : n <= 100 ? `<span class="lad-tag t100">ТОП-100</span>` : ""}</div>`;
   }
@@ -6414,7 +6427,7 @@ const LADDER = (() => {
     const pod = document.getElementById("ladPod"), list = document.getElementById("ladList");
     const rows = st.q ? d.list.filter(p => p[1].toLowerCase().includes(st.q) || p[2].toLowerCase() === st.q) : d.list;
     if (!st.q && d.list.length >= 3){ const R = REG.find(x => x[0] === st.reg);
-      pod.innerHTML = `<div class="lad-pod">${[1, 0, 2].map(i => { const p = d.list[i], pr = proOf(p[1]); return `<div class="lad-pc p${i + 1}"${pr ? ` data-acc="${pr.id}" role="button" tabindex="0"` : ""}><span class="lad-pc-m">${medal(p[0])}</span><b class="lad-pc-n">#${p[0]}</b><b class="lad-pc-name" translate="no">${esc(p[1])}</b><small translate="no">${p[2] ? esc(p[2]) : pr && pr.team ? esc(pr.team) : ""}</small><i class="lad-pc-bar"></i></div>`; }).join("")}</div>
+      pod.innerHTML = `<div class="lad-pod">${[1, 0, 2].map(i => { const p = d.list[i], pr = proOf(p[1]); return `<div class="lad-pc p${i + 1}"${pr ? ` data-acc="${pr.id}"` : ` data-nick="${esc(p[1].trim())}"`} role="button" tabindex="0"><span class="lad-pc-m">${medal(p[0])}</span><b class="lad-pc-n">#${p[0]}</b><b class="lad-pc-name" translate="no">${esc(p[1])}</b><small translate="no">${p[2] ? esc(p[2]) : pr && pr.team ? esc(pr.team) : ""}</small><i class="lad-pc-bar"></i></div>`; }).join("")}</div>
         <p class="lad-upd">${R[2]} ${R[1]} · обновлено ${d.t ? ago(d.t) : ""} · всего мест: ${d.list.length.toLocaleString("ru-RU")}</p>`; }
     else pod.innerHTML = "";
     const from = st.q ? 0 : 3, part = rows.slice(from, from + st.show);
