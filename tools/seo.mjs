@@ -11,8 +11,8 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;",
 const good = h => { const B = BUILDS[h.slug] || {}; return Object.keys(B).sort((a, b) => a - b).filter(k => !B[k].e); };
 const today = new Date().toISOString().slice(0, 10);
 
-// ---------- 1) /dota2 и /chc — копии главной со своими мета-тегами и стартовой вкладкой ----------
-for (const f of ["dota2.html", "chc.html"]) {
+// ---------- 1) /dota2, /chc, /dota, /cs, /deadlock — копии главной со своими мета-тегами и стартовой вкладкой ----------
+for (const f of ["dota2.html", "chc.html", "dota.html", "cs.html", "deadlock.html"]) {
   const old = fs.readFileSync(R + f, "utf8").replace(/\r\n/g, "\n").split("\n"), out = idx.split("\n");
   const pats = [/^<title>/, /^<meta name="description"/, /^<link rel="canonical"/, /property="og:url"/, /property="og:title"/, /property="og:description"/, /property="og:image"/, /name="twitter:title"/, /name="twitter:description"/, /name="twitter:image"/];
   for (const p of pats) { const o = old.find(l => p.test(l)), n = out.findIndex(l => p.test(l)); if (o && n >= 0) out[n] = o; }
@@ -125,7 +125,7 @@ ${foot}
 const u = (loc, f, p) => `  <url><loc>${SITE}${loc}</loc><lastmod>${today}</lastmod><changefreq>${f}</changefreq><priority>${p}</priority></url>`;
 fs.writeFileSync(R + "sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${[u("/", "daily", "1.0"), u("/heroes", "weekly", "0.9"), u("/dota2", "daily", "0.9"), u("/chc", "weekly", "0.9"), ...urls.map(x => u(x, "weekly", "0.8")), u("/privacy", "yearly", "0.2")].join("\n")}
+${[u("/", "daily", "1.0"), u("/dota", "daily", "0.9"), u("/cs", "daily", "0.9"), u("/deadlock", "daily", "0.9"), u("/heroes", "weekly", "0.9"), u("/dota2", "daily", "0.9"), u("/chc", "weekly", "0.9"), ...urls.map(x => u(x, "weekly", "0.8")), u("/privacy", "yearly", "0.2")].join("\n")}
 </urlset>
 `);
 console.log("heroes:", urls.length);

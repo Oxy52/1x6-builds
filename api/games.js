@@ -6,6 +6,7 @@
 //   GET /api/games?q=dlItems&lang=ru         -> предметы магазина: id -> имя, картинка, слот, тир
 //   GET /api/games?q=dlHero&id=1             -> сборка героя по статистике: основа и лучшие по винрейту
 //   GET /api/games?q=dlOrder&id=1&lang=ru    -> самый частый порядок прокачки умений
+//   GET /api/games?q=csMarket&cat=rifle|sniper|pistol|knife|gloves|smg&start=0 | &s=<поиск> -> цены скинов: Steam Market, Lis-skins (+ ссылка на CS.money), курсы валют
 // Новости CS2 и Deadlock: /api/news?app=cs|deadlock
 const UA = { Accept: "application/json", "User-Agent": "1x6-builds (+https://1x6-eta.vercel.app)" };
 const VRS = "ValveSoftware/counter-strike_regional_standings";
@@ -14,7 +15,7 @@ const DL = "https://api.deadlock-api.com/v1";
 // язык сайта -> язык Valve в Deadlock (как в api/news.js)
 const LNG = { ru: "russian", uk: "ukrainian", en: "english", es: "spanish", pt: "brazilian", de: "german", pl: "polish", tr: "turkish",
   fr: "french", it: "italian", kk: "russian", be: "russian", nl: "english", zh: "schinese", ja: "japanese", ko: "koreana" };
-const TTL = { csTeams: 21600, csTeam: 21600, csMatches: 21600, dlHeroes: 21600, dlHero: 21600, dlOrder: 43200, dlItems: 86400 };
+const TTL = { csTeams: 21600, csTeam: 21600, csMatches: 21600, dlHeroes: 21600, dlHero: 21600, dlOrder: 43200, dlItems: 86400, csMarket: 3600 };
 
 async function get(url, type = "json") {
   const r = await fetch(url, { headers: UA, signal: AbortSignal.timeout(20000) });
@@ -62,6 +63,26 @@ async function csMatches() {
     out.push({ d: m.d, a: m.team, b: m.vs, win: m.w ? m.team : m.vs });
   }
   return { date, matches: out.slice(0, 40) };
+}
+
+// ---------- CS2: сравнение цен скинов (Steam Market + Lis-skins; у CS.money нет открытого API — только ссылка) ----------
+const MEM = {};
+const memo = (k, ttl, fn) => { const m = MEM[k]; if (m && Date.now() - m.t < ttl) return m.p; const p = fn(); MEM[k] = { t: Date.now(), p }; p.catch(() => { delete MEM[k]; }); return p; };
+// прайс Lis-skins (официальная выгрузка, ~5 МБ): название -> цена в $, ссылка, сколько лотов
+const lisMap = () => memo("lis", 30 * 60e3, async () => new Map((await get("https://lis-skins.com/market_export_json/csgo.json")).map(x => [x.name, x])));
+const rates = () => memo("fx", 6 * 3600e3, async () => { const j = await get("https://open.er-api.com/v6/latest/USD"); return { usd: 1, uah: j.rates.UAH, rub: j.rates.RUB, eur: j.rates.EUR, t: j.time_last_update_unix }; });
+const CAT = { rifle: "tag_CSGO_Type_Rifle", sniper: "tag_CSGO_Type_SniperRifle", pistol: "tag_CSGO_Type_Pistol", knife: "tag_CSGO_Type_Knife", gloves: "tag_Type_Hands", smg: "tag_CSGO_Type_SMG" };
+async function csMarket(cat, query, start) {
+  const u = new URL("https://steamcommunity.com/market/search/render/");
+  Object.entries({ appid: 730, norender: 1, count: 10, start, sort_column: "popular", sort_dir: "desc" }).forEach(([k, v]) => u.searchParams.set(k, v));
+  if (query) u.searchParams.set("query", query); else u.searchParams.append("category_730_Type[]", CAT[cat] || CAT.rifle);
+  const [st, lis, fx] = await Promise.all([get(u.href), lisMap().catch(() => new Map()), rates().catch(() => null)]);
+  const items = (st.results || []).map(r => { const l = lis.get(r.hash_name); const ad = r.asset_description || {};
+    return { n: r.hash_name, img: ad.icon_url ? `https://community.cloudflare.steamstatic.com/economy/image/${ad.icon_url}/160fx120f` : "", col: ad.name_color || "",
+      steam: r.sell_price ? r.sell_price / 100 : null, steamN: r.sell_listings || 0, steamUrl: `https://steamcommunity.com/market/listings/730/${encodeURIComponent(r.hash_name)}`,
+      lis: l ? l.price : null, lisN: l ? l.count : 0, lisUrl: l ? l.url : `https://lis-skins.com/market/csgo/?query=${encodeURIComponent(r.hash_name)}`,
+      csmUrl: `https://cs.money/market/buy/?search=${encodeURIComponent(r.hash_name.replace(/ \([^)]*\)$/, ""))}` }; });
+  return { fx, total: st.total_count || 0, items };
 }
 
 async function dlHeroes(lang) {
@@ -113,6 +134,8 @@ module.exports = async (req, res) => {
     else if (q === "csTeam") out = await csTeam(String(req.query.p || ""));
     else if (q === "dlHeroes") out = await dlHeroes(lang);
     else if (q === "dlItems") out = await dlItems(lang);
+    else if (q === "csMarket") { const qs = String(req.query.s || "").trim().slice(0, 60), start = Math.min(90, Math.max(0, +req.query.start || 0) - (+req.query.start || 0) % 10);
+      if (qs && qs.length < 2) return fail(400, "bad_query"); out = await csMarket(String(req.query.cat || "rifle"), qs, start); }
     else { const id = +req.query.id; if (!(id > 0 && id < 1000)) return fail(400, "bad_id"); out = q === "dlOrder" ? await dlOrder(id, lang) : await dlHero(id); }
     res.setHeader("Cache-Control", `public, s-maxage=${TTL[q]}, stale-while-revalidate=86400`);
     res.status(200).json(out);

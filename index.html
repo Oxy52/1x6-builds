@@ -1601,18 +1601,32 @@
   .gsw-c:hover::after { transform: translateX(60%); }
   .gsw-c.cs { --g: #f5a524; } .gsw-c.dl { --g: #d9c48f; }
   .gsw-c:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--g) 55%, var(--line)); box-shadow: 0 24px 50px -28px var(--g); }
-  .gsw-c[aria-pressed="true"] { border-color: color-mix(in srgb, var(--g) 80%, var(--line)); box-shadow: 0 0 0 1px color-mix(in srgb, var(--g) 35%, transparent), 0 26px 60px -26px var(--g); }
-  .gsw-c[aria-pressed="true"]::before { background: repeating-linear-gradient(135deg, rgba(255,255,255,.035) 0 2px, transparent 2px 16px), radial-gradient(60% 40% at 50% 100%, color-mix(in srgb, var(--g) 25%, transparent), transparent); }
+  .gsw-c[aria-current="page"] { border-color: color-mix(in srgb, var(--g) 80%, var(--line)); box-shadow: 0 0 0 1px color-mix(in srgb, var(--g) 35%, transparent), 0 26px 60px -26px var(--g); }
+  .gsw-c[aria-current="page"]::before { background: repeating-linear-gradient(135deg, rgba(255,255,255,.035) 0 2px, transparent 2px 16px), radial-gradient(60% 40% at 50% 100%, color-mix(in srgb, var(--g) 25%, transparent), transparent); }
   .gsw-lg { flex: 1; display: grid; place-items: center; padding: 10px 0 18px; }
   .gsw-lg img { width: auto; max-width: 70%; height: 128px; object-fit: contain; filter: drop-shadow(0 14px 30px color-mix(in srgb, var(--g) 55%, transparent)); transition: transform .5s cubic-bezier(.22,.61,.36,1), opacity .35s; }
   .gsw-c.cs .gsw-lg img { height: auto; max-width: 84%; max-height: 96px; }
   .gsw-c:hover .gsw-lg img { transform: scale(1.07) translateY(-3px); }
-  .gsw-c:not([aria-pressed="true"]) .gsw-lg img { opacity: .78; } .gsw-c:hover .gsw-lg img { opacity: 1; }
+  .gsw-c:not([aria-current="page"]) .gsw-lg img { opacity: .78; } .gsw-c:hover .gsw-lg img { opacity: 1; }
   .gsw-c > span:last-child { min-width: 0; } .gsw-c b { display: block; font-family: var(--display); font-size: 21px; letter-spacing: -.3px; color: var(--fg); }
   .gsw-c small { display: block; margin-top: 4px; font-size: 13.5px; line-height: 1.4; }
   .gsw-c .gs { display: none; }
   @media (max-width: 760px) { .gsw-c { min-height: 230px; padding: 16px; } .gsw-lg img { height: 92px; } .gsw-c b { font-size: 17px; } }
   @media (max-width: 600px) { .gsw { gap: 8px; } .gsw-c { min-height: 0; padding: 12px 6px 10px; border-radius: 18px; text-align: center; } .gsw-lg { padding: 4px 0 8px; } .gsw-lg img { height: 46px; } .gsw-c.cs .gsw-lg img { max-height: 34px; } .gsw-c b { font-size: 14px; } .gsw-c small, .gsw-c .gl { display: none; } .gsw-c .gs { display: inline; } }
+  .hub-h { display: none; }
+  .hub .tabs-wrap, .hub #panes { display: none !important; }
+  .hub .hub-h { display: block; margin: clamp(18px, 5vh, 48px) 0 18px; font-family: var(--display); font-weight: 800; font-size: clamp(30px, 5vw, 48px); letter-spacing: -1px; text-align: center; }
+  .hub .gsw { gap: 18px; margin-bottom: 40px; } .hub .gsw-c { min-height: min(440px, 62vh); padding: 26px; } .hub .gsw-lg img { height: 150px; } .hub .gsw-c.cs .gsw-lg img { max-height: 110px; }
+  .hub .gsw-c b { font-size: 24px; } .hub .gsw-c small { font-size: 14.5px; }
+  @media (max-width: 760px) { .hub .gsw { grid-template-columns: 1fr; gap: 12px; } .hub .gsw-c { min-height: 190px; padding: 18px; text-align: left; } .hub .gsw-lg img { height: 84px; } .hub .gsw-c.cs .gsw-lg img { max-height: 64px; } .hub .gsw-c small, .hub .gsw-c .gl { display: block; } .hub .gsw-c .gs { display: none; } }
+  /* на страницах игр — компактный переключатель */
+  :root:not(.hub) .gsw-c { min-height: 0; flex-direction: row; align-items: center; gap: 14px; padding: 10px 16px; border-radius: 18px; }
+  :root:not(.hub) .gsw-lg { flex: none; width: 64px; padding: 0; } :root:not(.hub) .gsw-lg img { height: 40px; max-width: 64px; } :root:not(.hub) .gsw-c.cs .gsw-lg img { max-height: 30px; }
+  :root:not(.hub) .gsw-c b { font-size: 16px; } :root:not(.hub) .gsw-c small { font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  :root:not(.hub) .gsw-c[aria-current="page"] { border-color: color-mix(in srgb, var(--g) 80%, var(--line)); box-shadow: 0 0 0 1px color-mix(in srgb, var(--g) 35%, transparent), 0 16px 36px -24px var(--g); }
+  :root:not(.hub) .gsw-c:not([aria-current="page"]) .gsw-lg img { opacity: .75; }
+  @media (max-width: 600px) { :root:not(.hub) .gsw-c { flex-direction: column; gap: 4px; padding: 8px 4px; } :root:not(.hub) .gsw-lg { width: auto; } :root:not(.hub) .gsw-lg img { height: 30px; } :root:not(.hub) .gsw-c.cs .gsw-lg img { max-height: 22px; } :root:not(.hub) .gsw-c b { font-size: 13px; } }
+  a.gsw-c { text-decoration: none; }
   body[data-game="cs"] .tabs-wrap, body[data-game="deadlock"] .tabs-wrap { display: none; }
   .g-sub { margin: 18px 0 14px; } .g-news { color: inherit; text-decoration: none; }
   [data-pane="cs"] .ncard { --nc: #f5a524; } [data-pane="deadlock"] .ncard { --nc: #4fd1b5; }
@@ -1652,6 +1666,20 @@
   .g-full h1, .g-full h2, .g-full h3 { color: var(--fg); font-family: var(--display); font-size: 18px; margin: 18px 0 8px; } .g-full b { color: var(--fg); }
   .g-full a { color: var(--nc); } .g-full blockquote { margin: 10px 0; padding: 8px 14px; border-left: 3px solid var(--nc); background: rgba(255,255,255,.03); border-radius: 0 10px 10px 0; }
   .g-news { cursor: pointer; }
+  .mk-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 10px; } .mk-cats { margin: 0; } .mk-q { flex: 1 1 260px; min-width: 0; }
+  .mk-legend { display: flex; gap: 14px; flex-wrap: wrap; margin: 4px 0 10px; color: var(--muted-2); font-size: 12.5px; } .mk-legend span { display: inline-flex; align-items: center; gap: 6px; } .mk-legend img { width: 18px; height: 18px; border-radius: 5px; }
+  .mk-list { display: grid; gap: 8px; }
+  .mk-it { --rc: #b0c3d9; display: grid; grid-template-columns: 112px minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 10px 12px; border-radius: 18px; border: 1px solid var(--line); background: linear-gradient(90deg, color-mix(in srgb, var(--rc) 9%, transparent), transparent 40%), var(--bg-soft); }
+  .mk-img { height: 76px; display: grid; place-items: center; border-radius: 12px; background: radial-gradient(60% 70% at 50% 60%, color-mix(in srgb, var(--rc) 28%, transparent), transparent 70%); border-bottom: 2px solid color-mix(in srgb, var(--rc) 70%, transparent); }
+  .mk-img img { max-width: 100%; max-height: 72px; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(0,0,0,.5)); }
+  .mk-n { min-width: 0; } .mk-n b { display: block; font-size: 15px; font-weight: 700; line-height: 1.3; } .mk-save { display: inline-block; margin-top: 5px; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #4ade80; background: rgba(74,222,128,.1); }
+  .mk-ps { display: flex; gap: 6px; }
+  .mk-p { display: flex; align-items: center; gap: 8px; min-width: 128px; padding: 8px 12px 8px 8px; border-radius: 13px; border: 1px solid var(--line); background: rgba(255,255,255,.03); color: var(--fg); text-decoration: none; transition: border-color .2s, transform .2s, background .2s; }
+  .mk-p:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.25); background: rgba(255,255,255,.06); }
+  .mk-p img { flex: none; width: 28px; height: 28px; border-radius: 8px; } .mk-p small { display: block; font-size: 11px; color: var(--muted-2); white-space: nowrap; } .mk-p b { display: block; font-size: 15px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .mk-p.csm b { font-size: 13.5px; color: #ff5fb8; } .mk-p.best { border-color: rgba(74,222,128,.55); background: rgba(74,222,128,.07); } .mk-p.best b { color: #4ade80; }
+  @media (max-width: 900px) { .mk-it { grid-template-columns: 84px minmax(0, 1fr); } .mk-ps { grid-column: 1 / -1; } .mk-p { flex: 1; min-width: 0; } .mk-img { height: 60px; } .mk-img img { max-height: 56px; } }
+  @media (max-width: 480px) { .mk-p { flex-direction: column; gap: 3px; padding: 7px 4px; text-align: center; } .mk-p b { font-size: 13.5px; } }
   .dl-sub { margin: 18px 0 8px; font-size: 14px; color: var(--muted); font-weight: 700; }
   .dl-items { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 6px; }
   .dl-it { --s: #f0a040; display: flex; align-items: center; gap: 10px; padding: 6px 10px 6px 6px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-soft); min-width: 0; }
@@ -1848,6 +1876,7 @@
 </style>
 </head>
 <body>
+<script>if (!window.START_TAB && location.pathname === "/" && !location.hash && !location.search) document.documentElement.classList.add("hub");</script>
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&family=Press+Start+2P&display=swap">
 
@@ -1875,10 +1904,11 @@
     <button type="button" class="burger" id="burger" aria-label="Меню" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
   </nav>
 
+  <h1 class="hub-h">Выбери игру</h1>
   <nav class="gsw" id="gsw" aria-label="Игры">
-    <button type="button" class="gsw-c d2" data-g="dota" aria-pressed="true"><span class="gsw-lg"><img alt="" src="/games/dota.png"></span><span><b>Dota 2</b><small>Сборки 1x6, мета, топ MMR</small></span></button>
-    <button type="button" class="gsw-c cs" data-g="cs" aria-pressed="false"><span class="gsw-lg"><img alt="" src="/games/cs.png"></span><span><b><span class="gl">Counter-Strike 2</span><span class="gs">CS2</span></b><small>Новости, рейтинг команд, матчи</small></span></button>
-    <button type="button" class="gsw-c dl" data-g="deadlock" aria-pressed="false"><span class="gsw-lg"><img alt="" src="/games/deadlock.png"></span><span><b>Deadlock</b><small>Герои и сборки по статистике</small></span></button>
+    <a class="gsw-c d2" href="/dota" data-g="dota" aria-current="false"><span class="gsw-lg"><img alt="" src="/games/dota.png"></span><span><b>Dota 2</b><small>Сборки 1x6, мета, топ MMR</small></span></a>
+    <a class="gsw-c cs" href="/cs" data-g="cs" aria-current="false"><span class="gsw-lg"><img alt="" src="/games/cs.png"></span><span><b><span class="gl">Counter-Strike 2</span><span class="gs">CS2</span></b><small>Цены скинов, новости, рейтинг команд</small></span></a>
+    <a class="gsw-c dl" href="/deadlock" data-g="deadlock" aria-current="false"><span class="gsw-lg"><img alt="" src="/games/deadlock.png"></span><span><b>Deadlock</b><small>Герои и сборки по статистике</small></span></a>
   </nav>
   <div class="tabs-wrap">
     <div class="tabs" role="tablist" aria-label="Разделы">
@@ -1966,8 +1996,8 @@
   </div>
   <div class="tabpane" data-pane="cs" role="tabpanel" hidden>
     <section class="section first">
-      <div class="section-head"><h2>Counter-Strike 2</h2><p>Официальные новости, рейтинг команд Valve и последние матчи про-сцены.</p></div>
-      <div class="rkchips g-sub" data-g="cs" role="group" aria-label="Раздел"><button type="button" class="rkc" data-v="news" aria-pressed="true">Новости</button><button type="button" class="rkc" data-v="teams" aria-pressed="false">Топ команд</button><button type="button" class="rkc" data-v="matches" aria-pressed="false">Матчи</button></div>
+      <div class="section-head"><h2>Counter-Strike 2</h2><p>Сравнение цен скинов на CS.money, Lis-skins и в Steam, официальные новости, рейтинг команд Valve и последние матчи про-сцены.</p></div>
+      <div class="rkchips g-sub" data-g="cs" role="group" aria-label="Раздел"><button type="button" class="rkc" data-v="market" aria-pressed="true">Скины</button><button type="button" class="rkc" data-v="news" aria-pressed="false">Новости</button><button type="button" class="rkc" data-v="teams" aria-pressed="false">Топ команд</button><button type="button" class="rkc" data-v="matches" aria-pressed="false">Матчи</button></div>
       <div id="csBox" class="g-box"></div>
     </section>
   </div>
@@ -6185,7 +6215,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=8").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=9").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
@@ -6523,8 +6553,8 @@ const GAMES = (() => {
   const sk = n => `<div class="feed-sk"></div>`.repeat(n);
   const err = `<div class="gempty">Не удалось загрузить данные. Попробуй чуть позже.</div>`;
   const day = s => { try { return new Date(s).toLocaleDateString(L(), { day: "numeric", month: "short" }); } catch(e) { return String(s).slice(0, 10); } };
-  const st = { cs: "news", deadlock: "heroes", sort: "name", hero: 0 };
-  const VIEWS = { cs: { news: el => news(el, "cs"), teams: csTeams, matches: csMatches }, deadlock: { heroes: dlHeroes, news: el => news(el, "deadlock") } };
+  const st = { cs: "market", deadlock: "heroes", sort: "name", hero: 0, mcat: "rifle", mq: "", mstart: 0 };
+  const VIEWS = { cs: { market, news: el => news(el, "cs"), teams: csTeams, matches: csMatches }, deadlock: { heroes: dlHeroes, news: el => news(el, "deadlock") } };
   let wired = false;
 
   function open(g){
@@ -6533,7 +6563,10 @@ const GAMES = (() => {
       const nw = e => { const n = e.target.closest("[data-gid]"); if (n){ openNews(n.dataset.app, n.dataset.gid); return true; } };
       const key = e => { if ((e.key === "Enter" || e.key === " ") && e.target.matches("[data-gid], [data-p], [data-h]")){ e.preventDefault(); e.target.click(); } };
       const csBox = document.getElementById("csBox"), dlBox = document.getElementById("dlBox");
-      csBox.onclick = e => { if (nw(e)) return; const t = e.target.closest("[data-p]"); if (t) team(t); };
+      csBox.onclick = e => { if (nw(e)) return; const t = e.target.closest("[data-p]"); if (t) team(t);
+        const c = e.target.closest("[data-mc]"); if (c){ st.mcat = c.dataset.mc; st.mq = ""; st.mstart = 0; market(csBox); }
+        if (e.target.closest("#mkMore")){ st.mstart += 10; mkLoad(true); } };
+      document.addEventListener("curchange", () => { if (curTab === "cs" && st.cs === "market") mkDraw(); });
       dlBox.onclick = e => { if (nw(e)) return; const s = e.target.closest("[data-s]"); if (s){ st.sort = s.dataset.s; return draw("deadlock"); }
         const h = e.target.closest("[data-h]"); if (h){ st.hero = +h.dataset.h; draw("deadlock"); toTop(dlBox); return; }
         if (e.target.closest("#dlBack")){ st.hero = 0; draw("deadlock"); toTop(dlBox); } };
@@ -6580,6 +6613,47 @@ const GAMES = (() => {
       // первая картинка текста обычно та же, что в шапке
       box.innerHTML = (f.h || n.x || "").replace(/^(<p>)?<img [^>]*>(<\/p>)?(<br>)*/, m => n.img && m.includes(n.img) ? "" : m);
     } catch(e) { if (sh.isConnected) box.innerHTML = `<p>${n.x || ""}</p>`; }
+  }
+
+  // ---------- торговая площадка: одна и та же вещь на CS.money, Lis-skins и в Steam ----------
+  const MC = [["rifle", "Винтовки"], ["sniper", "Снайперские"], ["pistol", "Пистолеты"], ["smg", "ПП"], ["knife", "Ножи"], ["gloves", "Перчатки"]];
+  const SYM = { uah: "₴", usd: "$", rub: "₽", eur: "€" };
+  let MK = { items: [], fx: null, total: 0 }, mkT = 0;
+  const cur = () => typeof CURSEL !== "undefined" ? CURSEL.get() : "usd";
+  const money = v => { if (v == null) return "—"; const c = MK.fx ? cur() : "usd", x = v * (MK.fx ? MK.fx[c] || 1 : 1);
+    return `${x.toLocaleString(L(), { maximumFractionDigits: x >= 100 ? 0 : 2, minimumFractionDigits: x >= 100 ? 0 : 2 })} ${SYM[c]}`; };
+  function market(el){
+    el.innerHTML = `<div class="mk-bar"><div class="rkchips sub mk-cats">${MC.map(([k, t]) => `<button type="button" class="rkc" data-mc="${k}" aria-pressed="${!st.mq && st.mcat === k}">${t}</button>`).join("")}</div>
+        <label class="d2-search mk-q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="mkQ" placeholder="Найти скин, например AK-47 Redline" autocomplete="off" value="${esc(st.mq)}"></label></div>
+      <div class="mk-legend"><span><img alt="" src="/games/csmoney.png">CS.money</span><span><img alt="" src="/games/lisskins.png">Lis-skins</span><span><img alt="" src="/games/steam.png">Steam</span></div>
+      <div id="mkList" class="mk-list">${sk(4)}</div>
+      <p class="db-note">Цена Steam — самый дешёвый лот на торговой площадке Steam, цена Lis-skins — минимальная из их открытого прайса; обновляется раз в час, в валюте сайта по текущему курсу. У CS.money нет открытого прайса — кнопка открывает поиск этого скина у них. Нажми на площадку — откроется скин на её сайте.</p>`;
+    el.querySelector("#mkQ").oninput = e => { clearTimeout(mkT); const v = e.target.value.trim(); mkT = setTimeout(() => { if (v && v.length < 2) return; st.mq = v; st.mstart = 0;
+      el.querySelectorAll("[data-mc]").forEach(b => b.setAttribute("aria-pressed", !v && b.dataset.mc === st.mcat)); mkLoad(); }, 450); };
+    mkLoad();
+  }
+  async function mkLoad(more){
+    const box = document.getElementById("mkList"); if (!box) return;
+    if (!more) box.innerHTML = sk(4); else { const b = document.getElementById("mkMore"); if (b) b.disabled = true; }
+    const want = st.mq + "|" + st.mcat;
+    try { const d = await once(`/api/games?q=csMarket&${st.mq ? "s=" + encodeURIComponent(st.mq) : "cat=" + st.mcat}&start=${st.mstart}`);
+      if (want !== st.mq + "|" + st.mcat) return;
+      MK = { items: more ? MK.items.concat(d.items) : d.items, fx: d.fx || MK.fx, total: d.total }; mkDraw();
+    } catch(e) { if (!more) box.innerHTML = err; else { const b = document.getElementById("mkMore"); if (b) b.disabled = false; } }
+  }
+  function mkDraw(){
+    const box = document.getElementById("mkList"); if (!box) return;
+    if (!MK.items.length){ box.innerHTML = `<div class="gempty">Ничего не нашли. Попробуй написать название по-английски, как в игре.</div>`; return; }
+    box.innerHTML = MK.items.map(i => { const best = i.lis != null && i.steam != null ? (i.lis <= i.steam ? "lis" : "steam") : i.lis != null ? "lis" : "steam";
+      const save = i.lis != null && i.steam ? Math.round((1 - Math.min(i.lis, i.steam) / Math.max(i.lis, i.steam)) * 100) : 0;
+      return `<article class="mk-it"${i.col ? ` style="--rc:#${esc(i.col)}"` : ""}><div class="mk-img">${i.img ? `<img alt="" loading="lazy" src="${esc(i.img)}">` : ""}</div>
+        <div class="mk-n"><b translate="no">${esc(i.n)}</b>${save >= 3 ? `<small class="mk-save"><span>На</span> ${best === "lis" ? "Lis-skins" : "Steam"} <span>дешевле на</span> ${save}%</small>` : ""}</div>
+        <div class="mk-ps">
+          <a class="mk-p csm" href="${esc(i.csmUrl)}" target="_blank" rel="noopener nofollow"><img alt="" src="/games/csmoney.png"><span><small>CS.money</small><b>Смотреть</b></span></a>
+          <a class="mk-p lis${best === "lis" ? " best" : ""}" href="${esc(i.lisUrl)}" target="_blank" rel="noopener nofollow"><img alt="" src="/games/lisskins.png"><span><small>Lis-skins${i.lisN ? ` · ${i.lisN}` : ""}</small><b>${money(i.lis)}</b></span></a>
+          <a class="mk-p st${best === "steam" ? " best" : ""}" href="${esc(i.steamUrl)}" target="_blank" rel="noopener nofollow"><img alt="" src="/games/steam.png"><span><small>Steam${i.steamN ? ` · ${i.steamN}` : ""}</small><b>${money(i.steam)}</b></span></a>
+        </div></article>`; }).join("")
+      + (MK.items.length < Math.min(MK.total, 100) ? `<button type="button" class="btn btn-ghost lad-more" id="mkMore">Показать ещё</button>` : "");
   }
 
   function csTeams(el){
@@ -6666,12 +6740,12 @@ function setTab(name, opts){
   if (name === "news") NEWS.open();
   if (name === "ladder") LADDER.open();
   if (name === "cs" || name === "deadlock") GAMES.open(name);
-  { const g = name === "cs" || name === "deadlock" ? name : "dota"; if (g === "dota") lastDota = name; document.body.dataset.game = g; document.querySelectorAll("#gsw [data-g]").forEach(b => b.setAttribute("aria-pressed", b.dataset.g === g)); }
+  { const g = name === "cs" || name === "deadlock" ? name : "dota"; if (g === "dota") lastDota = name; document.body.dataset.game = g; document.querySelectorAll("#gsw [data-g]").forEach(b => b.setAttribute("aria-current", b.dataset.g === g && (!opts.instant || !document.documentElement.classList.contains("hub")) ? "page" : "false")); }
+  if (!opts.instant) document.documentElement.classList.remove("hub");
   if (!opts.keepHash){ try { history.replaceState(null, "", name === "1x6" ? location.pathname + location.search : "#" + name); } catch(e) {} }
   if (prev !== name && !opts.noScroll){ const tb = document.querySelector(".tabs"); const y = tb.getBoundingClientRect().top + scrollY - 70; if (scrollY > y) window.scrollTo({ top: y, behavior: REDUCED ? "auto" : "smooth" }); }
 }
 document.querySelectorAll(".tab[data-tab]").forEach(b => b.onclick = () => setTab(b.dataset.tab));
-document.getElementById("gsw").onclick = e => { const b = e.target.closest("[data-g]"); if (b) setTab(b.dataset.g === "dota" ? lastDota : b.dataset.g); };
 // «Ещё»: редкие разделы в выпадающем меню
 { const mb = document.getElementById("tabMore"), mn = document.getElementById("tabMenu");
   const close = () => { mn.hidden = true; mb.setAttribute("aria-expanded", "false"); };
@@ -6696,7 +6770,7 @@ document.getElementById("plQ").addEventListener("input", e => PROF.loadPlayers(e
   if (dm && /^\d{5,12}$/.test(dm)) setTimeout(() => { setTab("dota", { noScroll: true }); D2.match(dm); }, 700);
   if (dp && /^\d{1,12}$/.test(dp)) setTimeout(() => { setTab("dota", { noScroll: true }); D2.player(dp); }, 700); }
 if (/^#news-\d+$/.test(location.hash)) setTimeout(NEWS.fromHash, 500);
-addEventListener("hashchange", () => { const h = (location.hash || "").slice(1); if (TABS.includes(h) && h !== curTab) setTab(h, { keepHash: true }); if (/^news-\d+$/.test(h)) NEWS.fromHash(); if (/^premium/.test(h)) PROF.premium({ wait: h === "premium-ok" }); });
+addEventListener("hashchange", () => { document.documentElement.classList.remove("hub"); const h = (location.hash || "").slice(1); if (TABS.includes(h) && h !== curTab) setTab(h, { keepHash: true }); if (/^news-\d+$/.test(h)) NEWS.fromHash(); if (/^premium/.test(h)) PROF.premium({ wait: h === "premium-ok" }); });
 if (/^#premium/.test(location.hash)) setTimeout(() => { PROF.premium({ wait: location.hash === "#premium-ok" }); try { history.replaceState(null, "", location.pathname); } catch(e) {} }, 1200);
 /* ---------- меню (бургер) ---------- */
 const menu = document.getElementById("menu"), menuOv = document.getElementById("menuOv"), burger = document.getElementById("burger");
