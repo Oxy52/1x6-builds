@@ -10,8 +10,18 @@ const GRIDS = (() => {
 
   /* ---------- хранение ---------- */
   const blank = n => ({ config_name: n || "Моя сетка", categories: [] });
-  function load(){ try { const v = JSON.parse(localStorage.getItem(KEY) || "null"); if (v && Array.isArray(v.configs) && v.configs.length) { FILE = v; cur = Math.min(+v._cur || 0, v.configs.length - 1); return; } } catch(e) {} FILE = { version: 3, configs: [blank()] }; cur = 0; }
-  let sT = 0; function save(){ clearTimeout(sT); sT = setTimeout(() => { try { localStorage.setItem(KEY, JSON.stringify({ ...FILE, _cur: cur })); } catch(e) { PROF.toast("Сетка слишком большая для памяти браузера — скачай файл, чтобы не потерять."); } }, 300); }
+  function load(){ load0(); snap0 = snapNow(); HIST = []; FUT = []; }
+  function load0(){ try { const v = JSON.parse(localStorage.getItem(KEY) || "null"); if (v && Array.isArray(v.configs) && v.configs.length) { FILE = v; cur = Math.min(+v._cur || 0, v.configs.length - 1); return; } } catch(e) {} FILE = { version: 3, configs: [blank()] }; cur = 0; }
+  // отмена/повтор: снимки файла после каждой паузы в правках (быстрые правки сливаются в один шаг)
+  let sT = 0, HIST = [], FUT = [], snap0 = null;
+  const snapNow = () => JSON.stringify({ configs: FILE.configs, cur });
+  function commit(){ clearTimeout(sT); sT = 0; if (D){ save(); return; } const sn = snapNow(); if (snap0 != null && sn !== snap0){ HIST.push(snap0); if (HIST.length > 60) HIST.shift(); FUT = []; } snap0 = sn;
+    try { localStorage.setItem(KEY, JSON.stringify({ ...FILE, _cur: cur })); } catch(e) { PROF.toast("Сетка слишком большая для памяти браузера — скачай файл, чтобы не потерять."); } histBtns(); }
+  function save(){ clearTimeout(sT); sT = setTimeout(commit, 350); }
+  function histGo(back){ if (sT) commit(); const from = back ? HIST : FUT, to = back ? FUT : HIST; if (!from.length) return;
+    to.push(snap0); snap0 = from.pop(); const v = JSON.parse(snap0); FILE.configs = v.configs; cur = Math.min(v.cur || 0, FILE.configs.length - 1); sel = -1; selG = null;
+    try { localStorage.setItem(KEY, JSON.stringify({ ...FILE, _cur: cur })); } catch(e) {} draw(); histBtns(); }
+  function histBtns(){ const u = document.getElementById("grUndo"), r = document.getElementById("grRedo"); if (u) u.disabled = !HIST.length; if (r) r.disabled = !FUT.length; }
   const C = () => FILE.configs[cur];
   const r1 = v => Math.round((+v || 0) * 10) / 10;
   const isSym = k => !k.hero_ids.length && k.width <= SYM + 1 && k.height <= SYM + 1;
@@ -202,9 +212,9 @@ const GRIDS = (() => {
         <div class="gr-tpl"><span>Шаблоны:</span>${PRESETS.map(p => `<button type="button" class="rkc" data-tp="${p.k}" title="${esc(p.d)}">${esc(p.n)}</button>`).join("")}<button type="button" class="rkc" data-tp="clear">Очистить</button></div>
         <div class="gr-wrap">
           <div class="gr-left">
-            <div class="gr-tools"><button type="button" class="gr-b gr-art" id="grArt">🎨 Арт / сцена</button><button type="button" class="gr-b" id="grAdd">＋ Категория</button><button type="button" class="gr-b" id="grTxt">T Текст</button><span class="gr-sp"></span><span class="gr-stat" id="grCnt"></span></div>
-            <div class="gr-stage" id="grStage" tabindex="0" aria-label="Сетка героев"><div class="gr-cv" id="grCv"></div></div>
-            <div class="gr-hint">Перетаскивай категории, героев и рисунки. Клик по герою в списке — добавить в выбранную категорию, двойной клик по герою в сетке — убрать. Клик по точке рисунка выделяет весь рисунок. Стрелки двигают, Delete удаляет.</div>
+            <div class="gr-tools"><button type="button" class="gr-b gr-art" id="grArt">🎨 Арт / сцена</button><button type="button" class="gr-b" id="grAdd">＋ Категория</button><button type="button" class="gr-b" id="grTxt">T Текст</button><span class="gr-seg"><button type="button" class="gr-b gr-ic" id="grUndo" title="Отменить (Ctrl+Z)" aria-label="Отменить" disabled>↶</button><button type="button" class="gr-b gr-ic" id="grRedo" title="Повторить (Ctrl+Shift+Z)" aria-label="Повторить" disabled>↷</button></span><button type="button" class="gr-b gr-ic" id="grFull" title="Во весь экран" aria-label="Во весь экран" aria-pressed="false">⛶</button><span class="gr-sp"></span><span class="gr-stat" id="grCnt"></span></div>
+            <div class="gr-stage" id="grStage" tabindex="0" aria-label="Сетка героев"><div class="gr-cv" id="grCv"></div><canvas class="gr-sym" id="grSym" aria-hidden="true"></canvas><canvas class="gr-sym" id="grSymS" aria-hidden="true"></canvas></div>
+            <details class="gr-hint"><summary>Подсказки</summary>Перетаскивай категории, героев и рисунки. Клик по герою в списке — добавить в выбранную категорию, двойной клик по герою в сетке — убрать. Клик по точке рисунка выделяет весь рисунок. Стрелки двигают (с Shift — быстрее), Delete удаляет, Ctrl+Z — отменить.</details>
             <div class="gr-insp" id="grInsp"></div>
           </div>
           <div class="gr-pal">
@@ -214,6 +224,13 @@ const GRIDS = (() => {
           </div>
         </div>`;
       stage = el.querySelector("#grStage");
+      el.querySelector("#grUndo").onclick = () => histGo(true); el.querySelector("#grRedo").onclick = () => histGo(false);
+      el.querySelector("#grFull").onclick = e => { const on = el.classList.toggle("gr-full"); e.currentTarget.setAttribute("aria-pressed", on); document.documentElement.classList.toggle("gr-lock", on); };
+      addEventListener("keydown", e => { if (el.offsetParent === null && !el.classList.contains("gr-full")) return;
+        if (e.key === "Escape" && el.classList.contains("gr-full") && !document.querySelector(".gr-mod")){ el.querySelector("#grFull").click(); return; }
+        if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || document.querySelector(".gr-mod")) return;
+        if ((e.ctrlKey || e.metaKey) && (e.key === "z" || e.key === "Z" || e.key === "я" || e.key === "Я")){ e.preventDefault(); histGo(!e.shiftKey); }
+        else if ((e.ctrlKey || e.metaKey) && (e.key === "y" || e.key === "н")){ e.preventDefault(); histGo(false); } });
       el.querySelector("#grCfg").onchange = e => { cur = +e.target.value; sel = -1; selG = null; save(); draw(); };
       el.querySelector("#grCfgN").oninput = e => { C().config_name = e.target.value || "Сетка"; save(); cfgList(); };
       el.querySelector("#grNew").onclick = () => { FILE.configs.push(blank("Сетка " + (FILE.configs.length + 1))); cur = FILE.configs.length - 1; sel = -1; selG = null; save(); draw(); };
@@ -250,6 +267,7 @@ const GRIDS = (() => {
 
   function catHTML(k, i){
     const on = i === sel || (selG && k._g === selG), sym = isSym(k);
+    if (sym) return "";
     let inner = "";
     if (k.hero_ids.length){ const f = fit(k); inner = `<div class="gr-ts" style="gap:${PG * s}px;grid-template-columns:repeat(${f.cols},${f.tw * s}px)">${k.hero_ids.map((id, n) => { const h = HB[id]; return `<i class="gr-t" data-n="${n}" data-id="${id}" title="${esc(h ? h.n : id)}" style="width:${f.tw * s}px;height:${f.th * s}px">${h ? `<img alt="" src="${esc(h.img)}" loading="lazy" draggable="false">` : ""}</i>`; }).join("")}</div>`; }
     return `<div class="gr-cat${on ? " on" : ""}${sym ? " sym" : ""}${k._g ? " grp" : ""}${!k.hero_ids.length && !sym ? " zone" : ""}" data-i="${i}" style="left:${k.x_position * s}px;top:${k.y_position * s}px;width:${k.width * s}px;height:${k.height * s}px">${k.category_name ? `<div class="gr-lb" style="font-size:${LF * s}px">${esc(k.category_name)}</div>` : ""}${inner}${i === sel && !sym ? `<b class="gr-rs" title="Размер"></b>` : ""}</div>`;
@@ -259,10 +277,29 @@ const GRIDS = (() => {
     s = stage.clientWidth / GW; cv.style.height = GH * s + "px"; stage.style.setProperty("--s", s);
     if (!soft){ cfgList(); const n = document.getElementById("grCfgN"); if (n && document.activeElement !== n) n.value = C().config_name; }
     cv.innerHTML = cs.map(catHTML).join("") + (selG ? gbox() : "");
+    symDraw();
     const cn = document.getElementById("grCnt"); if (cn){ const sy = chars(cs.filter(isSym)); cn.innerHTML = `Категорий: <b>${cs.length}</b> · символов: <b>${sy}</b>${cs.length > 2600 ? ' · <span class="gr-warn">много — Дота может подтормаживать</span>' : ""}`; }
     if (!soft){ insp(); palMarks(); }
   }
-  function gbounds(g){ const ks = C().categories.filter(k => k._g === g); if (!ks.length) return null; const x0 = Math.min(...ks.map(k => k.x_position)), y0 = Math.min(...ks.map(k => k.y_position)), x1 = Math.max(...ks.map(k => k.x_position + 8)), y1 = Math.max(...ks.map(k => k.y_position + 16)); return { x0, y0, x1, y1, n: ks.length }; }
+  /* символы и рисунки — на canvas: тысячи точек без тысяч элементов страницы */
+  const MW = new Map();
+  let mctx = null; const mw = t => { let w = MW.get(t); if (w == null){ if (!mctx) mctx = document.createElement("canvas").getContext("2d"); mctx.font = `600 ${LF}px "Segoe UI", system-ui, sans-serif`; w = mctx.measureText(t).width; if (MW.size > 20000) MW.clear(); MW.set(t, w); } return w; };
+  function symCanvas(id){ const c = document.getElementById(id); if (!c) return null; const dpr = Math.min(2, devicePixelRatio || 1), W = stage.clientWidth, Hh = GH * s;
+    if (c.width !== Math.round(W * dpr) || c.height !== Math.round(Hh * dpr)){ c.width = Math.round(W * dpr); c.height = Math.round(Hh * dpr); c.style.width = W + "px"; c.style.height = Hh + "px"; }
+    const g = c.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, Hh); g.textBaseline = "top"; g.font = `600 ${LF * s}px "Segoe UI", system-ui, sans-serif`; c.style.transform = ""; return g; }
+  function symDraw(){
+    const a = symCanvas("grSym"), b = symCanvas("grSymS"); if (!a || !b) return; const cs = C().categories;
+    a.fillStyle = "rgba(235,240,240,.92)"; b.fillStyle = selG ? "#ffe08a" : "#f3c35a";
+    for (let i = 0; i < cs.length; i++){ const k = cs[i]; if (!k.category_name || !isSym(k)) continue; const on = i === sel || (selG && k._g === selG);
+      (on ? b : a).fillText(k.category_name, k.x_position * s, k.y_position * s); }
+    if (sel >= 0 && cs[sel] && isSym(cs[sel])){ const k = cs[sel]; b.strokeStyle = "#f3c35a"; b.setLineDash([3, 3]); b.strokeRect(k.x_position * s - 3, k.y_position * s - 3, Math.max(8, mw(k.category_name) * s) + 6, LF * s + 6); }
+  }
+  // какой символ под пальцем: последний нарисованный сверху; мелкие точки ловим с запасом
+  function symAt(e){ const r = stage.getBoundingClientRect(), x = (e.clientX - r.left) / s, y = (e.clientY - r.top) / s, cs = C().categories, pad = 4 / s;
+    for (let i = cs.length - 1; i >= 0; i--){ const k = cs[i]; if (!k.category_name || !isSym(k)) continue; const w = mw(k.category_name);
+      if (x >= k.x_position - pad && x <= k.x_position + w + pad && y >= k.y_position - pad && y <= k.y_position + LF * 1.15 + pad) return i; }
+    return -1; }
+  function gbounds(g){ let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity, n = 0; for (const k of C().categories) if (k._g === g){ n++; if (k.x_position < x0) x0 = k.x_position; if (k.y_position < y0) y0 = k.y_position; if (k.x_position + 8 > x1) x1 = k.x_position + 8; if (k.y_position + 16 > y1) y1 = k.y_position + 16; } return n ? { x0, y0, x1, y1, n } : null; }
   function gbox(){ const b = gbounds(selG); return b ? `<div class="gr-gbox" style="left:${b.x0 * s}px;top:${b.y0 * s}px;width:${(b.x1 - b.x0) * s}px;height:${(b.y1 - b.y0) * s}px"></div>` : ""; }
   function insp(){
     const el = document.getElementById("grInsp"); if (!el) return; const cs = C().categories;
@@ -298,21 +335,29 @@ const GRIDS = (() => {
   let D = null;
   function onDown(e){
     if (e.button > 0) return;
-    const rs = e.target.closest(".gr-rs"), t = e.target.closest(".gr-t"), p = e.target.closest(".gr-p"), cat = e.target.closest(".gr-cat"), gb = e.target.closest(".gr-gbox");
+    const rs = e.target.closest(".gr-rs"), t = e.target.closest(".gr-t"), p = e.target.closest(".gr-p"), gb = e.target.closest(".gr-gbox");
+    let cat = e.target.closest(".gr-cat"), si = -1;
+    if (!rs && !t && !p && !gb && stage.contains(e.target)){ si = symAt(e); if (si >= 0) cat = { dataset: { i: si } }; }
     if (p){ D = { kind: "hero", id: +p.dataset.id, from: null, x0: e.clientX, y0: e.clientY, moved: false }; }
     else if (t){ D = { kind: "hero", id: +t.dataset.id, from: [+cat.dataset.i, +t.dataset.n], x0: e.clientX, y0: e.clientY, moved: false }; }
     else if (rs){ const k = C().categories[sel]; D = { kind: "rs", k, w0: k.width, h0: k.height, x0: e.clientX, y0: e.clientY }; }
     else if (gb || (cat && C().categories[+cat.dataset.i]._g)){ const g = gb ? selG : C().categories[+cat.dataset.i]._g; if (selG !== g){ selG = g; sel = -1; draw(); }
       const ks = C().categories.map((k, i) => [k, i]).filter(([k]) => k._g === g); D = { kind: "grp", ks: ks.map(([k, i]) => [k, i, k.x_position, k.y_position]), x0: e.clientX, y0: e.clientY }; }
-    else if (cat){ const i = +cat.dataset.i; if (sel !== i || selG){ sel = i; selG = null; draw(); } const k = C().categories[i]; D = { kind: "mv", k, kx: k.x_position, ky: k.y_position, x0: e.clientX, y0: e.clientY }; }
+    else if (cat){ const i = +cat.dataset.i; if (sel !== i || selG){ sel = i; selG = null; draw(); } const k = C().categories[i]; D = { kind: "mv", k, sym: isSym(k), kx: k.x_position, ky: k.y_position, x0: e.clientX, y0: e.clientY }; }
     else { if (sel !== -1 || selG){ sel = -1; selG = null; draw(); } return; }
     e.preventDefault(); stage.focus({ preventScroll: true });
     addEventListener("pointermove", onMove); addEventListener("pointerup", onUp, { once: true });
   }
-  function onMove(e){
-    if (!D) return; const dx = (e.clientX - D.x0) / s, dy = (e.clientY - D.y0) / s;
-    if (D.kind === "mv"){ D.k.x_position = Math.round(D.kx + dx); D.k.y_position = Math.round(D.ky + dy); const el = stage.querySelector(`.gr-cat[data-i="${sel}"]`); if (el){ el.style.left = D.k.x_position * s + "px"; el.style.top = D.k.y_position * s + "px"; } }
-    else if (D.kind === "grp"){ const cv = document.getElementById("grCv"); D.ks.forEach(([k, i, x, y]) => { k.x_position = r1(x + dx); k.y_position = r1(y + dy); const el = cv.children[i]; if (el){ el.style.left = k.x_position * s + "px"; el.style.top = k.y_position * s + "px"; } }); const gb = cv.querySelector(".gr-gbox"); if (gb) gb.style.transform = `translate(${dx * s}px, ${dy * s}px)`; }
+  // движение обрабатываем раз в кадр: на телефонах pointermove приходит чаще, чем экран успевает рисовать
+  let mvE = null, mvR = 0;
+  function onMove(e){ mvE = e; if (!mvR) mvR = requestAnimationFrame(() => { mvR = 0; if (mvE) move(mvE); }); }
+  function move(e){
+    if (!D) return; const dx = (e.clientX - D.x0) / s, dy = (e.clientY - D.y0) / s, sc = document.getElementById("grSymS");
+    if (D.kind === "mv"){ D.k.x_position = Math.round(D.kx + dx); D.k.y_position = Math.round(D.ky + dy);
+      if (D.sym){ if (sc) sc.style.transform = `translate(${(D.k.x_position - D.kx) * s}px, ${(D.k.y_position - D.ky) * s}px)`; }
+      else { const el = stage.querySelector(`.gr-cat[data-i="${sel}"]`); if (el){ el.style.left = D.k.x_position * s + "px"; el.style.top = D.k.y_position * s + "px"; } } }
+    else if (D.kind === "grp"){ const cv = document.getElementById("grCv"); D.ks.forEach(([k, i, x, y]) => { k.x_position = r1(x + dx); k.y_position = r1(y + dy); if (!isSym(k)){ const el = cv.querySelector(`.gr-cat[data-i="${i}"]`); if (el){ el.style.left = k.x_position * s + "px"; el.style.top = k.y_position * s + "px"; } } });
+      const tr = `translate(${dx * s}px, ${dy * s}px)`, gb = cv.querySelector(".gr-gbox"); if (gb) gb.style.transform = tr; if (sc) sc.style.transform = tr; }
     else if (D.kind === "rs"){ D.k.width = Math.max(20, Math.round(D.w0 + dx)); D.k.height = Math.max(20, Math.round(D.h0 + dy)); draw(true); }
     else if (D.kind === "hero"){
       if (!D.moved && Math.hypot(e.clientX - D.x0, e.clientY - D.y0) < 6) return;
@@ -323,7 +368,7 @@ const GRIDS = (() => {
   }
   function catAt(e){ return document.elementsFromPoint(e.clientX, e.clientY).find(x => x.classList && x.classList.contains("gr-cat") && !x.classList.contains("sym")) || null; }
   function onUp(e){
-    removeEventListener("pointermove", onMove); const d = D; D = null; if (!d) return;
+    removeEventListener("pointermove", onMove); if (mvR){ cancelAnimationFrame(mvR); mvR = 0; } if (mvE && D) move(e); mvE = null; const d = D; D = null; if (!d) return;
     if (d.kind === "hero"){
       if (d.g) d.g.remove(); stage.querySelectorAll(".gr-cat.drop").forEach(x => x.classList.remove("drop"));
       const cs = C().categories;

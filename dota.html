@@ -60,6 +60,10 @@
   .nav.scrolled { background: rgba(8,8,11,.95); box-shadow: 0 1px 0 var(--line), 0 10px 30px rgba(0,0,0,.35); }
   .logo { color: var(--fg); text-decoration: none; white-space: nowrap; min-width: 0; }
   @media (max-width: 400px) { .logo .lt { display: none; } }
+  /* логотип не сжимается — пиксельный герой больше не наезжает на Aegis */
+  .nav .logo { flex: none; }
+  @media (max-width: 520px) { .nav { gap: 8px; } .logo { gap: 7px; font-size: 17px; } }
+  @media (max-width: 420px) { .logo .lt { display: none; } }
   .burger { margin-left: 0; width: 46px; height: 46px; flex: none; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); cursor: pointer; display: grid; place-content: center; gap: 5px; padding: 0; transition: border-color .2s; }
   .burger span { display: block; width: 20px; height: 2px; border-radius: 2px; background: var(--fg); transition: transform .3s cubic-bezier(.2,.8,.2,1), opacity .2s; }
   .burger:hover { border-color: rgba(255,255,255,.25); }
@@ -1615,7 +1619,7 @@
   @media (max-width: 600px) { .gsw { gap: 8px; } .gsw-c { min-height: 0; padding: 12px 6px 10px; border-radius: 18px; text-align: center; } .gsw-lg { padding: 4px 0 8px; } .gsw-lg img { height: 46px; } .gsw-c.cs .gsw-lg img { max-height: 34px; } .gsw-c b { font-size: 14px; } .gsw-c small, .gsw-c .gl { display: none; } .gsw-c .gs { display: inline; } }
   /* ---- главное меню: три больших квадрата игр ---- */
   .gsw-art { display: none; }
-  .hub .gsw-c { aspect-ratio: 1 / 1; min-height: 0; justify-content: flex-end; padding: 24px; border-radius: 30px; border-width: 2px; }
+  .hub .gsw-c { aspect-ratio: 3 / 4; min-height: 0; justify-content: flex-end; padding: 24px; border-radius: 30px; border-width: 2px; }
   .hub .gsw-art { display: block; position: absolute; inset: 0; z-index: -2; background-size: cover; background-position: center top; opacity: .55; transform: scale(1.04); transition: transform .8s cubic-bezier(.22,.61,.36,1), opacity .5s; }
   .hub .gsw-c::before { z-index: -1; background: linear-gradient(180deg, transparent 25%, rgba(8,8,11,.55) 55%, rgba(8,8,11,.95) 100%), repeating-linear-gradient(135deg, rgba(255,255,255,.025) 0 2px, transparent 2px 16px); }
   .hub .gsw-c.d2 .gsw-art { background-image: url("https://cdn.cloudflare.steamstatic.com/steam/apps/570/library_600x900_2x.jpg"); }
@@ -1641,9 +1645,9 @@
   @media (prefers-reduced-motion: reduce) { .hub .gsw-c, .hub .hub-h { animation: none; } }
   .hub-h { display: none; }
   .hub .tabs-wrap, .hub #panes { display: none !important; }
-  .hub .hub-h { display: block; margin: clamp(18px, 5vh, 48px) 0 18px; font-family: var(--display); font-weight: 800; font-size: clamp(30px, 5vw, 48px); letter-spacing: -1px; text-align: center; }
-  .hub .gsw { gap: 18px; margin-bottom: 40px; max-width: 1100px; margin-left: auto; margin-right: auto; }
-  @media (max-width: 760px) { .hub .gsw { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; } .hub .gsw-c { aspect-ratio: 1 / 1; min-height: 0; padding: 10px; border-radius: 20px; text-align: center; align-items: center; } .hub .gsw-lg { place-items: center; padding: 0 0 6px; } .hub .gsw-lg img { height: 44px; max-width: 90%; } .hub .gsw-c.cs .gsw-lg img { max-height: 30px; } .hub .gsw-c b { font-size: 15px; } .hub .gsw-c small, .hub .gsw-c .gl { display: none; } .hub .gsw-c .gs { display: inline; } .hub .hub-h { font-size: 30px; } .hb-row img { height: 22vh; } }
+  .hub .hub-h { display: block; margin: clamp(28px, 9vh, 96px) 0 22px; font-family: var(--display); font-weight: 800; font-size: clamp(30px, 5vw, 48px); letter-spacing: -1px; text-align: center; }
+  .hub .gsw { gap: 18px; margin-bottom: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; }
+  @media (max-width: 760px) { .hub .gsw { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; } .hub .gsw-c { aspect-ratio: 3 / 5; min-height: 0; padding: 12px 8px 14px; border-radius: 20px; text-align: center; align-items: center; } .hub .gsw-lg { place-items: center; padding: 0 0 8px; } .hub .gsw-lg img { height: 50px; max-width: 92%; } .hub .gsw-c.cs .gsw-lg img { max-height: 34px; } .hub .gsw-c b { font-size: 16px; } .hub .gsw-art { opacity: .75; } .hub .gsw-c small, .hub .gsw-c .gl { display: none; } .hub .gsw-c .gs { display: inline; } .hub .hub-h { font-size: 30px; } .hb-row img { height: 22vh; } }
   /* на страницах игр — компактный переключатель */
   :root:not(.hub) .gsw-c { min-height: 0; flex-direction: row; align-items: center; gap: 14px; padding: 10px 16px; border-radius: 18px; }
   :root:not(.hub) .gsw-lg { flex: none; width: 64px; padding: 0; } :root:not(.hub) .gsw-lg img { height: 40px; max-width: 64px; } :root:not(.hub) .gsw-c.cs .gsw-lg img { max-height: 30px; }
@@ -1652,6 +1656,15 @@
   :root:not(.hub) .gsw-c:not([aria-current="page"]) .gsw-lg img { opacity: .75; }
   @media (max-width: 600px) { :root:not(.hub) .gsw-c { flex-direction: column; gap: 4px; padding: 8px 4px; } :root:not(.hub) .gsw-lg { width: auto; } :root:not(.hub) .gsw-lg img { height: 30px; } :root:not(.hub) .gsw-c.cs .gsw-lg img { max-height: 22px; } :root:not(.hub) .gsw-c b { font-size: 13px; } }
   a.gsw-c { text-decoration: none; }
+  /* на страницах игр вместо трёх вкладок — кнопка «назад» к выбору игры */
+  :root:not(.hub) .gsw { display: none; }
+  .gback-row { display: flex; align-items: center; gap: 14px; margin: 6px 0 16px; min-width: 0; } .hub .gback-row { display: none; }
+  .gback { display: inline-flex; align-items: center; gap: 8px; flex: none; padding: 10px 18px 10px 14px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,.04); color: var(--fg); font-weight: 700; font-size: 14.5px; text-decoration: none; transition: background .2s, border-color .2s, transform .2s; }
+  .gback:hover { background: rgba(255,255,255,.09); border-color: color-mix(in srgb, var(--gcol, #ff4d3d) 50%, var(--line)); } .gback:active { transform: scale(.96); }
+  .gb-ar { font-size: 18px; line-height: 1; transition: transform .25s; } .gback:hover .gb-ar { transform: translateX(-4px); }
+  .gb-cur { display: flex; align-items: center; gap: 10px; min-width: 0; } .gb-cur img { height: 30px; width: auto; max-width: 90px; object-fit: contain; filter: drop-shadow(0 6px 14px color-mix(in srgb, var(--gcol, #ff4d3d) 50%, transparent)); }
+  .gb-cur b { font-family: var(--display); font-size: 19px; letter-spacing: -.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  body[data-game="cs"] { --gcol: #f5a524; } body[data-game="deadlock"] { --gcol: #d9c48f; }
   body[data-game="cs"] .tabs-wrap, body[data-game="deadlock"] .tabs-wrap { display: none; }
   .g-sub { margin: 18px 0 14px; } .g-news { color: inherit; text-decoration: none; }
   [data-pane="cs"] .ncard { --nc: #f5a524; } [data-pane="deadlock"] .ncard { --nc: #4fd1b5; }
@@ -1846,6 +1859,18 @@
   .gr-src { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; } .gr-src select { min-width: 200px; }
   .gr-pv { width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); display: block; }
   .gr-box { width: min(900px, 100%); }
+  /* редактор сеток: символы на canvas, отмена, полный экран, спокойнее панели */
+  .gr-sym { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 1; } #grSymS { z-index: 4; }
+  .gr-tools { padding: 8px; border-radius: 16px; border: 1px solid var(--line); background: var(--panel); }
+  .gr-seg { display: inline-flex; } .gr-seg .gr-b:first-child { border-radius: 10px 0 0 10px; } .gr-seg .gr-b:last-child { border-radius: 0 10px 10px 0; border-left: 0; }
+  .gr-b.gr-ic { min-width: 40px; padding: 6px 10px; font-size: 17px; line-height: 1.2; } .gr-b:disabled { opacity: .35; cursor: default; } .gr-b[aria-pressed="true"] { background: rgba(243,195,90,.2); border-color: rgba(243,195,90,.5); }
+  .gr-b { border-radius: 12px; } .gr-b:active:not(:disabled) { transform: scale(.96); }
+  .gr-stage { box-shadow: 0 20px 50px -30px rgba(0,0,0,.9), inset 0 0 0 1px rgba(255,255,255,.03); }
+  details.gr-hint summary { cursor: pointer; width: max-content; } details.gr-hint[open] summary { margin-bottom: 4px; }
+  #grEdit.gr-full { position: fixed; inset: 0; z-index: 300; background: var(--bg); padding: max(12px, env(safe-area-inset-top)) 12px 12px; overflow: auto; overscroll-behavior: contain; }
+  #grEdit.gr-full .gr-ph { max-height: calc(100vh - 160px); }
+  html.gr-lock, html.gr-lock body { overflow: hidden; }
+  #grEdit.gr-full .gr-tpl { display: none; } #grEdit.gr-full .gr-pal { order: 1; position: static; }
   @media (max-width: 860px) { .gr-wrap { grid-template-columns: 1fr; } .gr-pal { position: static; order: -1; } .gr-ph { grid-template-columns: repeat(auto-fill, minmax(54px, 1fr)); max-height: 210px; } .gr-bar input { width: 120px; } }
 
   /* ---------- появление пиксельного героя в окне сборки (как спавн с высоким тиром в Доте) ---------- */
@@ -1943,6 +1968,7 @@
     <a class="gsw-c cs" href="/cs" data-g="cs" aria-current="false"><span class="gsw-art" aria-hidden="true"></span><span class="gsw-lg"><img alt="" src="/games/cs.png"></span><span><b><span class="gl">Counter-Strike 2</span><span class="gs">CS2</span></b><small>Цены скинов, новости, рейтинг команд</small></span></a>
     <a class="gsw-c dl" href="/deadlock" data-g="deadlock" aria-current="false"><span class="gsw-art" aria-hidden="true"></span><span class="gsw-lg"><img alt="" src="/games/deadlock.png"></span><span><b>Deadlock</b><small>Герои и сборки по статистике</small></span></a>
   </nav>
+  <div class="gback-row"><a class="gback" href="/" id="gBack" aria-label="Назад к выбору игры"><span class="gb-ar" aria-hidden="true">←</span><span>Все игры</span></a><span class="gb-cur" id="gbCur"><img alt="" src="/games/dota.png"><b>Dota 2</b></span></div>
   <div class="tabs-wrap">
     <div class="tabs" role="tablist" aria-label="Разделы">
       <button type="button" class="tab" role="tab" data-tab="dota" aria-selected="false"><span class="tab-ic d2ic">D2</span><span class="tl">Dota 2</span><span class="ts">Мета</span></button>
@@ -2661,7 +2687,7 @@ document.getElementById("gameBtn").onclick = () => GAME.open();
   const ico = btn.firstElementChild, sheet = s => `url(pixel/${s}.webp)`;
   let last = "juggernaut"; try { const t = localStorage.getItem("ub-px"); if (PX.includes(t)) last = t; } catch(e) {}
   grid.innerHTML = PX.map(s => `<button type="button" class="pxo" data-s="${s}" style="--c:${(THEME[s] || [])[1] || "#888"}" title="${(HEROES.find(h => h.slug === s) || {}).en || s}" aria-label="${(HEROES.find(h => h.slug === s) || {}).en || s}"><span class="pxi" style="background-image:${sheet(s)}"></span></button>`).join("");
-  function show(slug, jump){
+  let show = function(slug, jump){
     if (PX.includes(slug)){ last = slug; try { localStorage.setItem("ub-px", slug); } catch(e) {} ico.className = ""; ico.style.backgroundImage = sheet(slug); }
     else if (slug && typeof HEROES !== "undefined" && HEROES.some(h => h.slug === slug)){ ico.className = "face"; ico.style.backgroundImage = `url(face/${slug}.webp)`; }
     else { ico.className = ""; ico.style.backgroundImage = sheet(last); }
@@ -2669,7 +2695,16 @@ document.getElementById("gameBtn").onclick = () => GAME.open();
     if (jump){ btn.classList.remove("jump"); void btn.offsetWidth; btn.classList.add("jump"); }
   }
   window.__pxSync = slug => show(slug, true);
-  btn.onclick = e => { e.stopPropagation(); thBtn.click(); btn.setAttribute("aria-expanded", String(!pop.hidden)); };
+  // на страницах CS2 и Deadlock — свои пиксельные персонажи: агенты и герои Deadlock; клик — следующий
+  const GPX = { cs: ["cs", 24, "Агент CS2"], deadlock: ["dl", 42, "Герой Deadlock"] };
+  const gpx = () => GPX[document.body.dataset.game];
+  function gshow(jump, step){ const G = gpx(); if (!G) return false; let i = 0; try { i = +localStorage.getItem("ub-px-" + G[0]) || 0; } catch(e) {}
+    if (step){ i = (i + 1 + Math.floor(Math.random() * (G[1] - 1))) % G[1]; try { localStorage.setItem("ub-px-" + G[0], i); } catch(e) {} }
+    ico.className = ""; ico.style.backgroundImage = `url(pixel/${G[0]}/${i % G[1]}.webp)`; btn.setAttribute("aria-label", G[2] + " — нажми, чтобы сменить"); btn.title = G[2];
+    if (jump){ btn.classList.remove("jump"); void btn.offsetWidth; btn.classList.add("jump"); } return true; }
+  const show0 = show; show = (slug, jump) => { if (!gshow(jump)) show0(slug, jump); };
+  new MutationObserver(() => { if (!gshow(true)){ btn.setAttribute("aria-label", "Тема сайта: выбрать героя"); btn.removeAttribute("title"); let c = ""; try { c = localStorage.getItem("ub-theme") || ""; } catch(e) {} show0(c, true); } }).observe(document.body, { attributes: true, attributeFilter: ["data-game"] });
+  btn.onclick = e => { e.stopPropagation(); if (gpx()){ gshow(true, true); return; } thBtn.click(); btn.setAttribute("aria-expanded", String(!pop.hidden)); };
   grid.onclick = e => { const b = e.target.closest(".pxo"); if (!b) return; if (window.__thSet) window.__thSet(b.dataset.s); setTimeout(() => document.dispatchEvent(new Event("click")), 200); };
   new MutationObserver(() => btn.setAttribute("aria-expanded", String(!pop.hidden))).observe(pop, { attributes: true, attributeFilter: ["hidden"] });
   let cur = ""; try { cur = localStorage.getItem("ub-theme") || ""; } catch(e) {}
@@ -6267,7 +6302,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=10").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=11").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
@@ -6817,7 +6852,7 @@ function setTab(name, opts){
   if (name === "news") NEWS.open();
   if (name === "ladder") LADDER.open();
   if (name === "cs" || name === "deadlock") GAMES.open(name);
-  { const g = name === "cs" || name === "deadlock" ? name : "dota"; if (g === "dota") lastDota = name; document.body.dataset.game = g; document.querySelectorAll("#gsw [data-g]").forEach(b => b.setAttribute("aria-current", b.dataset.g === g && (!opts.instant || !document.documentElement.classList.contains("hub")) ? "page" : "false")); }
+  { const g = name === "cs" || name === "deadlock" ? name : "dota"; if (g === "dota") lastDota = name; document.body.dataset.game = g; { const gc = document.getElementById("gbCur"); if (gc && gc.dataset.g !== g){ gc.dataset.g = g; const G = { dota: ["dota", "Dota 2"], cs: ["cs", "CS2"], deadlock: ["deadlock", "Deadlock"] }[g]; gc.innerHTML = `<img alt="" src="/games/${G[0]}.png"><b translate="no">${G[1]}</b>`; } } document.querySelectorAll("#gsw [data-g]").forEach(b => b.setAttribute("aria-current", b.dataset.g === g && (!opts.instant || !document.documentElement.classList.contains("hub")) ? "page" : "false")); }
   if (!opts.instant) document.documentElement.classList.remove("hub");
   if (!opts.keepHash){ try { history.replaceState(null, "", name === "1x6" ? location.pathname + location.search : "#" + name); } catch(e) {} }
   if (prev !== name && !opts.noScroll){ const tb = document.querySelector(".tabs"); const y = tb.getBoundingClientRect().top + scrollY - 70; if (scrollY > y) window.scrollTo({ top: y, behavior: REDUCED ? "auto" : "smooth" }); }
@@ -6952,6 +6987,6 @@ drawRecent();
 render();
 </script>
 
-<script src="/grids.js?v=9" defer></script>
+<script src="/grids.js?v=10" defer></script>
 </body>
 </html>
