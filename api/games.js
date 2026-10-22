@@ -1,0 +1,102 @@
+// CS2 и Deadlock: открытые источники без ключей, кеш на Vercel.
+//   GET /api/games?q=csTeams                 -> рейтинг команд Valve (VRS): место, очки, команда, состав
+//   GET /api/games?q=csTeam&p=<details path> -> последние матчи команды из отчёта Valve
+//   GET /api/games?q=csMatches               -> последние матчи топ-16 команд
+//   GET /api/games?q=dlHeroes&lang=ru        -> герои Deadlock: имя, картинки, винрейт, пикрейт
+//   GET /api/games?q=dlHero&id=1&lang=ru     -> сборка героя по статистике: основа (частые предметы) и лучшие по винрейту в каждом тире
+// Новости CS2 и Deadlock: /api/news?app=cs|deadlock
+const UA = { Accept: "application/json", "User-Agent": "1x6-builds (+https://1x6-eta.vercel.app)" };
+const VRS = "ValveSoftware/counter-strike_regional_standings";
+const RAW = `https://raw.githubusercontent.com/${VRS}/main/live/`;
+const DL = "https://api.deadlock-api.com/v1";
+// язык сайта -> язык Valve в Deadlock (как в api/news.js)
+const LNG = { ru: "russian", uk: "ukrainian", en: "english", es: "spanish", pt: "brazilian", de: "german", pl: "polish", tr: "turkish",
+  fr: "french", it: "italian", kk: "russian", be: "russian", nl: "english", zh: "schinese", ja: "japanese", ko: "koreana" };
+const TTL = { csTeams: 21600, csTeam: 21600, csMatches: 21600, dlHeroes: 21600, dlHero: 10800 };
+
+async function get(url, type = "json") {
+  const r = await fetch(url, { headers: UA, signal: AbortSignal.timeout(20000) });
+  if (!r.ok) throw new Error(url + " " + r.status);
+  return type === "json" ? r.json() : r.text();
+}
+
+// строки markdown-таблицы -> массив ячеек
+// в некоторых переводах Valve имена с разметкой вида #|mp|#Abrams
+const clean = s => String(s || "").replace(/#\|[^|]*\|#/g, "").trim();
+const rows = md => md.split("\n").filter(l => /^\|\s*\d/.test(l)).map(l => l.split("|").slice(1, -1).map(c => c.trim()));
+
+async function csTeams() {
+  const y = new Date().getUTCFullYear();
+  let files = [];
+  for (const yy of [y, y - 1]) {
+    try { files = (await get(`https://api.github.com/repos/${VRS}/contents/live/${yy}`)).map(f => f.name).filter(n => /^standings_global_\d{4}_\d\d_\d\d\.md$/.test(n)).map(n => yy + "/" + n); } catch (e) { files = []; }
+    if (files.length) break;
+  }
+  const last = files.sort().pop(); if (!last) throw new Error("no standings");
+  const md = await get(RAW + last, "text");
+  const date = last.match(/(\d{4})_(\d\d)_(\d\d)/).slice(1).join("-");
+  const teams = rows(md).slice(0, 60).map(c => ({ n: +c[0], pts: +c[1], team: c[2], roster: c[3].split(",").map(s => s.trim()).filter(Boolean),
+    p: last.slice(0, 4) + "/" + ((c[4] || "").match(/\((details\/[^)]+\.md)\)/) || [])[1] }));
+  return { date, teams };
+}
+
+async function csTeam(p) {
+  if (!/^\d{4}\/details\/\d{4}_\d\d_\d\d\/[\w.-]+\.md$/.test(p)) throw Object.assign(new Error("bad path"), { code: 400 });
+  const md = await get(RAW + p, "text");
+  // таблица матчей: Match Played | Match ID | Date | Opponent | W/L | ...
+  const i = md.indexOf("| Match Played");
+  const matches = i < 0 ? [] : rows(md.slice(i)).filter(c => c.length > 5 && /^\d{4}-\d\d-\d\d$/.test(c[2])).map(c => ({ d: c[2], vs: c[3], w: /^w/i.test(c[4]) }))
+    .sort((a, b) => b.d.localeCompare(a.d)).slice(0, 25);
+  return { matches };
+}
+
+// последние матчи топ-16 команд из их отчётов, без повторов (матч есть в отчётах обеих команд)
+async function csMatches() {
+  const { date, teams } = await csTeams();
+  const lists = await Promise.all(teams.slice(0, 16).map(t => csTeam(t.p).then(r => r.matches.map(m => ({ ...m, team: t.team }))).catch(() => [])));
+  const seen = new Set(), out = [];
+  for (const m of lists.flat().sort((a, b) => b.d.localeCompare(a.d))) {
+    const k = m.d + "|" + [m.team, m.vs].sort().join("|"); if (seen.has(k)) continue; seen.add(k);
+    out.push({ d: m.d, a: m.team, b: m.vs, win: m.w ? m.team : m.vs });
+  }
+  return { date, matches: out.slice(0, 40) };
+}
+
+async function dlHeroes(lang) {
+  const [hs, st] = await Promise.all([get(`${DL}/assets/heroes?only_active=true&language=${lang}`), get(`${DL}/analytics/hero-stats`)]);
+  const tot = st.reduce((a, x) => a + x.matches, 0) || 1, S = new Map(st.map(x => [x.hero_id, x]));
+  return hs.filter(h => h.player_selectable && !h.disabled && !h.in_development).map(h => { const s = S.get(h.id) || {};
+    return { id: h.id, name: clean(h.name), img: h.images?.icon_image_small_webp || h.images?.icon_image_small || "", card: h.images?.icon_hero_card_webp || h.images?.icon_hero_card || "",
+      wr: s.matches ? +(s.wins / s.matches * 100).toFixed(1) : null, pick: s.matches ? +(s.matches / tot * 1200).toFixed(1) : null, m: s.matches || 0 }; })
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+async function dlHero(id, lang) {
+  const [items, ist, hs] = await Promise.all([get(`${DL}/assets/items/by-type/upgrade?language=${lang}`), get(`${DL}/analytics/item-stats?hero_id=${id}&min_matches=300`), get(`${DL}/analytics/hero-stats`).catch(() => [])]);
+  const I = new Map(items.filter(i => i.shopable).map(i => [i.id, { id: i.id, name: clean(i.name), img: i.shop_image_webp || i.shop_image || i.image_webp || i.image || "", cost: i.cost, slot: i.item_slot_type, tier: i.item_tier }]));
+  // доля — от всех матчей героя (если статистика героя недоступна — от самого частого предмета)
+  const tot = (hs.find(x => x.hero_id === id) || {}).matches || Math.max(...ist.map(x => x.matches), 1);
+  const all = ist.filter(x => I.has(x.item_id)).map(x => ({ ...I.get(x.item_id), wr: +(x.wins / x.matches * 100).toFixed(1), pick: Math.round(x.matches / tot * 100), t: Math.round(x.avg_buy_time_s / 60) }));
+  // основа: что берут чаще всего, по времени покупки; по тирам: самые выигрышные среди не совсем редких (от 4% матчей)
+  const core = all.filter(i => i.pick >= 30).sort((a, b) => a.t - b.t).slice(0, 12);
+  const best = {};
+  for (const it of all) if (it.pick >= 4) (best[it.tier] = best[it.tier] || []).push(it);
+  for (const t in best) best[t] = best[t].sort((a, b) => b.wr - a.wr).slice(0, 6);
+  return { core, best };
+}
+
+module.exports = async (req, res) => {
+  const q = String(req.query.q || ""), lang = LNG[String(req.query.lang || "ru")] || "english";
+  const fail = (code, error) => { res.setHeader("Cache-Control", "public, s-maxage=60"); res.status(code).json({ error }); };
+  if (!TTL[q]) return fail(400, "bad_query");
+  try {
+    let out;
+    if (q === "csTeams") out = await csTeams();
+    else if (q === "csMatches") out = await csMatches();
+    else if (q === "csTeam") out = await csTeam(String(req.query.p || ""));
+    else if (q === "dlHeroes") out = await dlHeroes(lang);
+    else { const id = +req.query.id; if (!(id > 0 && id < 1000)) return fail(400, "bad_id"); out = await dlHero(id, lang); }
+    res.setHeader("Cache-Control", `public, s-maxage=${TTL[q]}, stale-while-revalidate=86400`);
+    res.status(200).json(out);
+  } catch (e) { fail(e.code === 400 ? 400 : 502, "upstream"); }
+};

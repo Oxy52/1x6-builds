@@ -1,14 +1,16 @@
 // Официальные новости Dota 2 из Steam (переводы делает сама Valve) + текущий патч.
 //   GET /api/news?lang=ru  -> { checked, patch: { num, ts, major, majorTs }, items: [{ ts, t, x, img, url, cat }] }
+//   GET /api/news?app=cs|deadlock&lang=ru -> то же для Counter-Strike 2 и Deadlock (без patch)
 // Кеш на Vercel: все посетители делят один запрос, обновляется сам раз в полчаса.
-const APP = 570, CLAN = 3703047;
+const APPS = { dota: 570, cs: 730, deadlock: 1422450 };
 const UA = { Accept: "application/json", "User-Agent": "1x6-builds (+https://1x6-eta.vercel.app)" };
 // язык сайта -> язык Steam (белорусский и казахский Valve не переводит — берём русский)
 const STEAM = { ru: "russian", uk: "ukrainian", en: "english", es: "spanish", pt: "brazilian", de: "german", pl: "polish", tr: "turkish",
   fr: "french", it: "italian", kk: "russian", be: "russian", nl: "dutch", zh: "schinese", ja: "japanese", ko: "koreana" };
 // индексы языков Steam в localized_capsule_image
 const LIDX = { english: 0, german: 1, french: 2, italian: 3, koreana: 4, spanish: 5, schinese: 6, russian: 8, japanese: 10, polish: 14, dutch: 16, turkish: 19, brazilian: 22, ukrainian: 26 };
-const IMG = `https://clan.akamai.steamstatic.com/images/${CLAN}/`;
+// картинки лежат в папке группы Steam: её id = clan_steamid - 103582791429521408
+const IMG = e => `https://clan.akamai.steamstatic.com/images/${Number(BigInt(e.clan_steamid || "103582791433224455") - 103582791429521408n)}/`;
 
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
@@ -34,15 +36,15 @@ function pic(e, lang) {
   try {
     const j = JSON.parse(e.jsondata || "{}"), caps = j.localized_capsule_image || [];
     const f = caps[LIDX[lang]] || caps[0];
-    if (f) return IMG + f;
+    if (f) return IMG(e) + f;
   } catch (err) { /* без картинки */ }
   const m = /\{STEAM_CLAN_(?:LOC_)?IMAGE\}\/\d+\/([\w.-]+\.(?:png|jpe?g|gif|webp))/i.exec(e.announcement_body?.body || "");
-  return m ? IMG + m[1] : "";
+  return m ? IMG(e) + m[1] : "";
 }
 
 const PATCH = /\d\.\d{2}[a-z]?\b|patch|update|патч|обновлени|оновлен/i;
 
-async function events(lang) {
+async function events(lang, APP) {
   const r = await fetch(`https://store.steampowered.com/events/ajaxgetpartnereventspageable/?clan_accountid=0&appid=${APP}&offset=0&count=15&l=${lang}`, { headers: UA });
   if (!r.ok) throw new Error("steam " + r.status);
   const d = await r.json();
@@ -68,9 +70,9 @@ async function patch() {
 }
 
 module.exports = async (req, res) => {
-  const lang = STEAM[String(req.query.lang || "ru")] || "english";
+  const lang = STEAM[String(req.query.lang || "ru")] || "english", app = APPS[String(req.query.app || "dota")] || 570;
   try {
-    const [items, p] = await Promise.all([events(lang), patch().catch(() => null)]);
+    const [items, p] = await Promise.all([events(lang, app), app === 570 ? patch().catch(() => null) : null]);
     res.setHeader("Cache-Control", "public, s-maxage=1800, stale-while-revalidate=86400");
     res.status(200).json({ checked: new Date().toISOString(), patch: p, items });
   } catch (err) {
