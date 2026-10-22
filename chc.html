@@ -1716,6 +1716,11 @@
   .mk-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 10px; } .mk-cats { margin: 0; } .mk-q { flex: 1 1 260px; min-width: 0; }
   .mk-legend { display: flex; gap: 14px; flex-wrap: wrap; margin: 4px 0 10px; color: var(--muted-2); font-size: 12.5px; } .mk-legend span { display: inline-flex; align-items: center; gap: 6px; } .mk-legend img { width: 18px; height: 18px; border-radius: 5px; }
   .mk-list { display: grid; gap: 8px; }
+  .mk-it { position: relative; } .mk-n { padding-right: 40px; }
+  .mk-fav { position: absolute; top: 8px; right: 8px; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: rgba(255,255,255,.04); color: var(--muted); font-size: 18px; line-height: 1; cursor: pointer; display: grid; place-items: center; transition: transform .2s cubic-bezier(.2,1.4,.3,1), color .2s, background .2s; z-index: 1; }
+  .mk-fav:hover { color: #f3c35a; transform: scale(1.1); } .mk-fav[aria-pressed="true"] { color: #f3c35a; background: rgba(243,195,90,.14); border-color: rgba(243,195,90,.45); }
+  .mk-fav:active { transform: scale(.9); }
+  .mk-favc span[aria-hidden] { color: #f3c35a; } .mk-fc { margin-left: 6px; font-variant-numeric: tabular-nums; opacity: .8; } .mk-fc:empty { display: none; }
   .mk-it { --rc: #b0c3d9; display: grid; grid-template-columns: 112px minmax(0, 1fr); align-items: center; gap: 14px; padding: 10px 12px; border-radius: 18px; border: 1px solid var(--line); background: linear-gradient(90deg, color-mix(in srgb, var(--rc) 9%, transparent), transparent 40%), var(--bg-soft); }
   .mk-img { height: 76px; display: grid; place-items: center; border-radius: 12px; background: radial-gradient(60% 70% at 50% 60%, color-mix(in srgb, var(--rc) 28%, transparent), transparent 70%); border-bottom: 2px solid color-mix(in srgb, var(--rc) 70%, transparent); }
   .mk-img img { max-width: 100%; max-height: 72px; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(0,0,0,.5)); }
@@ -1929,6 +1934,8 @@
   @media (prefers-reduced-motion: reduce) { .pxspawn *, #logoBtn .mark.lg img, #logoBtn .mark.lg::after { animation: none !important; } .pxspawn .ph { opacity: 1; } .pxspawn .pl, .pxspawn .rg, .pxspawn b, .pxspawn .fl, .pxspawn .du, .pxspawn .dim { display: none; } .banner { animation: none !important; } }
   .pxgrid { grid-template-columns: repeat(6, 1fr); max-height: 300px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
   .pxo { border-radius: 10px; }
+  #thPop { max-height: min(78vh, 680px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+  .pxg2 { max-height: none; overflow: visible; } .pxs-h { scroll-margin-top: 8px; }
   .thall, #thGrid { display: none !important; }
   /* ---------- пиксельный переход при обновлении по логотипу ---------- */
   .aegbg { position: fixed; inset: 0; z-index: 9997; background: radial-gradient(circle at 50% 50%, rgba(40,30,10,.55), #08080b 70%); opacity: 0; pointer-events: none; }
@@ -1957,7 +1964,7 @@
       <button type="button" class="pxh" id="pxHero" aria-label="Тема сайта: выбрать героя" aria-expanded="false" aria-controls="thPop"><i></i></button>
       <div class="thpop" id="thPop" role="dialog" aria-label="Тема сайта" hidden>
         <div class="thhead"><b>Тема героя</b><button type="button" class="threset" id="thReset">Обычная</button></div>
-        <small class="thsub">Пиксельные герои</small>
+        <small class="thsub">Пиксельные герои Dota 2</small>
         <div class="pxgrid" id="pxGrid"></div>
         <div class="thpt" id="thPrem"></div>
         <small class="thsub thall">Все герои</small>
@@ -2719,9 +2726,24 @@ document.getElementById("gameBtn").onclick = () => GAME.open();
   function hubStep(){ if (!HUBR.classList.contains("hub")){ clearInterval(hubT); hubT = 0; return false; } const k = hubN++ % 3, r = n => Math.floor(Math.random() * n);
     ico.className = ""; ico.style.backgroundImage = k === 0 ? sheet(PX[r(PX.length)]) : k === 1 ? `url(pixel/cs/${r(24)}.webp)` : `url(pixel/dl/${r(42)}.webp)`;
     btn.setAttribute("aria-label", "Персонаж — нажми, чтобы сменить"); btn.classList.remove("jump"); void btn.offsetWidth; btn.classList.add("jump"); return true; }
-  if (HUBR.classList.contains("hub")){ hubStep(); hubT = setInterval(() => { if (!document.hidden) hubStep(); }, 3200); }
-  btn.onclick = e => { e.stopPropagation(); if (HUBR.classList.contains("hub")){ hubStep(); clearInterval(hubT); hubT = setInterval(() => { if (!document.hidden) hubStep(); }, 3200); return; } if (gpx()){ gshow(true, true); return; } thBtn.click(); btn.setAttribute("aria-expanded", String(!pop.hidden)); };
-  grid.onclick = e => { const b = e.target.closest(".pxo"); if (!b) return; if (window.__thSet) window.__thSet(b.dataset.s); setTimeout(() => document.dispatchEvent(new Event("click")), 200); };
+  let pick0 = ""; try { pick0 = localStorage.getItem("ub-pxp") || ""; } catch(e) {}
+  if (HUBR.classList.contains("hub")){ const m = pick0.match(/^(cs|dl):(\d+)$/);
+    if (m){ ico.className = ""; ico.style.backgroundImage = `url(pixel/${m[1]}/${m[2]}.webp)`; }
+    else { hubStep(); hubT = setInterval(() => { if (!document.hidden) hubStep(); }, 3200); } }
+  // в выборе темы — пиксельные персонажи всех трёх игр: герои Доты, агенты CS2, герои Deadlock
+  const sec = (k, t, n) => `<small class="thsub pxs-h" id="pxH${k}">${t}</small><div class="pxgrid pxg2" data-g="${k}">${Array.from({ length: n }, (_, i) => `<button type="button" class="pxo" data-g="${k}" data-i="${i}" style="--c:${k === "cs" ? "#f5a524" : "#d9c48f"}" aria-label="${t} ${i + 1}"><span class="pxi" style="background-image:url(pixel/${k}/${i}.webp)"></span></button>`).join("")}</div>`;
+  let g2 = []; // секции строим при первом открытии — картинки не грузятся зря
+  const build2 = () => { if (g2.length) return; grid.insertAdjacentHTML("afterend", sec("cs", "Агенты CS2", 24) + sec("dl", "Герои Deadlock", 42)); g2 = [...pop.querySelectorAll(".pxg2")]; g2.forEach(gr => gr.onclick = pick2); };
+  const mark2 = () => { let pk = ""; try { pk = localStorage.getItem("ub-pxp") || ""; } catch(e) {} const G = gpx();
+    g2.forEach(gr => gr.querySelectorAll(".pxo").forEach(b => { let v = ""; try { v = localStorage.getItem("ub-px-" + b.dataset.g) || ""; } catch(e) {}
+      b.setAttribute("aria-pressed", (G && G[0] === b.dataset.g || pk.startsWith(b.dataset.g + ":")) && String(+v || 0) === b.dataset.i); })); };
+  function pick2(e){ const b = e.target.closest(".pxo"); if (!b) return; const k = b.dataset.g, i = +b.dataset.i;
+    try { localStorage.setItem("ub-px-" + k, i); localStorage.setItem("ub-pxp", k + ":" + i); } catch(_) {}
+    clearInterval(hubT); hubT = 0; ico.className = ""; ico.style.backgroundImage = `url(pixel/${k}/${i}.webp)`; btn.classList.remove("jump"); void btn.offsetWidth; btn.classList.add("jump"); mark2();
+    setTimeout(() => document.dispatchEvent(new Event("click")), 200); }
+  btn.onclick = e => { e.stopPropagation(); build2(); mark2(); thBtn.click(); btn.setAttribute("aria-expanded", String(!pop.hidden));
+    const G = gpx(); if (G && !pop.hidden){ const h = document.getElementById("pxH" + G[0]); if (h) setTimeout(() => h.scrollIntoView({ block: "start", behavior: "smooth" }), 30); } };
+  grid.onclick = e => { const b = e.target.closest(".pxo"); if (!b) return; try { localStorage.removeItem("ub-pxp"); } catch(_) {} clearInterval(hubT); hubT = 0; if (window.__thSet) window.__thSet(b.dataset.s); setTimeout(() => document.dispatchEvent(new Event("click")), 200); };
   new MutationObserver(() => btn.setAttribute("aria-expanded", String(!pop.hidden))).observe(pop, { attributes: true, attributeFilter: ["hidden"] });
   let cur = ""; try { cur = localStorage.getItem("ub-theme") || ""; } catch(e) {}
   if (!HUBR.classList.contains("hub")) show(cur, false);
@@ -2776,7 +2798,7 @@ document.getElementById("gameBtn").onclick = () => GAME.open();
     const GC = [[232, 86, 74], [245, 165, 36], [217, 196, 143]];
     let n = 0, cur = 0, col = GC[0].slice(), to = GC[0], W = 0, H = 0, t = 0, sp = [];
     function next(){ const k = n % 3, q = Math.floor(n / 3); n++;
-      const url = k === 0 ? `/hero/${D2[q % D2.length]}.webp` : k === 1 ? `/bg/hcs/${CS[q % CS.length]}.webp` : `/bg/hdl/${DL[q % DL.length]}.webp`;
+      const url = k === 0 ? `/bg/hd2/${D2[q % D2.length]}.webp` : k === 1 ? `/bg/hcs/${CS[q % CS.length]}.webp` : `/bg/hdl/${DL[q % DL.length]}.webp`;
       const im = new Image(); im.onload = () => { const a = hs[cur], b = hs[1 - cur]; cur = 1 - cur; to = GC[k];
         b.className = "hb-h g" + k; b.src = url; void b.offsetWidth; b.classList.add("on");
         if (a.classList.contains("on")){ a.classList.remove("on"); a.classList.add("out"); } }; im.src = url; }
@@ -6343,7 +6365,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=12").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=13").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
@@ -6754,15 +6776,33 @@ const GAMES = (() => {
   const cur = () => typeof CURSEL !== "undefined" ? CURSEL.get() : "usd";
   const money = (m, v) => { if (v == null) return "—"; const c = m.fx ? cur() : "usd", x = v * (m.fx ? m.fx[c] || 1 : 1);
     return `${x.toLocaleString(L(), { maximumFractionDigits: x >= 100 ? 0 : 2, minimumFractionDigits: x >= 100 ? 0 : 2 })} ${SYM[c]}`; };
+  // избранные скины: хранятся в браузере вместе с последними ценами, при открытии цены обновляются
+  const FKEY = g => "ub-skinfav-" + g;
+  const favs = g => { try { const v = JSON.parse(localStorage.getItem(FKEY(g)) || "[]"); return Array.isArray(v) ? v : []; } catch(e) { return []; } };
+  const favSet = (g, list) => { try { localStorage.setItem(FKEY(g), JSON.stringify(list.slice(0, 60))); } catch(e) {} };
+  const isFav = (g, n) => favs(g).some(x => x.n === n);
+  function favCount(m){ const c = m.el && m.el.querySelector(".mk-fc"); if (c) c.textContent = favs(m.g).length || ""; }
+  async function favLoad(m){
+    const box = m.el.querySelector(".mk-list"); m.items = favs(m.g); m.total = m.items.length; mkDraw(m);
+    const want = m.cat;
+    for (const it of m.items.slice()){ if (m.cat !== want || m.q) return;
+      try { const d = await once(`/api/games?q=market&g=${m.g}&s=${encodeURIComponent(it.n)}&start=0`); m.fx = d.fx || m.fx;
+        const f = (d.items || []).find(x => x.n === it.n); if (f){ const list = favs(m.g), k = list.findIndex(x => x.n === it.n); if (k >= 0){ list[k] = f; favSet(m.g, list); } if (m.cat === "fav" && !m.q && box.isConnected){ m.items = favs(m.g); mkDraw(m); } } } catch(e) {} }
+  }
   function market(el, g){
     const m = MKS[g] = MKS[g] || { g, cat: MC[g][0][0], q: "", start: 0, items: [], fx: null, total: 0, t: 0 };
     m.el = el;
-    el.innerHTML = `<div class="mk-bar"><div class="rkchips sub mk-cats">${MC[g].map(([k, t]) => `<button type="button" class="rkc" data-mc="${k}" aria-pressed="${!m.q && m.cat === k}">${t}</button>`).join("")}</div>
+    el.innerHTML = `<div class="mk-bar"><div class="rkchips sub mk-cats"><button type="button" class="rkc mk-favc" data-mc="fav" aria-pressed="${!m.q && m.cat === "fav"}"><span aria-hidden="true">★</span> <span>Избранное</span><span class="mk-fc">${favs(g).length || ""}</span></button>${MC[g].map(([k, t]) => `<button type="button" class="rkc" data-mc="${k}" aria-pressed="${!m.q && m.cat === k}">${t}</button>`).join("")}</div>
         <label class="d2-search mk-q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" class="mkQ" placeholder="${PH[g]}" autocomplete="off" value="${esc(m.q)}"></label></div>
       <div class="mk-legend"></div>
       <div class="mk-list">${sk(4)}</div>
       <p class="db-note"><span>Цены — самый дешёвый лот на каждой площадке, в валюте сайта по текущему курсу.</span> <span>Steam, Lis-skins, Skinport и Market обновляются раз в час.</span>${g === "cs" ? ` <span>CS.money и CSFloat — раз в сутки (отмечены ⏱).</span>` : ""} <span>Зелёная — самая выгодная.</span> <span>Нажми на площадку — откроется эта вещь на её сайте.</span> <span>Мы ничего не продаём, только показываем цены.</span></p>`;
-    el.onclick = e => { const c = e.target.closest("[data-mc]"); if (c){ m.cat = c.dataset.mc; m.q = ""; m.start = 0; market(el, g); return; }
+    el.onclick = e => { const fv = e.target.closest(".mk-fav");
+      if (fv){ e.preventDefault(); const n = fv.dataset.n, list = favs(g), k = list.findIndex(x => x.n === n);
+        if (k >= 0){ list.splice(k, 1); PROF.toast("Убрано из избранного"); } else { const it = m.items.find(x => x.n === n); if (it){ list.unshift(it); PROF.toast("Добавлено в избранное ★"); } }
+        favSet(g, list); favCount(m); if (m.cat === "fav" && !m.q){ m.items = favs(g); m.total = m.items.length; mkDraw(m); }
+        else { const on = list.some(x => x.n === n); fv.setAttribute("aria-pressed", on); fv.textContent = on ? "★" : "☆"; fv.setAttribute("aria-label", on ? "Убрать из избранного" : "В избранное"); } return; }
+      const c = e.target.closest("[data-mc]"); if (c){ m.cat = c.dataset.mc; m.q = ""; m.start = 0; m.items = []; market(el, g); return; }
       if (e.target.closest(".mk-more")){ m.start += 10; mkLoad(m, true); } };
     el.querySelector(".mkQ").oninput = e => { clearTimeout(m.t); const v = e.target.value.trim(); m.t = setTimeout(() => { if (v && v.length < 2) return; m.q = v; m.start = 0;
       el.querySelectorAll("[data-mc]").forEach(b => b.setAttribute("aria-pressed", !v && b.dataset.mc === m.cat)); mkLoad(m); }, 450); };
@@ -6771,6 +6811,7 @@ const GAMES = (() => {
   async function mkLoad(m, more){
     const box = m.el.querySelector(".mk-list"); if (!box) return;
     if (!more) box.innerHTML = sk(4); else { const b = m.el.querySelector(".mk-more"); if (b) b.disabled = true; }
+    if (!m.q && m.cat === "fav"){ favLoad(m); return; }
     const want = m.q + "|" + m.cat;
     try { const d = await once(`/api/games?q=market&g=${m.g}&${m.q ? "s=" + encodeURIComponent(m.q) : "cat=" + m.cat}&start=${m.start}`);
       if (want !== m.q + "|" + m.cat) return;
@@ -6779,11 +6820,13 @@ const GAMES = (() => {
   }
   function mkDraw(m){
     const box = m.el.querySelector(".mk-list"), leg = m.el.querySelector(".mk-legend"); if (!box) return;
-    if (!m.items.length){ box.innerHTML = `<div class="gempty">Ничего не нашли. Попробуй написать название по-английски, как в игре.</div>`; leg.innerHTML = ""; return; }
+    if (!m.items.length){ box.innerHTML = !m.q && m.cat === "fav" ? `<div class="gempty">В избранном пока пусто — жми ☆ на скине, чтобы сохранить его и следить за ценой.</div>` : `<div class="gempty">Ничего не нашли. Попробуй написать название по-английски, как в игре.</div>`; leg.innerHTML = ""; return; }
+    const FV = new Set(favs(m.g).map(x => x.n));
     const all = m.items[0].p; leg.innerHTML = all.map(p => `<span><img alt="" loading="lazy" src="${esc(logo(p))}">${esc(p.name)}</span>`).join("");
     box.innerHTML = m.items.map(i => { const ps = i.p.slice().sort((a, b) => (a.v == null) - (b.v == null) || a.v - b.v), has = ps.filter(p => p.v != null);
       const lo = has[0], hi = has[has.length - 1], save = lo && hi && hi.v > lo.v ? Math.round((1 - lo.v / hi.v) * 100) : 0;
-      return `<article class="mk-it"${i.col ? ` style="--rc:#${esc(i.col)}"` : ""}><div class="mk-img">${i.img ? `<img alt="" loading="lazy" src="${esc(i.img)}">` : ""}</div>
+      const fo = FV.has(i.n);
+      return `<article class="mk-it"${i.col ? ` style="--rc:#${esc(i.col)}"` : ""}><button type="button" class="mk-fav" data-n="${esc(i.n)}" aria-pressed="${fo}" aria-label="${fo ? "Убрать из избранного" : "В избранное"}">${fo ? "★" : "☆"}</button><div class="mk-img">${i.img ? `<img alt="" loading="lazy" src="${esc(i.img)}">` : ""}</div>
         <div class="mk-n"><b translate="no">${esc(i.n)}</b>${lo ? `<small class="mk-from"><span>Дешевле всего:</span> <b>${money(m, lo.v)}</b> · <span translate="no">${esc(lo.name)}</span></small>` : ""}${save >= 5 && has.length > 1 ? `<small class="mk-save"><span>Выгода до</span> ${save}%</small>` : ""}</div>
         <div class="mk-ps">${ps.map(p => `<a class="mk-p${lo && p === lo ? " best" : ""}${p.v == null ? " none" : ""}" href="${esc(p.u)}" target="_blank" rel="noopener nofollow"><img alt="" loading="lazy" src="${esc(logo(p))}"><span><small translate="no">${esc(p.name)}${p.n ? ` · ${p.n}` : ""}${p.daily ? " ⏱" : ""}</small><b>${p.v == null ? "Поиск" : money(m, p.v)}</b></span></a>`).join("")}</div></article>`; }).join("")
       + (m.items.length < Math.min(m.total, 100) ? `<button type="button" class="btn btn-ghost lad-more mk-more">Показать ещё</button>` : "");
