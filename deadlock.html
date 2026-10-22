@@ -1634,9 +1634,14 @@
   @keyframes gswIn { from { opacity: 0; transform: translateY(40px) scale(.94); } }
   /* фон главного меню: герои Dota 2, агенты CS2 и герои Deadlock плывут влево */
   .hub-bg { display: none; }
-  .hub .hub-bg { display: flex; flex-direction: column; justify-content: center; gap: 2vh; position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; opacity: 0; transition: opacity 1.2s ease; }
+  .hub .hub-bg { display: block; position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; opacity: 0; transition: opacity 1.2s ease; }
+  .hb-f { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hb-h { --hc: rgba(232,86,74,.45); position: absolute; right: 2vw; bottom: 0; width: min(66vh, 38vw); height: min(66vh, 38vw); object-fit: contain; object-position: 50% 100%; opacity: 0; transform: translateX(80px) scale(.96); filter: brightness(1.12) saturate(1.1) drop-shadow(0 0 40px var(--hc)); transition: opacity .9s ease, transform 1s cubic-bezier(.2,.8,.2,1); }
+  .hb-h.g1 { --hc: rgba(245,165,36,.45); } .hb-h.g2 { --hc: rgba(217,196,143,.4); }
+  .hb-h.on { opacity: 1; transform: none; } .hb-h.out { opacity: 0; transform: translateX(-80px) scale(.96); }
+  @media (max-width: 760px) { .hb-h { right: 50%; bottom: 0; width: min(92vw, 50vh); height: min(92vw, 50vh); margin-right: calc(min(92vw, 50vh) / -2); } .hb-h.on { opacity: .9; } }
   .hub .hub-bg.on { opacity: 1; }
-  .hub-bg::after { content: ""; position: absolute; inset: 0; background: radial-gradient(70% 60% at 50% 50%, rgba(8,8,11,.55), rgba(8,8,11,.92) 80%), linear-gradient(180deg, rgba(8,8,11,.85), rgba(8,8,11,.35) 30%, rgba(8,8,11,.35) 70%, rgba(8,8,11,.9)); }
+  .hub-bg::after { content: ""; position: absolute; inset: 0; background: radial-gradient(90% 70% at 50% 45%, rgba(8,8,11,.05), rgba(8,8,11,.6) 90%), linear-gradient(180deg, rgba(8,8,11,.55), transparent 22%, transparent 80%, rgba(8,8,11,.6)); }
   .hb-row { display: flex; width: max-content; gap: 2vh; animation: hbScroll var(--t, 80s) linear infinite; will-change: transform; }
   .hb-row img { height: 30vh; width: auto; flex: none; object-fit: contain; opacity: .55; filter: saturate(1.1) drop-shadow(0 10px 20px rgba(0,0,0,.6)); }
   .hb-row:nth-child(2) img { opacity: .45; } .hb-row:nth-child(3) img { opacity: .4; }
@@ -1664,6 +1669,10 @@
   .gb-ar { font-size: 18px; line-height: 1; transition: transform .25s; } .gback:hover .gb-ar { transform: translateX(-4px); }
   .gb-cur { display: flex; align-items: center; gap: 10px; min-width: 0; } .gb-cur img { height: 30px; width: auto; max-width: 90px; object-fit: contain; filter: drop-shadow(0 6px 14px color-mix(in srgb, var(--gcol, #ff4d3d) 50%, transparent)); }
   .gb-cur b { font-family: var(--display); font-size: 19px; letter-spacing: -.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .onl { display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px; border-radius: 999px; background: rgba(46,204,113,.1); border: 1px solid rgba(46,204,113,.28); color: #bfeccf; font-size: 13.5px; font-weight: 600; white-space: nowrap; } .onl[hidden] { display: none; }
+  .onl i { width: 8px; height: 8px; border-radius: 50%; background: #2ecc71; box-shadow: 0 0 0 0 rgba(46,204,113,.6); animation: onlP 2s infinite; } .onl b { color: #fff; font-variant-numeric: tabular-nums; }
+  @keyframes onlP { 70% { box-shadow: 0 0 0 7px rgba(46,204,113,0); } 100% { box-shadow: 0 0 0 0 rgba(46,204,113,0); } }
+  .hub-onl { display: none; } .hub .hub-onl { display: flex; justify-content: center; margin: -8px 0 20px; } .gb-onl { margin-left: auto; } @media (max-width: 420px) { .gb-onl { padding: 5px 10px; font-size: 12.5px; } }
   body[data-game="cs"] { --gcol: #f5a524; } body[data-game="deadlock"] { --gcol: #d9c48f; }
   body[data-game="cs"] .tabs-wrap, body[data-game="deadlock"] .tabs-wrap { display: none; }
   .g-sub { margin: 18px 0 14px; } .g-news { color: inherit; text-decoration: none; }
@@ -1942,7 +1951,7 @@
 <script>try { if (sessionStorage.getItem("ub-intro")) document.documentElement.classList.add("fast"); else sessionStorage.setItem("ub-intro", "1"); } catch(e) {}</script>
 <div class="wrap" id="top">
   <nav class="nav" id="topbar">
-    <a class="logo" href="/" id="logoBtn" title="Обновить сайт"><span class="mark lg"><img src="/logo.png" alt="" width="64" height="64"></span><span class="lt">Aegis</span></a>
+    <a class="logo" href="/" id="logoBtn" title="На главную"><span class="mark lg"><img src="/logo.png" alt="" width="64" height="64"></span><span class="lt">Aegis</span></a>
     <div class="thw">
       <button type="button" class="thbtn" id="thBtn" aria-label="Тема сайта: выбрать героя" aria-expanded="false" aria-controls="thPop"><span class="thdef">🎨</span></button>
       <button type="button" class="pxh" id="pxHero" aria-label="Тема сайта: выбрать героя" aria-expanded="false" aria-controls="thPop"><i></i></button>
@@ -1963,12 +1972,13 @@
 
   <div class="hub-bg" id="hubBg" aria-hidden="true"></div>
   <h1 class="hub-h">Выбери игру</h1>
+  <div class="hub-onl"><span class="onl" hidden><i aria-hidden="true"></i>Онлайн на сайте: <b translate="no">0</b></span></div>
   <nav class="gsw" id="gsw" aria-label="Игры">
     <a class="gsw-c d2" href="/dota" data-g="dota" aria-current="false"><span class="gsw-art" aria-hidden="true"></span><span class="gsw-lg"><img alt="" src="/games/dota.png"></span><span><b>Dota 2</b><small>Сборки 1x6, мета, топ MMR</small></span></a>
     <a class="gsw-c cs" href="/cs" data-g="cs" aria-current="false"><span class="gsw-art" aria-hidden="true"></span><span class="gsw-lg"><img alt="" src="/games/cs.png"></span><span><b><span class="gl">Counter-Strike 2</span><span class="gs">CS2</span></b><small>Цены скинов, новости, рейтинг команд</small></span></a>
     <a class="gsw-c dl" href="/deadlock" data-g="deadlock" aria-current="false"><span class="gsw-art" aria-hidden="true"></span><span class="gsw-lg"><img alt="" src="/games/deadlock.png"></span><span><b>Deadlock</b><small>Герои и сборки по статистике</small></span></a>
   </nav>
-  <div class="gback-row"><a class="gback" href="/" id="gBack" aria-label="Назад к выбору игры"><span class="gb-ar" aria-hidden="true">←</span><span>Все игры</span></a><span class="gb-cur" id="gbCur"><img alt="" src="/games/dota.png"><b>Dota 2</b></span></div>
+  <div class="gback-row"><a class="gback" href="/" id="gBack" aria-label="Назад к выбору игры"><span class="gb-ar" aria-hidden="true">←</span><span>Все игры</span></a><span class="gb-cur" id="gbCur"><img alt="" src="/games/dota.png"><b>Dota 2</b></span><span class="onl gb-onl" hidden><i aria-hidden="true"></i>Онлайн: <b translate="no">0</b></span></div>
   <div class="tabs-wrap">
     <div class="tabs" role="tablist" aria-label="Разделы">
       <button type="button" class="tab" role="tab" data-tab="dota" aria-selected="false"><span class="tab-ic d2ic">D2</span><span class="tl">Dota 2</span><span class="ts">Мета</span></button>
@@ -2756,14 +2766,34 @@ document.getElementById("gameBtn").onclick = () => GAME.open();
   document.addEventListener("visibilitychange", go);
 })();
 /* ---------- заставка ---------- */
-/* фон главного меню: ряды героев трёх игр, плывут влево (картинки грузятся только на главной) */
-(() => { const bg = document.getElementById("hubBg"); if (!bg) return;
-  const fill = () => { if (bg.dataset.on || !document.documentElement.classList.contains("hub")) return; bg.dataset.on = "1";
-    const pick = (dir, n) => Array.from({ length: n }, (_, i) => `/bg/${dir}/${i}.webp`).sort(() => Math.random() - .5);
-    const d2 = pick("d2", 54), cs = pick("cs", 24), dl = pick("dl", 42);
-    const mix = k => { const out = []; for (let i = 0; i < 8; i++) out.push(d2[(k * 8 + i) % d2.length], cs[(k * 8 + i) % cs.length], dl[(k * 8 + i) % dl.length]); return out; };
-    bg.innerHTML = [0, 1, 2].map(k => { const imgs = mix(k).map(u => `<img alt="" loading="lazy" decoding="async" src="${u}">`).join("");
-      return `<div class="hb-row" style="--t:${[90, 110, 100][k]}s;animation-delay:-${k * 17}s">${imgs}${imgs}</div>`; }).join("");
+/* фон главного меню: пиксельное поле + один большой герой (обычный арт), раз в 5 секунд следующий (Дота → CS2 → Deadlock) */
+(() => { const bg = document.getElementById("hubBg"); if (!bg) return; const R = document.documentElement;
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const fill = () => { if (bg.dataset.on || !R.classList.contains("hub")) return; bg.dataset.on = "1";
+    bg.innerHTML = `<canvas class="hb-f"></canvas><img class="hb-h" alt=""><img class="hb-h" alt="">`;
+    const cv = bg.firstElementChild, g = cv.getContext("2d"), hs = [...bg.querySelectorAll(".hb-h")];
+    const shuf = a => a.sort(() => Math.random() - .5), D2 = shuf(typeof HEROES !== "undefined" && HEROES.length ? HEROES.map(h => h.slug) : ["juggernaut"]), CS = shuf([...Array(25).keys()]), DL = shuf([...Array(44).keys()]);
+    const GC = [[232, 86, 74], [245, 165, 36], [217, 196, 143]];
+    let n = 0, cur = 0, col = GC[0].slice(), to = GC[0], W = 0, H = 0, t = 0, sp = [];
+    function next(){ const k = n % 3, q = Math.floor(n / 3); n++;
+      const url = k === 0 ? `/hero/${D2[q % D2.length]}.webp` : k === 1 ? `/bg/hcs/${CS[q % CS.length]}.webp` : `/bg/hdl/${DL[q % DL.length]}.webp`;
+      const im = new Image(); im.onload = () => { const a = hs[cur], b = hs[1 - cur]; cur = 1 - cur; to = GC[k];
+        b.className = "hb-h g" + k; b.src = url; void b.offsetWidth; b.classList.add("on");
+        if (a.classList.contains("on")){ a.classList.remove("on"); a.classList.add("out"); } }; im.src = url; }
+    function size(){ const d = Math.min(2, devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = W * d; cv.height = H * d; g.setTransform(d, 0, 0, d, 0, 0);
+      sp = Array.from({ length: Math.round(W * H / 7000) }, () => spawn(true)); }
+    function spawn(any){ return { x: Math.floor(Math.random() * W / 4) * 4, y: any ? Math.random() * H : H + 8, s: 2 + Math.floor(Math.random() * 3) * 2, v: .3 + Math.random() * .7, p: Math.random() * 6.3, gold: Math.random() < .3 }; }
+    function frame(){ g.clearRect(0, 0, W, H); for (let i = 0; i < 3; i++) col[i] += (to[i] - col[i]) * .04;
+      const [r, gg, b] = col.map(Math.round), C = 16, cols = Math.ceil(W / C), rows = Math.ceil(H / C);
+      for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++){
+        const w = Math.sin(x * .2 + t * .9) * Math.cos(y * .27 - t * .6) + Math.sin((x + y) * .1 - t * .4), a = Math.max(0, w) * .22 + .05;
+        if (a < .06) continue; g.fillStyle = `rgba(${r},${gg},${b},${a.toFixed(3)})`; g.fillRect(x * C + 6, y * C + 6, 4, 4); }
+      for (const q of sp){ q.y -= q.v; q.p += .08; if (q.y < -10) Object.assign(q, spawn(false)); const a = .45 + .4 * Math.sin(q.p);
+        g.fillStyle = q.gold ? `rgba(243,195,90,${a.toFixed(3)})` : `rgba(${r},${gg},${b},${Math.min(1, a + .15).toFixed(3)})`; g.fillRect(q.x, Math.round(q.y / 2) * 2, q.s, q.s); } }
+    let last = 0, raf = 0; const loop = ts => { raf = 0; if (!R.classList.contains("hub") || document.hidden) return; if (ts - last > 33){ last = ts; t += .033; frame(); } raf = requestAnimationFrame(loop); };
+    const go = () => { if (!raf && !still) raf = requestAnimationFrame(loop); };
+    size(); frame(); go(); next(); addEventListener("resize", () => { size(); frame(); }); document.addEventListener("visibilitychange", go);
+    setInterval(() => { if (!document.hidden && R.classList.contains("hub")) next(); }, 5000);
     requestAnimationFrame(() => bg.classList.add("on")); };
   if (document.readyState === "complete") fill(); else addEventListener("load", fill);
   addEventListener("hashchange", fill); })();
@@ -2803,6 +2833,11 @@ const CURSEL = (() => {
 const PROF = (() => {
   const LKEY = "ub-profile";
   const sb = (window.supabase && window.SB_CONF && window.SB_CONF.url) ? (() => { try { return window.supabase.createClient(window.SB_CONF.url, window.SB_CONF.key, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: "pkce" } }); } catch(e) { return null; } })() : null;
+  // онлайн на сайте: присутствие в общем канале Supabase Realtime, без таблиц и без входа
+  (() => { if (!sb) return; const show = n => document.querySelectorAll(".onl").forEach(e => { e.hidden = !n; const b = e.querySelector("b"); if (b) b.textContent = n; });
+    try { const me = Math.random().toString(36).slice(2) + Date.now().toString(36), ch = sb.channel("online", { config: { presence: { key: me } } });
+      ch.on("presence", { event: "sync" }, () => show(Object.keys(ch.presenceState()).length)).subscribe(st => { if (st === "SUBSCRIBED" && ch.track) Promise.resolve(ch.track({ at: Date.now() })).catch(() => {}); });
+      document.addEventListener("visibilitychange", () => { try { document.hidden ? ch.untrack() : ch.track({ at: Date.now() }); } catch(e) {} }); } catch(e) {} })();
   const CLOUD = !!sb;
   let P = null, U = null, autoOpened = false;
   const HAD_CODE = /[?&]code=|access_token=/.test(location.href);
@@ -6308,7 +6343,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=11").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=12").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
@@ -6970,7 +7005,7 @@ const PXWIPE = (() => {
   const spin = () => { if (m.classList.contains("spin")) return; m.classList.add("spin"); setTimeout(() => m.classList.remove("spin"), 1400); };
   m.addEventListener("mouseenter", spin); setInterval(() => { if (!document.hidden) spin(); }, 25000); })();
 document.getElementById("logoBtn").onclick = e => { e.preventDefault();
-  const to = location.pathname === "/" || location.pathname === "/index.html" ? "/" : location.pathname;
+  const to = "/"; // обновление через логотип всегда ведёт на выбор игры
   PXWIPE.out(() => { location.href = to; }); };
 PXWIPE.in();
 const topbar = document.getElementById("topbar"); let tbS = false;
