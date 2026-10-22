@@ -47,8 +47,8 @@ const GRIDS = (() => {
     return P; }
   let gid = 0; const newG = () => "g" + Date.now().toString(36) + (gid++);
   // левая колонка «1 POS … BAN» в рамке из символов, справа место под арт — как в арт-сетках
-  function posLayout(fill){
-    const P = fill ? byPos() : [[], [], [], [], []], out = [], g = newG(), x = 66, w = 520, h = 74, step = 94, y0 = 16;
+  function posLayout(fill, side){
+    const P = fill ? byPos() : [[], [], [], [], []], out = [], g = newG(), x = side === "l" ? 584 : 66, w = 520, h = 74, step = 94, y0 = 16;
     ["1 POS", "2 POS", "3 POS", "4 POS", "5 POS", "BAN"].forEach((t, i) => { const y = y0 + i * step;
       out.push({ category_name: "", x_position: x, y_position: y, width: w, height: h, hero_ids: P[i] || [] });
       out.push({ category_name: t, x_position: x + w + 14, y_position: y + h / 2 - 9, width: SYM, height: SYM, hero_ids: [], _g: g }); });
@@ -108,9 +108,13 @@ const GRIDS = (() => {
       put(x, y, M[i] > mx * .55 && o.ch === "." ? "·" : o.ch || "."); if (out.length >= (o.max || 2600)) break; }
     return out;
   }
-  async function sceneCfg(slug, name){
-    await heroes(); const img = await loadImg(`/hero/${slug}.webp`);
-    return { config_name: "Сцена: " + name, categories: posLayout(true).concat(artCats(img, { x: 650, y: 8, w: 530, h: 580, mode: "line", step: 5, thr: .12, ch: ".", crop: .58 })) };
+  // сцены для всех героев каталога: рисунок то справа, то слева, кадр по очереди — по пояс, во весь рост, лицо
+  const ALLSC = () => (typeof HEROES !== "undefined" && HEROES.length ? HEROES.map(h => [h.slug, h.ru || h.en]) : SCENES);
+  const CROPS = [[.58, "по пояс"], [1, "в полный рост"], [.34, "лицо"]];
+  function sceneOf(i){ const L = ALLSC(), fav = SCENES.map(x => x[0]), order = [...SCENES, ...L.filter(x => !fav.includes(x[0]))]; const [slug, name] = order[i], c = CROPS[i % 3], side = (i >> 1) % 2 ? "l" : "r"; return { slug, name, crop: c[0], cn: c[1], side }; }
+  async function sceneCfg(slug, name, crop, side){
+    await heroes(); const img = await loadImg(`/hero/${slug}.webp`), left = side === "l";
+    return { config_name: "Сцена: " + name, categories: posLayout(true, side).concat(artCats(img, { x: left ? 12 : 650, y: 8, w: 530, h: 580, mode: "line", step: 5, thr: .12, ch: ".", crop: crop || .58 })) };
   }
 
   /* ---------- разметка ---------- */
@@ -369,16 +373,18 @@ const GRIDS = (() => {
     el.innerHTML = `<div class="gr-shead"><div class="rkchips">${[["new", "Новые"], ["top", "Популярные"]].map(x => `<button type="button" class="rkc" data-ss="${x[0]}" aria-pressed="${x[0] === shopSort}">${x[1]}</button>`).join("")}</div>
       <label class="d2-search gr-sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="grSQ" placeholder="Название или автор" value="${esc(shopQ)}"></label></div>
       <h3 class="gr-h3">Сетки игроков</h3><div class="gr-cards" id="grUsr"><div class="feed-sk"></div></div>
-      <h3 class="gr-h3">Арт-сцены от Aegis</h3><p class="gr-mut">Позиции 1–5 слева, рисунок героя точками справа. Свою сцену — с любой картинкой — собери в редакторе: «🎨 Арт / сцена».</p><div class="gr-cards" id="grScn">${SCENES.map(() => `<div class="feed-sk"></div>`).join("")}</div>
+      <h3 class="gr-h3">Арт-сцены от Aegis</h3><p class="gr-mut">Позиции 1–5 в рамке и герой, нарисованный точками. Свою сцену — с любой картинкой — собери в редакторе: «🎨 Арт / сцена».</p><div class="gr-cards" id="grScn"><div class="feed-sk"></div></div><button type="button" class="btn btn-ghost gr-more" id="grMore" hidden>Ещё сцены</button>
       <h3 class="gr-h3">Обычные сетки</h3><div class="gr-cards" id="grPre"></div>`;
     el.querySelectorAll("[data-ss]").forEach(b => b.onclick = () => { shopSort = b.dataset.ss; shop(); });
     let qt = 0; el.querySelector("#grSQ").oninput = e => { clearTimeout(qt); qt = setTimeout(() => { shopQ = e.target.value.trim(); users(); }, 300); };
     const pre = PRESETS.map(p => ({ name: p.n, nick: "Aegis", d: p.d, data: { config_name: p.n, categories: H.length ? p.f() : [] } }));
     const pb = el.querySelector("#grPre"); pb.innerHTML = pre.map(card).join(""); bindCards(pb, pre);
     users();
-    const sc = [], box = el.querySelector("#grScn");
-    for (const [slug, name] of SCENES){ try { sc.push({ name: "Сцена: " + name, nick: "Aegis", data: await sceneCfg(slug, name) }); } catch(e) {} if (!box.isConnected) return; }
-    box.innerHTML = sc.map(card).join(""); bindCards(box, sc);
+    const sc = [], box = el.querySelector("#grScn"), more = el.querySelector("#grMore"), total = ALLSC().length; let next = 0;
+    const batch = async () => { more.hidden = true; const end = Math.min(total, next + 12);
+      for (; next < end; next++){ const q = sceneOf(next); try { sc.push({ name: "Сцена: " + q.name, nick: "Aegis", d: q.cn, data: await sceneCfg(q.slug, q.name, q.crop, q.side) }); } catch(e) {} if (!box.isConnected) return; }
+      box.innerHTML = sc.map(card).join(""); bindCards(box, sc); more.hidden = next >= total; more.textContent = `Ещё сцены (${total - next})`; };
+    more.onclick = batch; batch();
   }
   function card(g){ const cs = g.data.categories || [], sy = cs.filter(isSym).length; return `<div class="gr-card"><div class="gr-th"><img alt="" src="${thumb(g.data)}"></div><div class="gr-ci"><b>${esc(g.name)}</b><small>${esc(g.nick || "")}${g.d ? " · " + esc(g.d) : ""}</small>
     <small class="gr-meta">Категорий: ${cs.length}${sy ? ` · символов: ${sy}` : ""}${g.likes != null ? ` · ❤ ${g.likes} · ⬇ ${g.downloads || 0}` : ""}</small>
