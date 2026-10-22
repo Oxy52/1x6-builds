@@ -1659,6 +1659,58 @@
   @media (hover: hover) { .card:hover .heroart.pxart i { transform: translateY(-4%) scale(1.06); } }
   .heroart.pxart::after { content: ""; position: absolute; left: 22%; right: 22%; bottom: 14%; height: 5%; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,0,0,.55), transparent); z-index: -1; }
 
+  /* ---------- сетки героев ---------- */
+  .gr-subs { margin-bottom: 14px; }
+  .gr-bar, .gr-tpl, .gr-row, .gr-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .gr-bar { margin-bottom: 10px; } .gr-sp { flex: 1; }
+  .gr-bar select, .gr-bar input, .gr-row input, .gr-box input, .gr-box textarea, .gr-box select { background: var(--bg-soft); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; font: inherit; font-size: 13.5px; }
+  .gr-bar input { width: 170px; } .gr-row #grN { flex: 1; min-width: 160px; }
+  .gr-b { cursor: pointer; font: inherit; font-size: 13px; font-weight: 600; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--line); background: rgba(255,255,255,.04); color: var(--fg); transition: .15s; white-space: nowrap; }
+  .gr-b:hover { background: rgba(255,255,255,.09); } .gr-b.gr-main { background: var(--fg); color: var(--btn-fg); border-color: transparent; } .gr-b.gr-red { color: #ff7a6e; }
+  .gr-tpl { margin-bottom: 12px; font-size: 13px; color: var(--muted); }
+  .gr-wrap { display: grid; grid-template-columns: minmax(0, 1fr) 270px; gap: 14px; align-items: start; }
+  .gr-stage { position: relative; border-radius: 14px; border: 1px solid var(--line); background-color: #0e0e14; overflow: hidden; outline: none; touch-action: none; user-select: none;
+    background-image: linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px); background-size: calc(50px * var(--s, 1)) calc(50px * var(--s, 1)); }
+  .gr-cv { position: relative; width: 100%; }
+  .gr-cat { position: absolute; border: 1px dashed rgba(255,255,255,.14); border-radius: 4px; cursor: move; }
+  .gr-cat.on { border: 1px solid var(--gold); box-shadow: 0 0 0 1px var(--gold), 0 0 18px -4px var(--gold); z-index: 2; }
+  .gr-cat.drop { border-color: #6cf; background: rgba(100,200,255,.08); }
+  .gr-cat.art { border-color: transparent; } .gr-cat.art.on { border-color: var(--gold); }
+  .gr-lb { position: absolute; left: 0; bottom: 100%; white-space: pre; color: rgba(255,255,255,.85); line-height: 1.15; font-weight: 600; pointer-events: none; }
+  .gr-cat.art .gr-lb { position: static; font-family: ui-monospace, Consolas, monospace; font-weight: 400; line-height: 1; }
+  .gr-ts { display: flex; flex-wrap: wrap; align-content: flex-start; padding: 2px; }
+  .gr-t { display: block; flex: none; border-radius: 3px; overflow: hidden; background: #222; cursor: grab; box-shadow: 0 1px 3px rgba(0,0,0,.5); }
+  .gr-t img, .gr-p img, .gr-ghost img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+  .gr-rs { position: absolute; right: -6px; bottom: -6px; width: 14px; height: 14px; border-radius: 4px; background: var(--gold); cursor: nwse-resize; }
+  .gr-tools { margin-top: 10px; } .gr-hint, .gr-mut, .gr-stat { color: var(--muted); font-size: 12.5px; }
+  .gr-insp { margin-top: 10px; padding: 12px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); display: grid; gap: 8px; }
+  .gr-num { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); } .gr-num input { width: 66px; }
+  .gr-pal { position: sticky; top: 76px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); padding: 10px; display: grid; gap: 8px; }
+  .gr-af { display: flex; flex-wrap: wrap; gap: 5px; } .gr-af .rkc { padding: 5px 9px; font-size: 12px; }
+  .gr-ph { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; max-height: 62vh; overflow-y: auto; overscroll-behavior: contain; padding-right: 2px; }
+  .gr-p { position: relative; display: block; aspect-ratio: 3 / 4; border-radius: 6px; overflow: hidden; cursor: grab; background: #222; touch-action: none; }
+  .gr-p span { position: absolute; left: 0; right: 0; bottom: 0; font-size: 9.5px; font-style: normal; line-height: 1.1; padding: 8px 3px 3px; background: linear-gradient(transparent, rgba(0,0,0,.85)); color: #fff; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .gr-p.used { opacity: .4; } .gr-p:hover { outline: 2px solid var(--gold); opacity: 1; }
+  .gr-ghost { position: fixed; left: 0; top: 0; z-index: 9999; width: 50px; height: 66px; border-radius: 6px; overflow: hidden; pointer-events: none; box-shadow: 0 8px 24px rgba(0,0,0,.6); outline: 2px solid var(--gold); }
+  .gr-mod { position: fixed; inset: 0; z-index: 400; background: rgba(0,0,0,.6); display: grid; place-items: center; padding: 16px; }
+  .gr-box { position: relative; width: min(720px, 100%); max-height: 90vh; overflow: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 20px; display: grid; gap: 12px; box-sizing: border-box; }
+  .gr-box h3 { margin: 0; font-family: var(--display); } .gr-box p { margin: 0; } .gr-box textarea { width: 100%; box-sizing: border-box; resize: vertical; font-family: ui-monospace, Consolas, monospace; font-size: 12px; }
+  .gr-x { position: absolute; right: 12px; top: 12px; background: none; border: 0; color: var(--muted); font-size: 18px; cursor: pointer; }
+  .gr-acts { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; } .gr-acts .btn { padding: 10px 22px; font-size: 14px; }
+  .gr-file { justify-self: start; padding: 10px 18px; font-size: 14px; } .gr-chk { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+  .gr-err { color: #ff7a6e; font-size: 13px; min-height: 1em; }
+  .gr-arow { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; font-size: 13px; color: var(--muted); } .gr-arow label { display: flex; align-items: center; gap: 6px; }
+  .gr-pre { margin: 0; max-height: 300px; overflow: auto; background: #050507; color: #e9e6dc; border-radius: 10px; padding: 10px; font: 6px/6px ui-monospace, Consolas, monospace; white-space: pre; }
+  .gr-shead { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; } .gr-sq { max-width: 280px; }
+  .gr-h3 { font-family: var(--display); font-size: 18px; margin: 18px 0 10px; }
+  .gr-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .gr-card { border: 1px solid var(--line); border-radius: 16px; background: var(--panel); overflow: hidden; display: flex; flex-direction: column; }
+  .gr-th { background: #0d0d12; aspect-ratio: 16 / 9; overflow: hidden; } .gr-th img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .gr-ci { padding: 12px; display: grid; gap: 4px; } .gr-ci small { color: var(--muted); font-size: 12px; } .gr-meta { opacity: .85; }
+  .gr-ca { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; } .gr-cards .gempty, .gr-cards .feed-sk { grid-column: 1 / -1; }
+  .gr-help { max-width: 760px; line-height: 1.6; } .gr-help li { margin-bottom: 10px; } .gr-help code { background: rgba(255,255,255,.07); padding: 2px 6px; border-radius: 6px; font-size: 13px; word-break: break-all; }
+  @media (max-width: 860px) { .gr-wrap { grid-template-columns: 1fr; } .gr-pal { position: static; order: -1; } .gr-ph { grid-template-columns: repeat(auto-fill, minmax(54px, 1fr)); max-height: 210px; } .gr-bar input { width: 120px; } }
+
   /* ---------- появление пиксельного героя в окне сборки (как спавн с высоким тиром в Доте) ---------- */
   .banner .pxspawn { position: absolute; inset: 0; z-index: 1; pointer-events: none; --g: color-mix(in srgb, var(--c1) 35%, #f3c35a); }
   .banner:has(.pxspawn) { animation: bnShake .42s linear 1.05s; }
@@ -1748,6 +1800,7 @@
 
   <div class="tabs" role="tablist" aria-label="Разделы">
     <button type="button" class="tab" role="tab" data-tab="dota" aria-selected="false"><span class="tab-ic d2ic">D2</span><span class="tl">Dota 2</span><span class="ts">Мета</span></button>
+    <button type="button" class="tab" role="tab" data-tab="grids" aria-selected="false" aria-label="Сетки героев"><span class="tab-ic">▦</span><span class="tl">Сетки</span><span class="ts">Сетки</span></button>
     <button type="button" class="tab" role="tab" data-tab="news" aria-selected="false" aria-label="Новости"><span class="tab-ic">📰</span><span class="tl">Новости</span><span class="ts">Новости</span></button>
     <button type="button" class="tab" role="tab" data-tab="ladder" aria-selected="false" aria-label="Топ MMR"><span class="tab-ic">🥇</span><span class="tl">Топ MMR</span><span class="ts">Топ MMR</span></button>
     <button type="button" class="tab" role="tab" data-tab="1x6" aria-selected="true"><span class="tab-ic">1×6</span><span class="tl">Dota 1x6</span><span class="ts">Сборки</span></button>
@@ -1843,6 +1896,12 @@
     <section class="section first">
       <div class="section-head"><h2>Dota 2 — мета и сборки</h2><p>Все герои обычной Доты: винрейт и пикрейт по рангам и ролям, сборки предметов с винрейтом и контрпики — как на Dotabuff.</p></div>
       <div id="d2Pane"></div>
+    </section>
+  </div>
+  <div class="tabpane" data-pane="grids" role="tabpanel" hidden>
+    <section class="section first">
+      <div class="section-head"><h2>Сетки героев Dota 2</h2><p>Собери свою сетку героев для окна выбора: категории, порядок, арт из картинки. Скачай готовый файл одним кликом или возьми чужую сетку из мастерской.</p></div>
+      <div id="grPane"></div>
     </section>
   </div>
   <div class="tabpane" data-pane="custom" role="tabpanel" hidden>
@@ -6327,7 +6386,7 @@ const LADDER = (() => {
 })();
 
 /* ---------- вкладки ---------- */
-const TABS = ["dota", "news", "ladder", "1x6", "custom", "games", "feed", "rating"];
+const TABS = ["dota", "grids", "news", "ladder", "1x6", "custom", "games", "feed", "rating"];
 let curTab = "1x6";
 function inkTo(btn, instant){ const ink = document.getElementById("tabInk"), bar = btn.parentElement; if (!ink) return;
   if (instant){ ink.style.transition = "none"; requestAnimationFrame(() => ink.style.transition = ""); }
@@ -6341,6 +6400,7 @@ function setTab(name, opts){
   if (name === "feed") PROF.feedOpen();
   if (name === "rating") PROF.ratingOpen();
   if (name === "dota") D2.open();
+  if (name === "grids" && typeof GRIDS !== "undefined") GRIDS.open();
   if (name === "custom") CHC.open();
   if (name === "news") NEWS.open();
   if (name === "ladder") LADDER.open();
@@ -6471,5 +6531,6 @@ drawRecent();
 render();
 </script>
 
+<script src="/grids.js" defer></script>
 </body>
 </html>
