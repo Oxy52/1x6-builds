@@ -2703,12 +2703,18 @@ document.getElementById("gameBtn").onclick = () => GAME.open();
     ico.className = ""; ico.style.backgroundImage = `url(pixel/${G[0]}/${i % G[1]}.webp)`; btn.setAttribute("aria-label", G[2] + " — нажми, чтобы сменить"); btn.title = G[2];
     if (jump){ btn.classList.remove("jump"); void btn.offsetWidth; btn.classList.add("jump"); } return true; }
   const show0 = show; show = (slug, jump) => { if (!gshow(jump)) show0(slug, jump); };
-  new MutationObserver(() => { if (!gshow(true)){ btn.setAttribute("aria-label", "Тема сайта: выбрать героя"); btn.removeAttribute("title"); let c = ""; try { c = localStorage.getItem("ub-theme") || ""; } catch(e) {} show0(c, true); } }).observe(document.body, { attributes: true, attributeFilter: ["data-game"] });
-  btn.onclick = e => { e.stopPropagation(); if (gpx()){ gshow(true, true); return; } thBtn.click(); btn.setAttribute("aria-expanded", String(!pop.hidden)); };
+  new MutationObserver(() => { if (document.documentElement.classList.contains("hub")) return; if (!gshow(true)){ btn.setAttribute("aria-label", "Тема сайта: выбрать героя"); btn.removeAttribute("title"); let c = ""; try { c = localStorage.getItem("ub-theme") || ""; } catch(e) {} show0(c, true); } }).observe(document.body, { attributes: true, attributeFilter: ["data-game"] });
+  // на главной (выбор игры) — все игры поровну: Дота → CS2 → Deadlock по очереди
+  const HUBR = document.documentElement; let hubN = 0, hubT = 0;
+  function hubStep(){ if (!HUBR.classList.contains("hub")){ clearInterval(hubT); hubT = 0; return false; } const k = hubN++ % 3, r = n => Math.floor(Math.random() * n);
+    ico.className = ""; ico.style.backgroundImage = k === 0 ? sheet(PX[r(PX.length)]) : k === 1 ? `url(pixel/cs/${r(24)}.webp)` : `url(pixel/dl/${r(42)}.webp)`;
+    btn.setAttribute("aria-label", "Персонаж — нажми, чтобы сменить"); btn.classList.remove("jump"); void btn.offsetWidth; btn.classList.add("jump"); return true; }
+  if (HUBR.classList.contains("hub")){ hubStep(); hubT = setInterval(() => { if (!document.hidden) hubStep(); }, 3200); }
+  btn.onclick = e => { e.stopPropagation(); if (HUBR.classList.contains("hub")){ hubStep(); clearInterval(hubT); hubT = setInterval(() => { if (!document.hidden) hubStep(); }, 3200); return; } if (gpx()){ gshow(true, true); return; } thBtn.click(); btn.setAttribute("aria-expanded", String(!pop.hidden)); };
   grid.onclick = e => { const b = e.target.closest(".pxo"); if (!b) return; if (window.__thSet) window.__thSet(b.dataset.s); setTimeout(() => document.dispatchEvent(new Event("click")), 200); };
   new MutationObserver(() => btn.setAttribute("aria-expanded", String(!pop.hidden))).observe(pop, { attributes: true, attributeFilter: ["hidden"] });
   let cur = ""; try { cur = localStorage.getItem("ub-theme") || ""; } catch(e) {}
-  show(cur, false);
+  if (!HUBR.classList.contains("hub")) show(cur, false);
 })();
 
 /* ---------- пиксельное поле за заголовком: точки-пиксели и искры в цвет темы ---------- */
