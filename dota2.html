@@ -1494,7 +1494,8 @@
   .ncard { --nc: #58b6ff; position: relative; display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 14px; padding: 16px 18px 16px 16px; border-radius: 18px; border: 1px solid var(--line); overflow: hidden;
     background: linear-gradient(100deg, color-mix(in srgb, var(--nc) 8%, transparent), transparent 45%), var(--bg-soft); animation: inUp .6s cubic-bezier(.22,.61,.36,1) both; animation-delay: calc(var(--i, 0) * 40ms); }
   .ncard::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 0 3px 3px 0; background: var(--nc); box-shadow: 0 0 12px var(--nc); }
-  .ncard.patch { --nc: #ffb547; } .ncard.players { --nc: #c47bff; } .ncard.events { --nc: #4ade80; } .ncard.community { --nc: #ff6b8b; } .ncard.leaks { --nc: #2ee6d6; }
+  .ncard.patch { --nc: #ffb547; } .ncard.players { --nc: #c47bff; } .ncard.events { --nc: #4ade80; } .ncard.community { --nc: #ff6b8b; } .ncard.leaks { --nc: #2ee6d6; } .ncard.valve { --nc: #ff5a3c; }
+  .ncard.auto p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   .nic { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-size: 21px; background: color-mix(in srgb, var(--nc) 16%, transparent); border: 1px solid color-mix(in srgb, var(--nc) 35%, transparent); }
   button.nic { padding: 0; overflow: hidden; cursor: pointer; border: 2px solid var(--c1); background: var(--c2); transition: transform .2s; }
   button.nic:hover { transform: scale(1.08); }
@@ -6163,7 +6164,7 @@ const I18N = (() => {
 /* ---------- новости: патч и про-сцена ---------- */
 const NEWS = (() => {
   const UPDATED = "2026-10-21"; // дата обновления новостей (ГГГГ-ММ-ДД)
-  const CATS = { patch: "Патч", players: "Игроки", events: "Турниры", leaks: "Датамайн", community: "Комьюнити" };
+  const CATS = { patch: "Патч", players: "Игроки", events: "Турниры", leaks: "Датамайн", community: "Комьюнити", valve: "Valve" };
   // id растёт с каждой новостью — по нему считаем «новое с прошлого визита»
   const ITEMS = [
     { id: 43, w: "20–21 октября", d: "октябрь", cat: "leaks", ic: "🗓️", hl: 1, t: "Когда ждать 7.42", x: "Официальной даты нет. Трекеры патчей дают высокий шанс на выход в октябре–ноябре. Сообщество гадает между Хэллоуином (31 октября) и периодом перед DreamLeague Season 30 (2–13 декабря)." },
@@ -6211,8 +6212,25 @@ const NEWS = (() => {
     { id: 0, w: "Сентябрь", d: "10 сен", cat: "patch", ic: "🧳", t: "Осенние «Диковинки Квортеро»", x: "Новый сезон с наборами на Clockwerk, Treant Protector и Windranger." }
   ];
   const TOP = ITEMS.reduce((m, n) => Math.max(m, n.id), 0);
+  // официальные новости Valve из Steam (/api/news) — приходят сами, уже на языке сайта; берём только то, что новее ручных
+  const CUT = Date.parse(UPDATED + "T23:59:59Z") / 1000;
+  let AUTO = [], CHECKED = null, PATCH = { num: "7.41f", ts: 1789455600, major: "7.41", majorTs: 1774335600 }, seenT = 0;
+  try { seenT = +localStorage.getItem("ub-news-t") || 0; } catch(e) {}
+  const ALL = () => AUTO.concat(ITEMS);
+  const autoTop = () => AUTO.reduce((m, n) => Math.max(m, n.ts), 0);
+  const ldate = (ts, o) => { try { return new Date(ts * 1000).toLocaleDateString(TL === "ru" ? "ru-RU" : TL, o || { day: "numeric", month: "long" }); } catch(e) { return new Date(ts * 1000).toISOString().slice(0, 10); } };
+  async function loadAuto(){
+    try {
+      const r = await fetch(`/api/news?lang=${TL}`); if (!r.ok) return;
+      const d = await r.json(); if (d.patch && d.patch.num) PATCH = d.patch; CHECKED = d.checked || null;
+      AUTO = (d.items || []).filter(n => n.ts > CUT).map(n => ({ ...n, id: n.ts, auto: 1, w: ldate(n.ts), d: ldate(n.ts) }));
+    } catch(e) { return; }
+    dot(); const box = document.getElementById("newsBox"); if (wired && box && box.offsetParent) open();
+    if (/^#news-\d+$/.test(location.hash) && modal.hidden) fromHash();
+    else if (curId != null && !modal.hidden && modal.querySelector(".nsheet") && AUTO.some(n => n.id === curId)) openNews(curId);
+  }
   const H = slug => HEROES.find(h => h.slug === slug);
-  const NC = { patch: "#ffb547", players: "#c47bff", leaks: "#2ee6d6", events: "#4ade80", community: "#ff6b8b" };
+  const NC = { patch: "#ffb547", players: "#c47bff", leaks: "#2ee6d6", events: "#4ade80", community: "#ff6b8b", valve: "#ff5a3c" };
   // картинка новости: официальный арт из первоисточника (news/), герой/предмет с CDN Valve или живая анимация героя сайта; без неё — обложка с заголовком
   const CDN = "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react";
   const PIC = { 8: "news/trove.webp", 11: "news/trove.webp", 22: "news/trove.webp", 40: "news/carnival.webp", 34: "news/patch741.webp", 43: "news/patch741.webp", 1: "news/patch741.webp", 0: "news/patch741.webp",
@@ -6224,7 +6242,8 @@ const NEWS = (() => {
     players: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>',
     leaks: '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2M8.5 11h5M11 8.5v5"/>',
     events: '<path d="M7 4h10v4a5 5 0 0 1-10 0zM7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4M12 13v4M8 21h8M9 17h6v4H9z"/>',
-    community: '<path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/>' };
+    community: '<path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/>',
+    valve: '<path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.2 7.5 9.5 4.3-1.3 7.5-4.9 7.5-9.5V6z"/><path d="m8.5 11.5 2.5 2.5 4.5-5"/>' };
   const cic = c => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${CIC[c] || CIC.community}</svg>`;
   const plain = s => String(s).replace(/<[^>]+>/g, "");
   let NF = new Set(); try { NF = new Set(JSON.parse(localStorage.getItem("ub-news-fav") || "[]")); } catch(e) {}
@@ -6244,8 +6263,8 @@ const NEWS = (() => {
   const NT = () => TRN ? ' translate="no"' : "";
   const updTxt = () => { const d = new Date(UPDATED + "T12:00:00"); try { return d.toLocaleDateString(TL === "ru" ? "ru-RU" : TL, { day: "numeric", month: "long", year: "numeric" }); } catch(e) { return UPDATED; } };
 
-  function dot(){ document.querySelectorAll('.tab[data-tab="news"]').forEach(tb => { let d = tb.querySelector(".ndot");
-    if (TOP > seen && !d){ d = document.createElement("i"); d.className = "ndot"; d.setAttribute("aria-hidden", "true"); tb.appendChild(d); } else if (TOP <= seen && d) d.remove(); }); }
+  function dot(){ const fresh = TOP > seen || autoTop() > seenT; document.querySelectorAll('.tab[data-tab="news"]').forEach(tb => { let d = tb.querySelector(".ndot");
+    if (fresh && !d){ d = document.createElement("i"); d.className = "ndot"; d.setAttribute("aria-hidden", "true"); tb.appendChild(d); } else if (!fresh && d) d.remove(); }); }
   function go(){ setTab("news"); }
   function icon(n){ const h = n.hero && H(n.hero);
     return h ? `<button type="button" class="nic" data-s="${h.slug}" style="${vars(h)}" aria-label="Сборка ${h.en}" title="Сборка ${h.en}"><img alt="" loading="lazy" src="face/${h.slug}.webp"></button>`
@@ -6253,20 +6272,22 @@ const NEWS = (() => {
   function chips(n){ const list = [n.hero, ...(n.also || [])].map(H).filter(Boolean); if (!list.length) return "";
     return list.map(h => `<button type="button" class="nhero" data-s="${h.slug}" style="${vars(h)}"><img alt="" loading="lazy" src="face/${h.slug}.webp">Сборка ${h.en}</button>`).join(" "); }
   function card(n, i){
-    const fresh = !firstVisit && n.id > seen, T = tt(n);
-    return `<article class="ncard ${n.cat}" data-id="${n.id}" tabindex="0" style="--i:${Math.min(i, 10)}" aria-label="${plain(T.t)}">${icon(n)}<div><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span><span${NT()}>${td(n.d)}</span>${fresh ? `<span class="nnew">NEW</span>` : ""}</div>
+    const fresh = !firstVisit && (n.auto ? n.ts > seenT : n.id > seen), T = tt(n);
+    return `<article class="ncard ${n.cat}${n.auto ? " auto" : ""}" data-id="${n.id}" tabindex="0" style="--i:${Math.min(i, 10)}" aria-label="${plain(T.t)}">${icon(n)}<div><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span><span${NT()}>${td(n.d)}</span>${fresh ? `<span class="nnew">NEW</span>` : ""}</div>
       <h3${NT()}>${T.t}</h3><p${NT()}>${T.x}</p>${chips(n)}</div>${favBtn(n.id)}</article>`;
   }
   const favBtn = id => `<button type="button" class="fav nfav" data-id="${id}" aria-pressed="${NF.has(id)}" aria-label="Новость в избранное">${STAR}</button>`;
   let VIEW = [];
   function drawChips(){
-    const cnt = k => k === "all" ? ITEMS.length : k === "fav" ? NF.size : ITEMS.filter(n => n.cat === k).length;
-    document.getElementById("nChips").innerHTML = [["all", "Всё"], ["fav", "★ Избранное"], ["patch", "🛠️ Патч"], ["players", "🧑‍💻 Игроки"], ["leaks", "🔍 Датамайн"], ["events", "🏆 Турниры"], ["community", "🎉 Комьюнити"]]
-      .map(([k, l]) => `<button type="button" class="rkc" data-c="${k}" aria-pressed="${cat === k}">${l}<em>${cnt(k)}</em></button>`).join("");
+    const cnt = k => k === "all" ? ALL().length : k === "fav" ? NF.size : ALL().filter(n => n.cat === k).length;
+    document.getElementById("nChips").innerHTML = [["all", "Всё"], ["fav", "★ Избранное"], ["valve", "🛡️ Valve"], ["patch", "🛠️ Патч"], ["players", "🧑‍💻 Игроки"], ["leaks", "🔍 Датамайн"], ["events", "🏆 Турниры"], ["community", "🎉 Комьюнити"]]
+      .filter(([k]) => k !== "valve" || cnt(k)).map(([k, l]) => `<button type="button" class="rkc" data-c="${k}" aria-pressed="${cat === k}">${l}<em>${cnt(k)}</em></button>`).join("");
   }
   function draw(){
     const wk = ["20–21 октября", "12–18 октября", "5–11 октября", "Сентябрь"]; // неизвестная (новая) неделя встанет первой
-    VIEW = ITEMS.filter(n => cat === "all" || (cat === "fav" ? NF.has(n.id) : n.cat === cat)).sort((a, b) => wk.indexOf(a.w) - wk.indexOf(b.w) || b.id - a.id);
+    // официальные (они новее ручных) — сверху по дате, дальше ручные по неделям
+    VIEW = ALL().filter(n => cat === "all" || (cat === "fav" ? NF.has(n.id) : n.cat === cat))
+      .sort((a, b) => (b.auto || 0) - (a.auto || 0) || (a.auto ? b.ts - a.ts : wk.indexOf(a.w) - wk.indexOf(b.w) || b.id - a.id));
     drawChips();
     let html = "", w = "", i = 0;
     VIEW.forEach(n => { if (n.w !== w){ w = n.w; html += `<div class="ngrp"${NT()}>${td(w)}</div>`; } html += card(n, i++); });
@@ -6280,9 +6301,9 @@ const NEWS = (() => {
   }
   /* окно новости: картинка, полный текст, избранное, поделиться, листание */
   function openNews(id){
-    const n = ITEMS.find(x => x.id === id); if (!n) return;
+    const n = ALL().find(x => x.id === id); if (!n) return;
     curId = id; const T = tt(n);
-    const p = pic(n), h = n.hero && H(n.hero), pool = VIEW.some(x => x.id === id) ? VIEW : ITEMS, idx = pool.findIndex(x => x.id === id);
+    const p = pic(n), h = n.hero && H(n.hero), pool = VIEW.some(x => x.id === id) ? VIEW : ALL(), idx = pool.findIndex(x => x.id === id);
     const was = !modal.hidden;
     if (modal._cleanup){ try { modal._cleanup(); } catch(e) {} modal._cleanup = null; }
     modal.innerHTML = `<div class="sheet nsheet" role="dialog" aria-modal="true" aria-label="${plain(T.t)}" style="--nc:${NC[n.cat]};${h ? vars(h) : ""}">
@@ -6290,9 +6311,9 @@ const NEWS = (() => {
         <div class="ncv-t" aria-hidden="true">${cic(n.cat)}<span>${CATS[n.cat]}</span><b${NT()}>${plain(T.t)}</b></div>
         <button type="button" class="navh prev" aria-label="Предыдущая новость">‹</button><button type="button" class="navh next" aria-label="Следующая новость">›</button>
         <button type="button" class="close" aria-label="Закрыть">✕</button></div>
-      <div class="nbody"><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span><span${NT()}>${td(n.d)} · ${td(n.w)}</span></div>
+      <div class="nbody"><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span><span${NT()}>${td(n.d)}${n.w !== n.d ? ` · ${td(n.w)}` : ""}</span></div>
         <h3${NT()}>${T.t}</h3><p${NT()}>${T.x}</p>${chips(n)}
-        <div class="nacts"><button type="button" class="btn btn-ghost nfavbig" data-id="${id}" aria-pressed="${NF.has(id)}">★ <span>${NF.has(id) ? "В избранном" : "В избранное"}</span></button><button type="button" class="btn btn-ghost" id="nShare">Поделиться</button><span class="npos">${idx + 1} / ${pool.length}</span></div></div></div>`;
+        <div class="nacts"><button type="button" class="btn btn-ghost nfavbig" data-id="${id}" aria-pressed="${NF.has(id)}">★ <span>${NF.has(id) ? "В избранном" : "В избранное"}</span></button><button type="button" class="btn btn-ghost" id="nShare">Поделиться</button>${n.url ? `<a class="btn btn-ghost" href="${n.url}" target="_blank" rel="noopener" translate="no">Steam ↗</a>` : ""}<span class="npos">${idx + 1} / ${pool.length}</span></div></div></div>`;
     modal.classList.toggle("swap", was); modal.hidden = false; lockScroll();
     const sh = modal.querySelector(".nsheet"); if (was) sh.scrollTop = 0;
     const go = d => openNews(pool[(idx + d + pool.length) % pool.length].id);
@@ -6310,8 +6331,6 @@ const NEWS = (() => {
     const box = document.getElementById("newsBox"); if (!box) return;
     if (!wired){ wired = true;
       box.innerHTML = `<div class="npatch" id="nPatch"></div><div class="rkchips nchips" id="nChips"></div><div class="nlist" id="nList"></div><p class="nfoot" id="nFoot"></p>`;
-      document.getElementById("nPatch").innerHTML = `<span class="nv">7.41f</span><span class="nl">Текущий патч</span><h3>Второй по длительности патч в истории — и идёт на рекорд</h3>
-        <div class="nst"><span><b>211</b> дней без большого обновления</span><span>Рекорд 7.32: <b>240</b> дней</span><span>Последние правки: <b${NT()}>${td("15 сен")}</b></span><span>Мета: <b>Bounty Hunter</b></span></div>`;
       document.getElementById("nChips").onclick = e => { const b = e.target.closest(".rkc"); if (!b) return; cat = b.dataset.c; draw(); };
       const nl = document.getElementById("nList");
       nl.onclick = e => { const f = e.target.closest(".nfav"); if (f){ e.stopPropagation(); toggleFav(+f.dataset.id); return; }
@@ -6319,10 +6338,15 @@ const NEWS = (() => {
         const c = e.target.closest(".ncard"); if (c) openNews(+c.dataset.id); };
       nl.onkeydown = e => { if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("ncard")){ e.preventDefault(); openNews(+e.target.dataset.id); } };
     }
-    document.getElementById("nPatch").querySelectorAll("b").forEach((b, i) => { if (i === 2){ if (TRN) b.setAttribute("translate", "no"); else b.removeAttribute("translate"); b.textContent = td("15 сен"); } });
-    document.getElementById("nFoot").innerHTML = `<span>Обновлено</span> <span translate="no">${updTxt()}</span>`;
+    // патч и счётчик дней считаются сами (данные Valve из /api/news, до ответа — последние известные)
+    const P = PATCH, days = Math.max(0, Math.floor((Date.now() / 1000 - P.majorTs) / 86400));
+    const head = days >= 240 ? "Самый долгий патч в истории — рекорд 7.32 побит" : P.major === "7.41" ? "Второй по длительности патч в истории — и идёт на рекорд" : "";
+    document.getElementById("nPatch").innerHTML = `<span class="nv" translate="no">${String(P.num).replace(/[<>&"]/g, "")}</span><span class="nl">Текущий патч</span>${head ? `<h3>${head}</h3>` : ""}
+      <div class="nst"><span><b>${days}</b> дней без большого обновления</span><span>Рекорд 7.32: <b>240</b> дней</span>${P.ts > P.majorTs ? `<span>Последние правки: <b translate="no">${ldate(P.ts)}</b></span>` : ""}<span>Мета: <b>Bounty Hunter</b></span></div>`;
+    const upd = CHECKED ? ldate(Date.parse(CHECKED) / 1000, { day: "numeric", month: "long", year: "numeric" }) : updTxt();
+    document.getElementById("nFoot").innerHTML = `<span>Обновлено</span> <span translate="no">${upd}</span>`;
     draw();
-    seen = TOP; try { localStorage.setItem("ub-news", String(TOP)); } catch(e) {} dot();
+    seen = TOP; seenT = Math.max(seenT, autoTop()); try { localStorage.setItem("ub-news", String(TOP)); localStorage.setItem("ub-news-t", String(seenT)); } catch(e) {} dot();
   }
   /* бегущая строка «Свежее» в шапке */
   let teaser = () => {};
@@ -6331,9 +6355,9 @@ const NEWS = (() => {
     if (hl.length > 1 && !REDUCED) setInterval(() => { if (document.hidden) return; k = (k + 1) % hl.length; el.style.opacity = 0; setTimeout(() => { teaser(); el.style.opacity = 1; }, 250); }, 4500);
     el.style.transition = "opacity .25s ease"; })();
   // смена языка — подгружаем перевод и перерисовываем
-  const relang = l => loadTr(l).then(() => { teaser(); if (wired) open(); if (curId != null && !modal.hidden && modal.querySelector(".nsheet")) openNews(curId); });
+  const relang = l => loadTr(l).then(() => { teaser(); if (wired) open(); if (curId != null && !modal.hidden && modal.querySelector(".nsheet")) openNews(curId); }).then(() => { AUTO = []; return loadAuto(); });
   document.addEventListener("langchange", e => { if (e.detail !== TL) relang(e.detail); });
-  if (typeof I18N !== "undefined" && I18N.get() !== "ru") relang(I18N.get());
+  if (typeof I18N !== "undefined" && I18N.get() !== "ru") relang(I18N.get()); else setTimeout(loadAuto, 800);
   dot();
   return { open, go, dot, fromHash };
 })();
