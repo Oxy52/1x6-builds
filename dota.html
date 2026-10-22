@@ -1669,17 +1669,24 @@
   .mk-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 10px; } .mk-cats { margin: 0; } .mk-q { flex: 1 1 260px; min-width: 0; }
   .mk-legend { display: flex; gap: 14px; flex-wrap: wrap; margin: 4px 0 10px; color: var(--muted-2); font-size: 12.5px; } .mk-legend span { display: inline-flex; align-items: center; gap: 6px; } .mk-legend img { width: 18px; height: 18px; border-radius: 5px; }
   .mk-list { display: grid; gap: 8px; }
-  .mk-it { --rc: #b0c3d9; display: grid; grid-template-columns: 112px minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 10px 12px; border-radius: 18px; border: 1px solid var(--line); background: linear-gradient(90deg, color-mix(in srgb, var(--rc) 9%, transparent), transparent 40%), var(--bg-soft); }
+  .mk-it { --rc: #b0c3d9; display: grid; grid-template-columns: 112px minmax(0, 1fr); align-items: center; gap: 14px; padding: 10px 12px; border-radius: 18px; border: 1px solid var(--line); background: linear-gradient(90deg, color-mix(in srgb, var(--rc) 9%, transparent), transparent 40%), var(--bg-soft); }
   .mk-img { height: 76px; display: grid; place-items: center; border-radius: 12px; background: radial-gradient(60% 70% at 50% 60%, color-mix(in srgb, var(--rc) 28%, transparent), transparent 70%); border-bottom: 2px solid color-mix(in srgb, var(--rc) 70%, transparent); }
   .mk-img img { max-width: 100%; max-height: 72px; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(0,0,0,.5)); }
   .mk-n { min-width: 0; } .mk-n b { display: block; font-size: 15px; font-weight: 700; line-height: 1.3; } .mk-save { display: inline-block; margin-top: 5px; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #4ade80; background: rgba(74,222,128,.1); }
-  .mk-ps { display: flex; gap: 6px; }
+  .mk-ps { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 6px; }
+  .mk-from { display: block; margin-top: 4px; font-size: 12.5px; color: var(--muted-2); } .mk-from b { display: inline; font-size: 13px; color: #4ade80; }
+  .mk-p.none { opacity: .55; } .mk-p.none b { font-size: 12.5px; color: var(--muted-2); }
+  .dli { display: grid; gap: 12px; padding: 18px; border-radius: 20px; border: 1px solid var(--line); background: linear-gradient(135deg, rgba(196,153,92,.12), transparent 60%), var(--bg-soft); }
+  .dli-h { display: flex; gap: 12px; align-items: center; } .dli-ic { font-size: 34px; } .dli-h b { display: block; font-size: 18px; } .dli-h small { color: var(--muted-2); font-size: 13.5px; line-height: 1.45; }
+  .dli-steps { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: 14px; color: var(--muted); }
+  .dli-f { display: flex; gap: 8px; flex-wrap: wrap; } .dli-in { flex: 1 1 240px; min-width: 0; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,.04); color: var(--fg); font: inherit; font-size: 15px; }
+  .dli-msg { margin: 0; font-size: 14px; font-weight: 600; } .dli-msg.good { color: #4ade80; } .dli-msg.bad { color: #f87171; }
   .mk-p { display: flex; align-items: center; gap: 8px; min-width: 128px; padding: 8px 12px 8px 8px; border-radius: 13px; border: 1px solid var(--line); background: rgba(255,255,255,.03); color: var(--fg); text-decoration: none; transition: border-color .2s, transform .2s, background .2s; }
   .mk-p:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.25); background: rgba(255,255,255,.06); }
   .mk-p img { flex: none; width: 28px; height: 28px; border-radius: 8px; } .mk-p small { display: block; font-size: 11px; color: var(--muted-2); white-space: nowrap; } .mk-p b { display: block; font-size: 15px; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .mk-p.csm b { font-size: 13.5px; color: #ff5fb8; } .mk-p.best { border-color: rgba(74,222,128,.55); background: rgba(74,222,128,.07); } .mk-p.best b { color: #4ade80; }
-  @media (max-width: 900px) { .mk-it { grid-template-columns: 84px minmax(0, 1fr); } .mk-ps { grid-column: 1 / -1; } .mk-p { flex: 1; min-width: 0; } .mk-img { height: 60px; } .mk-img img { max-height: 56px; } }
-  @media (max-width: 480px) { .mk-p { flex-direction: column; gap: 3px; padding: 7px 4px; text-align: center; } .mk-p b { font-size: 13.5px; } }
+  @media (max-width: 900px) { .mk-it { grid-template-columns: 84px minmax(0, 1fr); } .mk-p { min-width: 0; } .mk-img { height: 60px; } .mk-img img { max-height: 56px; } }
+  @media (max-width: 480px) { .mk-ps { grid-template-columns: repeat(2, minmax(0, 1fr)); } .mk-p { padding: 7px 8px 7px 6px; gap: 6px; } .mk-p img { width: 22px; height: 22px; } .mk-p b { font-size: 13.5px; } }
   .dl-sub { margin: 18px 0 8px; font-size: 14px; color: var(--muted); font-weight: 700; }
   .dl-items { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 6px; }
   .dl-it { --s: #f0a040; display: flex; align-items: center; gap: 10px; padding: 6px 10px 6px 6px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-soft); min-width: 0; }
@@ -1996,15 +2003,15 @@
   </div>
   <div class="tabpane" data-pane="cs" role="tabpanel" hidden>
     <section class="section first">
-      <div class="section-head"><h2>Counter-Strike 2</h2><p>Сравнение цен скинов на CS.money, Lis-skins и в Steam, официальные новости, рейтинг команд Valve и последние матчи про-сцены.</p></div>
+      <div class="section-head"><h2>Counter-Strike 2</h2><p>Сравнение цен скинов на Steam, CS.money, Lis-skins, Skinport, Market.CSGO и CSFloat, официальные новости, рейтинг команд Valve и последние матчи про-сцены.</p></div>
       <div class="rkchips g-sub" data-g="cs" role="group" aria-label="Раздел"><button type="button" class="rkc" data-v="market" aria-pressed="true">Скины</button><button type="button" class="rkc" data-v="news" aria-pressed="false">Новости</button><button type="button" class="rkc" data-v="teams" aria-pressed="false">Топ команд</button><button type="button" class="rkc" data-v="matches" aria-pressed="false">Матчи</button></div>
       <div id="csBox" class="g-box"></div>
     </section>
   </div>
   <div class="tabpane" data-pane="deadlock" role="tabpanel" hidden>
     <section class="section first">
-      <div class="section-head"><h2>Deadlock</h2><p>Все герои с винрейтом и сборки, посчитанные по реальным матчам, плюс официальные новости.</p></div>
-      <div class="rkchips g-sub" data-g="deadlock" role="group" aria-label="Раздел"><button type="button" class="rkc" data-v="heroes" aria-pressed="true">Герои</button><button type="button" class="rkc" data-v="news" aria-pressed="false">Новости</button></div>
+      <div class="section-head"><h2>Deadlock</h2><p>Все герои с винрейтом и сборки, посчитанные по реальным матчам, инвайт в игру и официальные новости.</p></div>
+      <div class="rkchips g-sub" data-g="deadlock" role="group" aria-label="Раздел"><button type="button" class="rkc" data-v="heroes" aria-pressed="true">Герои</button><button type="button" class="rkc" data-v="invite" aria-pressed="false">🎟️ Инвайт</button><button type="button" class="rkc" data-v="news" aria-pressed="false">Новости</button></div>
       <div id="dlBox" class="g-box"></div>
     </section>
   </div>
@@ -3700,6 +3707,13 @@ const PROF = (() => {
     if (matchMedia("(pointer:fine)").matches) ta.focus();
   }
 
+  // заявка из других разделов (например, инвайт в Deadlock): уходит сообщением в чат поддержки
+  async function supportRequest(body){
+    if (!CLOUD || !U){ support(); return "auth"; }
+    const { error } = await sb.from("support_messages").insert({ user_id: U.id, sender: "user", body });
+    return !error;
+  }
+
   /* ---------- настройки аккаунта ---------- */
   const streamer = () => { try { return localStorage.getItem("ub-stream") === "1"; } catch(e) { return false; } };
   const realEmail = u => u && u.email && !/@1x6-eta\.vercel\.app$/.test(u.email) ? u.email : "";
@@ -3798,7 +3812,7 @@ const PROF = (() => {
       return { rows: data || [] };
     } catch(e) { return { error: "Нет связи с сервером." }; }
   }
-  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf, feedOpen, feedMore, openUser, me: () => P ? P.nick : null, rt: () => sb, duelReport, ratingOpen, medalHTML, statsOpen, premium, support, toast, settings, isPrem, isPremMe: () => isPrem(U && U.id), loadPlayers: q => { clearTimeout(plT); plT = setTimeout(() => loadPlayers(q), 250); } };
+  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf, feedOpen, feedMore, openUser, me: () => P ? P.nick : null, rt: () => sb, duelReport, ratingOpen, medalHTML, statsOpen, premium, support, supportRequest, toast, settings, isPrem, isPremMe: () => isPrem(U && U.id), loadPlayers: q => { clearTimeout(plT); plT = setTimeout(() => loadPlayers(q), 250); } };
 })();
 window.__favSync = () => PROF.syncFavs();
 
@@ -5314,12 +5328,12 @@ const D2 = (() => {
     const pane = document.getElementById("d2Pane"); if (!pane) return;
     if (pane.dataset.ready) return draw();
     pane.dataset.ready = "1";
-    pane.innerHTML = `<div class="rkchips d2-subs"><button type="button" class="rkc" data-sub2="heroes" aria-pressed="true">📊 Герои</button><button type="button" class="rkc" data-sub2="pros" aria-pressed="false">🏆 Про-игроки</button><button type="button" class="rkc" data-sub2="players" aria-pressed="false">👤 Игроки</button><button type="button" class="rkc" data-sub2="picker" aria-pressed="false">🎯 Пикер</button></div><div id="d2Heroes"><div class="d2-bar">
+    pane.innerHTML = `<div class="rkchips d2-subs"><button type="button" class="rkc" data-sub2="heroes" aria-pressed="true">📊 Герои</button><button type="button" class="rkc" data-sub2="pros" aria-pressed="false">🏆 Про-игроки</button><button type="button" class="rkc" data-sub2="players" aria-pressed="false">👤 Игроки</button><button type="button" class="rkc" data-sub2="picker" aria-pressed="false">🎯 Пикер</button><button type="button" class="rkc" data-sub2="skins" aria-pressed="false">🛒 Скины</button></div><div id="d2Heroes"><div class="d2-bar">
         <div class="rkchips d2-ranks">${RANKS.map(r => `<button type="button" class="rkc d2-rc" data-r="${r[0]}" aria-pressed="${r[0] === st.rank}">${rankIc(r[0])}${r[1]}</button>`).join("")}</div>
         <div class="rkchips sub d2-roles">${ROLES.map(r => `<button type="button" class="rkc" data-role="${r[0]}" aria-pressed="${r[0] === st.role}">${r[1]}</button>`).join("")}</div>
         <label class="d2-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="d2Q" placeholder="Найти героя" autocomplete="off"></label>
       </div><div id="d2Sum"></div><div id="d2List"><div class="feed-sk"></div><div class="feed-sk"></div><div class="feed-sk"></div></div>
-      <p class="db-note">Данные — открытая статистика публичных матчей <a href="https://www.opendota.com" target="_blank" rel="noopener">OpenDota</a>, обновляются раз в несколько часов. Нажми на героя — откроются винрейт по рангам и линиям, сборка предметов и контрпики.</p></div><div id="d2Pros" hidden></div><div id="d2Players" hidden></div><div id="d2Picker" hidden></div>`;
+      <p class="db-note">Данные — открытая статистика публичных матчей <a href="https://www.opendota.com" target="_blank" rel="noopener">OpenDota</a>, обновляются раз в несколько часов. Нажми на героя — откроются винрейт по рангам и линиям, сборка предметов и контрпики.</p></div><div id="d2Pros" hidden></div><div id="d2Players" hidden></div><div id="d2Picker" hidden></div><div id="d2Skins" hidden></div>`;
     pane.querySelectorAll("[data-sub2]").forEach(b => b.onclick = () => sub(b.dataset.sub2));
     pane.querySelectorAll("[data-r]").forEach(b => b.onclick = () => { st.rank = b.dataset.r; pane.querySelectorAll("[data-r]").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); });
     pane.querySelectorAll("[data-role]").forEach(b => b.onclick = () => { st.role = b.dataset.role; pane.querySelectorAll("[data-role]").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); });
@@ -5762,7 +5776,8 @@ const D2 = (() => {
   function sub(name){
     const pane = document.getElementById("d2Pane"); if (!pane) return;
     pane.querySelectorAll("[data-sub2]").forEach(b => b.setAttribute("aria-pressed", b.dataset.sub2 === name));
-    ["Heroes", "Pros", "Players", "Picker"].forEach(k => { const el = document.getElementById("d2" + k); if (el) el.hidden = k.toLowerCase() !== name; });
+    ["Heroes", "Pros", "Players", "Picker", "Skins"].forEach(k => { const el = document.getElementById("d2" + k); if (el) el.hidden = k.toLowerCase() !== name; });
+    if (name === "skins" && typeof GAMES !== "undefined"){ const el = document.getElementById("d2Skins"); if (!el.dataset.on){ el.dataset.on = "1"; GAMES.market(el, "dota"); } }
     if (name === "players") playersView();
     if (name === "pros") prosView();
     if (name === "picker"){ if (HEROES_D2) pickerView(); else get("heroStats").then(r => { HEROES_D2 = r; pickerView(); }).catch(() => {}); }
@@ -6215,7 +6230,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=9").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=10").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
@@ -6553,8 +6568,8 @@ const GAMES = (() => {
   const sk = n => `<div class="feed-sk"></div>`.repeat(n);
   const err = `<div class="gempty">Не удалось загрузить данные. Попробуй чуть позже.</div>`;
   const day = s => { try { return new Date(s).toLocaleDateString(L(), { day: "numeric", month: "short" }); } catch(e) { return String(s).slice(0, 10); } };
-  const st = { cs: "market", deadlock: "heroes", sort: "name", hero: 0, mcat: "rifle", mq: "", mstart: 0 };
-  const VIEWS = { cs: { market, news: el => news(el, "cs"), teams: csTeams, matches: csMatches }, deadlock: { heroes: dlHeroes, news: el => news(el, "deadlock") } };
+  const st = { cs: "market", deadlock: "heroes", sort: "name", hero: 0 };
+  const VIEWS = { cs: { market: el => market(el, "cs"), news: el => news(el, "cs"), teams: csTeams, matches: csMatches }, deadlock: { heroes: dlHeroes, invite: dlInvite, news: el => news(el, "deadlock") } };
   let wired = false;
 
   function open(g){
@@ -6564,9 +6579,8 @@ const GAMES = (() => {
       const key = e => { if ((e.key === "Enter" || e.key === " ") && e.target.matches("[data-gid], [data-p], [data-h]")){ e.preventDefault(); e.target.click(); } };
       const csBox = document.getElementById("csBox"), dlBox = document.getElementById("dlBox");
       csBox.onclick = e => { if (nw(e)) return; const t = e.target.closest("[data-p]"); if (t) team(t);
-        const c = e.target.closest("[data-mc]"); if (c){ st.mcat = c.dataset.mc; st.mq = ""; st.mstart = 0; market(csBox); }
-        if (e.target.closest("#mkMore")){ st.mstart += 10; mkLoad(true); } };
-      document.addEventListener("curchange", () => { if (curTab === "cs" && st.cs === "market") mkDraw(); });
+      };
+      document.addEventListener("curchange", () => Object.values(MKS).forEach(m => { if (m.el.isConnected) mkDraw(m); }));
       dlBox.onclick = e => { if (nw(e)) return; const s = e.target.closest("[data-s]"); if (s){ st.sort = s.dataset.s; return draw("deadlock"); }
         const h = e.target.closest("[data-h]"); if (h){ st.hero = +h.dataset.h; draw("deadlock"); toTop(dlBox); return; }
         if (e.target.closest("#dlBack")){ st.hero = 0; draw("deadlock"); toTop(dlBox); } };
@@ -6615,45 +6629,71 @@ const GAMES = (() => {
     } catch(e) { if (sh.isConnected) box.innerHTML = `<p>${n.x || ""}</p>`; }
   }
 
-  // ---------- торговая площадка: одна и та же вещь на CS.money, Lis-skins и в Steam ----------
-  const MC = [["rifle", "Винтовки"], ["sniper", "Снайперские"], ["pistol", "Пистолеты"], ["smg", "ПП"], ["knife", "Ножи"], ["gloves", "Перчатки"]];
+  // ---------- торговые площадки: одна и та же вещь на Steam, CS.money, Lis-skins, Skinport, Market и CSFloat ----------
+  // Только просмотр: цены приходят с нашего сервера одним запросом (кеш на час), сайт не тянет прайсы площадок сам.
+  const MC = { cs: [["rifle", "Винтовки"], ["sniper", "Снайперские"], ["pistol", "Пистолеты"], ["smg", "ПП"], ["knife", "Ножи"], ["gloves", "Перчатки"], ["case", "Кейсы"], ["sticker", "Наклейки"]],
+    dota: [["arcana", "Арканы"], ["immortal", "Бессмертные"], ["legendary", "Легендарные"], ["mythical", "Мифические"], ["set", "Наборы"], ["courier", "Курьеры"], ["ward", "Варды"]] };
+  const PH = { cs: "Найти скин, например AK-47 Redline", dota: "Найти предмет, например Manifold Paradox" };
+  const LOGO = { steam: "/games/steam.png", lis: "/games/lisskins.png", csm: "/games/csmoney.png" };
+  const logo = p => LOGO[p.k] || `https://www.google.com/s2/favicons?domain=${encodeURIComponent(p.d)}&sz=64`;
   const SYM = { uah: "₴", usd: "$", rub: "₽", eur: "€" };
-  let MK = { items: [], fx: null, total: 0 }, mkT = 0;
+  const MKS = {};
   const cur = () => typeof CURSEL !== "undefined" ? CURSEL.get() : "usd";
-  const money = v => { if (v == null) return "—"; const c = MK.fx ? cur() : "usd", x = v * (MK.fx ? MK.fx[c] || 1 : 1);
+  const money = (m, v) => { if (v == null) return "—"; const c = m.fx ? cur() : "usd", x = v * (m.fx ? m.fx[c] || 1 : 1);
     return `${x.toLocaleString(L(), { maximumFractionDigits: x >= 100 ? 0 : 2, minimumFractionDigits: x >= 100 ? 0 : 2 })} ${SYM[c]}`; };
-  function market(el){
-    el.innerHTML = `<div class="mk-bar"><div class="rkchips sub mk-cats">${MC.map(([k, t]) => `<button type="button" class="rkc" data-mc="${k}" aria-pressed="${!st.mq && st.mcat === k}">${t}</button>`).join("")}</div>
-        <label class="d2-search mk-q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="mkQ" placeholder="Найти скин, например AK-47 Redline" autocomplete="off" value="${esc(st.mq)}"></label></div>
-      <div class="mk-legend"><span><img alt="" src="/games/csmoney.png">CS.money</span><span><img alt="" src="/games/lisskins.png">Lis-skins</span><span><img alt="" src="/games/steam.png">Steam</span></div>
-      <div id="mkList" class="mk-list">${sk(4)}</div>
-      <p class="db-note">Цена Steam — самый дешёвый лот на торговой площадке Steam, цена Lis-skins — минимальная из их открытого прайса; обновляется раз в час, в валюте сайта по текущему курсу. У CS.money нет открытого прайса — кнопка открывает поиск этого скина у них. Нажми на площадку — откроется скин на её сайте.</p>`;
-    el.querySelector("#mkQ").oninput = e => { clearTimeout(mkT); const v = e.target.value.trim(); mkT = setTimeout(() => { if (v && v.length < 2) return; st.mq = v; st.mstart = 0;
-      el.querySelectorAll("[data-mc]").forEach(b => b.setAttribute("aria-pressed", !v && b.dataset.mc === st.mcat)); mkLoad(); }, 450); };
-    mkLoad();
+  function market(el, g){
+    const m = MKS[g] = MKS[g] || { g, cat: MC[g][0][0], q: "", start: 0, items: [], fx: null, total: 0, t: 0 };
+    m.el = el;
+    el.innerHTML = `<div class="mk-bar"><div class="rkchips sub mk-cats">${MC[g].map(([k, t]) => `<button type="button" class="rkc" data-mc="${k}" aria-pressed="${!m.q && m.cat === k}">${t}</button>`).join("")}</div>
+        <label class="d2-search mk-q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" class="mkQ" placeholder="${PH[g]}" autocomplete="off" value="${esc(m.q)}"></label></div>
+      <div class="mk-legend"></div>
+      <div class="mk-list">${sk(4)}</div>
+      <p class="db-note"><span>Цены — самый дешёвый лот на каждой площадке, в валюте сайта по текущему курсу.</span> <span>Steam, Lis-skins, Skinport и Market обновляются раз в час.</span>${g === "cs" ? ` <span>CS.money и CSFloat — раз в сутки (отмечены ⏱).</span>` : ""} <span>Зелёная — самая выгодная.</span> <span>Нажми на площадку — откроется эта вещь на её сайте.</span> <span>Мы ничего не продаём, только показываем цены.</span></p>`;
+    el.onclick = e => { const c = e.target.closest("[data-mc]"); if (c){ m.cat = c.dataset.mc; m.q = ""; m.start = 0; market(el, g); return; }
+      if (e.target.closest(".mk-more")){ m.start += 10; mkLoad(m, true); } };
+    el.querySelector(".mkQ").oninput = e => { clearTimeout(m.t); const v = e.target.value.trim(); m.t = setTimeout(() => { if (v && v.length < 2) return; m.q = v; m.start = 0;
+      el.querySelectorAll("[data-mc]").forEach(b => b.setAttribute("aria-pressed", !v && b.dataset.mc === m.cat)); mkLoad(m); }, 450); };
+    if (m.items.length && !m.start) mkDraw(m); else { m.start = 0; mkLoad(m); }
   }
-  async function mkLoad(more){
-    const box = document.getElementById("mkList"); if (!box) return;
-    if (!more) box.innerHTML = sk(4); else { const b = document.getElementById("mkMore"); if (b) b.disabled = true; }
-    const want = st.mq + "|" + st.mcat;
-    try { const d = await once(`/api/games?q=csMarket&${st.mq ? "s=" + encodeURIComponent(st.mq) : "cat=" + st.mcat}&start=${st.mstart}`);
-      if (want !== st.mq + "|" + st.mcat) return;
-      MK = { items: more ? MK.items.concat(d.items) : d.items, fx: d.fx || MK.fx, total: d.total }; mkDraw();
-    } catch(e) { if (!more) box.innerHTML = err; else { const b = document.getElementById("mkMore"); if (b) b.disabled = false; } }
+  async function mkLoad(m, more){
+    const box = m.el.querySelector(".mk-list"); if (!box) return;
+    if (!more) box.innerHTML = sk(4); else { const b = m.el.querySelector(".mk-more"); if (b) b.disabled = true; }
+    const want = m.q + "|" + m.cat;
+    try { const d = await once(`/api/games?q=market&g=${m.g}&${m.q ? "s=" + encodeURIComponent(m.q) : "cat=" + m.cat}&start=${m.start}`);
+      if (want !== m.q + "|" + m.cat) return;
+      Object.assign(m, { items: more ? m.items.concat(d.items) : d.items, fx: d.fx || m.fx, total: d.total }); mkDraw(m);
+    } catch(e) { if (!more) box.innerHTML = err; else { const b = m.el.querySelector(".mk-more"); if (b) b.disabled = false; } }
   }
-  function mkDraw(){
-    const box = document.getElementById("mkList"); if (!box) return;
-    if (!MK.items.length){ box.innerHTML = `<div class="gempty">Ничего не нашли. Попробуй написать название по-английски, как в игре.</div>`; return; }
-    box.innerHTML = MK.items.map(i => { const best = i.lis != null && i.steam != null ? (i.lis <= i.steam ? "lis" : "steam") : i.lis != null ? "lis" : "steam";
-      const save = i.lis != null && i.steam ? Math.round((1 - Math.min(i.lis, i.steam) / Math.max(i.lis, i.steam)) * 100) : 0;
+  function mkDraw(m){
+    const box = m.el.querySelector(".mk-list"), leg = m.el.querySelector(".mk-legend"); if (!box) return;
+    if (!m.items.length){ box.innerHTML = `<div class="gempty">Ничего не нашли. Попробуй написать название по-английски, как в игре.</div>`; leg.innerHTML = ""; return; }
+    const all = m.items[0].p; leg.innerHTML = all.map(p => `<span><img alt="" loading="lazy" src="${esc(logo(p))}">${esc(p.name)}</span>`).join("");
+    box.innerHTML = m.items.map(i => { const ps = i.p.slice().sort((a, b) => (a.v == null) - (b.v == null) || a.v - b.v), has = ps.filter(p => p.v != null);
+      const lo = has[0], hi = has[has.length - 1], save = lo && hi && hi.v > lo.v ? Math.round((1 - lo.v / hi.v) * 100) : 0;
       return `<article class="mk-it"${i.col ? ` style="--rc:#${esc(i.col)}"` : ""}><div class="mk-img">${i.img ? `<img alt="" loading="lazy" src="${esc(i.img)}">` : ""}</div>
-        <div class="mk-n"><b translate="no">${esc(i.n)}</b>${save >= 3 ? `<small class="mk-save"><span>На</span> ${best === "lis" ? "Lis-skins" : "Steam"} <span>дешевле на</span> ${save}%</small>` : ""}</div>
-        <div class="mk-ps">
-          <a class="mk-p csm" href="${esc(i.csmUrl)}" target="_blank" rel="noopener nofollow"><img alt="" src="/games/csmoney.png"><span><small>CS.money</small><b>Смотреть</b></span></a>
-          <a class="mk-p lis${best === "lis" ? " best" : ""}" href="${esc(i.lisUrl)}" target="_blank" rel="noopener nofollow"><img alt="" src="/games/lisskins.png"><span><small>Lis-skins${i.lisN ? ` · ${i.lisN}` : ""}</small><b>${money(i.lis)}</b></span></a>
-          <a class="mk-p st${best === "steam" ? " best" : ""}" href="${esc(i.steamUrl)}" target="_blank" rel="noopener nofollow"><img alt="" src="/games/steam.png"><span><small>Steam${i.steamN ? ` · ${i.steamN}` : ""}</small><b>${money(i.steam)}</b></span></a>
-        </div></article>`; }).join("")
-      + (MK.items.length < Math.min(MK.total, 100) ? `<button type="button" class="btn btn-ghost lad-more" id="mkMore">Показать ещё</button>` : "");
+        <div class="mk-n"><b translate="no">${esc(i.n)}</b>${lo ? `<small class="mk-from"><span>Дешевле всего:</span> <b>${money(m, lo.v)}</b> · <span translate="no">${esc(lo.name)}</span></small>` : ""}${save >= 5 && has.length > 1 ? `<small class="mk-save"><span>Выгода до</span> ${save}%</small>` : ""}</div>
+        <div class="mk-ps">${ps.map(p => `<a class="mk-p${lo && p === lo ? " best" : ""}${p.v == null ? " none" : ""}" href="${esc(p.u)}" target="_blank" rel="noopener nofollow"><img alt="" loading="lazy" src="${esc(logo(p))}"><span><small translate="no">${esc(p.name)}${p.n ? ` · ${p.n}` : ""}${p.daily ? " ⏱" : ""}</small><b>${p.v == null ? "Поиск" : money(m, p.v)}</b></span></a>`).join("")}</div></article>`; }).join("")
+      + (m.items.length < Math.min(m.total, 100) ? `<button type="button" class="btn btn-ghost lad-more mk-more">Показать ещё</button>` : "");
+  }
+
+  // ---------- Deadlock: инвайт в плейтест через наш аккаунт ----------
+  function dlInvite(el){
+    el.innerHTML = `<div class="dli">
+      <div class="dli-h"><span class="dli-ic">🎟️</span><div><b>Инвайт в Deadlock</b><small>Deadlock пока только по приглашению. Оставь ссылку на свой Steam — пришлём инвайт с нашего аккаунта.</small></div></div>
+      <ol class="dli-steps"><li>Вставь ссылку на профиль Steam или код друга.</li><li>Мы добавим тебя в друзья в Steam — прими заявку.</li><li>Пришлём инвайт из игры. Он приходит в Steam в течение 1–2 часов, после этого Deadlock появится в библиотеке.</li></ol>
+      <form class="dli-f"><input class="dli-in" type="text" maxlength="120" placeholder="steamcommunity.com/id/… или код друга" autocomplete="off" required><button type="submit" class="btn btn-primary">Получить инвайт</button></form>
+      <p class="dli-msg" hidden></p>
+      <p class="db-note">Заявка уходит в наш чат поддержки — там же придёт ответ. Нужен аккаунт на сайте (вход бесплатный). Инвайты отправляем вручную, обычно в течение дня.</p></div>`;
+    const f = el.querySelector(".dli-f"), inp = el.querySelector(".dli-in"), msg = el.querySelector(".dli-msg");
+    f.onsubmit = async e => { e.preventDefault(); const v = inp.value.trim();
+      const ok = /^(https?:\/\/)?(www\.)?steamcommunity\.com\/(id|profiles)\/[\w-]{2,64}\/?$/i.test(v) || /^\d{6,17}$/.test(v);
+      msg.hidden = false; if (!ok){ msg.className = "dli-msg bad"; msg.textContent = "Нужна ссылка вида steamcommunity.com/id/… или /profiles/…, либо цифровой код друга из Steam."; return; }
+      const b = f.querySelector("button"); b.disabled = true;
+      const r = typeof PROF !== "undefined" && PROF.supportRequest ? await PROF.supportRequest("🎟️ Заявка на инвайт в Deadlock\nSteam: " + v) : false;
+      b.disabled = false;
+      if (r === true){ msg.className = "dli-msg good"; msg.textContent = "Заявка отправлена! Прими заявку в друзья в Steam — ответ придёт в чат поддержки 💬"; inp.value = ""; }
+      else if (r === "auth"){ msg.hidden = true; }
+      else { msg.className = "dli-msg bad"; msg.textContent = "Не удалось отправить. Попробуй ещё раз или напиши нам в поддержку 💬"; } };
   }
 
   function csTeams(el){
@@ -6716,7 +6756,7 @@ const GAMES = (() => {
       }).catch(() => { const box = document.getElementById("dlOrd"); if (box) box.remove(); });
     }).catch(() => { el.innerHTML = err + `<button type="button" class="btn btn-ghost dl-back" id="dlBack">← Все герои</button>`; });
   }
-  return { open };
+  return { open, market };
 })();
 
 /* ---------- вкладки ---------- */

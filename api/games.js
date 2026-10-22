@@ -6,7 +6,7 @@
 //   GET /api/games?q=dlItems&lang=ru         -> предметы магазина: id -> имя, картинка, слот, тир
 //   GET /api/games?q=dlHero&id=1             -> сборка героя по статистике: основа и лучшие по винрейту
 //   GET /api/games?q=dlOrder&id=1&lang=ru    -> самый частый порядок прокачки умений
-//   GET /api/games?q=csMarket&cat=rifle|sniper|pistol|knife|gloves|smg&start=0 | &s=<поиск> -> цены скинов: Steam Market, Lis-skins (+ ссылка на CS.money), курсы валют
+//   GET /api/games?q=market&g=cs|dota&cat=<категория>&start=0 | &s=<поиск> -> цены скинов на Steam, Lis-skins, Skinport, Market.CSGO/Dota2, CS.money, CSFloat + курсы валют
 // Новости CS2 и Deadlock: /api/news?app=cs|deadlock
 const UA = { Accept: "application/json", "User-Agent": "1x6-builds (+https://1x6-eta.vercel.app)" };
 const VRS = "ValveSoftware/counter-strike_regional_standings";
@@ -15,7 +15,7 @@ const DL = "https://api.deadlock-api.com/v1";
 // язык сайта -> язык Valve в Deadlock (как в api/news.js)
 const LNG = { ru: "russian", uk: "ukrainian", en: "english", es: "spanish", pt: "brazilian", de: "german", pl: "polish", tr: "turkish",
   fr: "french", it: "italian", kk: "russian", be: "russian", nl: "english", zh: "schinese", ja: "japanese", ko: "koreana" };
-const TTL = { csTeams: 21600, csTeam: 21600, csMatches: 21600, dlHeroes: 21600, dlHero: 21600, dlOrder: 43200, dlItems: 86400, csMarket: 3600 };
+const TTL = { csTeams: 21600, csTeam: 21600, csMatches: 21600, dlHeroes: 21600, dlHero: 21600, dlOrder: 43200, dlItems: 86400, csMarket: 3600, market: 3600 };
 
 async function get(url, type = "json") {
   const r = await fetch(url, { headers: UA, signal: AbortSignal.timeout(20000) });
@@ -65,24 +65,55 @@ async function csMatches() {
   return { date, matches: out.slice(0, 40) };
 }
 
-// ---------- CS2: сравнение цен скинов (Steam Market + Lis-skins; у CS.money нет открытого API — только ссылка) ----------
+// ---------- Скины CS2 и Dota 2: одна вещь на разных площадках ----------
+// Живые прайсы: Steam (поиск), Lis-skins, Skinport, Market.CSGO / Market.Dota2; раз в сутки — CS.money и CSFloat (сборник csgotrader.app).
 const MEM = {};
 const memo = (k, ttl, fn) => { const m = MEM[k]; if (m && Date.now() - m.t < ttl) return m.p; const p = fn(); MEM[k] = { t: Date.now(), p }; p.catch(() => { delete MEM[k]; }); return p; };
-// прайс Lis-skins (официальная выгрузка, ~5 МБ): название -> цена в $, ссылка, сколько лотов
-const lisMap = () => memo("lis", 30 * 60e3, async () => new Map((await get("https://lis-skins.com/market_export_json/csgo.json")).map(x => [x.name, x])));
+const num = v => { const x = parseFloat(v); return x > 0 ? x : null; };
 const rates = () => memo("fx", 6 * 3600e3, async () => { const j = await get("https://open.er-api.com/v6/latest/USD"); return { usd: 1, uah: j.rates.UAH, rub: j.rates.RUB, eur: j.rates.EUR, t: j.time_last_update_unix }; });
-const CAT = { rifle: "tag_CSGO_Type_Rifle", sniper: "tag_CSGO_Type_SniperRifle", pistol: "tag_CSGO_Type_Pistol", knife: "tag_CSGO_Type_Knife", gloves: "tag_Type_Hands", smg: "tag_CSGO_Type_SMG" };
-async function csMarket(cat, query, start) {
-  const u = new URL("https://steamcommunity.com/market/search/render/");
-  Object.entries({ appid: 730, norender: 1, count: 10, start, sort_column: "popular", sort_dir: "desc" }).forEach(([k, v]) => u.searchParams.set(k, v));
-  if (query) u.searchParams.set("query", query); else u.searchParams.append("category_730_Type[]", CAT[cat] || CAT.rifle);
-  const [st, lis, fx] = await Promise.all([get(u.href), lisMap().catch(() => new Map()), rates().catch(() => null)]);
-  const items = (st.results || []).map(r => { const l = lis.get(r.hash_name); const ad = r.asset_description || {};
-    return { n: r.hash_name, img: ad.icon_url ? `https://community.cloudflare.steamstatic.com/economy/image/${ad.icon_url}/160fx120f` : "", col: ad.name_color || "",
-      steam: r.sell_price ? r.sell_price / 100 : null, steamN: r.sell_listings || 0, steamUrl: `https://steamcommunity.com/market/listings/730/${encodeURIComponent(r.hash_name)}`,
-      lis: l ? l.price : null, lisN: l ? l.count : 0, lisUrl: l ? l.url : `https://lis-skins.com/market/csgo/?query=${encodeURIComponent(r.hash_name)}`,
-      csmUrl: `https://cs.money/market/buy/?search=${encodeURIComponent(r.hash_name.replace(/ \([^)]*\)$/, ""))}` }; });
-  return { fx, total: st.total_count || 0, items };
+const APP = { cs: 730, dota: 570 };
+// каждая площадка: прайс (название -> {v: цена $, n: лотов, u: ссылка}) и ссылка поиска, если вещи в прайсе нет
+const SRC = {
+  lis: { name: "Lis-skins", d: "lis-skins.com", ttl: 30,
+    load: g => get(`https://lis-skins.com/market_export_json/${g === "cs" ? "csgo" : "dota2"}.json`).then(a => new Map(a.map(x => [x.name, { v: num(x.price), n: x.count || 0, u: x.url }]))),
+    search: (g, n) => `https://lis-skins.com/market/${g === "cs" ? "csgo" : "dota2"}/?query=${encodeURIComponent(n)}` },
+  skinport: { name: "Skinport", d: "skinport.com", ttl: 30,
+    load: g => fetch(`https://api.skinport.com/v1/items?app_id=${APP[g]}&currency=USD&tradable=0`, { headers: { ...UA, "Accept-Encoding": "br" }, signal: AbortSignal.timeout(20000) })
+      .then(r => { if (!r.ok) throw new Error("skinport " + r.status); return r.json(); })
+      .then(a => new Map(a.filter(x => x.min_price).map(x => [x.market_hash_name, { v: num(x.min_price), n: x.quantity || 0, u: x.market_page || x.item_page }]))),
+    search: (g, n) => `https://skinport.com/${g === "cs" ? "market" : "dota2"}?search=${encodeURIComponent(n)}` },
+  tm: { name: g => g === "cs" ? "Market.CSGO" : "Market.Dota2", d: g => g === "cs" ? "market.csgo.com" : "market.dota2.net", ttl: 30,
+    load: g => get(`https://${g === "cs" ? "market.csgo.com" : "market.dota2.net"}/api/v2/prices/USD.json`).then(j => new Map((j.items || []).map(x => [x.market_hash_name, { v: num(x.price), n: +x.volume || 0 }]))),
+    search: (g, n) => `https://${g === "cs" ? "market.csgo.com" : "market.dota2.net"}/en/?search=${encodeURIComponent(n)}` },
+  csm: { name: "CS.money", d: "cs.money", ttl: 360, only: "cs", daily: true,
+    load: () => get("https://prices.csgotrader.app/latest/csmoney.json").then(j => new Map(Object.entries(j).map(([k, x]) => [k, { v: num(x && x.price) }]))),
+    search: (g, n) => `https://cs.money/market/buy/?search=${encodeURIComponent(n.replace(/ \([^)]*\)$/, ""))}` },
+  csfloat: { name: "CSFloat", d: "csfloat.com", ttl: 360, only: "cs", daily: true,
+    load: () => get("https://prices.csgotrader.app/latest/csfloat.json").then(j => new Map(Object.entries(j).map(([k, x]) => [k, { v: num(x && (x.price || (x.starting_at && x.starting_at.price))) }]))),
+    search: (g, n) => `https://csfloat.com/search?market_hash_name=${encodeURIComponent(n)}` },
+};
+const price = (k, g) => memo(k + g, SRC[k].ttl * 60e3, () => SRC[k].load(g));
+const CAT = {
+  cs: { rifle: ["Type", "tag_CSGO_Type_Rifle"], sniper: ["Type", "tag_CSGO_Type_SniperRifle"], pistol: ["Type", "tag_CSGO_Type_Pistol"], knife: ["Type", "tag_CSGO_Type_Knife"],
+    gloves: ["Type", "tag_Type_Hands"], smg: ["Type", "tag_CSGO_Type_SMG"], case: ["Type", "tag_CSGO_Type_WeaponCase"], sticker: ["Type", "tag_CSGO_Tool_Sticker"] },
+  dota: { arcana: ["Rarity", "tag_Rarity_Arcana"], immortal: ["Rarity", "tag_Rarity_Immortal"], legendary: ["Rarity", "tag_Rarity_Legendary"], mythical: ["Rarity", "tag_Rarity_Mythical"],
+    courier: ["Type", "tag_courier"], ward: ["Type", "tag_ward"], set: ["Type", "tag_bundle"] } };
+async function market(g, cat, query, start) {
+  if (!APP[g]) g = "cs";
+  const app = APP[g], u = new URL("https://steamcommunity.com/market/search/render/");
+  Object.entries({ appid: app, norender: 1, count: 10, start, sort_column: "popular", sort_dir: "desc" }).forEach(([k, v]) => u.searchParams.set(k, v));
+  const C = CAT[g], c = C[cat] || Object.values(C)[0];
+  if (query) u.searchParams.set("query", query); else u.searchParams.append(`category_${app}_${c[0]}[]`, c[1]);
+  const keys = Object.keys(SRC).filter(k => !SRC[k].only || SRC[k].only === g);
+  // площадка, которая не ответила, просто не показывается — остальные работают
+  const [st, fx, ...maps] = await Promise.all([get(u.href), rates().catch(() => null), ...keys.map(k => price(k, g).catch(() => null))]);
+  const val = (x, gg) => typeof x === "function" ? x(gg) : x;
+  const items = (st.results || []).map(r => { const n = r.hash_name, ad = r.asset_description || {};
+    const p = [{ k: "steam", name: "Steam", d: "steamcommunity.com", v: r.sell_price ? r.sell_price / 100 : null, n: r.sell_listings || 0, u: `https://steamcommunity.com/market/listings/${app}/${encodeURIComponent(n)}` }];
+    keys.forEach((k, i) => { const m = maps[i]; if (!m) return; const x = m.get(n), S = SRC[k];
+      p.push({ k, name: val(S.name, g), d: val(S.d, g), v: x ? x.v : null, n: x ? x.n || 0 : 0, u: (x && x.u) || S.search(g, n), daily: !!S.daily }); });
+    return { n, img: ad.icon_url ? `https://community.cloudflare.steamstatic.com/economy/image/${ad.icon_url}/160fx120f` : "", col: ad.name_color || "", p }; });
+  return { g, fx, total: st.total_count || 0, items };
 }
 
 async function dlHeroes(lang) {
@@ -134,8 +165,8 @@ module.exports = async (req, res) => {
     else if (q === "csTeam") out = await csTeam(String(req.query.p || ""));
     else if (q === "dlHeroes") out = await dlHeroes(lang);
     else if (q === "dlItems") out = await dlItems(lang);
-    else if (q === "csMarket") { const qs = String(req.query.s || "").trim().slice(0, 60), start = Math.min(90, Math.max(0, +req.query.start || 0) - (+req.query.start || 0) % 10);
-      if (qs && qs.length < 2) return fail(400, "bad_query"); out = await csMarket(String(req.query.cat || "rifle"), qs, start); }
+    else if (q === "csMarket" || q === "market") { const qs = String(req.query.s || "").trim().slice(0, 60), s0 = Math.max(0, Math.min(90, +req.query.start || 0)), start = s0 - s0 % 10;
+      if (qs && qs.length < 2) return fail(400, "bad_query"); out = await market(q === "csMarket" ? "cs" : String(req.query.g || "cs"), String(req.query.cat || ""), qs, start); }
     else { const id = +req.query.id; if (!(id > 0 && id < 1000)) return fail(400, "bad_id"); out = q === "dlOrder" ? await dlOrder(id, lang) : await dlHero(id); }
     res.setHeader("Cache-Control", `public, s-maxage=${TTL[q]}, stale-while-revalidate=86400`);
     res.status(200).json(out);
