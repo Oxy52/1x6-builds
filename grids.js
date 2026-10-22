@@ -87,19 +87,22 @@ const GRIDS = (() => {
     g.fillStyle = "#fff"; g.fillRect(0, 0, W, Hh); g.drawImage(T.img, T.sx, T.sy, T.sw, T.sh, ox, oy, iw, ih);
     const d = g.getImageData(0, 0, W, Hh).data, L = new Float32Array(W * Hh); let mean = 0;
     for (let i = 0; i < L.length; i++){ L[i] = (.299 * d[i * 4] + .587 * d[i * 4 + 1] + .114 * d[i * 4 + 2]) / 255; mean += L[i]; }
-    mean /= L.length; const inv = o.inv == null ? mean > .5 : o.inv;
+    mean /= L.length; const inv = o.inv == null ? false : o.inv, RAW = L.slice();
+    if (o.norm){ const sm = Array.from(L.filter((_, i) => !(i % 7))).sort((a, b) => a - b), lo = sm[Math.floor(sm.length * .03)], hi = sm[Math.floor(sm.length * .97)], k = 1 / Math.max(.05, hi - lo); for (let i = 0; i < L.length; i++) L[i] = Math.min(1, Math.max(0, (L[i] - lo) * k)); }
     if (inv) for (let i = 0; i < L.length; i++) L[i] = 1 - L[i];
     for (let k = 0; k < (o.blur || 0); k++){ const B = new Float32Array(L.length); for (let y = 1; y < Hh - 1; y++) for (let x = 1; x < W - 1; x++){ const i = y * W + x; B[i] = (L[i] * 4 + L[i - 1] + L[i + 1] + L[i - W] + L[i + W] + L[i - W - 1] + L[i - W + 1] + L[i + W - 1] + L[i + W + 1]) / 12; } L.set(B); }
     const gain = o.gain || 1, out = [], G = o.g || newG(), cols = Math.floor(W / CW), rows = Math.floor(Hh / RH), MAXR = o.run || 8;
-    const RAMP = " .:-=+*#%@";
+    const RAMP = o.ramp || " .:-=+*#%@";
     for (let r = 0; r < rows; r++){
       let line = "";
       for (let q = 0; q < cols; q++){
         const x0 = Math.floor(q * CW), x1 = Math.floor((q + 1) * CW), y0 = Math.floor(r * RH), y1 = Math.floor((r + 1) * RH);
-        let v = 0, n = 0, jxx = 0, jyy = 0, jxy = 0;
+        let v = 0, n = 0, jxx = 0, jyy = 0, jxy = 0, rs = 0, rq = 0;
         for (let y = Math.max(1, y0); y < Math.min(Hh - 1, y1); y++) for (let x = Math.max(1, x0); x < Math.min(W - 1, x1); x++){
-          const i = y * W + x; v += L[i]; n++; const gx = L[i + 1] - L[i - 1], gy = L[i + W] - L[i - W]; jxx += gx * gx; jyy += gy * gy; jxy += gx * gy; }
+          const i = y * W + x; v += L[i]; n++; rs += RAW[i]; rq += RAW[i] * RAW[i]; const gx = L[i + 1] - L[i - 1], gy = L[i + W] - L[i - W]; jxx += gx * gx; jyy += gy * gy; jxy += gx * gy; }
         if (!n){ line += " "; continue; }
+        // ровный белый фон оставляем пустым
+        { const m = rs / n; if (m > .9 && Math.sqrt(Math.max(0, rq / n - m * m)) < .06){ line += " "; continue; } }
         v = Math.min(1, v / n * gain); const e = Math.sqrt(jxx + jyy) / n * 6;
         let ch = " ";
         if (e > (o.edge || .18) && v > .06){
@@ -161,13 +164,14 @@ const GRIDS = (() => {
   const NEWSC = [
     { n: "Слёзы", t: "Dead inside, Аниме, Рамки", art: "a15", q: "ты всё ещё ждёшь,|что они вернутся?" }
   ];
+  const chars = cs => cs.reduce((n, k) => n + (k.hero_ids.length ? 0 : k.category_name.replace(/\s/g, "").length), 0);
   async function newScene(d){
     await heroes(); const [art, fr] = await Promise.all([loadImg(`/grids-art/${d.art}.webp`), loadImg("/grids-art/a11.webp")]), g = newG(), g2 = newG();
     const top = [...H].filter(h => h.pick).sort((a, b) => b.pick - a.pick).slice(0, 12).map(h => h.id);
-    const cats = asciiCats(art, { x: 4, y: 4, w: 740, h: 588, g, stretch: true, inv: false, gain: d.gain || .85, thr: .18, edge: .22, blur: 1 })
-      .concat(asciiCats(fr, { x: 770, y: 112, w: 410, h: 470, stretch: true, g: g2, gain: 2.2, thr: .08, edge: .16, run: 10, blur: 1 }))
-      .concat(spaced(d.q, 790, 22, newG()));
-    cats.push({ category_name: "", x_position: 828, y_position: 178, width: 294, height: 336, hero_ids: top });
+    const best = asciiCats(art, { x: 0, y: 2, w: 840, h: 590, g, stretch: true, inv: false, norm: true, cw: 5, rh: 9, gain: 1, thr: .3, edge: .2, blur: 1, run: 4 });
+    const cats = best.concat(asciiCats(fr, { x: 866, y: 118, w: 320, h: 466, stretch: true, g: g2, inv: true, norm: true, cw: 5, rh: 9, gain: 1, thr: .35, edge: .25, run: 4, blur: 1, ramp: " .:-=+*" }))
+      .concat(spaced(d.q, 872, 24, newG()));
+    cats.push({ category_name: "", x_position: 906, y_position: 186, width: 240, height: 330, hero_ids: top });
     return { config_name: d.n, categories: cats };
   }
   async function sceneCfg(slug, name, crop, side){
@@ -255,7 +259,7 @@ const GRIDS = (() => {
     s = stage.clientWidth / GW; cv.style.height = GH * s + "px"; stage.style.setProperty("--s", s);
     if (!soft){ cfgList(); const n = document.getElementById("grCfgN"); if (n && document.activeElement !== n) n.value = C().config_name; }
     cv.innerHTML = cs.map(catHTML).join("") + (selG ? gbox() : "");
-    const cn = document.getElementById("grCnt"); if (cn){ const sy = cs.filter(isSym).length; cn.innerHTML = `Категорий: <b>${cs.length}</b> · символов: <b>${sy}</b>${cs.length > 2600 ? ' · <span class="gr-warn">много — Дота может подтормаживать</span>' : ""}`; }
+    const cn = document.getElementById("grCnt"); if (cn){ const sy = chars(cs.filter(isSym)); cn.innerHTML = `Категорий: <b>${cs.length}</b> · символов: <b>${sy}</b>${cs.length > 2600 ? ' · <span class="gr-warn">много — Дота может подтормаживать</span>' : ""}`; }
     if (!soft){ insp(); palMarks(); }
   }
   function gbounds(g){ const ks = C().categories.filter(k => k._g === g); if (!ks.length) return null; const x0 = Math.min(...ks.map(k => k.x_position)), y0 = Math.min(...ks.map(k => k.y_position)), x1 = Math.max(...ks.map(k => k.x_position + 8)), y1 = Math.max(...ks.map(k => k.y_position + 16)); return { x0, y0, x1, y1, n: ks.length }; }
@@ -360,7 +364,7 @@ const GRIDS = (() => {
       const bg = b.querySelector("#grPA").checked ? posLayout(false) : C().categories;
       paint(g, bg, 1, .45);
       if (!img){ cats = []; b.querySelector("#grAG").disabled = true; return; }
-      const o = box(), md = b.querySelector("#grMd").value; cats = artCats(img, { ...o, mode: md, gain: md === "ascii" ? +b.querySelector("#grSt").value / 50 : 1, edge: md === "ascii" ? .5 - +b.querySelector("#grTh").value / 120 : 0, step: +b.querySelector("#grSt").value / 10, thr: +b.querySelector("#grTh").value / 100, ch: b.querySelector("#grCh").value, inv: b.querySelector("#grInv").checked, crop: +b.querySelector("#grCr").value });
+      const o = box(), md = b.querySelector("#grMd").value; cats = artCats(img, { ...o, mode: md, gain: md === "ascii" ? +b.querySelector("#grSt").value / 50 : 1, edge: md === "ascii" ? .5 - +b.querySelector("#grTh").value / 120 : 0, norm: md === "ascii", cw: md === "ascii" ? 5 : undefined, rh: md === "ascii" ? 9 : undefined, ...(md === "ascii" ? { blur: 1, run: 4 } : {}), step: +b.querySelector("#grSt").value / 10, thr: md === "ascii" ? .3 : +b.querySelector("#grTh").value / 100, ch: b.querySelector("#grCh").value, inv: b.querySelector("#grInv").checked, crop: +b.querySelector("#grCr").value });
       paint(g, cats, 1, 1); const tot = cats.length + (b.querySelector("#grPA").checked ? 0 : C().categories.length);
       b.querySelector("#grAn").innerHTML = `Точек: <b>${cats.length}</b> · всего категорий станет: ${tot}${tot > 2600 ? ' — <span class="gr-warn">много, уменьши плотность</span>' : ""}`; b.querySelector("#grAG").disabled = !cats.length; };
     let rt = 0; const later = () => { clearTimeout(rt); rt = setTimeout(render, 60); };
@@ -446,7 +450,7 @@ const GRIDS = (() => {
       box.innerHTML = sc.map(card).join(""); bindCards(box, sc); more.hidden = next >= total; more.textContent = `Ещё сцены (${total - next})`; };
     more.onclick = batch; batch();
   }
-  function card(g){ const cs = g.data.categories || [], sy = cs.filter(isSym).length; return `<div class="gr-card"><div class="gr-th"><img alt="" src="${thumb(g.data)}"></div><div class="gr-ci"><b>${esc(g.name)}</b><small>${esc(g.nick || "")}${g.d ? " · " + esc(g.d) : ""}</small>
+  function card(g){ const cs = g.data.categories || [], sy = chars(cs.filter(isSym)); return `<div class="gr-card"><div class="gr-th"><img alt="" src="${thumb(g.data)}"></div><div class="gr-ci"><b>${esc(g.name)}</b><small>${esc(g.nick || "")}${g.d ? " · " + esc(g.d) : ""}</small>
     <small class="gr-meta">Категорий: ${cs.length}${sy ? ` · символов: ${sy}` : ""}${g.likes != null ? ` · ❤ ${g.likes} · ⬇ ${g.downloads || 0}` : ""}</small>
     <div class="gr-ca"><button type="button" class="gr-b" data-a="open">✏ В редактор</button><button type="button" class="gr-b" data-a="dl">⬇ Файл</button>${g.id ? `<button type="button" class="gr-b" data-a="like">❤</button>` : ""}${g.mine ? `<button type="button" class="gr-b gr-red" data-a="del">Удалить</button>` : ""}</div></div></div>`; }
   function bindCards(box, list){
