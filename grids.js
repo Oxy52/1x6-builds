@@ -70,11 +70,56 @@ const GRIDS = (() => {
   function trim(img){
     const w = Math.min(400, img.width), h = Math.round(img.height * w / img.width), c = document.createElement("canvas"); c.width = w; c.height = h;
     const g = c.getContext("2d", { willReadFrequently: true }); g.drawImage(img, 0, 0, w, h); const d = g.getImageData(0, 0, w, h).data;
-    let x0 = w, y0 = h, x1 = 0, y1 = 0, any = false; for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (d[(y * w + x) * 4 + 3] > 24){ any = true; if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+    let op = true; for (let i = 3; i < d.length; i += 16) if (d[i] < 250){ op = false; break; }
+    const ink = i => op ? (d[i] + d[i + 1] + d[i + 2]) / 3 < 225 : d[i + 3] > 24;
+    let x0 = w, y0 = h, x1 = 0, y1 = 0, any = false; for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (ink((y * w + x) * 4)){ any = true; if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
     if (!any || (x1 - x0 > w * .97 && y1 - y0 > h * .97)) return { img, sx: 0, sy: 0, sw: img.width, sh: img.height };
     const k = img.width / w; return { img, sx: x0 * k, sy: y0 * k, sw: (x1 - x0 + 1) * k, sh: (y1 - y0 + 1) * k };
   }
+  // плотный ASCII как в арт-сетках: строки символов, контуры — / \ | -, тени — . : = # % @
+  function asciiCats(img0, o){
+    const T0 = o.stretch ? { img: img0.img || img0, sx: 0, sy: 0, sw: (img0.img || img0).width, sh: (img0.img || img0).height } : img0.sw ? img0 : trim(img0), cr = o.crop || 1;
+    const T = cr < 1 ? { ...T0, sh: T0.sh * cr, sx: T0.sx + (cr < .5 ? T0.sw * .18 : 0), sw: cr < .5 ? T0.sw * .64 : T0.sw } : T0;
+    const CW = o.cw || 7, RH = o.rh || 12.5, W = Math.round(o.w), Hh = Math.round(o.h);
+    const sc = o.stretch ? 1 : Math.min(W / T.sw, Hh / T.sh), iw = o.stretch ? W : Math.round(T.sw * sc), ih = o.stretch ? Hh : Math.round(T.sh * sc);
+    const ox = Math.round((W - iw) / 2), oy = o.stretch ? 0 : Hh - ih;
+    const c = document.createElement("canvas"); c.width = W; c.height = Hh; const g = c.getContext("2d", { willReadFrequently: true });
+    g.fillStyle = "#fff"; g.fillRect(0, 0, W, Hh); g.drawImage(T.img, T.sx, T.sy, T.sw, T.sh, ox, oy, iw, ih);
+    const d = g.getImageData(0, 0, W, Hh).data, L = new Float32Array(W * Hh); let mean = 0;
+    for (let i = 0; i < L.length; i++){ L[i] = (.299 * d[i * 4] + .587 * d[i * 4 + 1] + .114 * d[i * 4 + 2]) / 255; mean += L[i]; }
+    mean /= L.length; const inv = o.inv == null ? mean > .5 : o.inv;
+    if (inv) for (let i = 0; i < L.length; i++) L[i] = 1 - L[i];
+    for (let k = 0; k < (o.blur || 0); k++){ const B = new Float32Array(L.length); for (let y = 1; y < Hh - 1; y++) for (let x = 1; x < W - 1; x++){ const i = y * W + x; B[i] = (L[i] * 4 + L[i - 1] + L[i + 1] + L[i - W] + L[i + W] + L[i - W - 1] + L[i - W + 1] + L[i + W - 1] + L[i + W + 1]) / 12; } L.set(B); }
+    const gain = o.gain || 1, out = [], G = o.g || newG(), cols = Math.floor(W / CW), rows = Math.floor(Hh / RH), MAXR = o.run || 8;
+    const RAMP = " .:-=+*#%@";
+    for (let r = 0; r < rows; r++){
+      let line = "";
+      for (let q = 0; q < cols; q++){
+        const x0 = Math.floor(q * CW), x1 = Math.floor((q + 1) * CW), y0 = Math.floor(r * RH), y1 = Math.floor((r + 1) * RH);
+        let v = 0, n = 0, jxx = 0, jyy = 0, jxy = 0;
+        for (let y = Math.max(1, y0); y < Math.min(Hh - 1, y1); y++) for (let x = Math.max(1, x0); x < Math.min(W - 1, x1); x++){
+          const i = y * W + x; v += L[i]; n++; const gx = L[i + 1] - L[i - 1], gy = L[i + W] - L[i - W]; jxx += gx * gx; jyy += gy * gy; jxy += gx * gy; }
+        if (!n){ line += " "; continue; }
+        v = Math.min(1, v / n * gain); const e = Math.sqrt(jxx + jyy) / n * 6;
+        let ch = " ";
+        if (e > (o.edge || .18) && v > .06){
+          // направление линии перпендикулярно градиенту; y вниз
+          const th = .5 * Math.atan2(2 * jxy, jxx - jyy) + Math.PI / 2; let a = ((th * 180 / Math.PI) % 180 + 180) % 180;
+          ch = a < 22.5 || a >= 157.5 ? "-" : a < 67.5 ? "\\" : a < 112.5 ? "|" : "/";
+          if (v > .55) ch = ch === "|" ? "#" : ch === "-" ? "=" : ch;
+        } else if (v > (o.thr || .12)) ch = RAMP[Math.min(RAMP.length - 1, 1 + Math.floor((v - (o.thr || .12)) / (1 - (o.thr || .12)) * (RAMP.length - 1)))];
+        line += ch;
+      }
+      // строка → куски до MAXR символов (по одному куску — одна категория)
+      let q = 0; while (q < line.length){ if (line[q] === " "){ q++; continue; } let e2 = q; while (e2 < line.length && e2 - q < MAXR && !(line[e2] === " " && line[e2 + 1] === " ")) e2++;
+        const txt = line.slice(q, e2).replace(/\s+$/, ""); if (txt) out.push({ category_name: txt, x_position: r1(o.x + q * CW), y_position: r1(o.y + r * RH - 9), width: SYM, height: SYM, hero_ids: [], _g: G }); q = e2; }
+    }
+    return out;
+  }
+  // текст вразрядку (цитаты сверху, как в арт-сетках)
+  function spaced(t, x, y, g){ return t.split("|").map((ln, i) => ({ category_name: [...ln.toUpperCase()].join(" "), x_position: x, y_position: y + i * 20, width: SYM, height: SYM, hero_ids: [], _g: g })); }
   function artCats(img0, o){
+    if (o.mode === "ascii") return asciiCats(img0, o);
     // o: { x, y, w, h, mode: line|fill, step, thr, ch, inv }
     const T0 = img0.sw ? img0 : trim(img0), cr = o.crop || 1, T = { ...T0, sh: T0.sh * cr, sx: T0.sx + (cr < .5 ? T0.sw * .18 : 0), sw: cr < .5 ? T0.sw * .64 : T0.sw }, img = { width: T.sw, height: T.sh };
     const px = 1.5, cw = Math.max(8, Math.round(o.w / px)), chh = Math.max(8, Math.round(o.h / px));
@@ -112,6 +157,19 @@ const GRIDS = (() => {
   const ALLSC = () => (typeof HEROES !== "undefined" && HEROES.length ? HEROES.map(h => [h.slug, h.ru || h.en]) : SCENES);
   const CROPS = [[.58, "по пояс"], [1, "в полный рост"], [.34, "лицо"]];
   function sceneOf(i){ const L = ALLSC(), fav = SCENES.map(x => x[0]), order = [...SCENES, ...L.filter(x => !fav.includes(x[0]))]; const [slug, name] = order[i], c = CROPS[i % 3], side = (i >> 1) % 2 ? "l" : "r"; return { slug, name, crop: c[0], cn: c[1], side }; }
+  // сцены в новом стиле: свой рисунок плотным ASCII + рамка-орнамент с героями + цитата
+  const NEWSC = [
+    { n: "Слёзы", t: "Dead inside, Аниме, Рамки", art: "a15", q: "ты всё ещё ждёшь,|что они вернутся?" }
+  ];
+  async function newScene(d){
+    await heroes(); const [art, fr] = await Promise.all([loadImg(`/grids-art/${d.art}.webp`), loadImg("/grids-art/a11.webp")]), g = newG(), g2 = newG();
+    const top = [...H].filter(h => h.pick).sort((a, b) => b.pick - a.pick).slice(0, 12).map(h => h.id);
+    const cats = asciiCats(art, { x: 4, y: 4, w: 740, h: 588, g, stretch: true, inv: false, gain: d.gain || .85, thr: .18, edge: .22, blur: 1 })
+      .concat(asciiCats(fr, { x: 770, y: 112, w: 410, h: 470, stretch: true, g: g2, gain: 2.2, thr: .08, edge: .16, run: 10, blur: 1 }))
+      .concat(spaced(d.q, 790, 22, newG()));
+    cats.push({ category_name: "", x_position: 828, y_position: 178, width: 294, height: 336, hero_ids: top });
+    return { config_name: d.n, categories: cats };
+  }
   async function sceneCfg(slug, name, crop, side){
     await heroes(); const img = await loadImg(`/hero/${slug}.webp`), left = side === "l";
     return { config_name: "Сцена: " + name, categories: posLayout(true, side).concat(artCats(img, { x: left ? 12 : 650, y: 8, w: 530, h: 580, mode: "line", step: 5, thr: .12, ch: ".", crop: crop || .58 })) };
@@ -283,7 +341,7 @@ const GRIDS = (() => {
       <div class="gr-src"><label class="btn btn-ghost gr-file">📂 Своя картинка<input type="file" accept="image/*" hidden></label><select id="grHs" aria-label="Герой"><option value="">…или герой Доты</option>${H1.map(h => `<option value="${h[0]}">${esc(h[1])}</option>`).join("")}</select></div>
       <canvas class="gr-pv" id="grPv" width="1193" height="593"></canvas>
       <div class="gr-arow">
-        <label>Стиль <select id="grMd"><option value="line">Контур точками</option><option value="fill">Заливка символами</option></select></label>
+        <label>Стиль <select id="grMd"><option value="ascii">ASCII-арт (плотно)</option><option value="line">Контур точками</option><option value="fill">Заливка символами</option></select></label>
         <label>Символ <select id="grCh"><option>.</option><option>·</option><option>*</option><option>+</option><option>o</option><option>#</option></select></label>
         <label>Кадр <select id="grCr"><option value="1">Весь рост</option><option value=".58">По пояс</option><option value=".34">Лицо</option></select></label>
         <label>Где <select id="grWh"><option value="r">Справа</option><option value="l">Слева</option><option value="c">По центру</option><option value="a">Весь экран</option></select></label>
@@ -302,7 +360,7 @@ const GRIDS = (() => {
       const bg = b.querySelector("#grPA").checked ? posLayout(false) : C().categories;
       paint(g, bg, 1, .45);
       if (!img){ cats = []; b.querySelector("#grAG").disabled = true; return; }
-      const o = box(); cats = artCats(img, { ...o, mode: b.querySelector("#grMd").value, step: +b.querySelector("#grSt").value / 10, thr: +b.querySelector("#grTh").value / 100, ch: b.querySelector("#grCh").value, inv: b.querySelector("#grInv").checked, crop: +b.querySelector("#grCr").value });
+      const o = box(), md = b.querySelector("#grMd").value; cats = artCats(img, { ...o, mode: md, gain: md === "ascii" ? +b.querySelector("#grSt").value / 50 : 1, edge: md === "ascii" ? .5 - +b.querySelector("#grTh").value / 120 : 0, step: +b.querySelector("#grSt").value / 10, thr: +b.querySelector("#grTh").value / 100, ch: b.querySelector("#grCh").value, inv: b.querySelector("#grInv").checked, crop: +b.querySelector("#grCr").value });
       paint(g, cats, 1, 1); const tot = cats.length + (b.querySelector("#grPA").checked ? 0 : C().categories.length);
       b.querySelector("#grAn").innerHTML = `Точек: <b>${cats.length}</b> · всего категорий станет: ${tot}${tot > 2600 ? ' — <span class="gr-warn">много, уменьши плотность</span>' : ""}`; b.querySelector("#grAG").disabled = !cats.length; };
     let rt = 0; const later = () => { clearTimeout(rt); rt = setTimeout(render, 60); };
@@ -372,6 +430,7 @@ const GRIDS = (() => {
     const el = document.getElementById("grShop"); await heroes().catch(() => {});
     el.innerHTML = `<div class="gr-shead"><div class="rkchips">${[["new", "Новые"], ["top", "Популярные"]].map(x => `<button type="button" class="rkc" data-ss="${x[0]}" aria-pressed="${x[0] === shopSort}">${x[1]}</button>`).join("")}</div>
       <label class="d2-search gr-sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="grSQ" placeholder="Название или автор" value="${esc(shopQ)}"></label></div>
+      <h3 class="gr-h3">Новые арт-сетки</h3><div class="gr-cards" id="grNew2"><div class="feed-sk"></div></div>
       <h3 class="gr-h3">Сетки игроков</h3><div class="gr-cards" id="grUsr"><div class="feed-sk"></div></div>
       <h3 class="gr-h3">Арт-сцены от Aegis</h3><p class="gr-mut">Позиции 1–5 в рамке и герой, нарисованный точками. Свою сцену — с любой картинкой — собери в редакторе: «🎨 Арт / сцена».</p><div class="gr-cards" id="grScn"><div class="feed-sk"></div></div><button type="button" class="btn btn-ghost gr-more" id="grMore" hidden>Ещё сцены</button>
       <h3 class="gr-h3">Обычные сетки</h3><div class="gr-cards" id="grPre"></div>`;
@@ -380,6 +439,7 @@ const GRIDS = (() => {
     const pre = PRESETS.map(p => ({ name: p.n, nick: "Aegis", d: p.d, data: { config_name: p.n, categories: H.length ? p.f() : [] } }));
     const pb = el.querySelector("#grPre"); pb.innerHTML = pre.map(card).join(""); bindCards(pb, pre);
     users();
+    (async () => { const nb = el.querySelector("#grNew2"), ns = []; for (const d of NEWSC){ try { ns.push({ name: d.n, nick: "Aegis", d: d.t, data: await newScene(d) }); } catch(e) {} } if (!nb.isConnected) return; nb.innerHTML = ns.map(card).join(""); bindCards(nb, ns); })();
     const sc = [], box = el.querySelector("#grScn"), more = el.querySelector("#grMore"), total = ALLSC().length; let next = 0;
     const batch = async () => { more.hidden = true; const end = Math.min(total, next + 12);
       for (; next < end; next++){ const q = sceneOf(next); try { sc.push({ name: "Сцена: " + q.name, nick: "Aegis", d: q.cn, data: await sceneCfg(q.slug, q.name, q.crop, q.side) }); } catch(e) {} if (!box.isConnected) return; }
