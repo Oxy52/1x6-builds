@@ -7,20 +7,40 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          curl -sL https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/en/agents.json -o ag.json || true
-          curl -sL "https://api.deadlock-api.com/v1/assets/heroes?only_active=true" -o dl.json || true
-          python3 - <<'PY'
-          import json
-          a=json.load(open('ag.json')); out=['CS',str(len(a)),json.dumps(a[0])[:800]]
-          d=json.load(open('dl.json')); out+=['DL',str(len(d)),json.dumps(d[0].get('images',{}))[:2500], d[0].get('name','')]
-          open('out.txt','w').write('\n'.join(out))
+          pip install pillow -q
+          curl -sL https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/en/agents.json -o ag.json
+          curl -sL "https://api.deadlock-api.com/v1/assets/heroes?only_active=true" -o dl.json
+          mkdir -p big/cs big/dl
+          python3 - <<'PY' || true
+          import json, urllib.request, io
+          from PIL import Image
+          log=[]
+          def get(u):
+              return Image.open(io.BytesIO(urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read()))
+          def save(im,p):
+              im=im.convert('RGBA'); bb=im.getchannel('A').getbbox(); im=im.crop(bb) if bb else im
+              if im.height>720: im=im.resize((round(im.width*720/im.height),720),Image.LANCZOS)
+              im.save(p,'WEBP',quality=82); return im.size
+          a=json.load(open('ag.json')); seen=set(); n=0
+          for x in a:
+              nm=x['name'].split('|')[0].strip()
+              if nm in seen: continue
+              seen.add(nm)
+              try:
+                  im=get(x['image']); log.append(f"cs {n} {nm} {im.size} -> {save(im,f'big/cs/{n}.webp')}"); n+=1
+              except Exception as e: log.append(f"cs err {nm} {e}")
+              if n>=30: break
+          d=json.load(open('dl.json')); n=0
+          for h in d:
+              im0=h.get('images',{}); best=None
+              for k in ['hero_card_critical','hero_card_gloat','icon_hero_card','top_bar_vertical_image']:
+                  u=im0.get(k)
+                  if not u: continue
+                  try:
+                      im=get(u); log.append(f"  {h['name']} {k} {im.size} {im.mode}")
+                      if best is None or im.size[0]*im.size[1]>best[1].size[0]*best[1].size[1]: best=(k,im)
+                  except Exception as e: log.append(f"  err {k} {e}")
+              if best: log.append(f"dl {n} {h['name']} {best[0]} -> {save(best[1],f'big/dl/{n}.webp')}"); n+=1
+          open('out.txt','w').write('\n'.join(log))
           PY
-          for u in $(python3 -c "import json;a=json.load(open('ag.json'));print(a[0]['image'])"); do curl -sL "$u" -o a0.png; done
-          python3 -c "import json;d=json.load(open('dl.json'));[print(k,v) for k,v in d[0]['images'].items()]" | head -40 > imgs.txt
-          for u in $(python3 -c "import json;d=json.load(open('dl.json'));im=d[0]['images'];print(' '.join(v for v in im.values() if isinstance(v,str) and v.endswith(('.png','.webp')) and 'webp' not in v)[:4000])"); do n=$(basename $u); curl -sL "$u" -o "x_$n"; done
-          python3 -c "
-          from PIL import Image;import glob
-          for f in ['a0.png']+glob.glob('x_*'):
-            try: im=Image.open(f); print(f,im.size,im.mode)
-            except Exception as e: print(f,e)" >> out.txt || true
-          git config user.name p; git config user.email p@p; git add out.txt imgs.txt; git commit -m r; git push
+          git config user.name p; git config user.email p@p; git add -A out.txt big; git commit -m r; git push
