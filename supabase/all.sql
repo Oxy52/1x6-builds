@@ -28,8 +28,8 @@ create policy "users delete own profile" on public.profiles for delete to authen
 
 -- хранилище аватарок и баннеров (до 2 МБ, только картинки)
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values ('media', 'media', true, 2097152, array['image/jpeg','image/png','image/webp'])
-on conflict (id) do update set public = true, file_size_limit = 2097152, allowed_mime_types = array['image/jpeg','image/png','image/webp'];
+values ('media', 'media', true, 2097152, array['image/jpeg','image/png','image/webp','image/gif'])
+on conflict (id) do update set public = true, file_size_limit = 2097152, allowed_mime_types = array['image/jpeg','image/png','image/webp','image/gif'];
 
 drop policy if exists "media upload own folder" on storage.objects;
 drop policy if exists "media update own folder" on storage.objects;

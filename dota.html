@@ -480,7 +480,8 @@
   .pick-ar:hover { transform: scale(1.1); border-color: var(--t1); } .pick-ar.l { left: -6px; } .pick-ar.r { right: -6px; } .pick-ar[hidden] { display: none; }
   .pick button, .pick label { flex: none; scroll-snap-align: start; cursor: pointer; padding: 0; border: 2px solid transparent; background: var(--bg-soft); overflow: hidden; transition: transform .15s, border-color .2s; }
   .pick.av button, .pick.av label { width: 54px; height: 54px; border-radius: 50%; }
-  .pick.av[data-show="hero"] button[data-t="cs"], .pick.av[data-show="hero"] button[data-t="dl"], .pick.av[data-show="cs"] button[data-t="hero"], .pick.av[data-show="cs"] button[data-t="dl"], .pick.av[data-show="dl"] button[data-t="hero"], .pick.av[data-show="dl"] button[data-t="cs"] { display: none; }
+  .pick.av[data-show="hero"] button[data-t="cs"], .pick.av[data-show="hero"] button[data-t="dl"], .pick.av[data-show="cs"] button[data-t="hero"], .pick.av[data-show="cs"] button[data-t="dl"], .pick.av[data-show="dl"] button[data-t="hero"], .pick.av[data-show="dl"] button[data-t="cs"],
+  .pick.av:not([data-show="anim"]) button[data-t="anim"], .pick.av[data-show="anim"] button:is([data-t="hero"], [data-t="cs"], [data-t="dl"]) { display: none; }
   .avg { display: flex; gap: 6px; flex-wrap: wrap; margin: 2px 0 8px; } .avg button { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px 6px 8px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,.04); color: var(--fg); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
   .avg button img { width: 20px; height: 20px; object-fit: contain; } .avg button[aria-pressed="true"] { border-color: var(--c1, #e8564a); background: color-mix(in srgb, var(--c1, #e8564a) 16%, transparent); }
   .pick.bn button, .pick.bn label { width: 120px; height: 62px; border-radius: 12px; }
@@ -3162,9 +3163,11 @@ const PROF = (() => {
 
   const esc = t => String(t == null ? "" : t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   const H = slug => HEROES.find(h => h.slug === slug);
-  const avSrc = a => !a ? "" : (a.t === "img" || a.t === "url") ? a.v : a.t === "cs" || a.t === "dl" ? `face/${a.t}/${String(a.v).replace(/\D/g, "")}.webp` : `face/${a.v}.webp`;
-  const AVG = [["hero", "Dota 2", "dota"], ["cs", "CS2", "cs"], ["dl", "Deadlock", "deadlock"]], AVN = { cs: 25, dl: 44 };
-  const bnSrc = b => !b ? "" : (b.t === "img" || b.t === "url") ? b.v : b.t === "arc" ? `arcana/${b.v}.webp` : b.t === "hero" ? `hero/${b.v}.webp` : "";
+  // анимированные аватарки и баннеры — свои зацикленные webp в anim/av и anim/bn
+  const ANIM_AV = ["flame", "orb", "rune", "radar", "hex", "vortex", "eye", "ember"], ANIM_BN = ["aurora", "embers", "synth", "stars", "rain", "waves", "lava", "fire"];
+  const avSrc = a => !a ? "" : (a.t === "img" || a.t === "url") ? a.v : a.t === "anim" ? `anim/av/${String(a.v).replace(/\W/g, "")}.webp` : a.t === "cs" || a.t === "dl" ? `face/${a.t}/${String(a.v).replace(/\D/g, "")}.webp` : `face/${a.v}.webp`;
+  const AVG = [["hero", "Dota 2", "dota"], ["cs", "CS2", "cs"], ["dl", "Deadlock", "deadlock"], ["anim", "Анимации", "/anim/av/flame.webp"]], AVN = { cs: 25, dl: 44 };
+  const bnSrc = b => !b ? "" : (b.t === "img" || b.t === "url") ? b.v : b.t === "arc" ? `arcana/${b.v}.webp` : b.t === "anim" ? `anim/bn/${String(b.v).replace(/\W/g, "")}.webp` : b.t === "hero" ? `hero/${b.v}.webp` : "";
   const enc = o => !o ? "" : o.t === "grad" ? "grad" : `${o.t === "img" ? "url" : o.t}:${o.v}`;
   const dec = s => { if (!s) return null; if (s === "grad") return { t: "grad", v: "" }; const i = s.indexOf(":"); const t = s.slice(0, i), v = s.slice(i + 1);
     if (t === "url" && !/^https:\/\//.test(v)) return null; return { t, v }; };
@@ -3360,6 +3363,8 @@ const PROF = (() => {
   /* ---------- картинки ---------- */
   function shrink(file, w, h, cb){
     const r = new FileReader();
+    // гифку и анимированный webp не перерисовываем (иначе пропадёт анимация) — только проверяем размер
+    if (/^image\/(gif|webp)$/.test(file.type)){ if (file.size > 2 * 1024 * 1024) return cb(null, "big"); r.onload = () => cb(r.result); r.onerror = () => cb(null); return r.readAsDataURL(file); }
     r.onload = () => { const img = new Image(); img.onload = () => {
       const c = document.createElement("canvas"); c.width = w; c.height = h; const x = c.getContext("2d");
       const sc = Math.max(w / img.width, h / img.height), dw = img.width * sc, dh = img.height * sc;
@@ -3368,10 +3373,10 @@ const PROF = (() => {
     r.onerror = () => cb(null); r.readAsDataURL(file);
   }
   async function uploadData(dataUrl, kind){
-    const blob = await (await fetch(dataUrl)).blob();
-    const path = `${U.id}/${kind}-${Date.now()}.jpg`;
-    const { error } = await sb.storage.from("media").upload(path, blob, { contentType: "image/jpeg", upsert: false, cacheControl: "604800" });
-    if (error) throw error;
+    const blob = await (await fetch(dataUrl)).blob(), type = /^image\/(gif|webp|png)$/.test(blob.type) ? blob.type : "image/jpeg";
+    const path = `${U.id}/${kind}-${Date.now()}.${type.split("/")[1].replace("jpeg", "jpg")}`;
+    const { error } = await sb.storage.from("media").upload(path, blob, { contentType: type, upsert: false, cacheControl: "604800" });
+    if (error){ if (type === "image/gif") error.gif = true; throw error; }
     return sb.storage.from("media").getPublicUrl(path).data.publicUrl;
   }
 
@@ -3391,12 +3396,12 @@ const PROF = (() => {
         <div class="pf"><label class="lb" for="fSt">Статус</label><input type="text" id="fSt" maxlength="40" placeholder="Например, мейню Пуджа" value="${esc(d.st)}"></div>
         <div class="pf">${lb("Любимые игры")}<div class="mygames" id="fGames">${GAMES3.map(([g, n]) => `<button type="button" data-g="${g}" aria-pressed="${MYG.includes(g)}"><img alt="" src="/games/${g}.png">${n}</button>`).join("")}</div><div class="hint">Можно выбрать несколько — они покажутся в профиле и первыми на главной</div></div>
         <div class="pf">${lb("Аватарка")}
-          <div class="avg" id="fAvG">${AVG.map(([t, n, g]) => `<button type="button" data-g="${t}" aria-pressed="${(["cs", "dl"].includes(d.av.t) ? d.av.t : "hero") === t}"><img alt="" src="/games/${g}.png">${n}</button>`).join("")}</div>
-          <div class="pick av" id="fAv" data-show="${["cs", "dl"].includes(d.av.t) ? d.av.t : "hero"}"><label class="up" title="Своё фото">＋<input type="file" accept="image/*" id="fAvUp"></label>${(d.av.t === "img" || d.av.t === "url") ? `<button type="button" data-t="${d.av.t}" aria-pressed="true"><img alt="" src="${esc(d.av.v)}"></button>` : ""}${HEROES.map(h => `<button type="button" data-t="hero" data-v="${h.slug}" aria-label="${h.en}" aria-pressed="${d.av.t === "hero" && d.av.v === h.slug}"><img alt="" loading="lazy" src="face/${h.slug}.webp"></button>`).join("")}${["cs", "dl"].map(t => Array.from({ length: AVN[t] }, (_, i) => `<button type="button" data-t="${t}" data-v="${i}" aria-label="${t === "cs" ? "Агент CS2" : "Герой Deadlock"}" aria-pressed="${d.av.t === t && +d.av.v === i}"><img alt="" loading="lazy" src="face/${t}/${i}.webp"></button>`).join("")).join("")}</div>
-          <div class="hint">Герой Dota 2, агент CS2, герой Deadlock или своё фото (＋)</div></div>
+          <div class="avg" id="fAvG">${AVG.map(([t, n, g]) => `<button type="button" data-g="${t}" aria-pressed="${(["cs", "dl", "anim"].includes(d.av.t) ? d.av.t : "hero") === t}"><img alt="" src="${g.includes("/") ? g : `/games/${g}.png`}">${n}</button>`).join("")}</div>
+          <div class="pick av" id="fAv" data-show="${["cs", "dl", "anim"].includes(d.av.t) ? d.av.t : "hero"}"><label class="up" title="Своё фото">＋<input type="file" accept="image/*" id="fAvUp"></label>${(d.av.t === "img" || d.av.t === "url") ? `<button type="button" data-t="${d.av.t}" aria-pressed="true"><img alt="" src="${esc(d.av.v)}"></button>` : ""}${HEROES.map(h => `<button type="button" data-t="hero" data-v="${h.slug}" aria-label="${h.en}" aria-pressed="${d.av.t === "hero" && d.av.v === h.slug}"><img alt="" loading="lazy" src="face/${h.slug}.webp"></button>`).join("")}${["cs", "dl"].map(t => Array.from({ length: AVN[t] }, (_, i) => `<button type="button" data-t="${t}" data-v="${i}" aria-label="${t === "cs" ? "Агент CS2" : "Герой Deadlock"}" aria-pressed="${d.av.t === t && +d.av.v === i}"><img alt="" loading="lazy" src="face/${t}/${i}.webp"></button>`).join("")).join("")}${ANIM_AV.map(v => `<button type="button" data-t="anim" data-v="${v}" aria-label="Анимация" aria-pressed="${d.av.t === "anim" && d.av.v === v}"><img alt="" loading="lazy" src="anim/av/${v}.webp"></button>`).join("")}</div>
+          <div class="hint">Герой Dota 2, агент CS2, герой Deadlock, анимация или своё фото (＋)</div></div>
         <div class="pf">${lb("Баннер сзади")}
-          <div class="pick bn" id="fBn"><label class="up" title="Своя картинка">＋<input type="file" accept="image/*" id="fBnUp"></label>${(d.bn.t === "img" || d.bn.t === "url") ? `<button type="button" data-t="${d.bn.t}" aria-pressed="true"><img alt="" src="${esc(d.bn.v)}"></button>` : ""}<button type="button" data-t="grad" aria-pressed="${d.bn.t === "grad"}" aria-label="Цвет темы" style="background:linear-gradient(135deg,var(--t1),var(--t2))"></button>${HEROES.map(h => `<button type="button" data-t="hero" data-v="${h.slug}" aria-pressed="${d.bn.t === "hero" && d.bn.v === h.slug}" style="${vars(h)};background:radial-gradient(circle at 50% 30%,var(--c1),var(--c2))" title="${h.en}"><img alt="" loading="lazy" src="hero/${h.slug}.webp" style="object-fit:cover;object-position:center 22%"></button>`).join("")}</div>
-          <div class="hint">Цвет, герой или своя картинка (＋)</div></div>
+          <div class="pick bn" id="fBn"><label class="up" title="Своя картинка">＋<input type="file" accept="image/*" id="fBnUp"></label>${(d.bn.t === "img" || d.bn.t === "url") ? `<button type="button" data-t="${d.bn.t}" aria-pressed="true"><img alt="" src="${esc(d.bn.v)}"></button>` : ""}<button type="button" data-t="grad" aria-pressed="${d.bn.t === "grad"}" aria-label="Цвет темы" style="background:linear-gradient(135deg,var(--t1),var(--t2))"></button>${ANIM_BN.map(v => `<button type="button" data-t="anim" data-v="${v}" aria-label="Анимация" aria-pressed="${d.bn.t === "anim" && d.bn.v === v}"><img alt="" loading="lazy" src="anim/bn/${v}.webp"></button>`).join("")}</div>
+          <div class="hint">Цвет темы, анимация или своя картинка (＋) — можно и гифку</div></div>
         ${CLOUD && U ? `<div class="pf"><span class="lb">Рамка аватарки</span><div class="frames" id="fFr">${FRAMES.map(f => { const ok = f.need(sInfo()); return `<button type="button" data-f="${f.id}" ${ok ? "" : "disabled"} aria-pressed="${(d.frame || "") === f.id}"><span class="fprev${frameCls(f.id)}"><img alt="" src="${esc(avSrc(d.av))}"></span><b>${f.name}</b><small>${ok ? "открыта" : "🔒 " + f.req}</small></button>`; }).join("")}</div><div class="hint">Рамки открываются с уровнем — получай опыт каждый день</div></div>` : ""}
         <div class="pf err" id="fErr" hidden></div>
         <div class="pacts" style="padding:0"><button type="submit" class="btn btn-primary" id="fSave">${isNew ? "Создать профиль" : "Сохранить"}</button><button type="button" class="btn btn-ghost" id="fCancel">Отмена</button></div>
@@ -3420,7 +3425,7 @@ const PROF = (() => {
     function upload(inp, pk, w, h, key, after){
       inp.onchange = () => { const f = inp.files && inp.files[0]; if (!f) return;
         if (!/^image\//.test(f.type)) return showErr("Это не картинка.");
-        shrink(f, w, h, url => { if (!url) return showErr("Не получилось открыть картинку.");
+        shrink(f, w, h, (url, why) => { if (!url) return showErr(why === "big" ? "Анимация больше 2 МБ — выбери файл поменьше." : "Не получилось открыть картинку.");
           err.hidden = true; let b = pk.querySelector('button[data-t="img"],button[data-t="url"]');
           if (!b){ b = document.createElement("button"); b.type = "button"; b.innerHTML = '<img alt="">'; pk.querySelector(".up").after(b); }
           b.dataset.t = "img"; b.querySelector("img").src = url; pk.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
@@ -3452,7 +3457,7 @@ const PROF = (() => {
         if (error){ if (error.code === "23505") { nh.textContent = "Этот ник уже занят — придумай другой"; nh.classList.add("err"); } else showErr(/relation|does not exist|schema cache/i.test(error.message) ? "База профилей ещё не настроена на сервере." : ERR(error.message)); return; }
         const wasNew = !P; P = { nick, st, av: np.av, bn: np.bn, frame: np.frame }; topbar(); view(); if (wasNew) claimDaily();
         if (typeof curTab !== "undefined" && curTab === "feed"){ const c = document.getElementById("feedCmp"); if (c) composer(c, null, () => feedOpen(true)); }
-      } catch(ex) { const m = ex && ex.message || ""; showErr(/Bucket not found|bucket/i.test(m) ? "Хранилище картинок ещё не настроено на сервере." : /row-level security/i.test(m) ? "Не удалось загрузить картинку — попробуй другую или выбери героя." : ERR(m)); }
+      } catch(ex) { const m = ex && ex.message || ""; showErr(ex && ex.gif ? "Хранилище пока не принимает GIF — сохрани анимацию в WebP или выбери готовую анимацию." : /Bucket not found|bucket/i.test(m) ? "Хранилище картинок ещё не настроено на сервере." : /row-level security/i.test(m) ? "Не удалось загрузить картинку — попробуй другую или выбери героя." : ERR(m)); }
       finally { if (btn.isConnected){ btn.disabled = false; btn.textContent = isNew ? "Создать профиль" : "Сохранить"; } }
     };
     if (isNew) setTimeout(() => { const i = box.querySelector("#fNick"); if (!i.value) i.focus({preventScroll: true}); }, 350);
@@ -6700,7 +6705,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=16").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=17").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
