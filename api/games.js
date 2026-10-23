@@ -8,7 +8,7 @@
 //   GET /api/games?q=dlOrder&id=1&lang=ru    -> самый частый порядок прокачки умений
 //   GET /api/games?q=market&g=cs|dota&cat=<категория>&start=0 | &s=<поиск> -> цены скинов на Steam, Lis-skins, Skinport, Market.CSGO/Dota2, CS.money, CSFloat + курсы валют
 // Новости CS2 и Deadlock: /api/news?app=cs|deadlock
-const UA = { Accept: "application/json", "User-Agent": "1x6-builds (+https://1x6-eta.vercel.app)" };
+const UA = { Accept: "application/json", "User-Agent": "1x6-builds (+https://blazecrest.vercel.app)" };
 const VRS = "ValveSoftware/counter-strike_regional_standings";
 const RAW = `https://raw.githubusercontent.com/${VRS}/main/live/`;
 const DL = "https://api.deadlock-api.com/v1";

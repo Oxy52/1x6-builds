@@ -3,23 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Мета Dota 2 — винрейт героев по рангам и ролям, сборки, контрпики | Aegis</title>
+<title>Мета Dota 2 — винрейт героев по рангам и ролям, сборки, контрпики | Blazecrest</title>
 <meta name="description" content="Винрейт и пикрейт всех героев Dota 2 по рангам и позициям, популярные сборки с винрейтом предметов, контрпики, пикер против драфта и профили игроков, как на Dotabuff.">
-<link rel="canonical" href="https://1x6-eta.vercel.app/dota2">
+<link rel="canonical" href="https://blazecrest.vercel.app/dota2">
 <meta name="theme-color" content="#08080b">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Blazecrest">
 <meta property="og:locale" content="ru_RU">
-<meta property="og:url" content="https://1x6-eta.vercel.app/dota2">
-<meta property="og:title" content="Мета Dota 2 — винрейт героев по рангам и ролям, сборки, контрпики | Aegis">
+<meta property="og:url" content="https://blazecrest.vercel.app/dota2">
+<meta property="og:title" content="Мета Dota 2 — винрейт героев по рангам и ролям, сборки, контрпики | Blazecrest">
 <meta property="og:description" content="Винрейт и пикрейт всех героев Dota 2 по рангам и позициям, популярные сборки с винрейтом предметов, контрпики, пикер против драфта и профили игроков, как на Dotabuff.">
-<meta property="og:image" content="https://1x6-eta.vercel.app/og/dota2.png">
+<meta property="og:image" content="https://blazecrest.vercel.app/og/dota2.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Мета Dota 2 — винрейт героев по рангам и ролям, сборки, контрпики | Aegis">
+<meta name="twitter:title" content="Мета Dota 2 — винрейт героев по рангам и ролям, сборки, контрпики | Blazecrest">
 <meta name="twitter:description" content="Винрейт и пикрейт всех героев Dota 2 по рангам и позициям, популярные сборки с винрейтом предметов, контрпики, пикер против драфта и профили игроков, как на Dotabuff.">
-<meta name="twitter:image" content="https://1x6-eta.vercel.app/og/dota2.png">
+<meta name="twitter:image" content="https://blazecrest.vercel.app/og/dota2.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://vsmjjlrgjyujaioknlkn.supabase.co" crossorigin>
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Blazecrest", "url": "https://1x6-eta.vercel.app/", "inLanguage": "ru", "description": "Сборки для кастомки Dota 1x6: 54 героя, предметы по этапам игры и арканы. Готовые билды Custom Hero Chaos, мета и винрейты Dota 2, мини-игры, рейтинг и онлайн-дуэли."}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Blazecrest", "url": "https://blazecrest.vercel.app/", "inLanguage": "ru", "description": "Сборки для кастомки Dota 1x6: 54 героя, предметы по этапам игры и арканы. Готовые билды Custom Hero Chaos, мета и винрейты Dota 2, мини-игры, рейтинг и онлайн-дуэли."}</script>
 <script>window.START_TAB = "dota";</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.100.0/dist/umd/supabase.min.js"></script>
 <script>window.SB_CONF = { url: "https://vsmjjlrgjyujaioknlkn.supabase.co", key: "sb_publishable_tJy3dl_kfNZXP6PXMqsQVQ_RUXqoPmn" };</script>
@@ -3502,7 +3502,7 @@ const PROF = (() => {
   async function feedOpen(force){
     const root = document.getElementById("feedPane"); if (!root) return;
     const list = document.getElementById("feedList"), more = document.getElementById("feedMore"), cmp = document.getElementById("feedCmp");
-    if (!CLOUD){ list.innerHTML = `<div class="gempty">Лента игроков работает на сайте <b>1x6-eta.vercel.app</b> после входа.</div>`; more.hidden = true; cmp.innerHTML = ""; return; }
+    if (!CLOUD){ list.innerHTML = `<div class="gempty">Лента игроков работает на сайте <b>blazecrest.vercel.app</b> после входа.</div>`; more.hidden = true; cmp.innerHTML = ""; return; }
     composer(cmp, null, () => feedOpen(true));
     wirePosts(list);
     if (feedLoaded && !force) return; feedLoaded = true; feedOff = 0;
@@ -3583,7 +3583,7 @@ const PROF = (() => {
     rkKind = kind || rkKind;
     const list = document.getElementById("rkList"), me = document.getElementById("rkMe"); if (!list) return;
     document.querySelectorAll(".rkc").forEach(b => b.setAttribute("aria-pressed", b.dataset.k === rkKind));
-    if (!CLOUD){ list.innerHTML = `<div class="gempty">Рейтинг игроков работает на сайте <b>1x6-eta.vercel.app</b>.</div>`; me.innerHTML = ""; return; }
+    if (!CLOUD){ list.innerHTML = `<div class="gempty">Рейтинг игроков работает на сайте <b>blazecrest.vercel.app</b>.</div>`; me.innerHTML = ""; return; }
     if (rkKind === "heroes") return metaOpen(list, me);
     if (rkKind === "matches") return matchesOpen(list, me);
     list.innerHTML = `<div class="feed-sk"></div><div class="feed-sk"></div><div class="feed-sk"></div>`;
@@ -3822,7 +3822,7 @@ const PROF = (() => {
     const say = (t, cls) => { msg.hidden = !t; msg.className = "pm-msg" + (cls ? " " + cls : ""); msg.innerHTML = t || ""; };
     const drawPay = () => {
       const p = PLANS.find(x => x.k === premPlan), en = (payInfo && payInfo.enabled) || {};
-      if (!CLOUD){ payEl.innerHTML = `<div class="pnone">Оплата работает на сайте 1x6-eta.vercel.app</div>`; return; }
+      if (!CLOUD){ payEl.innerHTML = `<div class="pnone">Оплата работает на сайте blazecrest.vercel.app</div>`; return; }
       if (!U){ payEl.innerHTML = `<button type="button" class="btn btn-primary pm-in" id="pmIn">Войди, чтобы оформить</button>`; payEl.querySelector("#pmIn").onclick = () => auth("in"); return; }
       const m = [["stars", "⭐", "Telegram Stars", `${p.stars} ⭐`], ["card", "💳", "Карта · Google Pay · Apple Pay · PayPal", `$${p.usd}`], ["crypto", "₿", "Криптовалюта · USDT, BTC, TON…", `$${p.usd}`]];
       payEl.innerHTML = `<div class="pm-ways">${m.map(w => `<button type="button" class="pm-way" data-p="${w[0]}"${payInfo && !en[w[0]] ? " disabled" : ""}><span class="pm-wi">${w[1]}</span><span class="pm-wt">${w[2]}${payInfo && !en[w[0]] ? "<small>скоро</small>" : ""}</span><b>${w[3]}</b></button>`).join("")}</div>`;
@@ -3890,7 +3890,7 @@ const PROF = (() => {
     if (fromOther){ supCount(); toast(`<span class="tic">💬</span><span><b>${IS_ADMIN ? "Новое обращение в поддержку" : "Ответ от поддержки"}</b><small>${esc(String(m.body).slice(0, 60))}</small></span>`, "", 4000); }
   }
   function support(){
-    if (!CLOUD){ shell("", `<div class="sup-head"><h3>💬 Поддержка</h3><small>Чат поддержки работает на сайте 1x6-eta.vercel.app</small></div><div style="height:24px"></div>`, "Поддержка"); return; }
+    if (!CLOUD){ shell("", `<div class="sup-head"><h3>💬 Поддержка</h3><small>Чат поддержки работает на сайте blazecrest.vercel.app</small></div><div style="height:24px"></div>`, "Поддержка"); return; }
     if (!U){
       const box = shell("", `<div class="sup-head"><h3>💬 Поддержка 1x6</h3><small>Вопрос, баг или идея — напиши нам, ответим прямо здесь.</small></div>
         <div class="psec">${signupCard ? `<div class="su-card"><div class="su-ic">💬</div><div class="su-b"><b>Войди, чтобы написать в поддержку</b><ul><li>Ответ придёт сюда же, в чат на сайте</li><li>Вся переписка сохранится</li></ul></div><button type="button" class="btn btn-primary su-go">Войти или зарегистрироваться</button><small class="su-n">Google, Discord, Telegram или почта. Бесплатно.</small></div>` : ""}</div><div style="height:12px"></div>`, "Поддержка");
@@ -5212,7 +5212,7 @@ const DUEL = (() => {
   }
   function onlineMenu(box){
     const el = box.querySelector("#dmOnline"); el.hidden = false;
-    if (!PROF.cloud || !PROF.rt()){ el.innerHTML = `<div class="gempty">Онлайн-дуэли работают на сайте <b>1x6-eta.vercel.app</b>.</div>`; return; }
+    if (!PROF.cloud || !PROF.rt()){ el.innerHTML = `<div class="gempty">Онлайн-дуэли работают на сайте <b>blazecrest.vercel.app</b>.</div>`; return; }
     el.innerHTML = `<div class="don"><button type="button" class="btn btn-primary" id="dnNew">Создать комнату</button><span class="dor">или</span><div class="djoin"><input id="dnCode" maxlength="5" placeholder="КОД" autocomplete="off" autocapitalize="characters"><button type="button" class="btn btn-ghost" id="dnJoin">Войти</button></div></div>`;
     el.querySelector("#dnNew").onclick = () => { const A = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let c = ""; for (let i = 0; i < 5; i++) c += A[Math.floor(Math.random() * A.length)]; start({ mode: "online", host: true, code: c }); };
     el.querySelector("#dnJoin").onclick = () => { const c = el.querySelector("#dnCode").value.toUpperCase().replace(/[^A-Z0-9]/g, ""); if (c.length === 5) start({ mode: "online", host: false, code: c }); };
@@ -6053,7 +6053,7 @@ const AI = (() => {
   }
   async function call(payload){
     const sb = PROF.rt && PROF.rt();
-    if (!PROF.cloud || !sb) return { error: "AI работает на сайте 1x6-eta.vercel.app" };
+    if (!PROF.cloud || !sb) return { error: "AI работает на сайте blazecrest.vercel.app" };
     const { data: { session } } = await sb.auth.getSession();
     if (!session) return { error: "login" };
     try {
@@ -6313,7 +6313,7 @@ async function shareLink(url, title, text){
   try { await navigator.clipboard.writeText(url); PROF.toast(`<span class="tic">🔗</span><span><b>Ссылка скопирована</b><small>Отправь её друзьям или в чат</small></span>`, "", 2600); }
   catch(e) { prompt("Скопируй ссылку:", url); }
 }
-const SITE_URL = location.origin && /^https?:/.test(location.origin) ? location.origin : "https://1x6-eta.vercel.app";
+const SITE_URL = location.origin && /^https?:/.test(location.origin) ? location.origin : "https://blazecrest.vercel.app";
 
 /* ---------- приложение на телефон (PWA) ---------- */
 let installEv = null;

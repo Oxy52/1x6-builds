@@ -21,7 +21,7 @@
 // Необязательно: OPENDOTA_API_KEY на Vercel — повышает лимиты OpenDota.
 const BASE = "https://api.opendota.com/api";
 const KEY = process.env.OPENDOTA_API_KEY || "";
-const UA = { Accept: "application/json", "User-Agent": "1x6-builds (+https://1x6-eta.vercel.app)" };
+const UA = { Accept: "application/json", "User-Agent": "1x6-builds (+https://blazecrest.vercel.app)" };
 
 const ROUTES = {
   heroStats: () => "/heroStats",

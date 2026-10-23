@@ -33,5 +33,18 @@
     "api/ai.js": {
       "maxDuration": 60
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/:path((?!api/).*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "1x6-eta.vercel.app"
+        }
+      ],
+      "destination": "https://blazecrest.vercel.app/:path",
+      "permanent": true
+    }
+  ]
 }

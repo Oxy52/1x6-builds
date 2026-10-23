@@ -10,12 +10,12 @@
 //   TELEGRAM_BOT_TOKEN      — уже есть (вход через Telegram). Включает оплату звёздами ⭐
 //   SUPABASE_SECRET_KEY     — уже есть
 //   STRIPE_SECRET_KEY       — sk_live_... из Stripe → Developers → API keys. Включает карты / Google Pay / Apple Pay / PayPal
-//   STRIPE_WEBHOOK_SECRET   — whsec_... из Stripe → Developers → Webhooks (адрес https://1x6-eta.vercel.app/api/pay?hook=stripe, событие checkout.session.completed)
+//   STRIPE_WEBHOOK_SECRET   — whsec_... из Stripe → Developers → Webhooks (адрес https://blazecrest.vercel.app/api/pay?hook=stripe, событие checkout.session.completed)
 //   NOWPAYMENTS_API_KEY     — из NOWPayments → Settings → API keys. Включает крипту
 //   NOWPAYMENTS_IPN_SECRET  — из NOWPayments → Settings → Payments → IPN secret key
 const crypto = require("crypto");
 
-const SITE = (process.env.SITE_URL || "https://1x6-eta.vercel.app").replace(/\/$/, "");
+const SITE = (process.env.SITE_URL || "https://blazecrest.vercel.app").replace(/\/$/, "");
 const SUPABASE_URL = process.env.SUPABASE_URL || "https://vsmjjlrgjyujaioknlkn.supabase.co";
 const SECRET = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 const BOT = process.env.TELEGRAM_BOT_TOKEN || "";

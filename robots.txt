@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://1x6-eta.vercel.app/sitemap.xml
+Sitemap: https://blazecrest.vercel.app/sitemap.xml

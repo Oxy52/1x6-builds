@@ -4,7 +4,7 @@
 //   GET /api/news?app=cs&gid=<gid>&lang=ru -> одна новость с полным текстом (h — безопасный HTML)
 // Кеш на Vercel: все посетители делят один запрос, обновляется сам раз в полчаса.
 const APPS = { dota: 570, cs: 730, deadlock: 1422450 };
-const UA = { Accept: "application/json", "User-Agent": "1x6-builds (+https://1x6-eta.vercel.app)" };
+const UA = { Accept: "application/json", "User-Agent": "1x6-builds (+https://blazecrest.vercel.app)" };
 // язык сайта -> язык Steam (белорусский и казахский Valve не переводит — берём русский)
 const STEAM = { ru: "russian", uk: "ukrainian", en: "english", es: "spanish", pt: "brazilian", de: "german", pl: "polish", tr: "turkish",
   fr: "french", it: "italian", kk: "russian", be: "russian", nl: "dutch", zh: "schinese", ja: "japanese", ko: "koreana" };

@@ -1,7 +1,7 @@
 // SEO: отдельные страницы сборок героев (/heroes/<slug>), список /heroes, свежие /dota2 и /chc из index.html, sitemap.xml
 // Запуск: node tools/seo.mjs из корня репозитория или из папки над ним (перезапускать после правок index.html)
 import fs from "fs";
-const R = fs.existsSync("1x6-builds/index.html") ? "1x6-builds/" : "", SITE = "https://1x6-eta.vercel.app";
+const R = fs.existsSync("1x6-builds/index.html") ? "1x6-builds/" : "", SITE = "https://blazecrest.vercel.app";
 const idx = fs.readFileSync(R + "index.html", "utf8").replace(/\r\n/g, "\n");
 const lit = name => { const a = idx.indexOf(`const ${name} = `); if (a < 0) throw new Error(name); let i = idx.indexOf("=", a) + 1;
   const open = idx[idx.indexOf(idx.slice(i).trim()[0], i)], close = open === "[" ? "]" : "}"; let d = 0, j = idx.indexOf(open, i);
