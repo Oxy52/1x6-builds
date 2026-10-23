@@ -9,5 +9,32 @@ jobs:
         with: { ref: probe }
       - run: |
           set +e
-          for q in "g=cs&cat=rifle&start=0&sort=exp" "g=cs&cat=rifle&start=0&sort=cheap" "g=dota&cat=immortal&start=0" "g=cs&cat=knife&start=0"; do echo "== $q"; curl -s "https://blazecrest.vercel.app/api/games?q=market&$q" | python3 -c "import sys,json;d=json.load(sys.stdin);[print(i['n'][:40],i.get('r'),i.get('rn'),[p['v'] for p in i['p']][:1]) for i in d.get('items',[])[:4]]"; done > out.txt 2>&1
+          {
+          for a in 570 730; do echo "== filters $a"; curl -s "https://steamcommunity.com/market/appfilters/$a?l=english" | python3 -c "
+          import sys,json
+          d=json.load(sys.stdin)
+          for k,v in d.get('facets',{}).items():
+            if any(x in k for x in ['Quality','Exterior','Type','Rarity']):
+              print(k, [(t, v['tags'][t]['localized_name']) for t in list(v['tags'])[:40]])
+          "; done
+          echo "== LC arcana listings"
+          curl -s "https://steamcommunity.com/market/listings/570/Blades%20of%20Voth%20Domosh/render/?start=0&count=5&currency=1&language=english" | python3 -c "
+          import sys,json,re
+          d=json.load(sys.stdin)
+          print('ok', d.get('success'), d.get('total_count'))
+          lis=d.get('listinginfo',{})
+          for lid,l in list(lis.items())[:5]:
+            a=l['asset']; ad=d['assets'][str(a['appid'])][a['contextid']][a['id']]
+            print('price', l.get('converted_price'), l.get('converted_fee'))
+            for x in ad.get('descriptions',[]): 
+              v=re.sub('<[^>]+>',' ',x.get('value',''))
+              if v.strip(): print('   D:', v.strip()[:160], x.get('color',''))
+          "
+          echo "== gem search"
+          curl -s "https://steamcommunity.com/market/search/render/?appid=570&norender=1&count=5&query=prismatic" | python3 -c "
+          import sys,json
+          d=json.load(sys.stdin)
+          for r in d.get('results',[]): print(r['hash_name'], r['asset_description'].get('type'))
+          "
+          } > out.txt 2>&1
           git config user.name probe; git config user.email probe@x; git add out.txt; git commit -qm out; git push
