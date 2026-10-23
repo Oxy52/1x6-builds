@@ -489,6 +489,21 @@
   .ns-gummy { color: var(--nc) !important; } .ns-gummy .nl { display: inline-block; white-space: pre; text-shadow: 0 2px 0 color-mix(in srgb, var(--nc) 45%, #000); animation: nsBounce 1.5s ease-in-out infinite; animation-delay: calc(var(--i) * .09s); }
   @keyframes nsBounce { 0%, 55%, 100% { transform: translateY(0); } 25% { transform: translateY(-3px) scale(1.06); } }
   @media (prefers-reduced-motion: reduce) { .ns, .ns .nl { animation: none !important; } }
+  .nsd, .nstag { -webkit-text-fill-color: initial; -webkit-text-stroke: 0; background: none; text-shadow: none; animation: none; font-family: var(--body); font-style: normal; }
+  .nsd { display: inline-block; margin: 0 .22em; font-size: .9em; vertical-align: .02em; } .nsd.col { color: var(--nc); -webkit-text-fill-color: var(--nc); font-weight: 800; } .nsd.w { font-size: .72em; vertical-align: .12em; margin: 0 .12em; }
+  .nsd img { width: 1em; height: 1em; object-fit: contain; vertical-align: -.12em; filter: drop-shadow(0 0 4px var(--nc)); }
+  .ns-neon .nsd, .ns-grad .nsd, .ns-shine .nsd, .ns-prism .nsd { filter: drop-shadow(0 0 5px var(--nc)); }
+  .nstag { display: inline-flex; align-items: center; gap: 4px; margin-left: .45em; padding: 2px 7px 2px 4px; border-radius: 7px; font-size: 11px; font-weight: 800; letter-spacing: .4px; line-height: 1.3; vertical-align: .2em;
+    color: var(--fg); -webkit-text-fill-color: var(--fg); background: color-mix(in srgb, var(--nc, var(--t1)) 18%, rgba(255,255,255,.06)); border: 1px solid color-mix(in srgb, var(--nc, var(--t1)) 45%, transparent); }
+  .nstag img { height: 13px; width: auto; max-width: 30px; object-fit: contain; }
+  .ns-decos, .ns-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .ns-decos button, .ns-tags button { min-width: 48px; height: 42px; padding: 0 10px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,.03); color: var(--fg); cursor: pointer; font-size: 15px; }
+  .ns-decos button[aria-pressed="true"], .ns-tags button[aria-pressed="true"] { border-color: var(--t1); box-shadow: 0 0 0 1px var(--t1) inset; background: color-mix(in srgb, var(--t1) 10%, transparent); }
+  .ns-tags .nstag { margin: 0; vertical-align: 0; } .ns-tags input#fNsT { flex: none; width: 130px !important; height: 42px; padding: 0 10px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); font-weight: 800; letter-spacing: .5px; text-transform: uppercase; }
+  .ns-card.on { border: 2px solid var(--nc); box-shadow: 0 0 26px -8px var(--nc); } .ns-card .pdot { position: absolute; left: 52px; top: 74px; right: auto; bottom: auto; z-index: 2; }
+  .pdot { position: absolute; right: 7px; bottom: 7px; width: 18px; height: 18px; border-radius: 50%; background: #22c55e; border: 3px solid var(--panel, var(--bg)); box-shadow: 0 0 8px rgba(34,197,94,.6); } .pav { position: relative; }
+  .sheet.prof.ns-prof { box-shadow: 0 0 0 2px var(--nc), 0 0 48px -12px var(--nc), 0 30px 80px -20px rgba(0,0,0,.7); }
+  @media (max-width: 600px) { .ns-fonts { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
   .ns-ed { display: grid; gap: 12px; padding: 12px; border-radius: 16px; border: 1px solid var(--line); background: var(--bg-soft); }
   .ns-prev { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; align-items: start; }
   .ns-card { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--bg); padding: 0 12px 12px; }
@@ -498,7 +513,7 @@
   .ns-msg { display: flex; gap: 10px; padding: 12px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg); } .ns-msg > img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; flex: none; }
   .ns-msg .ns-name { font-size: 15px; } .ns-msg small { color: var(--muted); font-size: 11px; margin-left: 6px; } .ns-msg p { margin: 3px 0 0; font-size: 14px; }
   .ns-sec > span { display: block; font-size: 12px; font-weight: 800; color: var(--muted); margin-bottom: 6px; }
-  .ns-fonts { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; } .ns-effs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+  .ns-fonts { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px; } .ns-effs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
   .ns-fonts button, .ns-effs button { height: 48px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,.03); color: var(--fg); font-size: 19px; cursor: pointer; overflow: hidden; padding: 0 4px; }
   .ns-effs button { font-size: 13.5px; } .ns-effs b { white-space: nowrap; }
   .ns-fonts button[aria-pressed="true"], .ns-effs button[aria-pressed="true"] { border-color: var(--t1); box-shadow: 0 0 0 1px var(--t1) inset; background: color-mix(in srgb, var(--t1) 10%, transparent); }
@@ -3178,10 +3193,10 @@ const PROF = (() => {
   (() => { if (!sb) return; const show = n => document.querySelectorAll(".onl").forEach(e => { e.hidden = !n; const b = e.querySelector("b"); if (b) b.textContent = n; });
     try { const me = Math.random().toString(36).slice(2) + Date.now().toString(36), ch = sb.channel("online", { config: { presence: { key: me } } });
       // кто где: ник (если вошёл) и раздел — админ видит список, нажав на «Онлайн»
-      const info = () => ({ n: (typeof PROF !== "undefined" && PROF.me && PROF.me()) || "", g: document.documentElement.classList.contains("hub") ? "hub" : (document.body.dataset.game || "dota") });
+      const info = () => ({ n: (typeof PROF !== "undefined" && PROF.me && PROF.me()) || "", u: (typeof PROF !== "undefined" && PROF.user && PROF.user() && PROF.user().id) || "", g: document.documentElement.classList.contains("hub") ? "hub" : (document.body.dataset.game || "dota") });
       let last = "", live = false;
       const track = () => { if (!live || document.hidden || !ch.track) return; const i = info(), k = JSON.stringify(i); if (k === last) return; last = k; Promise.resolve(ch.track({ at: Date.now(), ...i })).catch(() => { last = ""; }); };
-      ch.on("presence", { event: "sync" }, () => { show(Object.keys(ch.presenceState()).length); if (window.__onlDraw) window.__onlDraw(); }).subscribe(st => { if (st === "SUBSCRIBED"){ live = true; last = ""; track(); } });
+      ch.on("presence", { event: "sync" }, () => { show(Object.keys(ch.presenceState()).length); if (window.__onlDraw) window.__onlDraw(); if (window.__onlDraw2) window.__onlDraw2(); }).subscribe(st => { if (st === "SUBSCRIBED"){ live = true; last = ""; track(); } });
       setInterval(track, 15000); window.__onlTrack = () => setTimeout(track, 50);
       document.addEventListener("visibilitychange", () => { try { if (document.hidden){ ch.untrack(); last = ""; } else track(); } catch(e) {} });
       window.__onl = () => Object.values(ch.presenceState()).map(m => m[0] || {}); } catch(e) {} })();
@@ -3442,11 +3457,13 @@ const PROF = (() => {
         <div class="pf">${lb("Стиль ника 👑")}
           <div class="ns-ed" id="fNs">
             <div class="ns-prev">
-              <div class="ns-card"><div class="ns-cbn">${bnSrc(d.bn) ? `<img alt="" src="${esc(bnSrc(d.bn))}">` : ""}</div><img class="ns-av ns-cav" alt="" src="${esc(avSrc(d.av))}"><b class="ns-name" translate="no">${esc(d.nick || "Ник")}</b><small class="ns-st">${esc(d.st || "Статус")}</small></div>
+              <div class="ns-card"><i class="pdot"></i><div class="ns-cbn">${bnSrc(d.bn) ? `<img alt="" src="${esc(bnSrc(d.bn))}">` : ""}</div><img class="ns-av ns-cav" alt="" src="${esc(avSrc(d.av))}"><b class="ns-name" translate="no">${esc(d.nick || "Ник")}</b><small class="ns-st">${esc(d.st || "Статус")}</small></div>
               <div class="ns-msg"><img class="ns-av" alt="" src="${esc(avSrc(d.av))}"><div><b class="ns-name" translate="no">${esc(d.nick || "Ник")}</b><small>сегодня</small><p>это кто-нибудь читает?</p></div></div>
             </div>
             <div class="ns-sec"><span>Шрифт</span><div class="ns-fonts">${NSF.map((f, i) => `<button type="button" data-nf="${i}" aria-pressed="${nso.f === i}" style="font-family:${f === "inherit" ? "var(--body)" : f}${i === 3 ? ";font-size:13px" : ""}">Gg</button>`).join("")}</div></div>
             <div class="ns-sec"><span>Эффект</span><div class="ns-effs">${NSE.map(([k, t]) => `<button type="button" data-ne="${k}" aria-pressed="${nso.e === k}"><b class="ns-tile" data-k="${k}">${t}</b></button>`).join("")}</div></div>
+            <div class="ns-sec"><span>Украшение</span><div class="ns-decos"><button type="button" data-nd="" aria-pressed="${!nso.d}">—</button>${Object.keys(NSD).map(k => `<button type="button" data-nd="${k}" aria-pressed="${nso.d === k}"><b class="ns-dprev" data-k="${k}">Gg</b></button>`).join("")}</div></div>
+            <div class="ns-sec"><span>Тег</span><div class="ns-tags"><button type="button" data-ng="" aria-pressed="${!nso.g}">—</button>${Object.entries(NSG).map(([k, [ic, tx]]) => `<button type="button" data-ng="${k}" aria-pressed="${nso.g === k}"><span class="nstag"><img alt="" src="${ic}">${tx}</span></button>`).join("")}<input type="text" id="fNsT" maxlength="5" placeholder="Свой текст" value="${esc(nso.t)}" autocomplete="off"></div></div>
             <div class="ns-sec"><span>Цвет</span><div class="ns-cols"><label class="ns-pick" title="Свой цвет">✎<input type="color" id="fNsC" value="#${nso.c}"></label>${NSC.map(c => `<button type="button" data-nc="${c}" aria-pressed="${nso.c === c}" style="background:#${c}" aria-label="#${c}"></button>`).join("")}</div></div>
             <div class="ns-acts"><button type="button" class="btn btn-ghost" id="fNsRnd">🎲 Удиви меня</button><button type="button" class="btn btn-ghost" id="fNsOff">Без стиля</button></div>
             ${prem ? "" : `<div class="ns-lock"><span>👑 Стиль ника, анимированные аватарки и баннеры и свои GIF — с подпиской 1x6+. Попробовать можно уже сейчас, сохранится после оформления.</span><button type="button" class="btn btn-primary" id="fNsPrem">Оформить</button></div>`}
@@ -3473,16 +3490,24 @@ const PROF = (() => {
     // стиль ника
     const ns = { ...nso }, nsEd = box.querySelector("#fNs");
     const nsDraw = () => { const v = d.ns || "", nick = box.querySelector("#fNick").value.trim() || "Ник";
+      nsEd.querySelector(".ns-card").style.setProperty("--nc", "#" + ns.c); nsEd.querySelector(".ns-card").classList.toggle("on", !!v);
+      nsEd.querySelectorAll(".ns-dprev").forEach(el => { el.dataset.ns = "-"; el.textContent = "Gg"; nsApply(el, `0.min.${ns.c}.${el.dataset.k}`); });
+      nsEd.querySelectorAll("[data-nd]").forEach(b => b.setAttribute("aria-pressed", (!!v && b.dataset.nd === (ns.d || "")) || (!v && !b.dataset.nd)));
+      nsEd.querySelectorAll("[data-ng]").forEach(b => b.setAttribute("aria-pressed", (!!v && b.dataset.ng === (ns.g || "")) || (!v && !b.dataset.ng)));
       nsEd.querySelectorAll(".ns-name").forEach(el => { el.dataset.ns = "-"; el.textContent = nick; nsApply(el, v); });
       nsEd.querySelectorAll(".ns-tile").forEach(el => nsApply(el, `0.${el.dataset.k}.${ns.c}`));
       nsEd.querySelectorAll("[data-nf]").forEach(b => b.setAttribute("aria-pressed", !!v && +b.dataset.nf === ns.f));
       nsEd.querySelectorAll("[data-ne]").forEach(b => b.setAttribute("aria-pressed", !!v && b.dataset.ne === ns.e));
       nsEd.querySelectorAll("[data-nc]").forEach(b => b.setAttribute("aria-pressed", !!v && b.dataset.nc === ns.c)); };
-    const nsSet = () => { d.ns = `${ns.f}.${ns.e}.${ns.c}`; nsDraw(); };
+    const nsSet = () => { d.ns = nsStr(ns); nsDraw(); };
     nsEd.addEventListener("click", e => { const f = e.target.closest("[data-nf]"), ef = e.target.closest("[data-ne]"), c = e.target.closest("[data-nc]");
-      if (f){ ns.f = +f.dataset.nf; nsSet(); } else if (ef){ ns.e = ef.dataset.ne; nsSet(); } else if (c){ ns.c = c.dataset.nc; nsSet(); } });
+      const dd = e.target.closest("[data-nd]"), gg = e.target.closest("[data-ng]");
+      if (f){ ns.f = +f.dataset.nf; nsSet(); } else if (ef){ ns.e = ef.dataset.ne; nsSet(); } else if (c){ ns.c = c.dataset.nc; nsSet(); }
+      else if (dd){ ns.d = dd.dataset.nd; nsSet(); } else if (gg){ ns.g = gg.dataset.ng; if (!ns.g) ns.t = ""; nsSet(); } });
+    nsEd.querySelector("#fNsT").oninput = e => { const v = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 5); e.target.value = v; ns.t = v; if (!ns.g) ns.g = "bc"; nsSet(); };
     nsEd.querySelector("#fNsC").oninput = e => { ns.c = e.target.value.slice(1).toLowerCase(); nsSet(); };
-    nsEd.querySelector("#fNsRnd").onclick = () => { ns.f = rnd(NSF.length); ns.e = NSE[rnd(NSE.length)][0]; ns.c = rnd(3) ? NSC[rnd(NSC.length)] : Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, "0"); nsSet(); };
+    nsEd.querySelector("#fNsRnd").onclick = () => { ns.f = rnd(NSF.length); ns.e = NSE[rnd(NSE.length)][0]; ns.c = rnd(3) ? NSC[rnd(NSC.length)] : Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, "0");
+      const dk = Object.keys(NSD); ns.d = rnd(3) ? dk[rnd(dk.length)] : ""; const gk = Object.keys(NSG); ns.g = rnd(2) ? gk[rnd(gk.length)] : ""; ns.t = ""; nsSet(); };
     nsEd.querySelector("#fNsOff").onclick = () => { d.ns = ""; nsDraw(); };
     { const np = nsEd.querySelector("#fNsPrem"); if (np) np.onclick = () => premium(); }
     box.querySelector("#fNick").addEventListener("input", nsDraw);
@@ -4018,18 +4043,28 @@ const PROF = (() => {
   const premBadge = uid => isPrem(uid) ? `<span class="pbadge" title="Подписка 1x6+">👑</span>` : "";
 
   /* ---------- стиль ника (подписка 1x6+): шрифт, эффект, цвет — как в Discord ---------- */
-  const NSF = ["inherit", "'Russo One'", "'Unbounded'", "'Press Start 2P'", "'Pacifico'", "'Lobster'", "'Rubik Mono One'", "'Comfortaa'", "'Yeseva One'", "'Rubik Glitch'", "'Oswald'", "'Ruslan Display'"];
+  const NSF = ["inherit", "'Russo One'", "'Unbounded'", "'Press Start 2P'", "'Pacifico'", "'Lobster'", "'Rubik Mono One'", "'Comfortaa'", "'Yeseva One'", "'Rubik Glitch'", "'Oswald'", "'Ruslan Display'", "'Pixelify Sans'", "'UnifrakturCook'", "'Rubik Doodle Shadow'", "'Marck Script'"];
+  // украшения по бокам ника: [слева, справа, цвет ника для символа]; @logo — наш логотип
+  const NSD = { crown: ["👑", "👑"], fire: ["🔥", "🔥"], bolt: ["⚡", "⚡"], gem: ["💎", "💎"], skull: ["💀", "💀"], blades: ["🗡️", "🗡️"], moon: ["🌙", "✨"], ice: ["❄️", "❄️"],
+    sakura: ["🌸", "🌸"], star: ["✦", "✦", 1], wings: ["꧁", "꧂", 1], rune: ["◈", "◈", 1], bc: ["@logo", "@logo"] };
+  // тег рядом с ником: значок игры и короткая подпись
+  const NSG = { dota: ["/games/dota.png", "DOTA"], cs: ["/games/cs.png", "CS2"], dl: ["/games/deadlock.png", "DLCK"], bc: ["/logo.png", "BC"] };
   const NSE = [["min", "Минимализм"], ["grad", "Градиент"], ["neon", "Неон"], ["toon", "Мультфильм"], ["hl", "Выделение"], ["gummy", "Мармелад"], ["prism", "Призма"], ["shine", "Блеск"]];
   const NSC = ["f43f9e", "22c55e", "3b82f6", "c084fc", "e11d48", "f97316", "eab308", "22d3ee"];
   const NSTY = new Map();
-  const nsParse = s => { const m = /^(\d{1,2})\.([a-z]+)\.([0-9a-f]{6})$/.exec(s || ""); return m && +m[1] < NSF.length && NSE.some(e => e[0] === m[2]) ? { f: +m[1], e: m[2], c: m[3] } : null; };
+  // формат: шрифт.эффект.цвет[.украшение[.тег[.ПОДПИСЬ]]]
+  const nsParse = s => { const m = /^(\d{1,2})\.([a-z]+)\.([0-9a-f]{6})(?:\.([a-z]*)(?:\.([a-z]*)(?:\.([A-Z0-9]{0,5}))?)?)?$/.exec(s || "");
+    return m && +m[1] < NSF.length && NSE.some(e => e[0] === m[2]) ? { f: +m[1], e: m[2], c: m[3], d: NSD[m[4]] ? m[4] : "", g: NSG[m[5]] ? m[5] : "", t: m[6] || "" } : null; };
+  const nsStr = o => `${o.f}.${o.e}.${o.c}.${o.d || ""}.${o.g || ""}.${o.g ? o.t || "" : ""}`.replace(/\.+$/, "");
+  const nsDeco = (k, side) => { const x = NSD[k]; if (!x) return null; const sp = document.createElement("span"); sp.className = "nsd" + (x[2] ? " col" : "") + (k === "wings" ? " w" : "");
+    if (x[side] === "@logo") sp.innerHTML = `<img alt="" src="/logo.png">`; else sp.textContent = x[side]; return sp; };
   let nsFontsOn = false, nsRaf = 0;
   const nsFonts = () => { if (nsFontsOn) return; nsFontsOn = true; const l = document.createElement("link"); l.rel = "stylesheet";
-    l.href = "https://fonts.googleapis.com/css2?family=Russo+One&family=Unbounded:wght@800&family=Pacifico&family=Lobster&family=Rubik+Mono+One&family=Comfortaa:wght@700&family=Yeseva+One&family=Rubik+Glitch&family=Oswald:wght@700&family=Ruslan+Display&display=swap"; document.head.appendChild(l); };
+    l.href = "https://fonts.googleapis.com/css2?family=Russo+One&family=Unbounded:wght@800&family=Pacifico&family=Lobster&family=Rubik+Mono+One&family=Comfortaa:wght@700&family=Yeseva+One&family=Rubik+Glitch&family=Oswald:wght@700&family=Ruslan+Display&family=Pixelify+Sans:wght@700&family=UnifrakturCook:wght@700&family=Rubik+Doodle+Shadow&family=Marck+Script&display=swap"; document.head.appendChild(l); };
   // «Мармелад» прыгает по буквам — оборачиваем только текст самого ника, значки и подписи не трогаем
   function nsApply(el, st){
     const key = st || ""; if (el.dataset.ns === key) return; el.dataset.ns = key;
-    el.querySelectorAll(".nl").forEach(x => x.replaceWith(x.textContent)); el.normalize();
+    el.querySelectorAll(".nsd, .nstag").forEach(x => x.remove()); el.querySelectorAll(".nl").forEach(x => x.replaceWith(x.textContent)); el.normalize();
     [...el.classList].filter(c => c === "ns" || NSE.some(x => "ns-" + x[0] === c)).forEach(c => el.classList.remove(c));
     el.style.removeProperty("--nc"); el.style.fontFamily = ""; el.style.fontSize = "";
     const o = nsParse(key); if (!o) return;
@@ -4037,13 +4072,26 @@ const PROF = (() => {
     if (o.f) el.style.fontFamily = NSF[o.f] + ", var(--body)"; if (o.f === 3) el.style.fontSize = ".72em";
     if (o.e === "gummy") [...el.childNodes].filter(n => n.nodeType === 3 && n.nodeValue.trim()).forEach(n => {
       const f = document.createDocumentFragment(); [...n.nodeValue].forEach((ch, i) => { const sp = document.createElement("span"); sp.className = "nl"; sp.style.setProperty("--i", i); sp.textContent = ch; f.appendChild(sp); }); n.replaceWith(f); });
+    // украшения и тег — вокруг самого ника, до значков вроде 👑 подписки
+    const parts = [...el.childNodes].filter(n => (n.nodeType === 3 && n.nodeValue.trim()) || (n.nodeType === 1 && n.classList.contains("nl")));
+    if (!parts.length) return;
+    let last = parts[parts.length - 1];
+    if (o.d){ parts[0].before(nsDeco(o.d, 0)); const r = nsDeco(o.d, 1); last.after(r); last = r; }
+    if (o.g){ const tg = document.createElement("span"); tg.className = "nstag"; tg.innerHTML = `<img alt="" src="${NSG[o.g][0]}">${esc(o.t || NSG[o.g][1])}`; last.after(tg); }
   }
+  // кто сейчас на сайте (по общему каналу присутствия)
+  const isOnline = uid => { try { return !!uid && typeof window.__onl === "function" && window.__onl().some(x => x.u === uid); } catch(e) { return false; } };
   const NSSEL = ".pnick[data-user], h3[data-user], .plc[data-user] > b, .glist li[data-user] .gn";
   function decorateNames(root){
-    if (!NSTY.size) return;
-    (root || document).querySelectorAll(NSSEL).forEach(el => { const h = el.dataset.user ? el : el.closest("[data-user]"); const u = h && h.dataset.user; if (u) nsApply(el, isPrem(u) ? NSTY.get(u) || "" : ""); });
+    (root || document).querySelectorAll(NSSEL).forEach(el => { const h = el.dataset.user ? el : el.closest("[data-user]"); const u = h && h.dataset.user; if (!u) return;
+      const st = isPrem(u) ? NSTY.get(u) || "" : ""; if (NSTY.size) nsApply(el, st);
+      // в открытом профиле: рамка цвета ника и зелёная точка «на сайте»
+      if (el.matches("h3")){ const sh = el.closest(".sheet.prof"); if (!sh) return; const o = nsParse(st);
+        sh.classList.toggle("ns-prof", !!o); if (o) sh.style.setProperty("--nc", "#" + o.c); else sh.style.removeProperty("--nc");
+        const pav = sh.querySelector(".phead .pav"); if (pav){ const on = isOnline(u), dot = pav.querySelector(".pdot"); if (on && !dot) pav.insertAdjacentHTML("beforeend", `<i class="pdot" title="Сейчас на сайте"></i>`); else if (!on && dot) dot.remove(); } } });
   }
-  new MutationObserver(() => { if (!nsRaf && NSTY.size) nsRaf = requestAnimationFrame(() => { nsRaf = 0; decorateNames(document); }); }).observe(document.body, { childList: true, subtree: true });
+  window.__onlDraw2 = () => decorateNames(document);
+  new MutationObserver(() => { if (!nsRaf) nsRaf = requestAnimationFrame(() => { nsRaf = 0; decorateNames(document); }); }).observe(document.body, { childList: true, subtree: true });
   let premT = 0;
   async function loadPrem(){
     if (!CLOUD) return;
@@ -6806,7 +6854,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=18").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=19").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
