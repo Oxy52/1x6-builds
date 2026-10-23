@@ -9,19 +9,5 @@ jobs:
         with: { ref: probe }
       - run: |
           set +e
-          {
-          for n in deadlockkiber deadlockrf play_dead_lock Deadlock37 YourDeadlock dlocknew deadlockuainfo deadlocknews; do
-            h=$(curl -s -L "https://t.me/s/$n")
-            t=$(echo "$h" | grep -o '<meta property="og:title" content="[^"]*"' | head -1 | sed 's/.*content=//')
-            subs=$(echo "$h" | grep -o 'counter_value">[^<]*' | head -1)
-            c=$(echo "$h" | grep -c 'tgme_widget_message_wrap')
-            ph=$(echo "$h" | grep -c 'tgme_widget_message_photo_wrap')
-            last=$(echo "$h" | grep -o 'datetime="[^"]*"' | tail -1)
-            first=$(echo "$h" | grep -o 'datetime="[^"]*"' | head -1)
-            dims=""
-            for u in $(echo "$h" | grep -o "message_photo_wrap[^>]*background-image:url('[^']*')" | grep -o "https://[^']*" | tail -3); do curl -s "$u" -o i.jpg; dims="$dims $(file i.jpg | grep -o '[0-9]\+x[0-9]\+' | tail -1)"; done
-            ads=$(echo "$h" | grep -ci 'erid\|реклама\|промокод')
-            echo "$n | $t | $subs | posts=$c photos=$ph | $first .. $last | dims:$dims | ads=$ads"
-          done
-          } > out.txt 2>&1
+          curl -s "https://blazecrest.vercel.app/api/news?src=tg&ch=deadlock" | python3 -c "import sys,json;d=json.load(sys.stdin);print(len(d.get('items',[])),d.get('error'));[print(i['post'],i['cat'],i['t'][:80],'|',i['x'][:80],bool(i['img'])) for i in d.get('items',[])[:8]]" > out.txt 2>&1
           git config user.name probe; git config user.email probe@x; git add out.txt; git commit -qm out; git push
