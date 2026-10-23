@@ -1,44 +1,12 @@
-== setup webhook
-{"ok":true,"description":"Webhook was set"}
-== tg conf
-{"enabled":true,"bot_id":"8921419184","bot":"builds1x6_bot"}
-== poll
-{"wait":true}
-== headers
-content-security-policy: frame-ancestors 'self'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests
-cross-origin-opener-policy: same-origin-allow-popups
-permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
-referrer-policy: strict-origin-when-cross-origin
-strict-transport-security: max-age=63072000; includeSubDomains
-x-content-type-options: nosniff
-x-frame-options: SAMEORIGIN
-== security.txt
-200
-== anon select payments
-[]
-== anon select subscriptions
-[{"user_id":"cea5467a-22bb-4791-9416-0c1b6576cada","until":"2026-10-24T18:49:39.131218+00:00","plan":"trial","since":"2026-10-21T18:49:39.131218+00:00","updated_at":"2026-10-21T18:49:39.131218+00:00"}]
-== anon select admins
-[{"user_id":"cea5467a-22bb-4791-9416-0c1b6576cada"}]
-== anon select ai_usage
-{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.ai_usage' in the schema cache"}
-== anon select support_messages
-[]
-== anon select xp_daily
-[]
-== anon select referrals
-[]
-== anon insert profiles
-{"code":"42501","details":null,"hint":null,"message":"new row violates row-level security policy for table \"profiles\""}
-== anon update profiles
-[]
-== anon insert admins
-{"code":"42501","details":null,"hint":null,"message":"new row violates row-level security policy for table \"admins\""}
-== anon insert subscriptions
-{"code":"42501","details":null,"hint":null,"message":"new row violates row-level security policy for table \"subscriptions\""}
-== storage tglogin public
-{"statusCode":"404","error":"Bucket not found","message":"Bucket not found","code":"NoSuchBucket"}
-== storage list buckets anon
-[]
-== rpc list
-{"message":"Secret API key required","hint":"Only secret API keys can be used for this endpoint."}
+dota2exe | <meta property="og:title" content="Евгений" | posts=0
+dota2_exe | <meta property="og:title" content="Mumba Mumbetovich" | posts=0
+dotaexe | <meta property="og:title" content="A R" | posts=0
+dota_exe | <meta property="og:title" content="vlad" | posts=0
+dota2exe_news | <meta property="og:title" content="Telegram: Contact @dota2exe_news" | posts=0
+dota2exenews | <meta property="og:title" content="dota" | posts=1
+exedota | <meta property="og:title" content="octinomos" | posts=1
+dota2dotexe | <meta property="og:title" content="Telegram: Contact @dota2dotexe" | posts=0
+dotaa2exe | <meta property="og:title" content="Telegram: Contact @dotaa2exe" | posts=0
+dota2_exe_news | <meta property="og:title" content="Dota2.exe" | posts=20
+dota2exeru | <meta property="og:title" content="Telegram: Contact @dota2exeru" | posts=0
+dota2exe_ru | <meta property="og:title" content="Telegram: Contact @dota2exe_ru" | posts=0
