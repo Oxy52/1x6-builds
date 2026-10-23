@@ -542,6 +542,7 @@ const GRIDS = (() => {
     const u = PROF.user(); let liked = new Set();
     if (u){ try { const r = await sb.from("grid_likes").select("grid_id").in("grid_id", data.map(x => x.id)); liked = new Set((r.data || []).map(x => x.grid_id)); } catch(e) {} }
     const ago = t => { const d = (Date.now() - Date.parse(t)) / 864e5; return d < 1 ? "сегодня" : d < 2 ? "вчера" : d < 30 ? Math.floor(d) + " дн. назад" : new Date(t).toLocaleDateString(); };
+    await Promise.all(data.map(async r => { if (r.data && r.data.packed){ try { const v = await unpack(r.data.packed); r.data = { ...v, config_name: r.data.config_name, descr: r.data.descr }; } catch(e) { r.data = { config_name: r.name, categories: [] }; } } }));
     const list = data.map(r => ({ id: r.id, name: r.name, nick: r.nick, data: r.data, likes: r.likes, downloads: r.downloads, mine: u && u.id === r.user_id, liked: liked.has(r.id), at: ago(r.created_at) }));
     box.innerHTML = list.map(card).join(""); bindCards(box, list);
   }
@@ -551,8 +552,13 @@ const GRIDS = (() => {
     const [b, close] = modal(`<h3>Опубликовать в мастерской</h3><p class="gr-mut">Сетку увидят все: её можно будет открыть в редакторе, скачать и лайкнуть.</p><img class="gr-pvi" alt="" src="${big(c)}"><input id="grPN" maxlength="60" value="${esc(c.config_name)}" placeholder="Название"><textarea id="grPD" maxlength="200" rows="2" placeholder="Пара слов о сетке: для какой роли, что внутри (необязательно)"></textarea><p class="gr-mut">Без оскорблений и рекламы — такие сетки удаляем.</p><div class="gr-acts"><span></span><button type="button" class="btn btn-primary" id="grPG">Опубликовать</button></div><div class="gr-err" id="grPE"></div>`);
     b.querySelector("#grPG").onclick = async () => { const name = b.querySelector("#grPN").value.trim() || c.config_name; b.querySelector("#grPG").disabled = true;
       const descr = b.querySelector("#grPD").value.trim().slice(0, 200);
-      const { error } = await sb.from("grids").insert({ name, nick: PROF.me() || "Игрок", data: { ...c, config_name: name, ...(descr ? { descr } : {}) } });
-      if (error){ b.querySelector("#grPE").textContent = /relation|does not exist|schema/i.test(error.message || "") ? "Мастерская ещё не включена на сервере." : "Не получилось опубликовать: " + error.message; b.querySelector("#grPG").disabled = false; return; }
+      // большие арт-сетки (тысячи точек) не влезали в лимит сервера — храним их сжатыми, при показе распаковываем
+      let data = { ...c, config_name: name, ...(descr ? { descr } : {}) };
+      if (JSON.stringify(data).length > 150000){ try { data = { config_name: name, ...(descr ? { descr } : {}), n: c.categories.length, packed: await pack({ config_name: name, categories: c.categories }) }; } catch(e) {} }
+      if (JSON.stringify(data).length > 590000){ b.querySelector("#grPE").textContent = "Сетка слишком большая даже в сжатом виде — уменьши плотность рисунка или удали лишние точки."; b.querySelector("#grPG").disabled = false; return; }
+      const nick = String(PROF.me() || "Игрок").slice(0, 40);
+      const { error } = await sb.from("grids").insert({ name: name.slice(0, 60), nick, data });
+      if (error){ const m2 = error.message || ""; b.querySelector("#grPE").textContent = /does not exist|schema cache/i.test(m2) ? "Мастерская ещё не включена на сервере." : /row-level security|JWT|auth/i.test(m2) ? "Войди в аккаунт заново и попробуй ещё раз." : /check constraint/i.test(m2) ? "Сетка слишком большая или название слишком длинное." : "Не получилось опубликовать: " + m2; b.querySelector("#grPG").disabled = false; return; }
       close(); PROF.toast("Сетка опубликована 🎉"); shopSort = "new"; go("shop"); };
   }
 
