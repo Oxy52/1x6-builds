@@ -65,7 +65,7 @@ const head = (title, desc, url, img, ld, c1, c2) => `<!doctype html>
 </head>`;
 const top = `<header class="w"><a class="logo" href="/"><span class="mark lg"><img src="/logo.png" alt="" width="64" height="64"></span><span>Blazecrest</span></a><a class="go" href="/">Открыть сайт</a></header>`;
 const allList = cur => `<div class="all">${HEROES.map(h => `<a href="/heroes/${h.slug}"${h.slug === cur ? ' aria-current="page"' : ""}><img src="/face/${h.slug}.webp" alt="" loading="lazy" width="30" height="30"><span>${esc(h.en)}</span></a>`).join("")}</div>`;
-const foot = `<footer class="w">Blazecrest · неофициальный каталог сборок для кастомки Dota 1×6. Арт героев и предметов — Valve.<br><a href="/">Главная</a> · <a href="/heroes">Все герои</a> · <a href="/chc">Custom Hero Chaos</a> · <a href="/dota2">Мета Dota 2</a></footer>`;
+const foot = `<footer class="w">Blazecrest · Арт героев и предметов — Valve.<br><a href="/">Главная</a> · <a href="/heroes">Все герои</a> · <a href="/chc">Custom Hero Chaos</a> · <a href="/dota2">Мета Dota 2</a></footer>`;
 fs.mkdirSync(R + "heroes", { recursive: true });
 const urls = [];
 for (const h of HEROES) {

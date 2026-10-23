@@ -63,7 +63,6 @@
   /* логотип не сжимается — пиксельный герой больше не наезжает на Aegis */
   .nav .logo { flex: none; }
   @media (max-width: 520px) { .nav { gap: 8px; } .logo { gap: 7px; font-size: 17px; } }
-  @media (max-width: 480px) { .logo .lt { display: none; } }
   .burger { margin-left: 0; width: 46px; height: 46px; flex: none; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); cursor: pointer; display: grid; place-content: center; gap: 5px; padding: 0; transition: border-color .2s; }
   .burger span { display: block; width: 20px; height: 2px; border-radius: 2px; background: var(--fg); transition: transform .3s cubic-bezier(.2,.8,.2,1), opacity .2s; }
   .burger:hover { border-color: rgba(255,255,255,.25); }
@@ -2054,6 +2053,18 @@
   @keyframes pxcoverOff { to { opacity: 0; visibility: hidden; } }
   #logoBtn.pxbye .mark { animation: pxJump .45s cubic-bezier(.3,1.5,.5,1); }
   @media (prefers-reduced-motion: reduce) { .heroart.pxart i { animation: none; } }
+  /* на телефоне название сайта рядом с логотипом: кнопки чуть компактнее, «Войти» — значком */
+  @media (max-width: 480px) {
+    .nav { gap: 6px; } .logo { gap: 5px; } .logo .mark.lg { width: 30px; height: 30px; }
+    .logo .lt { display: inline; font-size: 14.5px; letter-spacing: -.2px; background: linear-gradient(180deg, #ffe7a3, #f3c35a 50%, #e8564a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .pxh { width: 36px; height: 36px; } .curbtn, .langbtn { min-width: 38px; width: 38px; padding: 0; }
+    .pbtn:has(> span:only-child) { width: 42px; min-width: 42px; padding: 0; background: var(--panel) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f1f1f5' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6'/%3E%3C/svg%3E") center / 20px no-repeat; }
+    .pbtn > span:only-child { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .curw, .langw, .thw { margin: 0 !important; } .langw + .pbtn { margin-left: auto !important; } .nav > .burger, #topbar > :last-child { width: 42px; min-width: 42px; height: 42px; }
+    .logo .lt { font-size: 14px; } .pbtn:has(> span:only-child) { width: 40px; min-width: 40px; height: 40px; }
+  }
+  @media (max-width: 379px) { .pxh { width: 32px; height: 32px; } .curbtn, .langbtn { width: 34px; min-width: 34px; height: 36px; } .logo .lt { font-size: 13px; } }
+  @media (max-width: 345px) { .logo .lt { display: none; } }
 </style>
 </head>
 <body>
@@ -2240,7 +2251,7 @@
   </div>
   </div>
 
-  <footer>Blazecrest · неофициальный каталог сборок для кастомки Dota 1×6. Арт героев — Valve.<br><a href="/heroes">Сборки всех героев</a> · <a href="/chc">Custom Hero Chaos</a> · <a href="/dota2">Мета Dota 2</a></footer>
+  <footer><span translate="no">Blazecrest</span> · <span>Арт героев — Valve.</span><br><a href="/heroes">Сборки всех героев</a> · <a href="/chc">Custom Hero Chaos</a> · <a href="/dota2">Мета Dota 2</a></footer>
 </div>
 
 <div class="menu-ov" id="menuOv" hidden></div>
