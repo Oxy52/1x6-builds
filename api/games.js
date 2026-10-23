@@ -193,7 +193,8 @@ async function csMatches() {
 const END = r => /TargetBombed|Bomb(ed)?$/.test(r) ? "bomb" : /Defused/.test(r) ? "defuse" : /Saved/.test(r) ? "time" : "kill";
 async function csMatch(slug) {
   if (!/^[\w-]{3,120}$/.test(slug)) throw Object.assign(new Error("bad slug"), { code: 400 });
-  const m = await b3(`/matches/${slug}?with=teams,tournament`), base = b3match(m);
+  // with=tournament у одного матча отдаёт 500 — турнир сайт берёт из списка матчей
+  const m = await b3(`/matches/${slug}?with=teams`), base = b3match(m);
   const games = ((await b3(`/games?filter[games.match_id][eq]=${m.id}&page[limit]=7`)).results || []).sort((a, b) => a.number - b.number);
   const side = n => n === m.team1?.name ? 1 : n === m.team2?.name ? 2 : 0;
   const maps = await Promise.all(games.map(async g => {

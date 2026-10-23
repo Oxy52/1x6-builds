@@ -7306,7 +7306,8 @@ const GAMES = (() => {
   const kk = v => v >= 1000 ? (v / 1000).toFixed(1) + "k" : String(v || 0);
   const mmss = t => Math.floor(t / 60) + ":" + String(Math.round(t % 60)).padStart(2, "0");
   const tlogo = t => t.img ? `<img alt="" loading="lazy" src="${esc(t.img)}" onerror="this.remove()">` : "";
-  function mrow(m){
+  const MT = {}; // турнир матча из списка (у bo3.gg в карточке одного матча его нет)
+  function mrow(m){ if (m.t) MT[m.s] = m.t;
     const mid = m.st === "live" ? `<span class="csx-live">LIVE</span><b>${m.a.sc ?? 0}<i>:</i>${m.b.sc ?? 0}</b>` : m.st === "soon" ? `<span class="csx-at">${when(m.d)}</span>` : `<b>${m.a.sc ?? "—"}<i>:</i>${m.b.sc ?? "—"}</b>`;
     return `<div class="csx ${m.st}" data-cm="${esc(m.s)}" role="button" tabindex="0">
       <span class="csx-t">${m.t ? `${m.t.img ? `<img alt="" loading="lazy" src="${esc(m.t.img)}" onerror="this.remove()">` : ""}<span translate="no">${esc(m.t.n)}</span>` : ""}<em>BO${m.bo || 1}</em>${m.st === "done" ? `<small>${day(m.d)}</small>` : ""}</span>
@@ -7349,6 +7350,7 @@ const GAMES = (() => {
     if (!g.isConnected) return;
     const box = g.querySelector(".cmx");
     if (!m){ box.innerHTML = `<div class="d2h-top"><div><h3>Матч</h3><small>Не удалось загрузить матч. Попробуй чуть позже.</small></div></div>`; return; }
+    m.t = m.t || MT[slug];
     const played = m.maps.filter(x => x.players.length || x.rounds.length);
     let cur = played.length > 1 ? "all" : played.length ? played[0].n : null;
     const status = m.st === "live" ? `<span class="csx-live">LIVE</span>` : m.st === "soon" ? `начало ${when(m.d)}` : when(m.d);
