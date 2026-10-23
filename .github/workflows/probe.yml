@@ -7,7 +7,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          K=sb_publishable_tJy3dl_kfNZXP6PXMqsQVQ_RUXqoPmn; U=https://vsmjjlrgjyujaioknlkn.supabase.co/rest/v1
-          { echo "== list"; curl -s -G "$U/grids" --data-urlencode "select=id,name" --data-urlencode "data->>kind=is.null" --data-urlencode "limit=3" -H "apikey: $K" | head -c 300; echo
-            echo "== cm"; curl -s -G "$U/grids" --data-urlencode "select=data->>g" --data-urlencode "data->>kind=eq.c" --data-urlencode "data->>g=in.(1,2)" -H "apikey: $K" | head -c 300; echo; } > out.txt
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
+          {
+          for c in USD EUR RUB UAH KZT; do echo "skinport $c: $(curl -s -o /dev/null -w '%{http_code}' -H 'Accept-Encoding: br' "https://api.skinport.com/v1/items?app_id=730&currency=$c&tradable=0") $(curl -s --compressed -H 'Accept-Encoding: br' "https://api.skinport.com/v1/items?app_id=730&currency=$c&tradable=0" | head -c 150)"; done
+          for c in USD EUR RUB UAH; do echo "tm $c: $(curl -s -o /dev/null -w '%{http_code}' "https://market.csgo.com/api/v2/prices/$c.json")"; done
+          for u in https://lis-skins.com/ https://lis-skins.com/market/csgo/ https://cs.money/ https://csfloat.com/ https://market.csgo.com/ https://skinport.com/; do
+            curl -sL --compressed -A "$UA" "$u" -o page.html; echo "== $u $(wc -c < page.html)"; grep -oE '"(USD|EUR|RUB|UAH|KZT|PLN|TRY|CNY|GBP|BRL)"' page.html | sort | uniq -c | tr '\n' ' '; echo
+            grep -oiE '.{60}(currenc|валют).{120}' page.html | head -5
+            for js in $(grep -oE 'src="[^"]+\.js"' page.html | sed 's/src="//;s/"//' | head -25); do case $js in http*) j=$js;; //*) j=https:$js;; *) j=$(echo $u | grep -oE 'https://[^/]+')$js;; esac; curl -sL --compressed -A "$UA" "$j" -o b.js; n=$(grep -oE '"(UAH|RUB|KZT)"' b.js | sort | uniq -c | tr '\n' ' '); [ -n "$n" ] && echo "  js $j: $n" && grep -oE '.{80}"UAH".{120}' b.js | head -2; done
+          done
+          } > out.txt 2>&1
           git config user.name p; git config user.email p@p; git add -A out.txt; git commit -m r; git push
