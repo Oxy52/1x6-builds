@@ -1,18 +1,8 @@
-== filters 570
-570_Quality [('unique', 'Standard'), ('strange', 'Inscribed'), ('genuine', 'Genuine'), ('lucky', 'Auspicious'), ('tournament', 'Heroic'), ('base', 'Base'), ('haunted', 'Cursed'), ('frozen', 'Frozen'), ('unusual', 'Unusual'), ('infused', 'Infused'), ('autographed', 'Autographed'), ('exalted', 'Exalted'), ('corrupted', 'Corrupted'), ('glitter', 'Glitter'), ('gold', 'Gold'), ('holo', 'Holo'), ('vintage', 'Elder'), ('legacy', 'Legacy')]
-570_Rarity [('Rarity_Rare', 'Rare'), ('Rarity_Common', 'Common'), ('Rarity_Uncommon', 'Uncommon'), ('Rarity_Mythical', 'Mythical'), ('Rarity_Immortal', 'Immortal'), ('Rarity_Legendary', 'Legendary'), ('Rarity_Arcana', 'Arcana'), ('Rarity_Ancient', 'Ancient')]
-570_Type [('wearable', 'Wearable'), ('loading_screen', 'Loading Screen'), ('socket_gem', 'Gem / Rune'), ('bundle', 'Bundle'), ('taunt', 'Taunt'), ('announcer', 'Announcer'), ('courier', 'Courier'), ('showcase_decoration', 'Showcase Decoration'), ('treasure_chest', 'Treasure'), ('ward', 'Ward'), ('player_card', 'Player Card'), ('hud_skin', 'HUD Skin'), ('sticker_capsule', 'Sticker Capsule'), ('tool', 'Tool'), ('cursor_pack', 'Cursor Pack'), ('music', 'Music'), ('sticker', 'Sticker'), ('misc', 'Misc'), ('radiantsiegecreeps', 'Radiant Siege Creeps'), ('radiantcreeps', 'Radiant Creeps'), ('direcreeps', 'Dire Creeps'), ('diretowers', 'Dire Towers'), ('pennant', 'Pennant'), ('diresiegecreeps', 'Dire Siege Creeps'), ('radianttowers', 'Radiant Towers'), ('league', 'League'), ('emoticon_tool', 'Emoticon Tool'), ('terrain', 'Terrain'), ('versus_screen', 'Versus Screen'), ('ancient', 'Ancient'), ('key', 'Treasure Key'), ('retired_treasure_chest', 'Retired Chest'), ('emblem', 'Emblem')]
-== filters 730
-730_Exterior [('WearCategory2', 'Field-Tested'), ('WearCategory1', 'Minimal Wear'), ('WearCategory4', 'Battle-Scarred'), ('WearCategory0', 'Factory New'), ('WearCategory3', 'Well-Worn'), ('WearCategoryNA', 'Not Painted')]
-730_Quality [('normal', 'Normal'), ('strange', 'StatTrak™'), ('tournament', 'Souvenir'), ('unusual', '★'), ('highlight', 'Highlight'), ('customized', 'Customized'), ('unusual_strange', '★ StatTrak™')]
-730_Rarity [('Rarity_Common_Weapon', 'Consumer Grade'), ('Rarity_Uncommon_Weapon', 'Industrial Grade'), ('Rarity_Rare_Weapon', 'Mil-Spec Grade'), ('Rarity_Mythical_Weapon', 'Restricted'), ('Rarity_Legendary_Weapon', 'Classified'), ('Rarity_Ancient_Weapon', 'Covert'), ('Rarity_Rare', 'High Grade'), ('Rarity_Common', 'Base Grade'), ('Rarity_Mythical', 'Remarkable'), ('Rarity_Ancient', 'Extraordinary'), ('Rarity_Legendary', 'Exotic'), ('Rarity_Legendary_Character', 'Superior'), ('Rarity_Rare_Character', 'Distinguished'), ('Rarity_Mythical_Character', 'Exceptional'), ('Rarity_Ancient_Character', 'Master'), ('Rarity_Contraband', 'Contraband')]
-730_Type [('CSGO_Type_SMG', 'SMG'), ('CSGO_Type_Pistol', 'Pistol'), ('CSGO_Type_Rifle', 'Rifle'), ('CSGO_Type_SniperRifle', 'Sniper Rifle'), ('CSGO_Type_Shotgun', 'Shotgun'), ('CSGO_Type_Machinegun', 'Machinegun'), ('CSGO_Type_Equipment', 'Equipment'), ('CSGO_Tool_Keychain', 'Charm'), ('CSGO_Type_Knife', 'Knife'), ('CSGO_Type_WeaponCase', 'Container'), ('Type_CustomPlayer', 'Agent'), ('CSGO_Tool_Sticker', 'Sticker'), ('Type_Hands', 'Gloves'), ('CSGO_Type_Spray', 'Graffiti'), ('CSGO_Type_MusicKit', 'Music Kit'), ('CSGO_Tool_Patch', 'Patch'), ('CSGO_Type_Collectible', 'Collectible'), ('CSGO_Type_Ticket', 'Pass'), ('CSGO_Tool_WeaponCase_KeyTag', 'Key'), ('CSGO_Tool_GiftTag', 'Gift'), ('CSGO_Tool_Name_TagTag', 'Tag'), ('CSGO_Type_Tool', 'Tool')]
-== LC arcana listings
+== Blades%20of%20Voth%20Domosh
+HTTP 200
+<!DOCTYPE html><html lang="en" class="responsive DesktopUI"><head><meta name="viewport" content="width=device-width,initial-scale=1"/><link rel="preload" as="image" href="https://cdn.fastly.steamstati
 Traceback (most recent call last):
-  File "<string>", line 3, in <module>
-  File "/usr/lib/python3.12/json/__init__.py", line 293, in load
-    return loads(fp.read(),
-           ^^^^^^^^^^^^^^^^
+  File "<string>", line 4, in <module>
   File "/usr/lib/python3.12/json/__init__.py", line 346, in loads
     return _default_decoder.decode(s)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -22,14 +12,31 @@ Traceback (most recent call last):
   File "/usr/lib/python3.12/json/decoder.py", line 355, in raw_decode
     raise JSONDecodeError("Expecting value", s, err.value) from None
 json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
-== gem search
-Prismatic: Reflection's Shade Mythical Prismatic Gem
-Prismatic Grace Mythical Bundle
-Prismatic: Unhallowed Ground Mythical Prismatic Gem
-Prismatic: Dredge Earth Mythical Prismatic Gem
-Prismatic: Earth Green Mythical Prismatic Gem
-Infused Blade of Prismatic Grace Mythical Blade
-Offhand Blade of Prismatic Grace Mythical Offhand blade
-Blade of Prismatic Grace Mythical Blade
-Autographed Tail of Prismatic Grace Mythical Tail
-Prismatic: Light Green Mythical Prismatic Gem
+== Fractal%20Horns%20of%20Inner%20Abysm
+HTTP 200
+<!DOCTYPE html><html lang="en" class="responsive DesktopUI"><head><meta name="viewport" content="width=device-width,initial-scale=1"/><link rel="preload" as="image" href="https://cdn.fastly.steamstati
+Traceback (most recent call last):
+  File "<string>", line 4, in <module>
+  File "/usr/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+== Manifold%20Paradox
+HTTP 200
+<!DOCTYPE html><html lang="en" class="responsive DesktopUI"><head><meta name="viewport" content="width=device-width,initial-scale=1"/><link rel="preload" as="image" href="https://cdn.fastly.steamstati
+Traceback (most recent call last):
+  File "<string>", line 4, in <module>
+  File "/usr/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
