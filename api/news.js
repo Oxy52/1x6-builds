@@ -92,7 +92,38 @@ async function patch() {
   return last ? { num: last.patch_number, ts: last.patch_timestamp, major: major?.patch_number, majorTs: major?.patch_timestamp } : null;
 }
 
+// Telegram-канал Dota2.exe (t.me/dota2_exe_news): публичная веб-версия канала, обновление раз в час
+const TG = "dota2_exe_news";
+const unent = t => String(t).replace(/&nbsp;/g, " ").replace(/&quot;/g, '"').replace(/&#39;|&#039;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+  .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(+n)).replace(/&#x([\da-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16))).replace(/&amp;/g, "&");
+const TGCAT = [["patch", /патч|обновлени|\bбаг|фикс|\b7\.\d\d|баланс|нерф|бафф|апдейт/i], ["events", /турнир|\bTI\b|интернешнл|international|мейджор|major|финал|плей-?офф|квалификац|групп[аы]|матч|рошан|riyadh|dreamleague|blast|pgl|esl|beyond|fissure|bo3|bo5|vs\.?/i],
+  ["leaks", /датамайн|слив|утечк|в файлах|нашли в клиенте|инсайд/i], ["players", /состав|ростер|трансфер|игрок|кэрри|мидер|оффлейн|саппорт|стрим|\bmmr\b|ммр|ранг/i]];
+async function tgNews() {
+  const r = await fetch(`https://t.me/s/${TG}`, { headers: { "User-Agent": "Mozilla/5.0 (compatible; Blazecrest/1.0; +https://blazecrest.vercel.app)", "Accept-Language": "ru" } });
+  if (!r.ok) throw new Error("tg " + r.status);
+  const html = await r.text(), out = [];
+  for (const ch of html.split('class="tgme_widget_message_wrap').slice(1)) {
+    const id = (/data-post="[\w]+\/(\d+)"/.exec(ch) || [])[1]; if (!id) continue;
+    const tm = (/<time[^>]*datetime="([^"]+)"/.exec(ch) || [])[1]; const ts = tm ? Math.floor(Date.parse(tm) / 1000) : 0;
+    const m = /<div class="tgme_widget_message_text[^"]*"[^>]*>([\s\S]*?)<\/div>\s*(?:<div class="tgme_widget_message_(?:footer|reply_markup|link_preview)|<\/div>)/.exec(ch);
+    let raw = m ? m[1] : "";
+    const txt = unent(raw.replace(/<br\s*\/?>/gi, "\n").replace(/<i class="emoji"[^>]*><b>([^<]*)<\/b><\/i>/g, "$1").replace(/<[^>]+>/g, "")).replace(/[ \t]+/g, " ").replace(/\n{3,}/g, "\n\n").trim();
+    if (!txt || /реклама|erid|winline|1xbet|fonbet|бетбум|betboom|букмекер|ставк|промокод|казино|casino/i.test(txt)) continue;
+    const img = (/tgme_widget_message_(?:photo_wrap|video_thumb)[^>]*background-image:url\('(https:\/\/[^']+)'\)/.exec(ch) || [])[1] || "";
+    const lines = txt.split("\n").map(x => x.trim()).filter(x => x && !/Dota2\.exe\s*\||розыгрыш|подписывайся|@dota2_exe/i.test(x));
+    let t = lines[0], rest = lines.slice(1).join("\n");
+    if (t.length > 110) { const cut = t.slice(0, 100).replace(/\s+\S*$/, ""); rest = t.slice(cut.length).trim() + (rest ? "\n" + rest : ""); t = cut + "…"; }
+    const cat = (TGCAT.find(([, re]) => re.test(txt)) || ["community"])[0];
+    out.push({ ts, t: esc(t), x: esc(rest || "").replace(/\n/g, "<br>"), img: /^https:\/\/cdn\d*\.(telesco\.pe|cdn-telegram\.org)\//.test(img) ? img : "", url: `https://t.me/${TG}/${id}`, post: +id, cat, src: "tg" });
+  }
+  return out.reverse().slice(0, 30);
+}
+
 module.exports = async (req, res) => {
+  if (req.query.src === "tg") {
+    try { const items = await tgNews(); res.setHeader("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=7200"); return res.status(200).json({ checked: new Date().toISOString(), items }); }
+    catch (e) { res.setHeader("Cache-Control", "public, s-maxage=300"); return res.status(502).json({ error: "tg unavailable" }); }
+  }
   const lang = STEAM[String(req.query.lang || "ru")] || "english", app = APPS[String(req.query.app || "dota")] || 570;
   const gid = /^\d{5,25}$/.test(String(req.query.gid || "")) ? String(req.query.gid) : "";
   try {

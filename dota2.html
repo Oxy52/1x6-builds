@@ -1514,6 +1514,7 @@
     background: linear-gradient(100deg, color-mix(in srgb, var(--nc) 8%, transparent), transparent 45%), var(--bg-soft); animation: inUp .6s cubic-bezier(.22,.61,.36,1) both; animation-delay: calc(var(--i, 0) * 40ms); }
   .ncard::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 0 3px 3px 0; background: var(--nc); box-shadow: 0 0 12px var(--nc); }
   .ncard.patch { --nc: #ffb547; } .ncard.players { --nc: #c47bff; } .ncard.events { --nc: #4ade80; } .ncard.community { --nc: #ff6b8b; } .ncard.leaks { --nc: #2ee6d6; } .ncard.valve { --nc: #ff5a3c; }
+  .nsrc { font-size: 11.5px; font-weight: 700; color: #5fb4ff; }
   .ncard.auto p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   .nic { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-size: 21px; background: color-mix(in srgb, var(--nc) 16%, transparent); border: 1px solid color-mix(in srgb, var(--nc) 35%, transparent); }
   button.nic { padding: 0; overflow: hidden; cursor: pointer; border: 2px solid var(--c1); background: var(--c2); transition: transform .2s; }
@@ -6682,8 +6683,21 @@ const NEWS = (() => {
     try {
       const r = await fetch(`/api/news?lang=${TL}`); if (!r.ok) return;
       const d = await r.json(); if (d.patch && d.patch.num) PATCH = d.patch; CHECKED = d.checked || null;
-      AUTO = (d.items || []).filter(n => n.ts > CUT).map(n => ({ ...n, id: n.ts, auto: 1, w: ldate(n.ts), d: ldate(n.ts) }));
+      AUTO = (d.items || []).filter(n => n.ts > CUT).map(n => ({ ...n, id: n.ts, auto: 1, w: ldate(n.ts), d: ldate(n.ts) })).concat(AUTO.filter(n => n.src === "tg"));
     } catch(e) { return; }
+    after();
+  }
+  // Telegram-канал Dota2.exe: свежие посты, сервер обновляет раз в час
+  async function loadTg(){
+    try {
+      const r = await fetch("/api/news?src=tg"); if (!r.ok) return;
+      const d = await r.json();
+      const tg = (d.items || []).filter(n => n.ts && n.post).map(n => ({ ...n, id: 2e9 + n.post, auto: 1, w: ldate(n.ts), d: ldate(n.ts) }));
+      AUTO = AUTO.filter(n => n.src !== "tg").concat(tg);
+    } catch(e) { return; }
+    after();
+  }
+  function after(){
     dot(); const box = document.getElementById("newsBox"); if (wired && box && box.offsetParent) open();
     if (/^#news-\d+$/.test(location.hash) && modal.hidden) fromHash();
     else if (curId != null && !modal.hidden && modal.querySelector(".nsheet") && AUTO.some(n => n.id === curId)) openNews(curId);
@@ -6750,7 +6764,7 @@ const NEWS = (() => {
     return list.map(h => `<button type="button" class="nhero" data-s="${h.slug}" style="${vars(h)}"><img alt="" loading="lazy" src="face/${h.slug}.webp">Сборка ${h.en}</button>`).join(" "); }
   function card(n, i){
     const fresh = !firstVisit && (n.auto ? n.ts > seenT : n.id > seen), T = tt(n);
-    return `<article class="ncard ${n.cat}${n.auto ? " auto" : ""}" data-id="${n.id}" tabindex="0" style="--i:${Math.min(i, 10)}" aria-label="${plain(T.t)}">${icon(n)}<div><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span><span${NT()}>${td(n.d)}</span>${fresh ? `<span class="nnew">NEW</span>` : ""}</div>
+    return `<article class="ncard ${n.cat}${n.auto ? " auto" : ""}" data-id="${n.id}" tabindex="0" style="--i:${Math.min(i, 10)}" aria-label="${plain(T.t)}">${icon(n)}<div><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span>${n.src === "tg" ? `<span class="nsrc" translate="no">✈ Dota2.exe</span>` : ""}<span${NT()}>${td(n.d)}</span>${fresh ? `<span class="nnew">NEW</span>` : ""}</div>
       <h3${NT()}>${T.t}</h3><p${NT()}>${T.x}</p>${chips(n)}</div>${favBtn(n.id)}</article>`;
   }
   const favBtn = id => `<button type="button" class="fav nfav" data-id="${id}" aria-pressed="${NF.has(id)}" aria-label="Новость в избранное">${STAR}</button>`;
@@ -6790,7 +6804,7 @@ const NEWS = (() => {
         <button type="button" class="close" aria-label="Закрыть">✕</button></div>
       <div class="nbody"><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span><span${NT()}>${td(n.d)}${n.w !== n.d ? ` · ${td(n.w)}` : ""}</span></div>
         <h3${NT()}>${T.t}</h3><p${NT()}>${T.x}</p>${chips(n)}
-        <div class="nacts"><button type="button" class="btn btn-ghost nfavbig" data-id="${id}" aria-pressed="${NF.has(id)}">★ <span>${NF.has(id) ? "В избранном" : "В избранное"}</span></button><button type="button" class="btn btn-ghost" id="nShare">Поделиться</button>${n.url ? `<a class="btn btn-ghost" href="${n.url}" target="_blank" rel="noopener" translate="no">Steam ↗</a>` : ""}<span class="npos">${idx + 1} / ${pool.length}</span></div></div></div>`;
+        <div class="nacts"><button type="button" class="btn btn-ghost nfavbig" data-id="${id}" aria-pressed="${NF.has(id)}">★ <span>${NF.has(id) ? "В избранном" : "В избранное"}</span></button><button type="button" class="btn btn-ghost" id="nShare">Поделиться</button>${n.url ? `<a class="btn btn-ghost" href="${n.url}" target="_blank" rel="noopener" translate="no">${n.src === "tg" ? "Telegram ↗" : "Steam ↗"}</a>` : ""}<span class="npos">${idx + 1} / ${pool.length}</span></div></div></div>`;
     modal.classList.toggle("swap", was); modal.hidden = false; lockScroll();
     const sh = modal.querySelector(".nsheet"); if (was) sh.scrollTop = 0;
     const go = d => openNews(pool[(idx + d + pool.length) % pool.length].id);
@@ -6832,9 +6846,10 @@ const NEWS = (() => {
     if (hl.length > 1 && !REDUCED) setInterval(() => { if (document.hidden) return; k = (k + 1) % hl.length; el.style.opacity = 0; setTimeout(() => { teaser(); el.style.opacity = 1; }, 250); }, 4500);
     el.style.transition = "opacity .25s ease"; })();
   // смена языка — подгружаем перевод и перерисовываем
-  const relang = l => loadTr(l).then(() => { teaser(); if (wired) open(); if (curId != null && !modal.hidden && modal.querySelector(".nsheet")) openNews(curId); }).then(() => { AUTO = []; return loadAuto(); });
+  const relang = l => loadTr(l).then(() => { teaser(); if (wired) open(); if (curId != null && !modal.hidden && modal.querySelector(".nsheet")) openNews(curId); }).then(() => { AUTO = AUTO.filter(n => n.src === "tg"); return loadAuto(); });
   document.addEventListener("langchange", e => { if (e.detail !== TL) relang(e.detail); });
   if (typeof I18N !== "undefined" && I18N.get() !== "ru") relang(I18N.get()); else setTimeout(loadAuto, 800);
+  setTimeout(loadTg, 900); setInterval(() => { if (!document.hidden) loadTg(); }, 60 * 60e3);
   dot();
   return { open, go, dot, fromHash, show };
 })();
