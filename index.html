@@ -7134,7 +7134,10 @@ const GAMES = (() => {
     const lowP = i => { const v = i.p.filter(p => p.v != null).map(p => p.v); return v.length ? Math.min(...v) : Infinity; };
     // избранное сортируется целиком тут; в каталоге цена и название уже отсортированы Steam, редкость — тут
     const view = m.sort === "rar" ? m.items.slice().sort((a, b) => (b.r || 0) - (a.r || 0))
-      : m.cat === "fav" && !m.q ? (m.sort === "cheap" ? m.items.slice().sort((a, b) => lowP(a) - lowP(b)) : m.sort === "exp" ? m.items.slice().sort((a, b) => (lowP(b) === Infinity ? -1 : lowP(b)) - (lowP(a) === Infinity ? -1 : lowP(a))) : m.sort === "name" ? m.items.slice().sort((a, b) => a.n.localeCompare(b.n)) : m.items) : m.items;
+      // цена — по той «Дешевле всего», что видна на карточке (Steam сортирует только по своей цене)
+      : m.sort === "cheap" ? m.items.slice().sort((a, b) => lowP(a) - lowP(b))
+      : m.sort === "exp" ? m.items.slice().sort((a, b) => (lowP(b) === Infinity ? -1 : lowP(b)) - (lowP(a) === Infinity ? -1 : lowP(a)))
+      : m.sort === "name" && m.cat === "fav" && !m.q ? m.items.slice().sort((a, b) => a.n.localeCompare(b.n)) : m.items;
     box.innerHTML = view.map(i => { const ps = i.p.slice().sort((a, b) => (a.v == null) - (b.v == null) || a.v - b.v), has = ps.filter(p => p.v != null);
       const lo = has[0], hi = has[has.length - 1], save = lo && hi && hi.v > lo.v ? Math.round((1 - lo.v / hi.v) * 100) : 0;
       const fo = FV.has(i.n);
