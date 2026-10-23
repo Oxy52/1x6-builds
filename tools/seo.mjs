@@ -107,7 +107,7 @@ ${foot}
 {
   const url = SITE + "/heroes", title = "Все сборки героев Dota 1x6 — 54 героя | Blazecrest", desc = "Сборки всех 54 героев кастомки Dota 1x6: предметы по этапам игры, несколько вариантов на героя и арканы. Выбери героя.";
   const ld = { "@context": "https://schema.org", "@type": "CollectionPage", name: "Сборки героев Dota 1x6", url, inLanguage: "ru" };
-  fs.writeFileSync(R + "heroes.html", `${head(title, desc, url, SITE + "/og/main.png", ld, "#e8564a", "#1a1a2e")}
+  fs.writeFileSync(R + "heroes.html", `${head(title, desc, url, SITE + "/og/main.png?v=2", ld, "#e8564a", "#1a1a2e")}
 <body>
 ${top}
 <main class="w">
