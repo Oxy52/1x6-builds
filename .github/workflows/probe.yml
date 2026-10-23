@@ -8,6 +8,6 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           set +e
-          for n in aegisforge aegisvault aegisarena aegisnest aegiscore aegisx aegisly aegisio aegispick aegisdraft aegiszone aegisplay aegishq myaegis getaegis aegisworld; do
-            r=$(curl -s -m 15 -o /tmp/b -w '%{http_code}' https://$n.vercel.app/); echo "$n $r $(head -c 120 /tmp/b | tr '\n' ' ')"; done > out.txt
+          for n in emberwing blazecrest pyrewing ashguard emberguard firecrest crestfall wingforge pyrecrest; do
+            r=$(curl -s -m 15 -o /tmp/b -w '%{http_code}' https://$n.vercel.app/); d=$(curl -s -m 10 "https://rdap.org/domain/$n.com" -o /dev/null -w "%{http_code}"); g=$(curl -s -m 10 "https://rdap.org/domain/$n.gg" -o /dev/null -w "%{http_code}"); echo "$n vercel=$r com=$d gg=$g $(head -c 120 /tmp/b | tr '\n' ' ')"; done > out.txt
           set -e; git config user.name p; git config user.email p@p; git add -A out.txt; git commit -m r; git push
