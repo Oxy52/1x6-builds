@@ -1,1 +1,30 @@
-84 page.html
+== gems
+Kinetic: Wraith Spin Редкое
+Inscribed Kills Редкое
+Kinetic: Bladekeeper's Blade Dance Редкое
+Kinetic: Bladekeeper's Omnislash Редкое
+== ins arcana
+20
+Inscribed Demon Eater
+Inscribed Blades of Voth Domosh
+Inscribed The Resurrection of Shen - Wings
+Inscribed Fractal Horns of Inner Abysm
+== cs FN st
+762
+StatTrak™ AK-47 | Ice Coaled (Field-Tested)
+StatTrak™ AK-47 | Slate (Well-Worn)
+StatTrak™ AK-47 | Uncharted (Field-Tested)
+== lots LC arcana
+55 None
+32.54 [('Duels Won: 1408', 'Rune of the Duelist Indomitable'), ('Duels Lost: 120', 'Inscribed Gem')] []
+34.07 [('Duels Won: 55', 'Rune of the Duelist Indomitable')] []
+34.2 [('Duels Won: 0', 'Rune of the Duelist Indomitable')] []
+34.2 [('Duels Won: 350', 'Rune of the Duelist Indomitable')] []
+34.51 [('Duels Won: 0', 'Rune of the Duelist Indomitable')] []
+== lots cs
+1721 None
+24.52 [] []
+25.33 [] []
+25.44 [] []
+25.73 [] ['Sticker: MOUZ (Glitter) | Paris 2023, MOUZ (Glitter) | Paris 2023, MOUZ (Glitter) | Paris 2023, MOUZ (Glitter) | Paris 2023, MOUZ (Glitter) | Paris 2023']
+25.71 [] []
