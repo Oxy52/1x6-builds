@@ -82,6 +82,7 @@
   .mi:hover, .mi:focus-visible { background: rgba(255,255,255,.06); outline: none; }
   .mi:active { background: rgba(255,255,255,.1); }
   .mi svg { width: 21px; height: 21px; flex: none; color: var(--muted); }
+  .mi .mi-lg { width: 21px; height: 21px; flex: none; object-fit: contain; }
   .mi span { flex: 1; min-width: 0; }
   .mi > span[style*="width:21px"], .mi .mpav { flex: none; }
   .mi .mpav { width: 34px; height: 34px; aspect-ratio: 1; }
@@ -476,6 +477,9 @@
   .pick::-webkit-scrollbar { display: none; }
   .pick button, .pick label { flex: none; scroll-snap-align: start; cursor: pointer; padding: 0; border: 2px solid transparent; background: var(--bg-soft); overflow: hidden; transition: transform .15s, border-color .2s; }
   .pick.av button, .pick.av label { width: 54px; height: 54px; border-radius: 50%; }
+  .pick.av[data-show="hero"] button[data-t="cs"], .pick.av[data-show="hero"] button[data-t="dl"], .pick.av[data-show="cs"] button[data-t="hero"], .pick.av[data-show="cs"] button[data-t="dl"], .pick.av[data-show="dl"] button[data-t="hero"], .pick.av[data-show="dl"] button[data-t="cs"] { display: none; }
+  .avg { display: flex; gap: 6px; flex-wrap: wrap; margin: 2px 0 8px; } .avg button { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px 6px 8px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,.04); color: var(--fg); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .avg button img { width: 20px; height: 20px; object-fit: contain; } .avg button[aria-pressed="true"] { border-color: var(--c1, #e8564a); background: color-mix(in srgb, var(--c1, #e8564a) 16%, transparent); }
   .pick.bn button, .pick.bn label { width: 120px; height: 62px; border-radius: 12px; }
   .pick img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .pick [aria-pressed="true"] { border-color: var(--t1); box-shadow: 0 0 12px color-mix(in srgb, var(--t1) 60%, transparent); }
@@ -2322,8 +2326,10 @@
   <button type="button" class="mi" data-act="all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>Все герои</span><em>54</em></button>
   <button type="button" class="mi" data-act="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Поиск героя</span></button>
   <button type="button" class="mi" data-act="fav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1.1 5.8L12 16.8l-5.3 2.8 1.1-5.8-4.3-4.1 5.9-.8z"/></svg><span>Избранное</span><em id="menuFavN"></em></button>
-  <div class="menu-l">Dota 2</div>
-  <button type="button" class="mi" data-act="news"><span style="width:21px;text-align:center">📰</span><span>Новости и патчи</span><em>new</em></button>
+  <div class="menu-l">Новости</div>
+  <button type="button" class="mi" data-act="news"><img class="mi-lg" src="/games/dota.png" alt=""><span>Dota 2 — новости и патчи</span><em>new</em></button>
+  <button type="button" class="mi" data-act="newsCs"><img class="mi-lg" src="/games/cs.png" alt=""><span>CS2 — новости</span></button>
+  <button type="button" class="mi" data-act="newsDl"><img class="mi-lg" src="/games/deadlock.png" alt=""><span>Deadlock — новости</span></button>
   <div class="menu-l">Развлечения</div>
   <button type="button" class="mi" data-act="roll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.3" fill="currentColor"/></svg><span>Рулетка героя</span></button>
   <button type="button" class="mi" data-act="broll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg><span>Рулетка билдов</span></button>
@@ -3087,7 +3093,8 @@ const PROF = (() => {
 
   const esc = t => String(t == null ? "" : t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   const H = slug => HEROES.find(h => h.slug === slug);
-  const avSrc = a => !a ? "" : (a.t === "img" || a.t === "url") ? a.v : `face/${a.v}.webp`;
+  const avSrc = a => !a ? "" : (a.t === "img" || a.t === "url") ? a.v : a.t === "cs" || a.t === "dl" ? `face/${a.t}/${String(a.v).replace(/\D/g, "")}.webp` : `face/${a.v}.webp`;
+  const AVG = [["hero", "Dota 2", "dota"], ["cs", "CS2", "cs"], ["dl", "Deadlock", "deadlock"]], AVN = { cs: 25, dl: 44 };
   const bnSrc = b => !b ? "" : (b.t === "img" || b.t === "url") ? b.v : b.t === "arc" ? `arcana/${b.v}.webp` : b.t === "hero" ? `hero/${b.v}.webp` : "";
   const enc = o => !o ? "" : o.t === "grad" ? "grad" : `${o.t === "img" ? "url" : o.t}:${o.v}`;
   const dec = s => { if (!s) return null; if (s === "grad") return { t: "grad", v: "" }; const i = s.indexOf(":"); const t = s.slice(0, i), v = s.slice(i + 1);
@@ -3315,8 +3322,9 @@ const PROF = (() => {
         <div class="pf"><label class="lb" for="fSt">Статус</label><input type="text" id="fSt" maxlength="40" placeholder="Например, мейню Пуджа" value="${esc(d.st)}"></div>
         <div class="pf">${lb("Любимые игры")}<div class="mygames" id="fGames">${GAMES3.map(([g, n]) => `<button type="button" data-g="${g}" aria-pressed="${MYG.includes(g)}"><img alt="" src="/games/${g}.png">${n}</button>`).join("")}</div><div class="hint">Можно выбрать несколько — они покажутся в профиле и первыми на главной</div></div>
         <div class="pf">${lb("Аватарка")}
-          <div class="pick av" id="fAv"><label class="up" title="Своё фото">＋<input type="file" accept="image/*" id="fAvUp"></label>${(d.av.t === "img" || d.av.t === "url") ? `<button type="button" data-t="${d.av.t}" aria-pressed="true"><img alt="" src="${esc(d.av.v)}"></button>` : ""}${HEROES.map(h => `<button type="button" data-t="hero" data-v="${h.slug}" aria-label="${h.en}" aria-pressed="${d.av.t === "hero" && d.av.v === h.slug}"><img alt="" loading="lazy" src="face/${h.slug}.webp"></button>`).join("")}</div>
-          <div class="hint">Смайлик героя или своё фото (＋)</div></div>
+          <div class="avg" id="fAvG">${AVG.map(([t, n, g]) => `<button type="button" data-g="${t}" aria-pressed="${(["cs", "dl"].includes(d.av.t) ? d.av.t : "hero") === t}"><img alt="" src="/games/${g}.png">${n}</button>`).join("")}</div>
+          <div class="pick av" id="fAv" data-show="${["cs", "dl"].includes(d.av.t) ? d.av.t : "hero"}"><label class="up" title="Своё фото">＋<input type="file" accept="image/*" id="fAvUp"></label>${(d.av.t === "img" || d.av.t === "url") ? `<button type="button" data-t="${d.av.t}" aria-pressed="true"><img alt="" src="${esc(d.av.v)}"></button>` : ""}${HEROES.map(h => `<button type="button" data-t="hero" data-v="${h.slug}" aria-label="${h.en}" aria-pressed="${d.av.t === "hero" && d.av.v === h.slug}"><img alt="" loading="lazy" src="face/${h.slug}.webp"></button>`).join("")}${["cs", "dl"].map(t => Array.from({ length: AVN[t] }, (_, i) => `<button type="button" data-t="${t}" data-v="${i}" aria-label="${t === "cs" ? "Агент CS2" : "Герой Deadlock"}" aria-pressed="${d.av.t === t && +d.av.v === i}"><img alt="" loading="lazy" src="face/${t}/${i}.webp"></button>`).join("")).join("")}</div>
+          <div class="hint">Герой Dota 2, агент CS2, герой Deadlock или своё фото (＋)</div></div>
         <div class="pf">${lb("Баннер сзади")}
           <div class="pick bn" id="fBn"><label class="up" title="Своя картинка">＋<input type="file" accept="image/*" id="fBnUp"></label>${(d.bn.t === "img" || d.bn.t === "url") ? `<button type="button" data-t="${d.bn.t}" aria-pressed="true"><img alt="" src="${esc(d.bn.v)}"></button>` : ""}<button type="button" data-t="grad" aria-pressed="${d.bn.t === "grad"}" aria-label="Цвет темы" style="background:linear-gradient(135deg,var(--t1),var(--t2))"></button>${HEROES.map(h => `<button type="button" data-t="hero" data-v="${h.slug}" aria-pressed="${d.bn.t === "hero" && d.bn.v === h.slug}" style="${vars(h)};background:radial-gradient(circle at 50% 30%,var(--c1),var(--c2))" title="${h.en}"><img alt="" loading="lazy" src="hero/${h.slug}.webp" style="object-fit:cover;object-position:center 22%"></button>`).join("")}</div>
           <div class="hint">Цвет, герой или своя картинка (＋)</div></div>
@@ -3333,6 +3341,7 @@ const PROF = (() => {
         d[key] = (b.dataset.t === "img" || b.dataset.t === "url") ? { t: b.dataset.t, v: b.querySelector("img").src } : { t: b.dataset.t, v: b.dataset.v || "" }; onSet(); });
       return pk;
     }
+    box.querySelectorAll("#fAvG [data-g]").forEach(b => b.onclick = () => { box.querySelectorAll("#fAvG [data-g]").forEach(x => x.setAttribute("aria-pressed", x === b)); const pk = box.querySelector("#fAv"); pk.dataset.show = b.dataset.g; pk.scrollLeft = 0; });
     const avPk = wire("#fAv", "av", () => { avPrev.src = avSrc(d.av); box.querySelectorAll(".fprev img").forEach(x => x.src = avSrc(d.av)); });
     const frEl = box.querySelector("#fFr");
     if (frEl) frEl.onclick = e => { const b = e.target.closest("button"); if (!b || b.disabled) return; d.frame = b.dataset.f; frEl.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); box.querySelector("#fAvPrev").className = "pav" + frameCls(d.frame); };
@@ -7261,7 +7270,7 @@ const GAMES = (() => {
       }).catch(() => { const box = document.getElementById("dlOrd"); if (box) box.remove(); });
     }).catch(() => { el.innerHTML = err + `<button type="button" class="btn btn-ghost dl-back" id="dlBack">← Все герои</button>`; });
   }
-  return { open, market };
+  return { open, market, news: g => { st[g] = "news"; setTab(g); if (wired) draw(g); } };
 })();
 
 /* ---------- вкладки ---------- */
@@ -7341,7 +7350,7 @@ const ACTS = {
   search(){ goBuilds(); setTimeout(() => document.getElementById("q").focus({preventScroll: true}), 450); },
   fav(){ setFilter(true, false); goBuilds(); },
   arc(){ setFilter(false, true); goBuilds(); },
-  news(){ NEWS.go(); }, profile(){ PROF.open(); }, feed(){ openFeed(); }, roll(){ roulette(); }, broll(){ buildRoulette(); }, quiz(){ quiz(); }, game(){ GAME.open(); }, duel(){ DUEL.open(); }, lasthit(){ MINI.lasthit(); }, invoker(){ MINI.invoker(); }, premium(){ PROF.premium(); }, chc(){ setTab("custom"); }, support(){ PROF.support(); }, settings(){ PROF.settings(); }, install(){ installApp(); }, shareSite(){ shareLink(SITE_URL + "/", "Blazecrest", "Сборки Dota 1x6, билды Custom Hero Chaos, мета Dota 2 и мини-игры"); }
+  news(){ NEWS.go(); }, newsCs(){ GAMES.news("cs"); }, newsDl(){ GAMES.news("deadlock"); }, profile(){ PROF.open(); }, feed(){ openFeed(); }, roll(){ roulette(); }, broll(){ buildRoulette(); }, quiz(){ quiz(); }, game(){ GAME.open(); }, duel(){ DUEL.open(); }, lasthit(){ MINI.lasthit(); }, invoker(){ MINI.invoker(); }, premium(){ PROF.premium(); }, chc(){ setTab("custom"); }, support(){ PROF.support(); }, settings(){ PROF.settings(); }, install(){ installApp(); }, shareSite(){ shareLink(SITE_URL + "/", "Blazecrest", "Сборки Dota 1x6, билды Custom Hero Chaos, мета Dota 2 и мини-игры"); }
 };
 menu.querySelectorAll(".mi[data-act]").forEach(b => b.onclick = () => closeMenu(ACTS[b.dataset.act]));
 menu.querySelector(".tgmi").addEventListener("click", () => closeMenu());
