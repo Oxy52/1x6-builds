@@ -1,12 +1,12 @@
-==== https://lis-skins.com/market/csgo/ title=Just a moment... textlen=261
+==== https://lis-skins.me/en/market/csgo/ title=410 Gone textlen=30
 codes in text: 
-==== https://cs.money/market/buy/ title=CS.MONEY — Buy CS:GO/CS2 skins | Skin Marketplace textlen=11779
+ERR https://www.lis-skins-ru.com/en/market/ page.goto: net::ERR_NAME_NOT_RESOLVED at https://www.lis-skins-ru.com/en/market/
+Call log:
+  - navig
+==== https://www.lis-skins-ru.com/en/market/ title= textlen=0
+codes in text: 
+==== https://cs.money/market/buy/ title=CS.MONEY — Buy CS:GO/CS2 skins | Skin Marketplace textlen=11783
 codes in text: 
 ==== https://csfloat.com/search title=CSFloat - Buy & Sell CS2 Skins on the Most Advanced Marketplace textlen=2758
 codes in text: USD
-  [https://csfloat.com/chunk-NVYZBVE4.js] CZK="CZK",e.DKK="DKK",e.GEL="GEL",e.HKD="HKD",e.HUF="HUF",e.IDR="IDR",e.ILS="ILS",e.KHR="KHR",e.KZT="KZT",e.MYR="MYR",e.MXN="MXN",e.NOK="NOK",e.NZD="NZD",e.PLN="PLN",e.RON="RON",e.RSD="RSD",e.SAR="SAR",e.SEK="SEK",e.SGD="SGD",e.THB="THB",e.TRY="TRY",e.TWD="TWD",e.U
-  [https://csfloat.com/chunk-NVYZBVE4.js] AH="UAH",e.USDC="USDC",e})(i||{}),u={[i.USD]:{code:i.USD,symbol:"$"},[i.EUR]:{code:i.EUR,symbol:"\u20AC",symbolOnRight:!0},[i.GBP]:{code:i.GBP,symbol:"\xA3"},[i.CAD]:{c
-==== https://market.csgo.com/ title=Buy CSGO Skins - Trade and Sell CS2 Skins and Items Safely | Market CSGO textlen=9906
-codes in text: USD
-==== https://skinport.com/market title=Buy CS:GO/CS2 Skins and Items - Skinport textlen=838
-codes in text: 
+  [https://csfloat.com/chunk-NVYZBVE4.js] ",e.NOK="NOK",e.NZD="NZD",e.PLN="PLN",e.RON="RON",e.RSD="RSD",e.SAR="SAR",e.SEK="SEK",e.SGD="SGD",e.THB="THB",e.TRY="TRY",e.TWD="TWD",e.UAH="UAH",e.USDC="USDC",e})(i||{}),u={[i.USD]:{code:i.USD,symbol:"$"},[i.EUR]:{code:i.EUR,symbol:"\u20AC",symbolOnRight:!0},[i.GBP]:{code:i.GBP,symbo
