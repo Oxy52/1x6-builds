@@ -68,8 +68,7 @@
     },
     "api/tagicon.js": {
       "maxDuration": 30,
-      "memory": 1024,
-      "includeFiles": "games/cs-tag.png"
+      "memory": 1024
     }
   },
   "redirects": [
