@@ -1,16 +1,9 @@
-aegisforge 402 Payment required  DEPLOYMENT_DISABLED  pdx1::6zxqx-1792723412428-87c80e777bb5 
-aegisvault 404 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  pdx1::zjh9q-1792723412733-b31a47865955 
-aegisarena 404 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  pdx1::84rsl-1792723412825-5f3065d52959 
-aegisnest 404 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  pdx1::4whf5-1792723412964-5576660e9f95 
-aegiscore 200 <!DOCTYPE html><html lang="en" class="dark h-full antialiased"><head><meta charSet="utf-8"/><meta name="viewport" conten
-aegisx 307 <!DOCTYPE html><html id="__next_error__"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width,
-aegisly 404 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  pdx1::97b4v-1792723414017-706107c55daa 
-aegisio 200 <!DOCTYPE html><html lang="en" class="__variable_f367f3 __variable_0a80b4"><head><meta charSet="utf-8"/><meta name="view
-aegispick 404 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  pdx1::j89c4-1792723414715-28d9852c7459 
-aegisdraft 404 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  pdx1::zjh9q-1792723414802-85adaf5471ae 
-aegiszone 404 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  pdx1::rjfmh-1792723414890-142413f35d7c 
-aegisplay 404 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  pdx1::kj8hn-1792723414985-1a9340d7f494 
-aegishq 404 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  pdx1::tgl9l-1792723415090-37a22791093c 
-myaegis 200 <!DOCTYPE html> <html lang="en">   <head>     <meta charset="UTF-8" />     <meta name="viewport" content="width=device-w
-getaegis 200 <!doctype html> <html lang="en"> <head> <meta charset="utf-8" /> <meta name="viewport" content="width=device-width, init
-aegisworld 404 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  pdx1::9h8cv-1792723416147-fad5ceb7bf99 
+emberwing vercel=200 com=302 gg=404 <!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initia
+blazecrest vercel=404 com=302 gg=404 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  cle1::ztg4g-1792723670344-119ba33debe4 
+pyrewing vercel=404 com=302 gg=404 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  cle1::cmgwb-1792723670759-5ad2daa7461b 
+ashguard vercel=200 com=302 gg=404 <!DOCTYPE html><html lang="en" class="geist_2ae47f08-module__h69qWW__variable geist_mono_eb58308d-module__w_p2Lq__variab
+emberguard vercel=200 com=302 gg=404 <!DOCTYPE html><html><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" d
+firecrest vercel=404 com=302 gg=429 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  cle1::l86l9-1792723672449-d1ad4ccda5bf 
+crestfall vercel=200 com=429 gg=429 <!doctype html> <html lang="en">   <head>     <meta charset="UTF-8" />     <meta name="viewport" content="width=device-w
+wingforge vercel=404 com=429 gg=429 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  cle1::x2hnq-1792723673253-165ef3f68513 
+pyrecrest vercel=404 com=429 gg=429 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  cle1::k855r-1792723673571-ca21256ff0d4 
