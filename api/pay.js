@@ -148,6 +148,22 @@ async function hookTg(req, res, body) {
     }
     return res.status(200).end();
   }
+  const lg = msg && msg.chat && msg.from && typeof msg.text === "string" && /^\/start login_([a-f0-9]{32})\s*$/.exec(msg.text);
+  const nf = msg && msg.chat && typeof msg.text === "string" && /^\/start notify_([a-f0-9]{32})\s*$/.exec(msg.text);
+  if (nf) {
+    let ok = false; try { ok = await require("./_tglogin").linkNotify(nf[1], msg.chat.id); } catch (e) {}
+    await tg("sendMessage", { chat_id: msg.chat.id, text: ok ? "🔔 Уведомления Blazecrest включены. Сюда будут приходить новые сообщения в поддержку." : "Ссылка устарела. Нажми «Уведомления в Telegram» на сайте ещё раз." });
+    return res.status(200).end();
+  }
+  if (lg) {
+    const L = require("./_tglogin");
+    let ok = false;
+    try { const th = await L.tokenFor(msg.from); ok = Boolean(th && await L.put(lg[1], th)); } catch (e) {}
+    await tg("sendMessage", ok
+      ? { chat_id: msg.chat.id, text: "✅ Вход в Blazecrest подтверждён!\nВернись на сайт — ты уже вошёл. Если вкладка закрыта, открой сайт и нажми «Войти через Telegram» ещё раз.", reply_markup: { inline_keyboard: [[{ text: "Открыть Blazecrest", url: SITE }]] } }
+      : { chat_id: msg.chat.id, text: "Не получилось подтвердить вход. Вернись на сайт и нажми «Войти через Telegram» ещё раз." });
+    return res.status(200).end();
+  }
   if (msg && msg.chat && typeof msg.text === "string" && /^\/(paysupport|terms)/.test(msg.text)) {
     await tg("sendMessage", { chat_id: msg.chat.id, text: "Подписка 1x6+ — цифровая услуга сайта Blazecrest: значок, рамки, бонусы опыта, длинные посты и полная статистика. Включается сразу после оплаты на выбранный срок, сама не продлевается.\nПроблема с оплатой или подпиской? Напиши администратору в канал: https://t.me/+swCyihkKvwU4NTBi — укажи ник на сайте и время оплаты." });
     return res.status(200).end();

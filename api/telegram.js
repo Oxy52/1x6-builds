@@ -48,6 +48,12 @@ async function tgSend(chat, text) {
     body: JSON.stringify({ chat_id: chat, text, disable_web_page_preview: true }) });
   return r.ok;
 }
+let BOTNAME = "";
+async function botName() {
+  if (BOTNAME) return BOTNAME;
+  try { const j = await (await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getMe`, { signal: AbortSignal.timeout(5000) })).json(); BOTNAME = (j.result && j.result.username) || ""; } catch (e) {}
+  return BOTNAME;
+}
 const sent = new Set();
 // уведомления поддержки: chat id админа хранится в app_metadata его аккаунта (без новых таблиц)
 async function act(req, res, a, body) {
@@ -60,6 +66,12 @@ async function act(req, res, a, body) {
     if (!up.ok) return res.status(502).json({ error: "save_failed" });
     const ok = await tgSend(chat, "✅ Уведомления Blazecrest включены. Сюда будут приходить новые сообщения в поддержку.");
     return res.status(200).json({ ok: true, delivered: ok });
+  }
+  if (a === "notifycode") {
+    const admins = await adminIds(); if (!admins.includes(me.id)) return res.status(403).json({ error: "not_admin" });
+    const nonce = crypto.randomBytes(16).toString("hex");
+    if (!await require("./_tglogin").put(nonce, null, { uid: me.id })) return res.status(502).json({ error: "save_failed" });
+    return res.status(200).json({ nonce, bot: await botName() });
   }
   if (a === "notify") {
     const id = Number(body && body.id); if (!id || sent.has(id)) return res.status(200).json({ ok: true });
@@ -82,7 +94,13 @@ module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
   const enabled = Boolean(BOT_TOKEN && SECRET);
   if (req.method === "GET") {
-    return res.status(200).json({ enabled, bot_id: enabled ? BOT_TOKEN.split(":")[0] : null });
+    const q = req.query || {};
+    if (q.poll) {
+      if (!enabled) return res.status(503).json({ error: "not_configured" });
+      const th = await require("./_tglogin").take(String(q.poll)).catch(() => null);
+      return res.status(200).json(th ? { token_hash: th } : { wait: true });
+    }
+    return res.status(200).json({ enabled, bot_id: enabled ? BOT_TOKEN.split(":")[0] : null, bot: enabled ? await botName() : null });
   }
   if (req.method !== "POST") return res.status(405).json({ error: "method_not_allowed" });
   if (!enabled) return res.status(503).json({ error: "not_configured" });

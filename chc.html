@@ -3054,7 +3054,7 @@ const PROF = (() => {
   function tgConf(){
     if (TGC) return TGC;
     TGC = fetch("/api/telegram", { headers: { accept: "application/json" } }).then(r => r.ok ? r.json() : null)
-      .then(c => { if (c && c.enabled) loadTgScript(); return c; }).catch(() => null);
+      .catch(() => null);
     return TGC;
   }
   function loadTgScript(){
@@ -3115,22 +3115,25 @@ const PROF = (() => {
     if (tg) tgConf().then(c => { if (!c || !c.enabled || !tg.isConnected) return;
       tg.classList.remove("off"); tg.disabled = false; const em = tg.querySelector("em"); if (em) em.remove();
       tg.onclick = () => {
-        if (!window.Telegram || !Telegram.Login){ say("Telegram ещё загружается — нажми ещё раз через секунду."); loadTgScript(); return; }
-        say("Подтверди вход в окне Telegram…", true);
-        Telegram.Login.auth({ bot_id: c.bot_id, request_access: "write", lang: "ru" }, async data => {
-          if (!data){ say("Вход через Telegram отменён."); return; }
-          busy(true); say("Входим…", true);
+        if (!c.bot){ say("Бот Telegram сейчас недоступен. Попробуй другой способ входа."); return; }
+        const nonce = [...crypto.getRandomValues(new Uint8Array(16))].map(x => x.toString(16).padStart(2, "0")).join("");
+        const url = `https://t.me/${c.bot}?start=login_${nonce}`;
+        const w = window.open(url, "_blank");
+        msg.hidden = false; msg.classList.add("good");
+        msg.innerHTML = `Открой бота в Telegram и нажми <b>«Старт»</b> — вход подтвердится сам.<br><a href="${url}" target="_blank" rel="noopener" style="color:inherit;font-weight:700;text-decoration:underline">Открыть бота @${c.bot}</a>`;
+        clearInterval(tg._t); const t0 = Date.now(); let busyPoll = false;
+        const poll = async () => {
+          if (!tg.isConnected || Date.now() - t0 > 10 * 60e3){ clearInterval(tg._t); document.removeEventListener("visibilitychange", poll); return; }
+          if (busyPoll) return; busyPoll = true;
           try {
-            const r = await fetch("/api/telegram", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ user: data }) });
-            const j = await r.json().catch(() => ({}));
-            if (!r.ok || !j.token_hash){ say(j.error === "expired" ? "Подтверждение устарело, попробуй ещё раз." : "Не получилось войти через Telegram. Попробуй ещё раз."); return; }
-            try { sessionStorage.setItem("ub-auth-pending", "1"); } catch(_) {}
-            const { error } = await sb.auth.verifyOtp({ type: "magiclink", token_hash: j.token_hash });
-            if (error){ say(ERR(error.message)); return; }
-            closeModal();
-          } catch(ex) { say(ERR(ex && ex.message)); }
-          finally { busy(false); }
-        });
+            const j = await (await fetch("/api/telegram?poll=" + nonce, { cache: "no-store" })).json().catch(() => ({}));
+            if (j.token_hash){ clearInterval(tg._t); document.removeEventListener("visibilitychange", poll); busy(true); say("Входим…", true);
+              try { sessionStorage.setItem("ub-auth-pending", "1"); } catch(_) {}
+              const { error } = await sb.auth.verifyOtp({ type: "magiclink", token_hash: j.token_hash });
+              busy(false); if (error){ say(ERR(error.message)); return; } closeModal(); }
+          } catch(_) {} finally { busyPoll = false; }
+        };
+        tg._t = setInterval(poll, 2500); document.addEventListener("visibilitychange", poll);
       };
     });
     box.querySelectorAll(".ob[data-p]").forEach(b => b.onclick = async () => {
@@ -3138,7 +3141,8 @@ const PROF = (() => {
       const ex = await providers(); if (ex && !ex[b.dataset.p]){ say("Этот способ входа ещё не включён на сайте."); return; }
       busy(true); say("Перенаправляем…", true);
       try { sessionStorage.setItem("ub-auth-pending", "1"); } catch(e) {}
-      const { error } = await sb.auth.signInWithOAuth({ provider: b.dataset.p, options: { redirectTo: location.origin + location.pathname } });
+      const qp = b.dataset.p === "google" ? { prompt: "select_account" } : b.dataset.p === "discord" ? { prompt: "consent" } : undefined;
+      const { error } = await sb.auth.signInWithOAuth({ provider: b.dataset.p, options: { redirectTo: location.origin + location.pathname, queryParams: qp } });
       if (error){ busy(false); say(ERR(error.message)); }
     });
     box.querySelector("#aForm").onsubmit = async e => {
@@ -3955,7 +3959,7 @@ const PROF = (() => {
   }
   async function inbox(){
     const box = shell("", `<div class="sup-head"><h3>📥 Обращения</h3><small>Все диалоги игроков с поддержкой. Нажми, чтобы ответить.</small><button type="button" class="btn btn-ghost sup-tg" id="supTg">🔔 Уведомления в Telegram</button></div><div class="psec" id="supIn"><div class="feed-sk"></div><div class="feed-sk"></div></div><div style="height:20px"></div>`, "Обращения");
-    supView = null; loadTgScript();
+    supView = null;
     box.querySelector("#supTg").onclick = e => supLinkTg(e.currentTarget);
     const el = box.querySelector("#supIn");
     const { data, error } = await sb.from("support_threads").select("*").order("last_at", { ascending: false }).limit(100);
@@ -4011,15 +4015,14 @@ const PROF = (() => {
   async function supNotify(id){ if (!id) return; try { const { data } = await sb.auth.getSession(); const t = data && data.session && data.session.access_token; if (!t) return;
     fetch("/api/telegram?act=notify", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + t }, body: JSON.stringify({ id }) }).catch(() => {}); } catch(e) {} }
   async function supLinkTg(b){
-    const c = await tgConf(); if (!c || !c.enabled){ toast("Бот Telegram не настроен на сервере."); return; }
-    if (!window.Telegram || !Telegram.Login){ loadTgScript(); toast("Telegram загружается — нажми ещё раз через секунду."); return; }
-    Telegram.Login.auth({ bot_id: c.bot_id, request_access: "write", lang: "ru" }, async data => {
-      if (!data) return; b.disabled = true;
-      try { const { data: sd } = await sb.auth.getSession(); const t = sd && sd.session && sd.session.access_token;
-        const r = await fetch("/api/telegram?act=link", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + t }, body: JSON.stringify({ user: data }) });
-        const j = await r.json().catch(() => ({}));
-        toast(r.ok ? (j.delivered ? "🔔 Готово! Проверь Telegram — бот прислал сообщение." : "Включено, но бот не смог написать — открой бота в Telegram и нажми Start.") : j.error === "not_admin" ? "Это только для админа." : "Не получилось включить уведомления.");
-      } catch(e) { toast("Не получилось включить уведомления."); } b.disabled = false; });
+    b.disabled = true;
+    try { const { data: sd } = await sb.auth.getSession(); const t = sd && sd.session && sd.session.access_token;
+      const r = await fetch("/api/telegram?act=notifycode", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + t }, body: "{}" });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || !j.nonce || !j.bot){ toast(j.error === "not_admin" ? "Это только для администратора." : "Не получилось включить уведомления."); return; }
+      const url = `https://t.me/${j.bot}?start=notify_${j.nonce}`; if (!window.open(url, "_blank")) location.href = url;
+      toast("Открой бота и нажми «Старт» — уведомления включатся.");
+    } catch(e) { toast("Не получилось включить уведомления."); } finally { b.disabled = false; }
   }
   // заявка из других разделов (например, инвайт в Deadlock): уходит сообщением в чат поддержки
   async function supportRequest(body){
@@ -6888,6 +6891,7 @@ const LADDER = (() => {
   function draw(){
     const d = data[st.reg]; if (!d) return;
     const pod = document.getElementById("ladPod"), list = document.getElementById("ladList");
+    if (!Array.isArray(d.list)){ delete data[st.reg]; list.innerHTML = `<div class="gempty">Не удалось загрузить рейтинг Valve. Попробуй чуть позже.</div>`; return; }
     const rows = st.q ? d.list.filter(p => p[1].toLowerCase().includes(st.q) || p[2].toLowerCase() === st.q) : d.list;
     if (!st.q && d.list.length >= 3){ const R = REG.find(x => x[0] === st.reg);
       pod.innerHTML = `<div class="lad-pod">${[1, 0, 2].map(i => { const p = d.list[i], pr = proOf(p[1]); return `<div class="lad-pc p${i + 1}"${pr ? ` data-acc="${pr.id}"` : ` data-nick="${esc(p[1].trim())}"`} role="button" tabindex="0"><span class="lad-pc-m">${medal(p[0])}</span><b class="lad-pc-n">#${p[0]}</b><b class="lad-pc-name" translate="no">${esc(p[1])}</b><small translate="no">${p[2] ? esc(p[2]) : pr && pr.team ? esc(pr.team) : ""}</small><i class="lad-pc-bar"></i></div>`; }).join("")}</div>

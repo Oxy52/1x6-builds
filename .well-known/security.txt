@@ -1,0 +1,4 @@
+Contact: https://t.me/+swCyihkKvwU4NTBi
+Preferred-Languages: ru, uk, en
+Canonical: https://blazecrest.vercel.app/.well-known/security.txt
+Expires: 2027-10-23T00:00:00.000Z
