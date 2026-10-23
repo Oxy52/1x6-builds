@@ -1,12 +1,18 @@
-tgme_widget_message_text js-message_text" dir="auto">
-tgme_widget_message_text js-message_reply_text" dir="auto">
-tgme_widget_message_text js-message_text" dir="auto">
-tgme_widget_message_text js-message_text" dir="auto">
-tgme_widget_message_text js-message_text" dir="auto">
-tgme_widget_message_text js-message_text" dir="auto">
-tgme_channel_info_description">DEADLOCK - новости в тг, обновления, патчи, гайды.
-counter_value">23.3K
-counter_value">2.88K
-counter_value">1.96K
-counter_value">9
-counter_value">3.48K
+== dota
+16 None
+7339 community Папсон закрывает Микото+1в — Рапира Пьюру не помогла. True
+7338 community 🤷‍♂️ МИКОТО ОТПУСТИЛ? True
+7337 community 1w пытаются вернуться в игру True
+7336 patch 😮‍💨 БАГ БЕСКОНЕЧНЫЙ МИДАС НА МИПО — Снова он, Valve создали баг, пытая True
+== cs
+18 None
+11000 events 🚨 NAVI НЕ УСПЕВАЮТ НА ВСЕ ТУРНИРЫ? True
+10999 community 😎 РАБОТА МЕЧТЫ True
+10998 community 🚬 АИМ НЕ ГАРАНТИРУЕТ ПОБЕДУ — OverDrive объяснил, что отличает сильные True
+10997 patch 🙂 АПДЕЙТ ВОЙС-ЧАТА В CS2? — в файлах игры обнаружили упоминания встрое True
+== deadlock
+12 None
+6189 community 👁Разработчики убрали текстурку/цвет у 🎨Living ink. True
+6188 patch 👁Yoshi&#39;k пофиксил баг связанный с ультой 👨 Victor&#39;a(мы про*бал True
+6187 players 🎨 Есть другие ТОП организации, что пытались подписать отдельных игроко False
+6186 leaks ❤️Minesweeper (наш любимый бывший инсайдер) написал об том, что про ко True
