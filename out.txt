@@ -1,42 +1,18 @@
-== Blades%20of%20Voth%20Domosh
-HTTP 200
-<!DOCTYPE html><html lang="en" class="responsive DesktopUI"><head><meta name="viewport" content="width=device-width,initial-scale=1"/><link rel="preload" as="image" href="https://cdn.fastly.steamstati
-Traceback (most recent call last):
-  File "<string>", line 4, in <module>
-  File "/usr/lib/python3.12/json/__init__.py", line 346, in loads
-    return _default_decoder.decode(s)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.12/json/decoder.py", line 337, in decode
-    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.12/json/decoder.py", line 355, in raw_decode
-    raise JSONDecodeError("Expecting value", s, err.value) from None
-json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
-== Fractal%20Horns%20of%20Inner%20Abysm
-HTTP 200
-<!DOCTYPE html><html lang="en" class="responsive DesktopUI"><head><meta name="viewport" content="width=device-width,initial-scale=1"/><link rel="preload" as="image" href="https://cdn.fastly.steamstati
-Traceback (most recent call last):
-  File "<string>", line 4, in <module>
-  File "/usr/lib/python3.12/json/__init__.py", line 346, in loads
-    return _default_decoder.decode(s)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.12/json/decoder.py", line 337, in decode
-    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.12/json/decoder.py", line 355, in raw_decode
-    raise JSONDecodeError("Expecting value", s, err.value) from None
-json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
-== Manifold%20Paradox
-HTTP 200
-<!DOCTYPE html><html lang="en" class="responsive DesktopUI"><head><meta name="viewport" content="width=device-width,initial-scale=1"/><link rel="preload" as="image" href="https://cdn.fastly.steamstati
-Traceback (most recent call last):
-  File "<string>", line 4, in <module>
-  File "/usr/lib/python3.12/json/__init__.py", line 346, in loads
-    return _default_decoder.decode(s)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.12/json/decoder.py", line 337, in decode
-    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.12/json/decoder.py", line 355, in raw_decode
-    raise JSONDecodeError("Expecting value", s, err.value) from None
-json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+700061 page.html
+<script type="application/json" id="valve-ssr-data" nonce="21a76de3-5afe-486e-97fa-2156fe4ba0ab">{"route":"/market/listings/:appid/:name/:bucket?","cdn":"cdn.fastly.steamstatic.
+<script nonce="21a76de3-5afe-486e-97fa-2156fe4ba0ab">(()=>{const e=document.getElementById("valve-ssr-data");const d=JSON.parse(e.tex
+<script type="module" src="https://cdn.fastly.steamstatic.com/steamcommunity/public/ssr/D9HGkokr.js" nonce="21a76de3-5afe-486e-97fa-2156fe4ba0ab" async="">
+<script type="module" src="https://cdn.fastly.steamstatic.com/steamcommunity/public/ssr/DhUP8H1s.js" nonce="21a76de3-5afe-486e-97fa-2156fe4ba0ab" async="">
+<script type="module" src="https://cdn.fastly.steamstatic.com/steamcommunity/public/ssr/6agzKVoz.js" nonce="21a76de3-5afe-486e-97fa-2156fe4ba0ab" async="">
+<script type="module" src="https://cdn.fastly.steamstatic.com/steamcommunity/public/ssr/Vyk9DuUw.js" nonce="21a76de3-5afe-486e-97fa-2156fe4ba0ab" async="">
+<script type="module" src="https://cdn.fastly.steamstatic.com/steamcommunity/public/ssr/BttukokU.js" nonce="21a76de3-5afe-486e-97fa-2156fe4ba0ab" async="">
+      1 window.Config=
+      1 window.SSR=
+      1 window.UserConfig=
+     42 data-precedence=
+     25 data-accent-color=
+      7 data-has-value=
+      4 data-selected=
+      1 data-react-nav-root=
+      1 data-dull-color=
+      1 data-body-text-color=
