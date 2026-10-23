@@ -93,7 +93,7 @@ async function patch() {
 }
 
 // Telegram-канал Dota2.exe (t.me/dota2_exe_news): публичная веб-версия канала, обновление раз в час
-const TGCH = { dota: "dota2_exe_news", cs: "cs2_exe_news", deadlock: "deadlocknews" };
+const TGCH = { dota: "dota2_exe_news", cs: "cs2_exe_news", deadlock: "Deadlock37" };
 const unent = t => String(t).replace(/&nbsp;/g, " ").replace(/&quot;/g, '"').replace(/&#39;|&#039;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
   .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(+n)).replace(/&#x([\da-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16))).replace(/&amp;/g, "&");
 const TGCAT = [["patch", /патч|обновлени|\bбаг|фикс|\b7\.\d\d|баланс|нерф|бафф|апдейт/i], ["events", /турнир|\bTI\b|интернешнл|international|мейджор|major|финал|плей-?офф|квалификац|групп[аы]|матч|рошан|riyadh|dreamleague|blast|pgl|esl|beyond|fissure|bo3|bo5|vs\.?/i],
@@ -110,7 +110,7 @@ async function tgNews(TG) {
     const txt = unent(raw.replace(/<br\s*\/?>/gi, "\n").replace(/<i class="emoji"[^>]*><b>([^<]*)<\/b><\/i>/g, "$1").replace(/<[^>]+>/g, "")).replace(/[ \t]+/g, " ").replace(/\n{3,}/g, "\n\n").trim();
     if (!txt || /реклама|erid|winline|1xbet|fonbet|бетбум|betboom|букмекер|ставк|промокод|казино|casino|депозит|пополнени|бонус к|забирай|переходи по ссылке/i.test(txt)) continue;
     const img = (/tgme_widget_message_(?:photo_wrap|video_thumb)[^>]*background-image:url\('(https:\/\/[^']+)'\)/.exec(ch) || [])[1] || "";
-    const lines = txt.split("\n").map(x => x.trim()).filter(x => x && !/(Dota2|CS2)\.exe\s*\||розыгрыш|подписывайся|@dota2_exe|@cs2_exe|@deadlocknews/i.test(x));
+    const lines = txt.split("\n").map(x => x.trim()).filter(x => x && !/(Dota2|CS2)\.exe\s*\||розыгрыш|подписывайся|@dota2_exe|@cs2_exe|@deadlocknews|@Deadlock37/i.test(x));
     let t = lines[0], rest = lines.slice(1).join("\n");
     if (t.length > 110) { const cut = t.slice(0, 100).replace(/\s+\S*$/, ""); rest = t.slice(cut.length).trim() + (rest ? "\n" + rest : ""); t = cut + "…"; }
     const cat = (TGCAT.find(([, re]) => re.test(txt)) || ["community"])[0];
