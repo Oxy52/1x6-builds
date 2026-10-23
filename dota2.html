@@ -475,6 +475,9 @@
   .pf .err { color: #ff8a80; }
   .pick { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 4px 2px 6px; scroll-snap-type: x proximity; }
   .pick::-webkit-scrollbar { display: none; }
+  .pick-w { position: relative; } .pick-w > .pick { scroll-behavior: smooth; }
+  .pick-ar { position: absolute; top: 50%; z-index: 2; width: 34px; height: 34px; margin-top: -19px; display: grid; place-items: center; padding: 0 0 3px; border-radius: 50%; border: 1px solid rgba(255,255,255,.18); background: color-mix(in srgb, var(--bg) 82%, transparent); color: var(--fg); font-size: 24px; line-height: 1; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.45); backdrop-filter: blur(6px); transition: transform .15s, border-color .2s; }
+  .pick-ar:hover { transform: scale(1.1); border-color: var(--t1); } .pick-ar.l { left: -6px; } .pick-ar.r { right: -6px; } .pick-ar[hidden] { display: none; }
   .pick button, .pick label { flex: none; scroll-snap-align: start; cursor: pointer; padding: 0; border: 2px solid transparent; background: var(--bg-soft); overflow: hidden; transition: transform .15s, border-color .2s; }
   .pick.av button, .pick.av label { width: 54px; height: 54px; border-radius: 50%; }
   .pick.av[data-show="hero"] button[data-t="cs"], .pick.av[data-show="hero"] button[data-t="dl"], .pick.av[data-show="cs"] button[data-t="hero"], .pick.av[data-show="cs"] button[data-t="dl"], .pick.av[data-show="dl"] button[data-t="hero"], .pick.av[data-show="dl"] button[data-t="cs"] { display: none; }
@@ -2678,6 +2681,21 @@ function closeModal(){
 }
 new MutationObserver(() => { if (modal.classList.contains("closing") && modal.firstElementChild !== closingEl){ clearTimeout(closeT); modal.classList.remove("closing"); closingEl = null; } }).observe(modal, { childList: true });
 let lockY = 0, locked = false;
+// стрелки ‹ › и колесо мыши для горизонтальных рядов выбора (аватарки, обложки): иначе на компьютере не прокрутить
+const PICKS = new WeakSet(); let pickRaf = 0;
+function pickArrows(){ pickRaf = 0; document.querySelectorAll(".pick").forEach(p => { if (PICKS.has(p)) return; PICKS.add(p);
+  const w = document.createElement("div"); w.className = "pick-w"; p.before(w); w.append(p);
+  w.insertAdjacentHTML("beforeend", `<button type="button" class="pick-ar l" aria-label="Назад" hidden>‹</button><button type="button" class="pick-ar r" aria-label="Дальше" hidden>›</button>`);
+  const [l, r] = w.querySelectorAll(".pick-ar");
+  const upd = () => { const sc = p.scrollWidth > p.clientWidth + 4; l.hidden = !sc || p.scrollLeft < 4; r.hidden = !sc || p.scrollLeft + p.clientWidth >= p.scrollWidth - 4; };
+  l.onclick = () => p.scrollBy({ left: -p.clientWidth * .8 }); r.onclick = () => p.scrollBy({ left: p.clientWidth * .8 });
+  p.addEventListener("scroll", upd, { passive: true }); new ResizeObserver(upd).observe(p); w.addEventListener("click", () => requestAnimationFrame(upd));
+  new MutationObserver(() => requestAnimationFrame(upd)).observe(p, { attributes: true, attributeFilter: ["data-show", "hidden"], childList: true });
+  p.addEventListener("wheel", e => { if (Math.abs(e.deltaY) <= Math.abs(e.deltaX) || p.scrollWidth <= p.clientWidth) return;
+    const end = e.deltaY > 0 ? p.scrollLeft + p.clientWidth >= p.scrollWidth - 2 : p.scrollLeft <= 0; if (end) return;
+    e.preventDefault(); p.style.scrollBehavior = "auto"; p.scrollLeft += e.deltaY; p.style.scrollBehavior = ""; }, { passive: false });
+  upd(); }); }
+new MutationObserver(() => { if (!pickRaf) pickRaf = requestAnimationFrame(pickArrows); }).observe(document.body, { childList: true, subtree: true });
 function lockScroll(){ if (locked) return; locked = true; lockY = window.scrollY; document.body.style.top = `-${lockY}px`; document.body.classList.add("locked"); }
 function unlockScroll(){ if (!locked) return; locked = false; document.body.classList.remove("locked"); document.body.style.top = ""; window.scrollTo(0, lockY); }
 /* горизонтальный свайп: d = +1 влево (следующий), -1 вправо (предыдущий) */
