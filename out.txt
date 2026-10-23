@@ -1,0 +1,10 @@
+== grids
+[]
+== grid_likes
+[]
+== news_posts
+{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.news_posts' in the schema cache"}
+== posts
+[]
+== feed_posts
+{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.feed_posts' in the schema cache"}
