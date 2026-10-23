@@ -1,16 +1,12 @@
-cs2_exe_news | <meta property="og:title" content="CS2.exe" | posts=20 | datetime="2026-10-23T09:50:16+00:00"
-cs2exe_news | <meta property="og:title" content="Telegram: Contact @cs2exe_news" | posts=0 | 
-cs2_exe | <meta property="og:title" content="🇬🇪" | posts=0 | 
-cs_exe_news | <meta property="og:title" content="Telegram: Contact @cs_exe_news" | posts=0 | 
-csgo_exe_news | <meta property="og:title" content="Telegram: Contact @csgo_exe_news" | posts=0 | 
-cs2exe | <meta property="og:title" content="cs2reservedChannel" | posts=2 | datetime="2023-03-06T21:50:41+00:00"
-cs2_exe_ru | <meta property="og:title" content="Telegram: Contact @cs2_exe_ru" | posts=0 | 
-deadlock_exe_news | <meta property="og:title" content="Telegram: Contact @deadlock_exe_news" | posts=0 | 
-deadlockexe_news | <meta property="og:title" content="Telegram: Contact @deadlockexe_news" | posts=0 | 
-deadlock_exe | <meta property="og:title" content="DeadLock👾" | posts=0 | 
-deadlock_news | <meta property="og:title" content="Redbeard" | posts=0 | 
-deadlockru | <meta property="og:title" content="Deadlock" | posts=1 | datetime="2024-05-12T14:04:32+00:00"
-deadlock_ru | <meta property="og:title" content="Deadlock | VALVE" | posts=15 | datetime="2024-03-01T17:48:51+00:00"
-deadlocknews | <meta property="og:title" content="DEADLOCK PROJECT 8" | posts=16 | datetime="2026-10-23T09:44:44+00:00"
-deadlock_rus | <meta property="og:title" content="ddd" | posts=1 | datetime="2025-06-24T17:10:09+00:00"
-deadlock_exe_ru | <meta property="og:title" content="Telegram: Contact @deadlock_exe_ru" | posts=0 | 
+tgme_widget_message_text js-message_text" dir="auto">
+tgme_widget_message_text js-message_reply_text" dir="auto">
+tgme_widget_message_text js-message_text" dir="auto">
+tgme_widget_message_text js-message_text" dir="auto">
+tgme_widget_message_text js-message_text" dir="auto">
+tgme_widget_message_text js-message_text" dir="auto">
+tgme_channel_info_description">DEADLOCK - новости в тг, обновления, патчи, гайды.
+counter_value">23.3K
+counter_value">2.88K
+counter_value">1.96K
+counter_value">9
+counter_value">3.48K
