@@ -475,6 +475,41 @@
   .pf .err { color: #ff8a80; }
   .pick { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 4px 2px 6px; scroll-snap-type: x proximity; }
   .pick::-webkit-scrollbar { display: none; }
+  /* стиль ника */
+  .ns { --nc: #c084fc; } .ns-min { color: var(--nc) !important; }
+  .ns-grad, .ns-prism, .ns-shine { -webkit-background-clip: text; background-clip: text; color: transparent !important; -webkit-text-fill-color: transparent; }
+  .ns-grad { background-image: linear-gradient(90deg, var(--nc), color-mix(in srgb, var(--nc) 35%, #fff), var(--nc)); background-size: 200% 100%; animation: nsMove 3s linear infinite; }
+  .ns-prism { background-image: linear-gradient(90deg, #ff5f6d, #ffc371, #47e891, #3fb8ff, #a66cff, #ff5f6d); background-size: 300% 100%; animation: nsMove 4s linear infinite; }
+  .ns-shine { background-image: linear-gradient(100deg, var(--nc) 38%, #fff 50%, var(--nc) 62%); background-size: 250% 100%; animation: nsShine 2.6s linear infinite; }
+  @keyframes nsMove { to { background-position: 200% 0; } } @keyframes nsShine { from { background-position: 150% 0; } to { background-position: -100% 0; } }
+  .ns-neon { color: #fff !important; text-shadow: 0 0 3px var(--nc), 0 0 9px var(--nc), 0 0 16px var(--nc); animation: nsNeon 3s ease-in-out infinite; }
+  @keyframes nsNeon { 0%, 100% { text-shadow: 0 0 3px var(--nc), 0 0 9px var(--nc), 0 0 16px var(--nc); } 50% { text-shadow: 0 0 2px var(--nc), 0 0 5px var(--nc), 0 0 9px var(--nc); } 51%, 53% { opacity: .75; } 52% { opacity: 1; } }
+  .ns-toon { color: #fff !important; -webkit-text-stroke: 3px var(--nc); paint-order: stroke fill; text-shadow: 2px 2px 0 color-mix(in srgb, var(--nc) 60%, #000); }
+  .ns-hl { color: #fff !important; background: linear-gradient(transparent 52%, color-mix(in srgb, var(--nc) 75%, transparent) 52%, color-mix(in srgb, var(--nc) 75%, transparent) 92%, transparent 92%); padding: 0 3px; border-radius: 2px; }
+  .ns-gummy { color: var(--nc) !important; } .ns-gummy .nl { display: inline-block; white-space: pre; text-shadow: 0 2px 0 color-mix(in srgb, var(--nc) 45%, #000); animation: nsBounce 1.5s ease-in-out infinite; animation-delay: calc(var(--i) * .09s); }
+  @keyframes nsBounce { 0%, 55%, 100% { transform: translateY(0); } 25% { transform: translateY(-3px) scale(1.06); } }
+  @media (prefers-reduced-motion: reduce) { .ns, .ns .nl { animation: none !important; } }
+  .ns-ed { display: grid; gap: 12px; padding: 12px; border-radius: 16px; border: 1px solid var(--line); background: var(--bg-soft); }
+  .ns-prev { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; align-items: start; }
+  .ns-card { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--bg); padding: 0 12px 12px; }
+  .ns-cbn { height: 64px; margin: 0 -12px; background: linear-gradient(135deg, var(--t1), var(--t2)); } .ns-cbn img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ns-cav { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; margin-top: -28px; border: 3px solid var(--bg); display: block; background: var(--bg-soft); }
+  .ns-card .ns-name { display: block; margin-top: 6px; font-size: 21px; line-height: 1.35; } .ns-card .ns-st { display: block; color: var(--muted); font-size: 12px; }
+  .ns-msg { display: flex; gap: 10px; padding: 12px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg); } .ns-msg > img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; flex: none; }
+  .ns-msg .ns-name { font-size: 15px; } .ns-msg small { color: var(--muted); font-size: 11px; margin-left: 6px; } .ns-msg p { margin: 3px 0 0; font-size: 14px; }
+  .ns-sec > span { display: block; font-size: 12px; font-weight: 800; color: var(--muted); margin-bottom: 6px; }
+  .ns-fonts { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; } .ns-effs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+  .ns-fonts button, .ns-effs button { height: 48px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,.03); color: var(--fg); font-size: 19px; cursor: pointer; overflow: hidden; padding: 0 4px; }
+  .ns-effs button { font-size: 13.5px; } .ns-effs b { white-space: nowrap; }
+  .ns-fonts button[aria-pressed="true"], .ns-effs button[aria-pressed="true"] { border-color: var(--t1); box-shadow: 0 0 0 1px var(--t1) inset; background: color-mix(in srgb, var(--t1) 10%, transparent); }
+  .ns-cols { display: flex; gap: 8px; flex-wrap: wrap; } .ns-cols button, .ns-pick { width: 38px; height: 38px; border-radius: 10px; border: 2px solid transparent; cursor: pointer; }
+  .ns-cols button[aria-pressed="true"] { border-color: #fff; box-shadow: 0 0 0 2px var(--bg-soft) inset; }
+  .ns-pick { position: relative; display: grid; place-items: center; background: rgba(255,255,255,.06); border-color: var(--line); color: var(--fg); font-size: 16px; overflow: hidden; } .ns-pick input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .ns-acts { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ns-lock { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding: 10px 12px; border-radius: 12px; background: rgba(243,195,90,.08); border: 1px solid rgba(243,195,90,.35); font-size: 13px; } .ns-lock span { flex: 1 1 220px; }
+  .pick button.lk { position: relative; } .pick button.lk::after { content: "👑"; position: absolute; right: 2px; bottom: 2px; font-size: 12px; line-height: 1; padding: 2px; border-radius: 6px; background: rgba(0,0,0,.65); }
+  .pick.av button.lk::after { right: 50%; bottom: -1px; transform: translateX(50%); }
+  @media (max-width: 600px) { .ns-prev { grid-template-columns: 1fr; } .ns-fonts { grid-template-columns: repeat(4, minmax(0, 1fr)); } .ns-effs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .pick-w { position: relative; } .pick-w > .pick { scroll-behavior: smooth; }
   .pick-ar { position: absolute; top: 50%; z-index: 2; width: 34px; height: 34px; margin-top: -19px; display: grid; place-items: center; padding: 0 0 3px; border-radius: 50%; border: 1px solid rgba(255,255,255,.18); background: color-mix(in srgb, var(--bg) 82%, transparent); color: var(--fg); font-size: 24px; line-height: 1; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.45); backdrop-filter: blur(6px); transition: transform .15s, border-color .2s; }
   .pick-ar:hover { transform: scale(1.1); border-color: var(--t1); } .pick-ar.l { left: -6px; } .pick-ar.r { right: -6px; } .pick-ar[hidden] { display: none; }
@@ -3171,7 +3206,7 @@ const PROF = (() => {
   const enc = o => !o ? "" : o.t === "grad" ? "grad" : `${o.t === "img" ? "url" : o.t}:${o.v}`;
   const dec = s => { if (!s) return null; if (s === "grad") return { t: "grad", v: "" }; const i = s.indexOf(":"); const t = s.slice(0, i), v = s.slice(i + 1);
     if (t === "url" && !/^https:\/\//.test(v)) return null; return { t, v }; };
-  const fromRow = r => ({ nick: r.nick, st: r.status || "", av: dec(r.avatar) || { t: "hero", v: "pudge" }, bn: dec(r.banner) || { t: "grad", v: "" }, frame: r.frame || "" });
+  const fromRow = r => ({ nick: r.nick, st: r.status || "", av: dec(r.avatar) || { t: "hero", v: "pudge" }, bn: dec(r.banner) || { t: "grad", v: "" }, frame: r.frame || "", ns: r.name_style || "" });
   function seen(){ try { return JSON.parse(localStorage.getItem("ub-seen") || "[]"); } catch(e) { return []; } }
   const provName = u => { if (u && u.user_metadata && u.user_metadata.provider === "telegram") return "Telegram"; if (u && u.user_metadata && u.user_metadata.provider === "steam") return "Steam"; const p = u && u.app_metadata && u.app_metadata.provider; return p === "google" ? "Google" : p === "discord" ? "Discord" : p === "email" ? "почта" : p || ""; };
 
@@ -3335,7 +3370,7 @@ const PROF = (() => {
     let best = 0; try { best = +localStorage.getItem("ub-best") || 0; } catch(e) {}
     const fav = [...FAV].filter(x => !String(x).startsWith("g:")), rec = (typeof RECENT !== "undefined" ? RECENT : []).slice(0, 8);
     const box = shell(bnSrc(P.bn), `
-      <div class="phead"><div class="pav${frameCls(P.frame)}"><img alt="" src="${esc(avSrc(P.av))}"></div><div class="pname"><h3 translate="no">${esc(P.nick)}</h3>${P.st ? `<div class="pst">${esc(P.st)}</div>` : ""}${CLOUD && U ? `<div class="pvia">${viaLine(U)}</div>` : ""}</div></div>
+      <div class="phead"><div class="pav${frameCls(P.frame)}"><img alt="" src="${esc(avSrc(P.av))}"></div><div class="pname"><h3 translate="no"${CLOUD && U ? ` data-user="${esc(U.id)}"` : ""}>${esc(P.nick)}</h3>${P.st ? `<div class="pst">${esc(P.st)}</div>` : ""}${CLOUD && U ? `<div class="pvia">${viaLine(U)}</div>` : ""}</div></div>
       <div class="pstats"><div class="pstat"><b>${fav.length}</b><span>в избранном</span></div><div class="pstat"><b>${seen().length}</b><span>героев изучено</span></div><div class="pstat"><b>${best}</b><span>рекорд в квизе</span></div></div>
       ${CLOUD && U ? lvlBlock() : ""}
       <div class="psec"><h4>Любимые игры</h4>${mygChips(MYG) || `<div class="pnone">Не выбраны — нажми «Редактировать профиль».</div>`}</div>
@@ -3361,10 +3396,10 @@ const PROF = (() => {
   }
 
   /* ---------- картинки ---------- */
-  function shrink(file, w, h, cb){
+  function shrink(file, w, h, cb, anim){
     const r = new FileReader();
-    // гифку и анимированный webp не перерисовываем (иначе пропадёт анимация) — только проверяем размер
-    if (/^image\/(gif|webp)$/.test(file.type)){ if (file.size > 2 * 1024 * 1024) return cb(null, "big"); r.onload = () => cb(r.result); r.onerror = () => cb(null); return r.readAsDataURL(file); }
+    // гифку и анимированный webp не перерисовываем (иначе пропадёт анимация) — только проверяем размер; без подписки — обычная картинка
+    if (anim && /^image\/(gif|webp)$/.test(file.type)){ if (file.size > 2 * 1024 * 1024) return cb(null, "big"); r.onload = () => cb(r.result); r.onerror = () => cb(null); return r.readAsDataURL(file); }
     r.onload = () => { const img = new Image(); img.onload = () => {
       const c = document.createElement("canvas"); c.width = w; c.height = h; const x = c.getContext("2d");
       const sc = Math.max(w / img.width, h / img.height), dw = img.width * sc, dh = img.height * sc;
@@ -3389,6 +3424,8 @@ const PROF = (() => {
     if (!d.nick && CLOUD && U){ const md = U.user_metadata || {}; d.nick = String(md.user_name || md.name || md.full_name || "").replace(/[^\p{L}\p{N}_\-. ]/gu, "").slice(0, 20); }
     const arcs = Object.keys(ARCANA);
     const lb = t => `<span class="lb">${t}</span>`;
+    const prem = !CLOUD || isPrem(U && U.id), lk = prem ? "" : ` class="lk" title="С подпиской 1x6+"`;
+    const nso = nsParse(d.ns) || { f: 0, e: "min", c: "c084fc" };
     const box = shell(bnSrc(d.bn), `
       <div class="phead"><div class="pav${frameCls(d.frame)}" id="fAvPrev"><img alt="" src="${esc(avSrc(d.av))}"></div><div class="pname"><h3>${isNew ? "Новый профиль" : "Редактирование"}</h3><div class="pst">${CLOUD ? "Профиль сохранится в твоём аккаунте" : "Профиль хранится на этом устройстве"}</div></div></div>
       <form class="pform" id="pForm" novalidate>
@@ -3397,11 +3434,23 @@ const PROF = (() => {
         <div class="pf">${lb("Любимые игры")}<div class="mygames" id="fGames">${GAMES3.map(([g, n]) => `<button type="button" data-g="${g}" aria-pressed="${MYG.includes(g)}"><img alt="" src="/games/${g}.png">${n}</button>`).join("")}</div><div class="hint">Можно выбрать несколько — они покажутся в профиле и первыми на главной</div></div>
         <div class="pf">${lb("Аватарка")}
           <div class="avg" id="fAvG">${AVG.map(([t, n, g]) => `<button type="button" data-g="${t}" aria-pressed="${(["cs", "dl", "anim"].includes(d.av.t) ? d.av.t : "hero") === t}"><img alt="" src="${g.includes("/") ? g : `/games/${g}.png`}">${n}</button>`).join("")}</div>
-          <div class="pick av" id="fAv" data-show="${["cs", "dl", "anim"].includes(d.av.t) ? d.av.t : "hero"}"><label class="up" title="Своё фото">＋<input type="file" accept="image/*" id="fAvUp"></label>${(d.av.t === "img" || d.av.t === "url") ? `<button type="button" data-t="${d.av.t}" aria-pressed="true"><img alt="" src="${esc(d.av.v)}"></button>` : ""}${HEROES.map(h => `<button type="button" data-t="hero" data-v="${h.slug}" aria-label="${h.en}" aria-pressed="${d.av.t === "hero" && d.av.v === h.slug}"><img alt="" loading="lazy" src="face/${h.slug}.webp"></button>`).join("")}${["cs", "dl"].map(t => Array.from({ length: AVN[t] }, (_, i) => `<button type="button" data-t="${t}" data-v="${i}" aria-label="${t === "cs" ? "Агент CS2" : "Герой Deadlock"}" aria-pressed="${d.av.t === t && +d.av.v === i}"><img alt="" loading="lazy" src="face/${t}/${i}.webp"></button>`).join("")).join("")}${ANIM_AV.map(v => `<button type="button" data-t="anim" data-v="${v}" aria-label="Анимация" aria-pressed="${d.av.t === "anim" && d.av.v === v}"><img alt="" loading="lazy" src="anim/av/${v}.webp"></button>`).join("")}</div>
+          <div class="pick av" id="fAv" data-show="${["cs", "dl", "anim"].includes(d.av.t) ? d.av.t : "hero"}"><label class="up" title="Своё фото">＋<input type="file" accept="image/*" id="fAvUp"></label>${(d.av.t === "img" || d.av.t === "url") ? `<button type="button" data-t="${d.av.t}" aria-pressed="true"><img alt="" src="${esc(d.av.v)}"></button>` : ""}${HEROES.map(h => `<button type="button" data-t="hero" data-v="${h.slug}" aria-label="${h.en}" aria-pressed="${d.av.t === "hero" && d.av.v === h.slug}"><img alt="" loading="lazy" src="face/${h.slug}.webp"></button>`).join("")}${["cs", "dl"].map(t => Array.from({ length: AVN[t] }, (_, i) => `<button type="button" data-t="${t}" data-v="${i}" aria-label="${t === "cs" ? "Агент CS2" : "Герой Deadlock"}" aria-pressed="${d.av.t === t && +d.av.v === i}"><img alt="" loading="lazy" src="face/${t}/${i}.webp"></button>`).join("")).join("")}${ANIM_AV.map(v => `<button type="button" data-t="anim" data-v="${v}"${lk} aria-label="Анимация" aria-pressed="${d.av.t === "anim" && d.av.v === v}"><img alt="" loading="lazy" src="anim/av/${v}.webp"></button>`).join("")}</div>
           <div class="hint">Герой Dota 2, агент CS2, герой Deadlock, анимация или своё фото (＋)</div></div>
         <div class="pf">${lb("Баннер сзади")}
-          <div class="pick bn" id="fBn"><label class="up" title="Своя картинка">＋<input type="file" accept="image/*" id="fBnUp"></label>${(d.bn.t === "img" || d.bn.t === "url") ? `<button type="button" data-t="${d.bn.t}" aria-pressed="true"><img alt="" src="${esc(d.bn.v)}"></button>` : ""}<button type="button" data-t="grad" aria-pressed="${d.bn.t === "grad"}" aria-label="Цвет темы" style="background:linear-gradient(135deg,var(--t1),var(--t2))"></button>${ANIM_BN.map(v => `<button type="button" data-t="anim" data-v="${v}" aria-label="Анимация" aria-pressed="${d.bn.t === "anim" && d.bn.v === v}"><img alt="" loading="lazy" src="anim/bn/${v}.webp"></button>`).join("")}</div>
+          <div class="pick bn" id="fBn"><label class="up" title="Своя картинка">＋<input type="file" accept="image/*" id="fBnUp"></label>${(d.bn.t === "img" || d.bn.t === "url") ? `<button type="button" data-t="${d.bn.t}" aria-pressed="true"><img alt="" src="${esc(d.bn.v)}"></button>` : ""}<button type="button" data-t="grad" aria-pressed="${d.bn.t === "grad"}" aria-label="Цвет темы" style="background:linear-gradient(135deg,var(--t1),var(--t2))"></button>${ANIM_BN.map(v => `<button type="button" data-t="anim" data-v="${v}"${lk} aria-label="Анимация" aria-pressed="${d.bn.t === "anim" && d.bn.v === v}"><img alt="" loading="lazy" src="anim/bn/${v}.webp"></button>`).join("")}</div>
           <div class="hint">Цвет темы, анимация или своя картинка (＋) — можно и гифку</div></div>
+        <div class="pf">${lb("Стиль ника 👑")}
+          <div class="ns-ed" id="fNs">
+            <div class="ns-prev">
+              <div class="ns-card"><div class="ns-cbn">${bnSrc(d.bn) ? `<img alt="" src="${esc(bnSrc(d.bn))}">` : ""}</div><img class="ns-av ns-cav" alt="" src="${esc(avSrc(d.av))}"><b class="ns-name" translate="no">${esc(d.nick || "Ник")}</b><small class="ns-st">${esc(d.st || "Статус")}</small></div>
+              <div class="ns-msg"><img class="ns-av" alt="" src="${esc(avSrc(d.av))}"><div><b class="ns-name" translate="no">${esc(d.nick || "Ник")}</b><small>сегодня</small><p>это кто-нибудь читает?</p></div></div>
+            </div>
+            <div class="ns-sec"><span>Шрифт</span><div class="ns-fonts">${NSF.map((f, i) => `<button type="button" data-nf="${i}" aria-pressed="${nso.f === i}" style="font-family:${f === "inherit" ? "var(--body)" : f}${i === 3 ? ";font-size:13px" : ""}">Gg</button>`).join("")}</div></div>
+            <div class="ns-sec"><span>Эффект</span><div class="ns-effs">${NSE.map(([k, t]) => `<button type="button" data-ne="${k}" aria-pressed="${nso.e === k}"><b class="ns-tile" data-k="${k}">${t}</b></button>`).join("")}</div></div>
+            <div class="ns-sec"><span>Цвет</span><div class="ns-cols"><label class="ns-pick" title="Свой цвет">✎<input type="color" id="fNsC" value="#${nso.c}"></label>${NSC.map(c => `<button type="button" data-nc="${c}" aria-pressed="${nso.c === c}" style="background:#${c}" aria-label="#${c}"></button>`).join("")}</div></div>
+            <div class="ns-acts"><button type="button" class="btn btn-ghost" id="fNsRnd">🎲 Удиви меня</button><button type="button" class="btn btn-ghost" id="fNsOff">Без стиля</button></div>
+            ${prem ? "" : `<div class="ns-lock"><span>👑 Стиль ника, анимированные аватарки и баннеры и свои GIF — с подпиской 1x6+. Попробовать можно уже сейчас, сохранится после оформления.</span><button type="button" class="btn btn-primary" id="fNsPrem">Оформить</button></div>`}
+          </div></div>
         ${CLOUD && U ? `<div class="pf"><span class="lb">Рамка аватарки</span><div class="frames" id="fFr">${FRAMES.map(f => { const ok = f.need(sInfo()); return `<button type="button" data-f="${f.id}" ${ok ? "" : "disabled"} aria-pressed="${(d.frame || "") === f.id}"><span class="fprev${frameCls(f.id)}"><img alt="" src="${esc(avSrc(d.av))}"></span><b>${f.name}</b><small>${ok ? "открыта" : "🔒 " + f.req}</small></button>`; }).join("")}</div><div class="hint">Рамки открываются с уровнем — получай опыт каждый день</div></div>` : ""}
         <div class="pf err" id="fErr" hidden></div>
         <div class="pacts" style="padding:0"><button type="submit" class="btn btn-primary" id="fSave">${isNew ? "Создать профиль" : "Сохранить"}</button><button type="button" class="btn btn-ghost" id="fCancel">Отмена</button></div>
@@ -3411,25 +3460,45 @@ const PROF = (() => {
     function wire(pickId, key, onSet){
       const pk = box.querySelector(pickId);
       pk.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return;
+        if (b.classList.contains("lk")){ premium(); return; }
         pk.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
         d[key] = (b.dataset.t === "img" || b.dataset.t === "url") ? { t: b.dataset.t, v: b.querySelector("img").src } : { t: b.dataset.t, v: b.dataset.v || "" }; onSet(); });
       return pk;
     }
     box.querySelectorAll("#fAvG [data-g]").forEach(b => b.onclick = () => { box.querySelectorAll("#fAvG [data-g]").forEach(x => x.setAttribute("aria-pressed", x === b)); const pk = box.querySelector("#fAv"); pk.dataset.show = b.dataset.g; pk.scrollLeft = 0; });
-    const avPk = wire("#fAv", "av", () => { avPrev.src = avSrc(d.av); box.querySelectorAll(".fprev img").forEach(x => x.src = avSrc(d.av)); });
+    const avPk = wire("#fAv", "av", () => { avPrev.src = avSrc(d.av); box.querySelectorAll(".fprev img, .ns-av").forEach(x => x.src = avSrc(d.av)); });
     const frEl = box.querySelector("#fFr");
     if (frEl) frEl.onclick = e => { const b = e.target.closest("button"); if (!b || b.disabled) return; d.frame = b.dataset.f; frEl.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); box.querySelector("#fAvPrev").className = "pav" + frameCls(d.frame); };
-    const bnPk = wire("#fBn", "bn", () => setCover(bnSrc(d.bn)));
+    const bnPk = wire("#fBn", "bn", () => { setCover(bnSrc(d.bn)); const cb = box.querySelector(".ns-cbn"); cb.innerHTML = bnSrc(d.bn) ? `<img alt="" src="${esc(bnSrc(d.bn))}">` : ""; });
+    // стиль ника
+    const ns = { ...nso }, nsEd = box.querySelector("#fNs");
+    const nsDraw = () => { const v = d.ns || "", nick = box.querySelector("#fNick").value.trim() || "Ник";
+      nsEd.querySelectorAll(".ns-name").forEach(el => { el.dataset.ns = "-"; el.textContent = nick; nsApply(el, v); });
+      nsEd.querySelectorAll(".ns-tile").forEach(el => nsApply(el, `0.${el.dataset.k}.${ns.c}`));
+      nsEd.querySelectorAll("[data-nf]").forEach(b => b.setAttribute("aria-pressed", !!v && +b.dataset.nf === ns.f));
+      nsEd.querySelectorAll("[data-ne]").forEach(b => b.setAttribute("aria-pressed", !!v && b.dataset.ne === ns.e));
+      nsEd.querySelectorAll("[data-nc]").forEach(b => b.setAttribute("aria-pressed", !!v && b.dataset.nc === ns.c)); };
+    const nsSet = () => { d.ns = `${ns.f}.${ns.e}.${ns.c}`; nsDraw(); };
+    nsEd.addEventListener("click", e => { const f = e.target.closest("[data-nf]"), ef = e.target.closest("[data-ne]"), c = e.target.closest("[data-nc]");
+      if (f){ ns.f = +f.dataset.nf; nsSet(); } else if (ef){ ns.e = ef.dataset.ne; nsSet(); } else if (c){ ns.c = c.dataset.nc; nsSet(); } });
+    nsEd.querySelector("#fNsC").oninput = e => { ns.c = e.target.value.slice(1).toLowerCase(); nsSet(); };
+    nsEd.querySelector("#fNsRnd").onclick = () => { ns.f = rnd(NSF.length); ns.e = NSE[rnd(NSE.length)][0]; ns.c = rnd(3) ? NSC[rnd(NSC.length)] : Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, "0"); nsSet(); };
+    nsEd.querySelector("#fNsOff").onclick = () => { d.ns = ""; nsDraw(); };
+    { const np = nsEd.querySelector("#fNsPrem"); if (np) np.onclick = () => premium(); }
+    box.querySelector("#fNick").addEventListener("input", nsDraw);
+    box.querySelector("#fSt").addEventListener("input", e => { nsEd.querySelector(".ns-st").textContent = e.target.value.trim() || "Статус"; });
+    nsFonts(); nsDraw();
     const err = box.querySelector("#fErr");
     const showErr = t => { err.hidden = false; err.textContent = t; };
     function upload(inp, pk, w, h, key, after){
       inp.onchange = () => { const f = inp.files && inp.files[0]; if (!f) return;
         if (!/^image\//.test(f.type)) return showErr("Это не картинка.");
+        if (/^image\/gif$/.test(f.type) && !prem) toast("GIF сохранится картинкой без анимации — анимация доступна с подпиской 1x6+ 👑");
         shrink(f, w, h, (url, why) => { if (!url) return showErr(why === "big" ? "Анимация больше 2 МБ — выбери файл поменьше." : "Не получилось открыть картинку.");
           err.hidden = true; let b = pk.querySelector('button[data-t="img"],button[data-t="url"]');
           if (!b){ b = document.createElement("button"); b.type = "button"; b.innerHTML = '<img alt="">'; pk.querySelector(".up").after(b); }
           b.dataset.t = "img"; b.querySelector("img").src = url; pk.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
-          d[key] = { t: "img", v: url }; after(); pk.scrollLeft = 0; }); inp.value = ""; };
+          d[key] = { t: "img", v: url }; after(); pk.scrollLeft = 0; }, prem); inp.value = ""; };
     }
     upload(box.querySelector("#fAvUp"), avPk, 256, 256, "av", () => { avPrev.src = d.av.v; });
     upload(box.querySelector("#fBnUp"), bnPk, 1200, 420, "bn", () => setCover(d.bn.v));
@@ -3442,7 +3511,7 @@ const PROF = (() => {
       const nh = box.querySelector("#fNickH");
       if (nick.length < 2){ nh.textContent = "Ник должен быть от 2 до 20 символов"; nh.classList.add("err"); box.querySelector("#fNick").focus(); return; }
       MYG = [...box.querySelectorAll('#fGames button[aria-pressed="true"]')].map(b => b.dataset.g); mygShow();
-      const np = { nick, st, av: d.av, bn: d.bn, frame: d.frame || "", created: (P && P.created) || Date.now() };
+      const np = { nick, st, av: d.av, bn: d.bn, frame: d.frame || "", ns: d.ns || "", created: (P && P.created) || Date.now() };
       if (!CLOUD){
         try { localStorage.setItem(LKEY, JSON.stringify(np)); } catch(_) { return showErr("Картинка слишком большая для памяти браузера — выбери другую или героя."); }
         P = np; LOCAL = np; topbar(); return view();
@@ -3452,10 +3521,12 @@ const PROF = (() => {
         if (np.av.t === "img" && /^data:/.test(np.av.v)) np.av = { t: "url", v: await uploadData(np.av.v, "avatar") };
         if (np.bn.t === "img" && /^data:/.test(np.bn.v)) np.bn = { t: "url", v: await uploadData(np.bn.v, "banner") };
         if (np.av.t === "img") np.av.t = "url"; if (np.bn.t === "img") np.bn.t = "url";
-        let { error } = await sb.from("profiles").upsert({ id: U.id, nick, status: st, avatar: enc(np.av), banner: enc(np.bn), frame: np.frame, favs: favsOut(), updated_at: new Date().toISOString() });
+        const nsv = isPrem(U.id) && nsParse(d.ns) ? d.ns : "";
+        let { error } = await sb.from("profiles").upsert({ id: U.id, nick, status: st, avatar: enc(np.av), banner: enc(np.bn), frame: np.frame, name_style: nsv, favs: favsOut(), updated_at: new Date().toISOString() });
+        if (error && /name_style/.test(error.message || "")) ({ error } = await sb.from("profiles").upsert({ id: U.id, nick, status: st, avatar: enc(np.av), banner: enc(np.bn), frame: np.frame, favs: favsOut(), updated_at: new Date().toISOString() }));
         if (error && /frame/.test(error.message || "")) ({ error } = await sb.from("profiles").upsert({ id: U.id, nick, status: st, avatar: enc(np.av), banner: enc(np.bn), favs: favsOut(), updated_at: new Date().toISOString() }));
         if (error){ if (error.code === "23505") { nh.textContent = "Этот ник уже занят — придумай другой"; nh.classList.add("err"); } else showErr(/relation|does not exist|schema cache/i.test(error.message) ? "База профилей ещё не настроена на сервере." : ERR(error.message)); return; }
-        const wasNew = !P; P = { nick, st, av: np.av, bn: np.bn, frame: np.frame }; topbar(); view(); if (wasNew) claimDaily();
+        const wasNew = !P; P = { nick, st, av: np.av, bn: np.bn, frame: np.frame, ns: nsv }; if (nsv) NSTY.set(U.id, nsv); else NSTY.delete(U.id); topbar(); view(); if (wasNew) claimDaily();
         if (typeof curTab !== "undefined" && curTab === "feed"){ const c = document.getElementById("feedCmp"); if (c) composer(c, null, () => feedOpen(true)); }
       } catch(ex) { const m = ex && ex.message || ""; showErr(ex && ex.gif ? "Хранилище пока не принимает GIF — сохрани анимацию в WebP или выбери готовую анимацию." : /Bucket not found|bucket/i.test(m) ? "Хранилище картинок ещё не настроено на сервере." : /row-level security/i.test(m) ? "Не удалось загрузить картинку — попробуй другую или выбери героя." : ERR(m)); }
       finally { if (btn.isConnected){ btn.disabled = false; btn.textContent = isNew ? "Создать профиль" : "Сохранить"; } }
@@ -3754,7 +3825,7 @@ const PROF = (() => {
     const dm = await duelMMR(uid);
     const q = fromRow(pr), xp = st ? st.xp : 0, lv = lvlOf(xp), mine = U && uid === U.id, pfa = Array.isArray(pr.favs) ? pr.favs : [], favs = pfa.filter(x => !String(x).startsWith("g:")).slice(0, 12), pg = pfa.filter(x => String(x).startsWith("g:")).map(x => x.slice(2));
     const box = shell(bnSrc(q.bn), `
-      <div class="phead"><div class="pav${frameCls(q.frame)}"><img alt="" src="${esc(avSrc(q.av))}"></div><div class="pname"><h3 translate="no" class="${isPrem(uid) ? "gold" : ""}">${esc(q.nick)}${premBadge(uid)} <em class="glv">${lv} ур.</em></h3>${q.st ? `<div class="pst">${esc(q.st)}</div>` : ""}</div></div>
+      <div class="phead"><div class="pav${frameCls(q.frame)}"><img alt="" src="${esc(avSrc(q.av))}"></div><div class="pname"><h3 translate="no" data-user="${esc(uid)}" class="${isPrem(uid) ? "gold" : ""}">${esc(q.nick)}${premBadge(uid)} <em class="glv">${lv} ур.</em></h3>${q.st ? `<div class="pst">${esc(q.st)}</div>` : ""}</div></div>
       <div class="pstats"><div class="pstat"><b>${lv}</b><span>уровень</span></div><div class="pstat"><b>${rs ? rs.best : 0}</b><span>рекорд арены</span></div><div class="pstat"><b>${dm ? dm.mmr : "—"}</b><span>MMR дуэлей</span></div></div>
       ${dm && dm.wins + dm.losses > 0 ? `<div class="psec">${medalHTML(dm.mmr)} <small class="pnone">${dm.wins} побед · ${dm.losses} поражений</small></div>` : ""}
       ${pg.length ? `<div class="psec"><h4>Любимые игры</h4>${mygChips(pg)}</div>` : ""}
@@ -3921,7 +3992,7 @@ const PROF = (() => {
     const best = runs.reduce((s, r) => Math.max(s, r.score), 0), mine = U && U.id === uid;
     const streak = (() => { let n = 0, k = null; for (const m of matches){ if (!m.winner) continue; const w = m.winner === uid; if (k == null) k = w; if (w !== k) break; n++; } const pl = (n, a, b, c) => n % 10 === 1 && n % 100 !== 11 ? a : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? b : c; return n > 1 ? (k ? `🔥 ${n} ${pl(n, "победа", "победы", "побед")} подряд` : `🧊 ${n} ${pl(n, "поражение", "поражения", "поражений")} подряд`) : ""; })();
     const box = shell(bnSrc(q.bn), `
-      <div class="phead"><div class="pav${frameCls(q.frame)}"><img alt="" src="${esc(avSrc(q.av))}"></div><div class="pname"><h3 translate="no" class="${isPrem(uid) ? "gold" : ""}">${esc(q.nick)}${premBadge(uid)}</h3><div class="pst">${W + L ? medalHTML(mmr) : "Ещё не играл рейтинговых дуэлей"}${streak ? ` <small class="db-streak">${streak}</small>` : ""}</div></div></div>
+      <div class="phead"><div class="pav${frameCls(q.frame)}"><img alt="" src="${esc(avSrc(q.av))}"></div><div class="pname"><h3 translate="no" data-user="${esc(uid)}" class="${isPrem(uid) ? "gold" : ""}">${esc(q.nick)}${premBadge(uid)}</h3><div class="pst">${W + L ? medalHTML(mmr) : "Ещё не играл рейтинговых дуэлей"}${streak ? ` <small class="db-streak">${streak}</small>` : ""}</div></div></div>
       <div class="pstats db-sum"><div class="pstat"><b>${W + L ? mmr : "—"}</b><span>MMR</span></div><div class="pstat"><b class="db-wr ${wrCls(wr)}">${W + L ? wr + "%" : "—"}</b><span>винрейт</span></div><div class="pstat"><b>${W + L}</b><span>матчей</span></div><div class="pstat"><b>${best || "—"}</b><span>рекорд арены</span></div></div>
       ${W + L ? `<div class="psec"><div class="db-wl"><span style="flex:${W || .001}" class="w">${W} побед</span><span style="flex:${L || .001}" class="l">${L} поражений</span></div></div>` : ""}
       ${setupMissing ? `<div class="psec"><div class="pnone">Подробная статистика ещё не настроена на сервере.</div></div>` : ""}
@@ -3945,6 +4016,34 @@ const PROF = (() => {
   const PREM = new Map();
   const isPrem = uid => !!uid && (PREM.get(uid) || 0) > Date.now();
   const premBadge = uid => isPrem(uid) ? `<span class="pbadge" title="Подписка 1x6+">👑</span>` : "";
+
+  /* ---------- стиль ника (подписка 1x6+): шрифт, эффект, цвет — как в Discord ---------- */
+  const NSF = ["inherit", "'Russo One'", "'Unbounded'", "'Press Start 2P'", "'Pacifico'", "'Lobster'", "'Rubik Mono One'", "'Comfortaa'", "'Yeseva One'", "'Rubik Glitch'", "'Oswald'", "'Ruslan Display'"];
+  const NSE = [["min", "Минимализм"], ["grad", "Градиент"], ["neon", "Неон"], ["toon", "Мультфильм"], ["hl", "Выделение"], ["gummy", "Мармелад"], ["prism", "Призма"], ["shine", "Блеск"]];
+  const NSC = ["f43f9e", "22c55e", "3b82f6", "c084fc", "e11d48", "f97316", "eab308", "22d3ee"];
+  const NSTY = new Map();
+  const nsParse = s => { const m = /^(\d{1,2})\.([a-z]+)\.([0-9a-f]{6})$/.exec(s || ""); return m && +m[1] < NSF.length && NSE.some(e => e[0] === m[2]) ? { f: +m[1], e: m[2], c: m[3] } : null; };
+  let nsFontsOn = false, nsRaf = 0;
+  const nsFonts = () => { if (nsFontsOn) return; nsFontsOn = true; const l = document.createElement("link"); l.rel = "stylesheet";
+    l.href = "https://fonts.googleapis.com/css2?family=Russo+One&family=Unbounded:wght@800&family=Pacifico&family=Lobster&family=Rubik+Mono+One&family=Comfortaa:wght@700&family=Yeseva+One&family=Rubik+Glitch&family=Oswald:wght@700&family=Ruslan+Display&display=swap"; document.head.appendChild(l); };
+  // «Мармелад» прыгает по буквам — оборачиваем только текст самого ника, значки и подписи не трогаем
+  function nsApply(el, st){
+    const key = st || ""; if (el.dataset.ns === key) return; el.dataset.ns = key;
+    el.querySelectorAll(".nl").forEach(x => x.replaceWith(x.textContent)); el.normalize();
+    [...el.classList].filter(c => c === "ns" || NSE.some(x => "ns-" + x[0] === c)).forEach(c => el.classList.remove(c));
+    el.style.removeProperty("--nc"); el.style.fontFamily = ""; el.style.fontSize = "";
+    const o = nsParse(key); if (!o) return;
+    nsFonts(); el.classList.add("ns", "ns-" + o.e); el.style.setProperty("--nc", "#" + o.c);
+    if (o.f) el.style.fontFamily = NSF[o.f] + ", var(--body)"; if (o.f === 3) el.style.fontSize = ".72em";
+    if (o.e === "gummy") [...el.childNodes].filter(n => n.nodeType === 3 && n.nodeValue.trim()).forEach(n => {
+      const f = document.createDocumentFragment(); [...n.nodeValue].forEach((ch, i) => { const sp = document.createElement("span"); sp.className = "nl"; sp.style.setProperty("--i", i); sp.textContent = ch; f.appendChild(sp); }); n.replaceWith(f); });
+  }
+  const NSSEL = ".pnick[data-user], h3[data-user], .plc[data-user] > b, .glist li[data-user] .gn";
+  function decorateNames(root){
+    if (!NSTY.size) return;
+    (root || document).querySelectorAll(NSSEL).forEach(el => { const h = el.dataset.user ? el : el.closest("[data-user]"); const u = h && h.dataset.user; if (u) nsApply(el, isPrem(u) ? NSTY.get(u) || "" : ""); });
+  }
+  new MutationObserver(() => { if (!nsRaf && NSTY.size) nsRaf = requestAnimationFrame(() => { nsRaf = 0; decorateNames(document); }); }).observe(document.body, { childList: true, subtree: true });
   let premT = 0;
   async function loadPrem(){
     if (!CLOUD) return;
@@ -3952,7 +4051,9 @@ const PROF = (() => {
       const { data, error } = await sb.from("subscriptions").select("user_id,until").gt("until", new Date().toISOString()).limit(2000);
       if (error) return;
       PREM.clear(); (data || []).forEach(r => PREM.set(r.user_id, new Date(r.until).getTime()));
-      decoratePrem(document); topbar();
+      const ns = await sb.from("profiles").select("id,name_style").neq("name_style", "").limit(2000);
+      if (!ns.error){ NSTY.clear(); (ns.data || []).forEach(r => NSTY.set(r.id, r.name_style)); }
+      decoratePrem(document); topbar(); decorateNames(document);
     } catch(e) {}
   }
   function decoratePrem(root){
@@ -6705,7 +6806,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=17").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=18").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
