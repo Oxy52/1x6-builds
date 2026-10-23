@@ -1873,6 +1873,52 @@
   .gr-src { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; } .gr-src select { min-width: 200px; }
   .gr-pv { width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); display: block; }
   .gr-box { width: min(900px, 100%); }
+
+  /* ---------- Кто заруинил? ---------- */
+  .ru-hero { position: relative; isolation: isolate; overflow: hidden; min-height: 340px; padding: 34px 30px; border-radius: 28px; border: 1px solid color-mix(in srgb, #e8564a 30%, var(--line)); background: radial-gradient(70% 90% at 85% 100%, rgba(232,86,74,.22), transparent 65%), linear-gradient(160deg, #1a0f12, #0b0b10 70%); }
+  .ru-f { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2; }
+  .ru-art { position: absolute; right: 2%; bottom: 0; height: 108%; max-width: 52%; object-fit: contain; object-position: 100% 100%; z-index: -1; opacity: 0; transform: translateX(60px); transition: opacity .9s ease, transform 1s cubic-bezier(.2,.8,.2,1); filter: brightness(1.1) drop-shadow(0 0 40px rgba(232,86,74,.45)); pointer-events: none; }
+  .ru-art.on { opacity: .95; transform: none; } .ru-art.out { opacity: 0; transform: translateX(-60px); }
+  .ru-art.bad { filter: brightness(1.05) saturate(1.1) drop-shadow(0 0 46px rgba(255,60,40,.75)); }
+  .ru-in { position: relative; max-width: 560px; }
+  .ru-tag { display: inline-block; padding: 5px 12px; border-radius: 999px; background: #e8564a; color: #fff; font-size: 12px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase; }
+  .ru-in h2 { margin: 14px 0 8px; font-family: var(--display); font-size: clamp(34px, 6vw, 56px); letter-spacing: -1.5px; line-height: 1; }
+  .ru-in p { margin: 0 0 18px; color: rgba(255,255,255,.78); font-size: 15.5px; line-height: 1.5; }
+  .ru-form { display: flex; gap: 8px; flex-wrap: wrap; } .ru-form input { flex: 1 1 240px; min-width: 0; padding: 14px 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,.14); background: rgba(8,8,11,.7); color: var(--fg); font: inherit; font-size: 16px; backdrop-filter: blur(6px); }
+  .ru-form input:focus { outline: none; border-color: #e8564a; box-shadow: 0 0 0 3px rgba(232,86,74,.2); } .ru-form .btn { padding: 14px 22px; }
+  .ru-hint { display: block; margin-top: 10px; color: rgba(255,255,255,.55); font-size: 12.5px; line-height: 1.45; }
+  .ru-out { margin-top: 18px; scroll-margin-top: 80px; } .ru-out .feed-sk { height: 120px; margin-bottom: 10px; }
+  .ru-sum { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; } .ru-sum span { padding: 6px 12px; border-radius: 999px; background: var(--panel); border: 1px solid var(--line); font-size: 13px; color: var(--muted); } .ru-sum b { color: var(--fg); } .ru-sum b.rad { color: #4ade80; } .ru-sum b.dire { color: #ff7a6e; }
+  .ru-you { margin: 0 0 12px; padding: 12px 14px; border-radius: 14px; background: rgba(243,195,90,.08); border: 1px solid rgba(243,195,90,.3); }
+  .ru-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 12px; align-items: start; }
+  .ru-card { padding: 16px; border-radius: 22px; border: 1px solid var(--line); background: var(--panel); }
+  .ru-card.main { border-color: rgba(232,86,74,.55); background: radial-gradient(80% 60% at 0% 0%, rgba(232,86,74,.16), transparent 60%), var(--panel); box-shadow: 0 30px 60px -40px rgba(232,86,74,.8); }
+  .ru-ch { display: flex; align-items: center; gap: 12px; } .ru-ch > div:nth-child(2) { flex: 1; min-width: 0; } .ru-ch b { display: block; font-size: 17px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .ru-ch small { color: var(--muted); font-size: 13px; }
+  .ru-hi { width: 64px; height: 64px; object-fit: cover; border-radius: 14px; background: #111; flex: none; } .ru-card.main .ru-hi { width: 96px; height: 54px; border-radius: 10px; }
+  .ru-lbl { display: inline-block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .6px; color: #ff7a6e; }
+  .ru-score { text-align: center; flex: none; } .ru-score b { display: block; font-family: var(--display); font-size: 34px; line-height: 1; color: #ff7a6e; } .ru-score small { font-size: 10.5px; color: var(--muted); display: block; max-width: 80px; line-height: 1.2; }
+  .ru-why { margin: 12px 0 0; color: rgba(255,255,255,.82); line-height: 1.5; font-size: 14.5px; }
+  .ru-ms, .ru-nums { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 12px; } .ru-nums { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .ru-m { padding: 9px 10px; border-radius: 12px; background: var(--bg-soft); border: 1px solid var(--line); min-width: 0; } .ru-m small { display: block; font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ru-m b { font-size: 15px; font-variant-numeric: tabular-nums; }
+  .ru-l { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 5px; } .ru-l li { padding: 7px 10px 7px 30px; border-radius: 10px; font-size: 13.5px; position: relative; }
+  .ru-l.bad li { background: rgba(255,90,70,.08); } .ru-l.bad li::before { content: "✕"; position: absolute; left: 10px; color: #ff7a6e; font-weight: 800; }
+  .ru-l.good li { background: rgba(74,222,128,.07); } .ru-l.good li::before { content: "✓"; position: absolute; left: 10px; color: #4ade80; font-weight: 800; }
+  .ru-h3 { font-family: var(--display); font-size: 19px; margin: 24px 0 10px; }
+  .ru-mo { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; } .ru-mo li { display: flex; gap: 10px; align-items: center; padding: 9px 12px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); font-size: 14px; }
+  .ru-mo time { flex: none; width: 46px; font-variant-numeric: tabular-nums; color: var(--muted); font-weight: 700; } .ru-mo i { flex: none; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-weight: 800; }
+  .ru-mo li.bad i { background: rgba(255,90,70,.18); color: #ff7a6e; } .ru-mo li.good i { background: rgba(74,222,128,.16); color: #4ade80; }
+  .ru-parse { padding: 14px; border-radius: 16px; border: 1px dashed var(--line); display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: space-between; } .ru-parse p { margin: 0; color: var(--muted); font-size: 14px; flex: 1 1 260px; }
+  .ru-tw { overflow-x: auto; border-radius: 16px; border: 1px solid var(--line); }
+  .ru-t { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 620px; } .ru-t th { text-align: left; font-size: 11.5px; color: var(--muted); font-weight: 700; padding: 9px 10px; background: var(--bg-soft); }
+  .ru-t td { padding: 8px 10px; border-top: 1px solid var(--line); font-variant-numeric: tabular-nums; white-space: nowrap; } .ru-t tr.me td { background: rgba(243,195,90,.08); }
+  .ru-th { display: flex; align-items: center; gap: 8px; min-width: 170px; } .ru-th img { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; } .ru-th b { display: block; max-width: 130px; overflow: hidden; text-overflow: ellipsis; } .ru-th small { color: var(--muted); font-size: 11.5px; }
+  .ru-bar { position: relative; display: block; width: 90px; height: 20px; border-radius: 6px; background: rgba(255,255,255,.06); overflow: hidden; } .ru-bar i { position: absolute; inset: 0 auto 0 0; width: var(--v); background: linear-gradient(90deg, #f3c35a, #e8564a); } .ru-bar b { position: relative; padding-left: 7px; font-size: 12px; line-height: 20px; }
+  .ru-rec { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 8px; }
+  .ru-r { display: flex; align-items: center; gap: 10px; padding: 9px 12px 9px 9px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); font: inherit; text-align: left; cursor: pointer; transition: border-color .2s, transform .2s; }
+  .ru-r:hover { transform: translateY(-2px); border-color: rgba(232,86,74,.5); } .ru-r img { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; } .ru-r span { flex: 1; min-width: 0; } .ru-r b { display: block; font-size: 14px; } .ru-r small { color: var(--muted); font-size: 12px; }
+  .ru-r em { font-style: normal; font-size: 12px; font-weight: 800; } .ru-r.w em { color: #4ade80; } .ru-r.l em { color: #ff7a6e; }
+  @media (max-width: 760px) { .ru-hero { padding: 24px 18px 200px; min-height: 0; } .ru-art { height: 210px; max-width: 70%; right: 50%; transform: translateX(50%) translateX(40px); } .ru-art.on { transform: translateX(50%); } .ru-art.out { transform: translateX(50%) translateX(-40px); }
+    .ru-grid { grid-template-columns: 1fr; } .ru-nums { grid-template-columns: repeat(3, minmax(0, 1fr)); } .ru-score b { font-size: 28px; } }
   /* редактор сеток: символы на canvas, отмена, полный экран, спокойнее панели */
   .gr-sym { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 1; } #grSymS { z-index: 4; }
   .gr-tools { padding: 8px; border-radius: 16px; border: 1px solid var(--line); background: var(--panel); }
@@ -1884,6 +1930,24 @@
   #grEdit.gr-full { position: fixed; inset: 0; z-index: 300; background: var(--bg); padding: max(12px, env(safe-area-inset-top)) 12px 12px; overflow: auto; overscroll-behavior: contain; }
   #grEdit.gr-full .gr-ph { max-height: calc(100vh - 160px); }
   html.gr-lock, html.gr-lock body { overflow: hidden; }
+  .gr-name { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
+  .gr-nm { flex: 1 1 260px; display: flex; align-items: center; gap: 10px; padding: 4px 6px 4px 14px; border-radius: 16px; border: 1px solid var(--line); background: var(--panel); transition: border-color .2s, box-shadow .2s; cursor: text; }
+  .gr-nm:focus-within { border-color: rgba(243,195,90,.6); box-shadow: 0 0 0 3px rgba(243,195,90,.14); }
+  .gr-nm input { flex: 1; min-width: 0; border: 0; background: none; color: var(--fg); font: inherit; font-family: var(--display); font-size: 20px; font-weight: 800; padding: 8px 0; outline: none; }
+  .gr-my { display: flex; gap: 6px; align-items: center; } .gr-my select { max-width: 170px; background: var(--bg-soft); color: var(--fg); border: 1px solid var(--line); border-radius: 12px; padding: 9px 10px; font: inherit; font-size: 13.5px; }
+  .gr-steps { margin-bottom: 12px; padding: 12px; border-radius: 18px; border: 1px solid rgba(243,195,90,.22); background: linear-gradient(135deg, rgba(243,195,90,.07), rgba(232,86,74,.05)); }
+  .gr-sh { display: flex; justify-content: space-between; align-items: center; margin: 0 2px 10px; } .gr-sh b { font-family: var(--display); font-size: 15px; }
+  .gr-shide { background: none; border: 0; color: var(--muted); font: inherit; font-size: 12.5px; cursor: pointer; }
+  .gr-sl { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .gr-st { display: flex; gap: 10px; align-items: flex-start; text-align: left; padding: 10px; border-radius: 14px; border: 1px solid var(--line); background: rgba(0,0,0,.25); color: var(--fg); font: inherit; cursor: pointer; transition: border-color .2s, transform .2s; }
+  .gr-st:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.2); }
+  .gr-st i { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-weight: 800; font-size: 13px; background: rgba(255,255,255,.08); color: var(--muted); }
+  .gr-st b { display: block; font-size: 13.5px; } .gr-st small { display: block; margin-top: 3px; font-size: 11.5px; line-height: 1.35; color: var(--muted); }
+  .gr-st.now { border-color: rgba(243,195,90,.6); box-shadow: 0 0 0 1px rgba(243,195,90,.25); } .gr-st.now i { background: #f3c35a; color: #1a1306; }
+  .gr-st.ok i { background: rgba(74,222,128,.2); color: #4ade80; } .gr-st.ok b { color: var(--muted); }
+  .gr-howb { margin-right: 6px; }
+  .gr-flash { animation: grFlash 1.2s ease; } @keyframes grFlash { 0%, 60% { box-shadow: 0 0 0 3px rgba(243,195,90,.7); border-radius: 14px; } 100% { box-shadow: 0 0 0 0 rgba(243,195,90,0); } }
+  @media (max-width: 860px) { .gr-sl { grid-template-columns: repeat(2, minmax(0, 1fr)); } .gr-st small { display: none; } .gr-my { flex: 1; } .gr-my select { flex: 1; max-width: none; } }
   #grEdit.gr-full .gr-tpl { display: none; } #grEdit.gr-full .gr-pal { order: 1; position: static; }
   @media (max-width: 860px) { .gr-wrap { grid-template-columns: 1fr; } .gr-pal { position: static; order: -1; } .gr-ph { grid-template-columns: repeat(auto-fill, minmax(54px, 1fr)); max-height: 210px; } .gr-bar input { width: 120px; } }
 
@@ -1943,7 +2007,8 @@
   .aegflash { position: fixed; left: 50%; top: 50%; z-index: 9999; width: 60vmin; height: 60vmin; border-radius: 50%; pointer-events: none; opacity: 0;
     background: radial-gradient(closest-side, #fff, rgba(243,195,90,.8) 35%, rgba(243,195,90,.25) 60%, transparent); }
   .pxwipe { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 9999; pointer-events: none; image-rendering: pixelated; }
-  html.pxcover body::before { content: ""; position: fixed; inset: 0; z-index: 9998; background: #08080b; }
+  html.pxcover body::before { content: ""; position: fixed; inset: 0; z-index: 9998; background: #08080b; animation: pxcoverOff .4s ease 2.5s forwards; pointer-events: none; }
+  @keyframes pxcoverOff { to { opacity: 0; visibility: hidden; } }
   #logoBtn.pxbye .mark { animation: pxJump .45s cubic-bezier(.3,1.5,.5,1); }
   @media (prefers-reduced-motion: reduce) { .heroart.pxart i { animation: none; } }
 </style>
@@ -1998,6 +2063,7 @@
       <i class="tab-ink" id="tabInk"></i>
     </div>
     <div class="tab-menu" id="tabMenu" hidden>
+      <button type="button" class="tab" role="tab" data-tab="ruin" aria-selected="false"><span class="tab-ic">🧨</span><span class="tl">Кто заруинил?</span><span class="ts">Руин</span></button>
       <button type="button" class="tab" role="tab" data-tab="games" aria-selected="false"><span class="tab-ic">🎮</span><span class="tl">Мини-игры</span><span class="ts">Игры</span></button>
       <button type="button" class="tab" role="tab" data-tab="feed" aria-selected="false"><span class="tab-ic">💬</span><span class="tl">Лента</span><span class="ts">Лента</span></button>
       <button type="button" class="tab" role="tab" data-tab="rating" aria-selected="false"><span class="tab-ic">🏆</span><span class="tl">Рейтинг</span><span class="ts">Топ</span></button>
@@ -2083,6 +2149,9 @@
       <div class="rkchips g-sub" data-g="deadlock" role="group" aria-label="Раздел"><button type="button" class="rkc" data-v="heroes" aria-pressed="true">Герои</button><button type="button" class="rkc" data-v="invite" aria-pressed="false">🎟️ Инвайт</button><button type="button" class="rkc" data-v="news" aria-pressed="false">Новости</button></div>
       <div id="dlBox" class="g-box"></div>
     </section>
+  </div>
+  <div class="tabpane" data-pane="ruin" role="tabpanel" hidden>
+    <section class="section first"><div id="ruinBox"></div></section>
   </div>
   <div class="tabpane" data-pane="ladder" role="tabpanel" hidden>
     <section class="section first">
@@ -6916,7 +6985,7 @@ const GAMES = (() => {
 })();
 
 /* ---------- вкладки ---------- */
-const TABS = ["dota", "grids", "news", "ladder", "1x6", "custom", "games", "feed", "rating", "cs", "deadlock"];
+const TABS = ["dota", "grids", "news", "ladder", "1x6", "custom", "ruin", "games", "feed", "rating", "cs", "deadlock"];
 let curTab = "1x6", lastDota = "1x6";
 function inkTo(btn, instant){ const ink = document.getElementById("tabInk"), bar = btn.parentElement; if (!ink) return;
   if (instant){ ink.style.transition = "none"; requestAnimationFrame(() => ink.style.transition = ""); }
@@ -6933,6 +7002,7 @@ function setTab(name, opts){
   if (name === "dota") D2.open();
   if (name === "grids" && typeof GRIDS !== "undefined") GRIDS.open();
   if (name === "custom") CHC.open();
+  if (name === "ruin" && typeof RUIN !== "undefined") RUIN.open();
   if (name === "news") NEWS.open();
   if (name === "ladder") LADDER.open();
   if (name === "cs" || name === "deadlock") GAMES.open(name);
@@ -7020,7 +7090,8 @@ const PXWIPE = (() => {
     return c; }
   return {
     out(go){
-      const fin = () => { try { sessionStorage.setItem("ub-wipe", "1"); } catch(e) {} go(); };
+      let gone = false; const fin = () => { if (gone) return; gone = true; try { sessionStorage.setItem("ub-wipe", "1"); } catch(e) {} go(); };
+      setTimeout(fin, 2200); // страховка: если браузер (iOS в режиме энергосбережения) не доиграл анимацию, всё равно переходим
       const im = document.querySelector("#logoBtn .mark img");
       if (still || !im || !im.animate){ document.getElementById("logoBtn").classList.add("pxbye"); return run(1, 430, fin); }
       // Aegis летит в центр, делает оборот и схлопывается во вспышку
@@ -7040,6 +7111,9 @@ const PXWIPE = (() => {
         setTimeout(fin, 230);
       };
     },
+    // Safari/iOS возвращает страницу «Назад» из кеша вместе с застывшей анимацией — убираем её
+    reset(){ document.querySelectorAll(".aegbg, .aegfly, .aegflash, .pxwipe").forEach(x => x.remove()); const im = document.querySelector("#logoBtn .mark img"); if (im) im.style.visibility = "";
+      const lg = document.getElementById("logoBtn"); if (lg) lg.classList.remove("pxbye"); document.documentElement.classList.remove("pxcover"); },
     in(){ let on = false; try { on = sessionStorage.getItem("ub-wipe") === "1"; sessionStorage.removeItem("ub-wipe"); } catch(e) {}
       document.documentElement.classList.remove("pxcover"); if (on) run(-1, 520); }
   };
@@ -7050,7 +7124,8 @@ const PXWIPE = (() => {
 document.getElementById("logoBtn").onclick = e => { e.preventDefault();
   const to = "/"; // обновление через логотип всегда ведёт на выбор игры
   PXWIPE.out(() => { location.href = to; }); };
-PXWIPE.in();
+try { PXWIPE.in(); } catch(e) { document.documentElement.classList.remove("pxcover"); }
+addEventListener("pageshow", e => { if (e.persisted) PXWIPE.reset(); });
 const topbar = document.getElementById("topbar"); let tbS = false;
 addEventListener("scroll", () => { const s = scrollY > 8; if (s !== tbS) { tbS = s; topbar.classList.toggle("scrolled", s); } }, {passive: true});
 
@@ -7071,6 +7146,7 @@ drawRecent();
 render();
 </script>
 
-<script src="/grids.js?v=10" defer></script>
+<script src="/grids.js?v=11" defer></script>
+<script src="/ruin.js?v=1" defer></script>
 </body>
 </html>

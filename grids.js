@@ -203,9 +203,12 @@ const GRIDS = (() => {
   function editor(){
     const el = document.getElementById("grEdit");
     if (!el.dataset.ready){ el.dataset.ready = "1";
-      el.innerHTML = `<div class="gr-bar">
-          <select id="grCfg" aria-label="Сетка"></select><input id="grCfgN" maxlength="40" aria-label="Название сетки" placeholder="Название сетки">
-          <button type="button" class="gr-b" id="grNew" title="Новая пустая сетка">＋ Сетка</button><button type="button" class="gr-b" id="grDelC" title="Удалить эту сетку">🗑</button>
+      el.innerHTML = `<div class="gr-name">
+          <label class="gr-nm" title="Название сетки — так она будет называться в Доте"><span aria-hidden="true">✏️</span><input id="grCfgN" maxlength="40" aria-label="Название сетки" placeholder="Назови свою сетку"></label>
+          <div class="gr-my"><select id="grCfg" aria-label="Мои сетки"></select><button type="button" class="gr-b" id="grNew" title="Новая пустая сетка">＋ Новая</button><button type="button" class="gr-b gr-ic" id="grDelC" title="Удалить эту сетку" aria-label="Удалить сетку">🗑</button></div>
+        </div>
+        <div class="gr-steps" id="grSteps"></div>
+        <div class="gr-bar"><button type="button" class="rkc gr-howb" id="grHowB" hidden>❓ Как сделать сетку</button>
           <span class="gr-sp"></span>
           <button type="button" class="gr-b" id="grImp">⤓ Импорт</button><button type="button" class="gr-b" id="grLink">🔗 Ссылка</button><button type="button" class="gr-b" id="grPub">📤 В мастерскую</button><button type="button" class="gr-b gr-main" id="grDl">⬇ Скачать файл</button>
         </div>
@@ -224,6 +227,8 @@ const GRIDS = (() => {
           </div>
         </div>`;
       stage = el.querySelector("#grStage");
+      el.querySelector("#grSteps").onclick = e => { const b = e.target.closest("[data-st]"); if (b) stepGo(+b.dataset.st); if (e.target.closest(".gr-shide")) stepsShow(false); };
+      el.querySelector("#grHowB").onclick = () => stepsShow(true);
       el.querySelector("#grUndo").onclick = () => histGo(true); el.querySelector("#grRedo").onclick = () => histGo(false);
       el.querySelector("#grFull").onclick = e => { const on = el.classList.toggle("gr-full"); e.currentTarget.setAttribute("aria-pressed", on); document.documentElement.classList.toggle("gr-lock", on); };
       addEventListener("keydown", e => { if (el.offsetParent === null && !el.classList.contains("gr-full")) return;
@@ -254,6 +259,16 @@ const GRIDS = (() => {
     }
     draw();
   }
+  /* ---------- пошаговая подсказка: 4 шага, отмечаются сами по мере работы ---------- */
+  const STEPS = [["Выбери шаблон", "Готовая раскладка — или начни с пустой сетки и добавь категории сам"], ["Расставь героев", "Перетащи героя из списка в категорию. Клик по герою — добавить в выбранную категорию"], ["Добавь рисунок", "Необязательно: арт из точек — герой, аниме или своя картинка"], ["Скачай и установи", "Один файл — и сетка появится в Доте при выборе героя"]];
+  function stepsShow(on){ try { localStorage.setItem("ub-grid-steps", on ? "1" : "0"); } catch(e) {} steps(); }
+  function steps(){ const el = document.getElementById("grSteps"), hb = document.getElementById("grHowB"); if (!el || !FILE) return;
+    let on = true; try { on = localStorage.getItem("ub-grid-steps") !== "0"; } catch(e) {} el.hidden = !on; if (hb) hb.hidden = on; if (!on) return;
+    const cs = C().categories, dl = (() => { try { return localStorage.getItem("ub-grid-dl") === "1"; } catch(e) { return false; } })();
+    const done = [cs.some(k => !isSym(k)), cs.some(k => k.hero_ids.length), cs.some(isSym), dl], nx = done.findIndex((d, i) => !d && i !== 2);
+    el.innerHTML = `<div class="gr-sh"><b>Как сделать сетку</b><button type="button" class="gr-shide">Скрыть</button></div><div class="gr-sl">${STEPS.map((x, i) => `<button type="button" class="gr-st${done[i] ? " ok" : ""}${i === nx ? " now" : ""}" data-st="${i}"><i>${done[i] ? "✓" : i + 1}</i><span><b>${x[0]}</b><small>${x[1]}</small></span></button>`).join("")}</div>`; }
+  function flash(q){ const t = document.querySelector(q); if (!t) return; t.scrollIntoView({ block: "center", behavior: "smooth" }); t.classList.remove("gr-flash"); void t.offsetWidth; t.classList.add("gr-flash"); }
+  function stepGo(i){ if (i === 0) flash(".gr-tpl"); else if (i === 1){ if (!C().categories.some(k => !isSym(k))) addCat(); flash(".gr-pal"); } else if (i === 2) artist(); else download(); }
   function onKey(e){
     if (e.target.tagName === "INPUT") return; const st = e.shiftKey ? 10 : 1, mv = { ArrowLeft: [-st, 0], ArrowRight: [st, 0], ArrowUp: [0, -st], ArrowDown: [0, st] }[e.key];
     const list = selG ? C().categories.filter(k => k._g === selG) : sel >= 0 ? [C().categories[sel]] : []; if (!list.length) return;
@@ -279,7 +294,7 @@ const GRIDS = (() => {
     cv.innerHTML = cs.map(catHTML).join("") + (selG ? gbox() : "");
     symDraw();
     const cn = document.getElementById("grCnt"); if (cn){ const sy = chars(cs.filter(isSym)); cn.innerHTML = `Категорий: <b>${cs.length}</b> · символов: <b>${sy}</b>${cs.length > 2600 ? ' · <span class="gr-warn">много — Дота может подтормаживать</span>' : ""}`; }
-    if (!soft){ insp(); palMarks(); }
+    if (!soft){ insp(); palMarks(); steps(); }
   }
   /* символы и рисунки — на canvas: тысячи точек без тысяч элементов страницы */
   const MW = new Map();
@@ -432,7 +447,7 @@ const GRIDS = (() => {
   /* ---------- файл ---------- */
   function fileText(f){ return JSON.stringify(clean(f || FILE), null, "\t"); }
   function saveFile(f){ const b = new Blob([fileText(f)], { type: "application/json" }), a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "hero_grid_config.json"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
-  function download(){ saveFile();
+  function download(){ saveFile(); try { localStorage.setItem("ub-grid-dl", "1"); } catch(e) {} steps();
     PROF.toast(`Файл скачан. Положи его в папку Steam → userdata → <b>твой ID</b> → 570 → remote → cfg (с заменой) при закрытой Доте. <a href="#" id="grHowT">Подробнее</a>`, "", 7000);
     setTimeout(() => { const l = document.getElementById("grHowT"); if (l) l.onclick = ev => { ev.preventDefault(); go("help"); }; }, 50); }
   function parse(txt){ const v = JSON.parse(txt); if (v && Array.isArray(v.configs)) return v; if (v && Array.isArray(v.categories)) return { version: 3, configs: [v] }; throw new Error("bad"); }

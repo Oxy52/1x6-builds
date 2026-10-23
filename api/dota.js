@@ -15,6 +15,8 @@
 //   GET /api/dota?q=player|wl|recent|pheroes&id=86745912 -> профиль игрока, победы/поражения, последние матчи, герои
 //   GET /api/dota?q=pmatches&id=1&off=20       -> вся история матчей игрока, по 20 штук
 //   GET /api/dota?q=match&id=8000000000        -> разбор матча (составы, KDA, предметы, график золота)
+//   GET /api/dota?q=ruin&id=8000000000         -> матч для «Кто заруинил?»: игроки с бенчмарками, драки, объекты, смерти
+//   GET /api/dota?q=parse&id=8000000000        -> попросить OpenDota разобрать реплей (появятся драки и моменты)
 //   GET /api/dota?q=rank&n=1..8                -> иконка ранга
 // Необязательно: OPENDOTA_API_KEY на Vercel — повышает лимиты OpenDota.
 const BASE = "https://api.opendota.com/api";
@@ -35,11 +37,12 @@ const ROUTES = {
   recent: p => `/players/${p.id}/recentMatches`,
   pheroes: p => `/players/${p.id}/heroes`,
   match: p => `/matches/${p.id}`,
+  ruin: p => `/matches/${p.id}`,
   pmatches: p => `/players/${p.id}/matches?limit=20&offset=${p.off}&project=hero_id&project=kills&project=deaths&project=assists&project=gold_per_min&project=start_time&project=duration&project=player_slot&project=radiant_win&project=game_mode`
 };
 const NEEDS_HERO = new Set(["itemPopularity", "itemTimings", "laneRoles", "matchups", "builds"]);
-const NEEDS_ID = new Set(["player", "wl", "recent", "pheroes", "match", "pmatches"]);
-const TTL = { items: 86400, itemIds: 86400, abilities: 86400, builds: 43200, pros: 21600, ladder: 1800, ladderTop: 1800, search: 600, player: 300, wl: 300, recent: 300, pheroes: 600, match: 86400, pmatches: 300 };
+const NEEDS_ID = new Set(["player", "wl", "recent", "pheroes", "match", "pmatches", "ruin", "parse"]);
+const TTL = { items: 86400, itemIds: 86400, abilities: 86400, builds: 43200, pros: 21600, ladder: 1800, ladderTop: 1800, search: 600, player: 300, wl: 300, recent: 300, pheroes: 600, match: 86400, pmatches: 300, ruin: 900 };
 
 const withKey = url => KEY ? url + (url.includes("?") ? "&" : "?") + "api_key=" + encodeURIComponent(KEY) : url;
 async function od(path) {
@@ -67,6 +70,21 @@ function slimMatch(text) {
     league: m.league && m.league.name || "", rt: team(m.radiant_team) || (m.radiant_name ? { name: m.radiant_name, tag: "", logo: m.radiant_logo || "" } : null), dt: team(m.dire_team) || (m.dire_name ? { name: m.dire_name, tag: "", logo: m.dire_logo || "" } : null),
     pb: (m.picks_bans || []).map(x => [x.hero_id, x.is_pick ? 1 : 0, x.team, x.order]), gold: m.radiant_gold_adv || [], xp: m.radiant_xp_adv || [], fb: m.first_blood_time || 0,
     players: (m.players || []).map(p => Object.fromEntries(keep.map(k => [k, p[k] == null ? null : p[k]]))) });
+}
+// «Кто заруинил?»: всё, что нужно для оценки вклада каждого игрока, без лишнего (полный матч весит мегабайты)
+function slimRuin(text) {
+  const m = JSON.parse(text);
+  if (!m || !m.match_id) return text;
+  const keep = ["account_id", "personaname", "player_slot", "hero_id", "kills", "deaths", "assists", "last_hits", "denies", "gold_per_min", "xp_per_min", "net_worth", "hero_damage", "tower_damage", "hero_healing", "level",
+    "lane_role", "is_roaming", "teamfight_participation", "obs_placed", "sen_placed", "stuns", "camps_stacked", "lane_efficiency_pct", "buyback_count", "towers_killed", "roshans_killed", "life_state_dead", "observer_kills", "sentry_kills", "rank_tier"];
+  const bench = b => b ? Object.fromEntries(Object.entries(b).map(([k, v]) => [k, v && v.pct != null ? Math.round(v.pct * 1000) / 1000 : null])) : null;
+  const OBJ = new Set(["building_kill", "CHAT_MESSAGE_ROSHAN_KILL", "CHAT_MESSAGE_FIRSTBLOOD", "CHAT_MESSAGE_AEGIS"]);
+  return JSON.stringify({ id: m.match_id, start: m.start_time, dur: m.duration, rw: m.radiant_win, rs: m.radiant_score, ds: m.dire_score, mode: m.game_mode, lobby: m.lobby_type,
+    parsed: !!m.version, gold: m.radiant_gold_adv || [],
+    obj: (m.objectives || []).filter(o => OBJ.has(o.type)).map(o => [o.time, o.type, o.team != null ? o.team : null, o.key || "", o.slot != null ? o.slot : null]),
+    tf: (m.teamfights || []).map(t => [t.start, t.end, t.deaths, (t.players || []).map(p => [p.deaths || 0, p.damage || 0, p.healing || 0, p.gold_delta || 0, Object.values(p.killed || {}).reduce((a, b) => a + b, 0)])]),
+    players: (m.players || []).map(p => ({ ...Object.fromEntries(keep.map(k => [k, p[k] == null ? null : p[k]])), bench: bench(p.benchmarks),
+      kl: (p.kills_log || []).map(k => [k.time, String(k.key || "").replace("npc_dota_hero_", "")]) })) });
 }
 function slimHeroes(text) {
   const keep = ["id", "name", "localized_name", "primary_attr", "attack_type", "roles", "img", "icon", "turbo_picks", "turbo_wins", "pro_pick", "pro_win", "pro_ban", "pub_pick", "pub_win"];
@@ -176,6 +194,12 @@ module.exports = async (req, res) => {
       return res.status(200).send(Buffer.from(await r.arrayBuffer()));
     } catch (e) { return res.status(502).end(); }
   }
+  if (q === "parse") {
+    if (!/^\d{1,12}$/.test(String(p.id || ""))) return fail(400, "bad_id");
+    try { const r = await fetch(withKey(`${BASE}/request/${p.id}`), { method: "POST", signal: AbortSignal.timeout(9000), headers: UA });
+      res.setHeader("Cache-Control", "no-store"); return res.status(r.ok ? 200 : 502).json({ ok: r.ok }); }
+    catch (e) { return fail(502, "upstream_unreachable"); }
+  }
   if (q !== "abilities" && q !== "builds" && q !== "pros" && q !== "ladder" && q !== "ladderTop" && !ROUTES[q]) return fail(400, "bad_query");
   if (NEEDS_HERO.has(q) && !/^\d{1,3}$/.test(String(p.hero || ""))) return fail(400, "bad_hero");
   if (q === "ladder" && !REGIONS.includes(String(p.region || ""))) return fail(400, "bad_region");
@@ -190,11 +214,12 @@ module.exports = async (req, res) => {
     else if (q === "ladderTop") out = await ladderTop();
     else {
       const text = await od(ROUTES[q]({ hero: p.hero, id: p.id, name: String(p.name || "").trim(), off: Math.max(0, Math.min(100000, parseInt(p.off, 10) || 0)) }));
-      try { out = q === "items" ? slimItems(text) : q === "heroStats" ? slimHeroes(text) : q === "match" ? slimMatch(text) : q === "search" ? JSON.stringify(JSON.parse(text).slice(0, 20)) : text; }
+      try { out = q === "items" ? slimItems(text) : q === "heroStats" ? slimHeroes(text) : q === "match" ? slimMatch(text) : q === "ruin" ? slimRuin(text) : q === "search" ? JSON.stringify(JSON.parse(text).slice(0, 20)) : text; }
       catch (e) { out = text; }
     }
     res.setHeader("Content-Type", "application/json; charset=utf-8");
-    const ttl = TTL[q] || 21600;
+    let ttl = TTL[q] || 21600;
+    if (q === "ruin") { try { if (JSON.parse(out).parsed) ttl = 86400; else ttl = 120; } catch (e) {} }
     res.setHeader("Cache-Control", `public, max-age=${Math.min(600, ttl)}, s-maxage=${ttl}, stale-while-revalidate=${ttl * 4}`);
     return res.status(200).send(out);
   } catch (e) {
