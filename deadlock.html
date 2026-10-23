@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://vsmjjlrgjyujaioknlkn.supabase.co" crossorigin>
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Blazecrest", "url": "https://blazecrest.vercel.app/", "inLanguage": "ru", "description": "Сборки для кастомки Dota 1x6: 54 героя, предметы по этапам игры и арканы. Готовые билды Custom Hero Chaos, мета и винрейты Dota 2, мини-игры, рейтинг и онлайн-дуэли."}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Blazecrest", "url": "https://blazecrest.vercel.app/", "inLanguage": "ru", "description": "Сборки для кастомки Dota 1x6: 54 героя, предметы по этапам игры. Готовые билды Custom Hero Chaos, мета и винрейты Dota 2, мини-игры, рейтинг и онлайн-дуэли."}</script>
 <script>window.START_TAB = "deadlock";</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.100.0/dist/umd/supabase.min.js"></script>
 <script>window.SB_CONF = { url: "https://vsmjjlrgjyujaioknlkn.supabase.co", key: "sb_publishable_tJy3dl_kfNZXP6PXMqsQVQ_RUXqoPmn" };</script>
@@ -2186,9 +2186,9 @@
   </div>
   <div class="tabpane" data-pane="games" role="tabpanel" hidden>
     <section class="section first">
-      <div class="section-head"><h2>Мини-игры</h2><p>Играй героями из 1x6, открывай арканы и попадай в топ.</p></div>
+      <div class="section-head"><h2>Мини-игры</h2><p>Играй героями из 1x6 и попадай в топ.</p></div>
       <div class="gcards">
-        <button type="button" class="gcard big" data-g="arena"><span class="gc-ic">⚔️</span><b>Арена 1x6</b><small>Пиксельный выживач: способности героев, врождённые, Рошан и 54 арканы</small><em>Играть</em></button>
+        <button type="button" class="gcard big" data-g="arena"><span class="gc-ic">⚔️</span><b>Арена 1x6</b><small>Пиксельный выживач: способности героев, врождённые, Рошан и рейтинг</small><em>Играть</em></button>
         <button type="button" class="gcard big duelc" data-g="duel"><span class="gc-ic">🃏</span><b>Дуэль 1x6</b><small>Карточная битва героями Доты: против бота, против друга онлайн или вдвоём на одном телефоне</small><em>Играть</em></button>
         <button type="button" class="gcard new" data-g="lasthit"><span class="gc-ic">🗡️</span><b>Ластхит</b><small>Добивай крипов и денай своих — как на линии</small><em>Играть</em></button>
         <button type="button" class="gcard new" data-g="invoker"><span class="gc-ic">🔮</span><b>Инвокер</b><small>Собирай заклинания из сфер на скорость</small><em>Играть</em></button>
@@ -2488,14 +2488,13 @@ function render(){
   if (!list.length){ const d = document.createElement("div"); d.className = "empty"; d.textContent = favOnly && !FAV.size ? "В избранном пока пусто — жми ★ на карточке героя." : "Ничего не найдено. Попробуй другое имя."; grid.appendChild(d); return; }
   list.forEach((h, idx) => {
     const card = document.createElement("button");
-    card.className = "card" + (ARCANA[h.slug] ? " arc" : "");
+    card.className = "card";
     card.style.cssText = vars(h);
     card.setAttribute("aria-label", `${h.en} — открыть сборку`);
     card.innerHTML = `${sceneHTML(h, SMALL ? 5 : 10)}
       ${PIXEL.has(h.slug) ? `<div class="heroart pxart"><i style="background-image:url(${pxs(h.slug)});--d:${(idx % 7) * -.13}s"></i></div>` : `<div class="heroart"><img alt="" loading="lazy" decoding="async" src="${sm(h)}" onerror="this.remove()"></div>`}
-      ${ARCANA[h.slug] ? `<div class="card-arc"><img alt="" loading="lazy" src="arcana/${h.slug}.webp"><div class="sweep"></div></div>` : ``}
       <div class="scrim"></div>
-      <div class="badges">${ARCANA[h.slug] ? `<span class="badge arc">Аркана</span>` : ``}${h.note ? `<span class="badge warn">нюанс</span>` : ``}</div>
+      <div class="badges">${h.note ? `<span class="badge warn">нюанс</span>` : ``}</div>
       <div class="meta"><div class="name">${h.en}</div><div class="ru">${h.ru}</div></div>`;
     card.onclick = () => openHero(h);
     card._anim = SMALL || PIXEL.has(h.slug) ? null : attachAnim(card, h);
@@ -2510,7 +2509,7 @@ function render(){
 }
 
 function openHero(h, startK){
-  const arc = ARCANA[h.slug];
+  const arc = null;
   modal.innerHTML = `
     <div class="sheet" role="dialog" aria-modal="true" aria-label="Сборка ${h.en}">
       <div class="banner" id="banner" style="${vars(h)}">
@@ -2654,7 +2653,7 @@ function roulette(){
   }));
   const done = () => {
     strip.children[WIN].classList.add("win");
-    res.innerHTML = `<div><b>${win.en}</b><small>${win.ru}${ARCANA[win.slug] ? " · есть аркана" : ""}</small></div>
+    res.innerHTML = `<div><b>${win.en}</b><small>${win.ru}</small></div>
       <div class="acts"><button class="btn btn-ghost" id="again">Ещё раз</button><button class="btn btn-primary" id="openWin">Открыть сборку</button></div>`;
     res.querySelector("#again").onclick = roulette;
     res.querySelector("#openWin").onclick = () => openHero(win);
@@ -2714,7 +2713,7 @@ function openFeed(){
       <div class="shade"></div>
       ${i === 0 ? `<div class="swipe-up"><span style="font-size:22px">↑</span>Листай вверх</div>` : ``}
       <div class="info"><div class="who">${h.en}<small>${h.ru}</small></div>
-        <div class="tag">Билд <b class="bnum">${ks.indexOf(k) + 1}</b> из ${ks.length}${ARCANA[h.slug] ? ` · есть аркана` : ``}</div>
+        <div class="tag">Билд <b class="bnum">${ks.indexOf(k) + 1}</b> из ${ks.length}</div>
         <div class="mb">${miniBuild(h, k)}</div></div>
       <div class="acts-r">
         <button class="ra" data-a="open" aria-label="Открыть сборку ${h.en}"><span class="av"><img alt="" src="${sm(h)}"></span></button>
@@ -3233,7 +3232,7 @@ const PROF = (() => {
   function edit(isNew){
     if (CLOUD && !U) return auth("in");
     const base = P || (CLOUD ? LOCAL : null);
-    const d = base ? JSON.parse(JSON.stringify(base)) : { nick: "", st: "", av: { t: "hero", v: HEROES[rnd(HEROES.length)].slug }, bn: { t: "arc", v: Object.keys(ARCANA)[rnd(11)] } };
+    const d = base ? JSON.parse(JSON.stringify(base)) : { nick: "", st: "", av: { t: "hero", v: HEROES[rnd(HEROES.length)].slug }, bn: { t: "grad", v: "" } };
     if (!base && CLOUD && U){ const md = U.user_metadata || {}; const au = md.avatar_url || md.picture; if (au && /^https:\/\//.test(au)) d.av = { t: "url", v: au }; }
     if (!d.nick && CLOUD && U){ const md = U.user_metadata || {}; d.nick = String(md.user_name || md.name || md.full_name || "").replace(/[^\p{L}\p{N}_\-. ]/gu, "").slice(0, 20); }
     const arcs = Object.keys(ARCANA);
@@ -3248,8 +3247,8 @@ const PROF = (() => {
           <div class="pick av" id="fAv"><label class="up" title="Своё фото">＋<input type="file" accept="image/*" id="fAvUp"></label>${(d.av.t === "img" || d.av.t === "url") ? `<button type="button" data-t="${d.av.t}" aria-pressed="true"><img alt="" src="${esc(d.av.v)}"></button>` : ""}${HEROES.map(h => `<button type="button" data-t="hero" data-v="${h.slug}" aria-label="${h.en}" aria-pressed="${d.av.t === "hero" && d.av.v === h.slug}"><img alt="" loading="lazy" src="face/${h.slug}.webp"></button>`).join("")}</div>
           <div class="hint">Смайлик героя или своё фото (＋)</div></div>
         <div class="pf">${lb("Баннер сзади")}
-          <div class="pick bn" id="fBn"><label class="up" title="Своя картинка">＋<input type="file" accept="image/*" id="fBnUp"></label>${(d.bn.t === "img" || d.bn.t === "url") ? `<button type="button" data-t="${d.bn.t}" aria-pressed="true"><img alt="" src="${esc(d.bn.v)}"></button>` : ""}<button type="button" data-t="grad" aria-pressed="${d.bn.t === "grad"}" aria-label="Цвет темы" style="background:linear-gradient(135deg,var(--t1),var(--t2))"></button>${arcs.map(a => `<button type="button" data-t="arc" data-v="${a}" aria-pressed="${d.bn.t === "arc" && d.bn.v === a}" title="${ARCANA[a]}"><img alt="" loading="lazy" src="arcana/${a}.webp"></button>`).join("")}${HEROES.map(h => `<button type="button" data-t="hero" data-v="${h.slug}" aria-pressed="${d.bn.t === "hero" && d.bn.v === h.slug}" style="${vars(h)};background:radial-gradient(circle at 50% 30%,var(--c1),var(--c2))" title="${h.en}"><img alt="" loading="lazy" src="hero/${h.slug}.webp" style="object-fit:cover;object-position:center 22%"></button>`).join("")}</div>
-          <div class="hint">Аркана, герой или своя картинка (＋)</div></div>
+          <div class="pick bn" id="fBn"><label class="up" title="Своя картинка">＋<input type="file" accept="image/*" id="fBnUp"></label>${(d.bn.t === "img" || d.bn.t === "url") ? `<button type="button" data-t="${d.bn.t}" aria-pressed="true"><img alt="" src="${esc(d.bn.v)}"></button>` : ""}<button type="button" data-t="grad" aria-pressed="${d.bn.t === "grad"}" aria-label="Цвет темы" style="background:linear-gradient(135deg,var(--t1),var(--t2))"></button>${HEROES.map(h => `<button type="button" data-t="hero" data-v="${h.slug}" aria-pressed="${d.bn.t === "hero" && d.bn.v === h.slug}" style="${vars(h)};background:radial-gradient(circle at 50% 30%,var(--c1),var(--c2))" title="${h.en}"><img alt="" loading="lazy" src="hero/${h.slug}.webp" style="object-fit:cover;object-position:center 22%"></button>`).join("")}</div>
+          <div class="hint">Цвет, герой или своя картинка (＋)</div></div>
         ${CLOUD && U ? `<div class="pf"><span class="lb">Рамка аватарки</span><div class="frames" id="fFr">${FRAMES.map(f => { const ok = f.need(sInfo()); return `<button type="button" data-f="${f.id}" ${ok ? "" : "disabled"} aria-pressed="${(d.frame || "") === f.id}"><span class="fprev${frameCls(f.id)}"><img alt="" src="${esc(avSrc(d.av))}"></span><b>${f.name}</b><small>${ok ? "открыта" : "🔒 " + f.req}</small></button>`; }).join("")}</div><div class="hint">Рамки открываются с уровнем — получай опыт каждый день</div></div>` : ""}
         <div class="pf err" id="fErr" hidden></div>
         <div class="pacts" style="padding:0"><button type="submit" class="btn btn-primary" id="fSave">${isNew ? "Создать профиль" : "Сохранить"}</button><button type="button" class="btn btn-ghost" id="fCancel">Отмена</button></div>
@@ -3779,7 +3778,7 @@ const PROF = (() => {
     const show = t => {
       box.querySelectorAll(".db-tabs .rkc").forEach(b => b.setAttribute("aria-pressed", b.dataset.t === t));
       if (t === "m"){ pane.innerHTML = matches.length ? `<ul class="db-ml">${matches.map(m => matchRow(m, uid)).join("")}</ul>${!isPrem(U && U.id) && matches.length >= 30 ? `<button type="button" class="db-more" id="dbMore">👑 Вся история матчей и график за всё время — с 1x6+</button>` : ""}` : `<div class="pnone">Онлайн-дуэлей пока нет</div>`; { const mb = pane.querySelector("#dbMore"); if (mb) mb.onclick = () => premium(); } wireMatches(pane, matches, () => statsOpen(uid)); }
-      if (t === "a"){ pane.innerHTML = arena.length ? `<div class="db-tw"><table class="db-t"><thead><tr><th>Герой</th><th>Игр</th><th>Рекорд</th><th>Средний</th><th>Убийств</th></tr></thead><tbody>${arena.map(o => `<tr data-s="${esc(o.hero)}"><td class="db-hc">${hFace(o.hero)}<span>${esc(hName(o.hero))}${o.arc ? ` <em class="db-arc" title="Играл в аркане">✦</em>` : ""}</span></td><td><b>${o.games}</b></td><td><b>${o.best}</b></td><td>${Math.round(o.sum / o.games)}</td><td>${Math.round(o.kills / o.games)}</td></tr>`).join("")}</tbody></table></div>` : `<div class="pnone">Забегов в Арене пока нет</div>`; }
+      if (t === "a"){ pane.innerHTML = arena.length ? `<div class="db-tw"><table class="db-t"><thead><tr><th>Герой</th><th>Игр</th><th>Рекорд</th><th>Средний</th><th>Убийств</th></tr></thead><tbody>${arena.map(o => `<tr data-s="${esc(o.hero)}"><td class="db-hc">${hFace(o.hero)}<span>${esc(hName(o.hero))}</span></td><td><b>${o.games}</b></td><td><b>${o.best}</b></td><td>${Math.round(o.sum / o.games)}</td><td>${Math.round(o.kills / o.games)}</td></tr>`).join("")}</tbody></table></div>` : `<div class="pnone">Забегов в Арене пока нет</div>`; }
       if (t === "c"){ pane.innerHTML = cards.length ? `<div class="db-tw"><table class="db-t"><thead><tr><th>Герой</th><th>Игр</th><th>Винрейт</th></tr></thead><tbody>${cards.map(o => { const p = pct(o.wins, o.games); return `<tr data-s="${esc(o.hero)}"><td class="db-hc">${hFace(o.hero)}<span>${esc(hName(o.hero))}</span></td><td><b>${o.games}</b></td><td class="db-wr ${wrCls(p)}"><b>${p}%</b><i class="db-bar"><i style="width:${p}%"></i></i></td></tr>`; }).join("")}</tbody></table></div>` : `<div class="pnone">Пока нет данных о героях в дуэлях</div>`; }
       pane.querySelectorAll("tr[data-s]").forEach(tr => tr.onclick = () => { const h = H(tr.dataset.s); if (h) openHero(h); });
     };
@@ -4407,13 +4406,13 @@ const GAME = (() => {
       drawPrev();
     }
     function arcOwned(){ return !!arcState().own[hero]; }
-    function arcActive(){ return arcOwned() && arcOn[hero] !== false; }
+    function arcActive(){ return false; }
     function drawPrev(){
       const sp = arcActive() ? faceArc : face, pc = $("gPrev"); pc.width = sp.width; pc.height = sp.height; const pv = pc.getContext("2d"); pv.imageSmoothingEnabled = false; pv.clearRect(0, 0, pc.width, pc.height); pv.drawImage(sp, 0, 0);
       $("gPrevW").classList.toggle("arc", arcActive()); $("gPrevW").style.setProperty("--ac", arcColor());
     }
     function arcInfo(){
-      const a = ARC[hero], st = arcState(), own = !!st.own[hero], best = st.best[hero] || 0, need = ARC_NEED(hero), el = $("gArc"); if (!a || !el) return;
+      const a = ARC[hero], st = arcState(), own = !!st.own[hero], best = st.best[hero] || 0, need = ARC_NEED(hero), el = $("gArc"); if (el){ el.hidden = true; el.innerHTML = ""; } return;
       const tag = a[2] ? "настоящая аркана из Dota 2" : "концепт-аркана";
       el.style.setProperty("--ac", a[1]);
       el.innerHTML = own
@@ -4421,7 +4420,7 @@ const GAME = (() => {
         : `<div class="arclock"><span class="arcgem">🔒</span><span><b>${esc(a[0])}</b><small>${tag} · открой: набери <b>${need}</b> очков этим героем или убей Рошана</small><i class="arcbar"><em style="width:${Math.min(100, best / need * 100)}%"></em></i><small>Лучший результат: ${best} / ${need}</small></span></div>`;
       const tb = el.querySelector("#gArcT"); if (tb) tb.onclick = e => { e.stopPropagation(); arcOn[hero] = !arcActive(); try { localStorage.setItem("ub-arc-on", JSON.stringify(arcOn)); } catch(_) {} arcInfo(); drawPrev(); };
     }
-    function arcCount(){ const st = arcState(), n = Object.keys(st.own).length; const c = $("gArcN"); if (c) c.textContent = `Арканы: ${n} / ${HEROES.length}`;
+    function arcCount(){ const st = arcState(), n = Object.keys(st.own).length; const c = $("gArcN"); if (c){ c.hidden = true; c.textContent = ""; }
       heroesEl.querySelectorAll("button").forEach(b => b.classList.toggle("hasarc", !!st.own[b.dataset.v])); }
     function kitInfo(){ const k = kitOf(hero), h = HEROES.find(x => x.slug === hero) || { en: hero };
       $("gKit").innerHTML = `<b>${esc(h.en)}</b><span class="gbadges"><i class="${k.melee ? "mel" : "rng"}">${k.melee ? "⚔️ Ближний бой" : "🏹 Дальний бой"}</i><i>${ATTR_NAME[k.attr]}</i></span><span class="gsk">${k.ic} <b>${k.name}</b> — ${k.desc}</span><span class="gsk inn">🧬 Врождённая: <b>${k.inn.name}</b> — ${k.inn.desc}</span>`; }
@@ -4856,7 +4855,7 @@ const GAME = (() => {
       if (!running) return; running = false; burst(p.x, p.y, C1, 30); burst(p.x, p.y, "#fff", 12); shake = .4;
       const sc = score(), ms = Math.round(performance.now() - t0), rec = sc > best;
       const ast = arcState(), arcUsed = !!(ast.own[hero] && arcOn[hero]); ast.best[hero] = Math.max(ast.best[hero] || 0, sc); let newArc = false;
-      if (!ast.own[hero] && (sc >= ARC_NEED(hero) || bossKills > 0)){ ast.own[hero] = 1; newArc = true; arcOn[hero] = true; try { localStorage.setItem("ub-arc-on", JSON.stringify(arcOn)); } catch(_) {} }
+      if (false){ ast.own[hero] = 1; newArc = true; arcOn[hero] = true; try { localStorage.setItem("ub-arc-on", JSON.stringify(arcOn)); } catch(_) {} }
       arcSave(ast);
       if (rec){ best = sc; try { localStorage.setItem(LBEST, best); } catch(e) {} }
       if (sc > 0){ PROF.grant("run"); if (rec && sc >= 100) PROF.nudge("run"); }

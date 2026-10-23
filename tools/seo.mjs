@@ -69,7 +69,7 @@ const foot = `<footer class="w">Blazecrest<br><a href="/">Главная</a> · 
 fs.mkdirSync(R + "heroes", { recursive: true });
 const urls = [];
 for (const h of HEROES) {
-  const ks = good(h), arc = ARCANA[h.slug], [elem, c1, c2] = THEME[h.slug] || ["", "#e8564a", "#1a1a22"];
+  const ks = good(h), arc = null, [elem, c1, c2] = THEME[h.slug] || ["", "#e8564a", "#1a1a22"];
   if (!ks.length) continue;
   const url = `${SITE}/heroes/${h.slug}`;
   const title = `${h.en} (${h.ru}) — сборка Dota 1x6 | Blazecrest`;
@@ -105,7 +105,7 @@ ${foot}
 }
 // список героев
 {
-  const url = SITE + "/heroes", title = "Все сборки героев Dota 1x6 — 54 героя | Blazecrest", desc = "Сборки всех 54 героев кастомки Dota 1x6: предметы по этапам игры, несколько вариантов на героя и арканы. Выбери героя.";
+  const url = SITE + "/heroes", title = "Все сборки героев Dota 1x6 — 54 героя | Blazecrest", desc = "Сборки всех 54 героев кастомки Dota 1x6: предметы по этапам игры, несколько вариантов на героя. Выбери героя.";
   const ld = { "@context": "https://schema.org", "@type": "CollectionPage", name: "Сборки героев Dota 1x6", url, inLanguage: "ru" };
   fs.writeFileSync(R + "heroes.html", `${head(title, desc, url, SITE + "/og/main.png?v=2", ld, "#e8564a", "#1a1a2e")}
 <body>
