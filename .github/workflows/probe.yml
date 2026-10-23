@@ -9,15 +9,12 @@ jobs:
         with: { ref: probe }
       - run: |
           set +e
-          curl -s -H "Accept-Language: en" "https://steamcommunity.com/market/listings/730/AK-47%20%7C%20Redline%20%28Field-Tested%29" > page.html; curl -s -H "Accept-Language: en" "https://steamcommunity.com/market/listings/570/Exalted%20Fractal%20Horns%20of%20Inner%20Abysm" > page2.html; gzip -c page2.html > page2.html.gz
+          S=https://blazecrest.vercel.app/api/games
           {
-          wc -c page.html
-          grep -o 'g_rg[A-Za-z]*' page.html | sort | uniq -c
-          grep -o 'Duels[^"<]\{0,60\}' page.html | head -5
-          grep -o '"descriptions":\[[^]]\{0,400\}' page.html | head -3
-          grep -o '<script[^>]*>[^<]\{0,80\}' page.html | head -20
-          grep -o 'window\.[A-Za-z_]*\s*=' page.html | sort | uniq -c | head
-          grep -o 'data-[a-z_-]*=' page.html | sort | uniq -c | sort -rn | head
+          echo "== gems"; curl -s "$S?q=market&g=dota&cat=gem&start=0" | python3 -c "import sys,json;d=json.load(sys.stdin);[print(i['n'],i.get('rn')) for i in d['items'][:4]]"
+          echo "== ins arcana"; curl -s "$S?q=market&g=dota&cat=arcana&start=0&ql=ins" | python3 -c "import sys,json;d=json.load(sys.stdin);print(d['total']);[print(i['n']) for i in d['items'][:4]]"
+          echo "== cs FN st"; curl -s "$S?q=market&g=cs&cat=rifle&start=0&ql=st" | python3 -c "import sys,json;d=json.load(sys.stdin);print(d['total']);[print(i['n']) for i in d['items'][:3]]"
+          echo "== lots LC arcana"; curl -s "$S?q=lots&g=dota&s=Inscribed%20Blades%20of%20Voth%20Domosh" | python3 -c "import sys,json;d=json.load(sys.stdin);print(d.get('total'),d.get('error'));[print(l['v'],[(g['n'],g['t']) for g in l['gems']],l['extra']) for l in d.get('items',[])[:5]]"
+          echo "== lots cs"; curl -s "$S?q=lots&g=cs&s=AK-47%20%7C%20Redline%20(Field-Tested)" | python3 -c "import sys,json;d=json.load(sys.stdin);print(d.get('total'),d.get('error'));[print(l['v'],l['gems'],l['extra']) for l in d.get('items',[])[:5]]"
           } > out.txt 2>&1
-          gzip -c page.html > page.html.gz
-          git config user.name probe; git config user.email probe@x; git add out.txt page.html.gz page2.html.gz; git commit -qm out; git push
+          git config user.name probe; git config user.email probe@x; git add out.txt; git commit -qm out; git push
