@@ -497,11 +497,12 @@
     color: var(--fg); -webkit-text-fill-color: var(--fg); background: color-mix(in srgb, var(--nc, var(--t1)) 18%, rgba(255,255,255,.06)); border: 1px solid color-mix(in srgb, var(--nc, var(--t1)) 45%, transparent); }
   .nstag img { height: 16px; width: auto; max-width: 30px; object-fit: contain; border-radius: 4px; } .nstag.ic { padding: 2px 4px; }
   .ns-up { position: relative; display: inline-grid; place-items: center; height: 42px; padding: 0 12px; border-radius: 12px; border: 1px dashed rgba(255,255,255,.25); color: var(--muted); font-size: 13px; font-weight: 700; cursor: pointer; overflow: hidden; }
-  .ns-up:hover { color: var(--fg); border-color: var(--t1); } .ns-up input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .ns-up:hover { color: var(--fg); border-color: var(--t1); } .ns-up.busy { pointer-events: none; opacity: .6; } .ns-up.busy::after { content: "…"; margin-left: 4px; }
+  .ns-tags input#fNsT.bad { border-color: #ef4444; color: #fca5a5; } .ns-up input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
   .ns-decos, .ns-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
   .ns-decos button, .ns-tags button { min-width: 48px; height: 42px; padding: 0 10px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,.03); color: var(--fg); cursor: pointer; font-size: 15px; }
   .ns-decos button[aria-pressed="true"], .ns-tags button[aria-pressed="true"] { border-color: var(--t1); box-shadow: 0 0 0 1px var(--t1) inset; background: color-mix(in srgb, var(--t1) 10%, transparent); }
-  .ns-tags .nstag { margin: 0; vertical-align: 0; } .ns-tags input#fNsT { flex: none; width: 130px !important; height: 42px; padding: 0 10px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); font-weight: 800; letter-spacing: .5px; text-transform: uppercase; }
+  .ns-tags .nstag { margin: 0; vertical-align: 0; } .ns-tags input#fNsT { flex: none; width: 170px !important; height: 42px; padding: 0 10px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); font-weight: 800; letter-spacing: .3px; }
   .ns-card.on { border: 2px solid var(--nc); box-shadow: 0 0 26px -8px var(--nc); } .ns-card .pdot { position: absolute; left: 52px; top: 74px; right: auto; bottom: auto; z-index: 2; }
   .pdot { position: absolute; right: 7px; bottom: 7px; width: 18px; height: 18px; border-radius: 50%; background: #22c55e; border: 3px solid var(--panel, var(--bg)); box-shadow: 0 0 8px rgba(34,197,94,.6); } .pav { position: relative; }
   .sheet.prof.ns-prof { box-shadow: 0 0 0 2px var(--nc), 0 0 48px -12px var(--nc), 0 30px 80px -20px rgba(0,0,0,.7); }
@@ -3465,7 +3466,7 @@ const PROF = (() => {
             <div class="ns-sec"><span>Шрифт</span><div class="ns-fonts">${NSF.map((f, i) => `<button type="button" data-nf="${i}" aria-pressed="${nso.f === i}" style="font-family:${f === "inherit" ? "var(--body)" : f}${i === 3 ? ";font-size:13px" : ""}">Gg</button>`).join("")}</div></div>
             <div class="ns-sec"><span>Эффект</span><div class="ns-effs">${NSE.map(([k, t]) => `<button type="button" data-ne="${k}" aria-pressed="${nso.e === k}"><b class="ns-tile" data-k="${k}">${t}</b></button>`).join("")}</div></div>
             <div class="ns-sec"><span>Украшение</span><div class="ns-decos"><button type="button" data-nd="" aria-pressed="${!nso.d}">—</button>${Object.keys(NSD).map(k => `<button type="button" data-nd="${k}" aria-pressed="${nso.d === k}"><b class="ns-dprev" data-k="${k}">Gg</b></button>`).join("")}</div></div>
-            <div class="ns-sec"><span>Тег</span><div class="ns-tags"><button type="button" data-ng="" aria-pressed="${!nso.g}">—</button>${Object.entries(NSG).map(([k, [ic, tx]]) => `<button type="button" data-ng="${k}" aria-pressed="${nso.g === k}"${k === "up" ? ` id="fNsUpB"${nso.g === "up" ? "" : " hidden"}` : ""}><span class="nstag">${k === "up" ? `<img alt="" src="${esc(tagUrl(U && U.id, nso.v))}" onerror="this.remove()">` : `<img alt="" src="${ic}">`}${k === "up" ? "" : tx}</span></button>`).join("")}<label class="ns-up" title="Своя иконка тега">＋ Своя иконка<input type="file" accept="image/png,image/jpeg,image/webp" id="fNsUp"></label><input type="text" id="fNsT" maxlength="5" placeholder="Свой текст" value="${esc(nso.t)}" autocomplete="off"></div></div>
+            <div class="ns-sec"><span>Тег</span><div class="ns-tags"><button type="button" data-ng="" aria-pressed="${!nso.g}">—</button>${Object.entries(NSG).map(([k, [ic, tx]]) => `<button type="button" data-ng="${k}" aria-pressed="${nso.g === k}"${k === "up" ? ` id="fNsUpB"${nso.g === "up" ? "" : " hidden"}` : ""}><span class="nstag">${k === "up" ? `<img alt="" src="${esc(tagUrl(U && U.id, nso.v))}" onerror="this.remove()">` : `<img alt="" src="${ic}">`}${k === "up" ? "" : tx}</span></button>`).join("")}<label class="ns-up" title="Своя иконка тега">＋ Своя иконка<input type="file" accept="image/png,image/jpeg,image/webp" id="fNsUp"></label><input type="text" id="fNsT" maxlength="12" placeholder="Свой текст тега" value="${esc(nso.t)}" autocomplete="off"></div></div>
             <div class="ns-sec"><span>Цвет</span><div class="ns-cols"><label class="ns-pick" title="Свой цвет">✎<input type="color" id="fNsC" value="#${nso.c}"></label>${NSC.map(c => `<button type="button" data-nc="${c}" aria-pressed="${nso.c === c}" style="background:#${c}" aria-label="#${c}"></button>`).join("")}</div></div>
             <div class="ns-acts"><button type="button" class="btn btn-ghost" id="fNsRnd">🎲 Удиви меня</button><button type="button" class="btn btn-ghost" id="fNsOff">Без стиля</button></div>
             ${prem ? "" : `<div class="ns-lock"><span>👑 Стиль ника, анимированные аватарки и баннеры и свои GIF — с подпиской 1x6+. Попробовать можно уже сейчас, сохранится после оформления.</span><button type="button" class="btn btn-primary" id="fNsPrem">Оформить</button></div>`}
@@ -3515,12 +3516,21 @@ const PROF = (() => {
         x.drawImage(im, (64 - w) / 2, (64 - h) / 2, w, h);
         c.toBlob(async blob => { if (!blob) return; const local = URL.createObjectURL(blob);
           const ub = nsEd.querySelector("#fNsUpB"); ub.hidden = false; ub.querySelector(".nstag").innerHTML = `<img alt="" src="${local}">`;
+          const was = { g: ns.g, v: ns.v }, b64 = c.toDataURL("image/png");
           nsEd.querySelectorAll(".ns-name").forEach(el => el._tagSrc = local);
           ns.g = "up"; ns.v = Date.now().toString(36).slice(-6); nsSet();
-          if (CLOUD && U){ const { error } = await sb.storage.from("media").upload(`${U.id}/tag.png`, blob, { contentType: "image/png", upsert: true, cacheControl: "604800" });
-            if (error) toast("Не удалось загрузить иконку. Попробуй ещё раз."); } }, "image/png"); };
+          if (!(CLOUD && U)) return;
+          const lb = nsEd.querySelector(".ns-up"); lb.classList.add("busy");
+          let r = null; try { const { data: { session } } = await sb.auth.getSession();
+            r = await fetch("/api/tagicon", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + (session && session.access_token || "") }, body: JSON.stringify({ png: b64 }) }).then(x => x.json()); } catch(_) {}
+          lb.classList.remove("busy");
+          if (r && r.ok){ ns.v = r.v; nsSet(); toast("Иконка прошла проверку ✅"); return; }
+          ub.hidden = !was.g || was.g !== "up"; nsEd.querySelectorAll(".ns-name").forEach(el => el._tagSrc = ""); ns.g = was.g; ns.v = was.v; nsSet();
+          toast(r && r.error === "nsfw" ? "Иконка не прошла проверку: 18+ и запрещённые картинки ставить нельзя." : r && r.error === "premium_required" ? "Своя иконка — с подпиской 1x6+ 👑" : "Не удалось загрузить иконку. Попробуй ещё раз."); }, "image/png"); };
         im.onerror = () => toast("Не получилось открыть картинку."); im.src = rd.result; }; rd.readAsDataURL(f); };
-    nsEd.querySelector("#fNsT").oninput = e => { const v = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 5); e.target.value = v; ns.t = v; if (!ns.g) ns.g = "bc"; nsSet(); };
+    nsEd.querySelector("#fNsT").oninput = e => { const v = e.target.value.replace(/[^\p{L}\p{N} _-]/gu, "").replace(/\s+/g, " ").slice(0, 12); e.target.value = v;
+      const bad = NS_BAD.test(v); e.target.classList.toggle("bad", bad); if (bad){ toast("В теге недопустимое слово — так нельзя."); return; }
+      ns.t = v.trim(); if (!ns.g) ns.g = "bc"; nsSet(); };
     nsEd.querySelector("#fNsC").oninput = e => { ns.c = e.target.value.slice(1).toLowerCase(); nsSet(); };
     nsEd.querySelector("#fNsRnd").onclick = () => { ns.f = rnd(NSF.length); ns.e = NSE[rnd(NSE.length)][0]; ns.c = rnd(3) ? NSC[rnd(NSC.length)] : Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, "0");
       const dk = Object.keys(NSD); ns.d = rnd(3) ? dk[rnd(dk.length)] : ""; const gk = Object.keys(NSG).filter(k => k !== "up"); ns.g = rnd(2) ? gk[rnd(gk.length)] : ""; ns.t = ""; nsSet(); };
@@ -4071,8 +4081,10 @@ const PROF = (() => {
   const NSC = ["f43f9e", "22c55e", "3b82f6", "c084fc", "e11d48", "f97316", "eab308", "22d3ee"];
   const NSTY = new Map();
   // формат: шрифт.эффект.цвет[.украшение[.тег[.ПОДПИСЬ]]]
-  const nsParse = s => { const m = /^(\d{1,2})\.([a-z]+)\.([0-9a-f]{6})(?:\.([a-z]*)(?:\.([a-z]*)(?:\.([A-Z0-9]{0,5})(?:\.([a-z0-9]{0,6}))?)?)?)?$/.exec(s || "");
+  const nsParse = s => { const m = /^(\d{1,2})\.([a-z]+)\.([0-9a-f]{6})(?:\.([a-z]*)(?:\.([a-z]*)(?:\.([\p{L}\p{N} _-]{0,12})(?:\.([a-z0-9]{0,6}))?)?)?)?$/u.exec(s || "");
     return m && +m[1] < NSF.length && NSE.some(e => e[0] === m[2]) ? { f: +m[1], e: m[2], c: m[3], d: NSD[m[4]] ? m[4] : "", g: NSG[m[5]] ? m[5] : "", t: m[6] || "", v: m[7] || "" } : null; };
+  // мат и 18+ в подписи тега не пропускаем (то же проверяет база)
+  const NS_BAD = /(х[уy][йиеёяю]|п[иі1]зд|[её]б[аaлуи]|бля|муд[аи]к|пид[оа]р|гандон|шлюх|залуп|fuck|shit|bitch|porn|n[i1]gg|fag|cunt|dick|pussy|hitler|nazi|sex)/iu;
   const nsStr = o => `${o.f}.${o.e}.${o.c}.${o.d || ""}.${o.g || ""}.${o.g ? o.t || "" : ""}.${o.g === "up" ? o.v || "" : ""}`.replace(/\.+$/, "");
   const nsDeco = (k, side) => { const x = NSD[k]; if (!x) return null; const sp = document.createElement("span"); sp.className = "nsd" + (x[2] ? " col" : "") + (k === "wings" ? " w" : "");
     if (x[side] === "@logo") sp.innerHTML = `<img alt="" src="/logo.png">`; else sp.textContent = x[side]; return sp; };
@@ -6873,7 +6885,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=20").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=21").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;

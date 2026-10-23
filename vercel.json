@@ -65,6 +65,10 @@
   "functions": {
     "api/ai.js": {
       "maxDuration": 60
+    },
+    "api/tagicon.js": {
+      "maxDuration": 30,
+      "memory": 1024
     }
   },
   "redirects": [

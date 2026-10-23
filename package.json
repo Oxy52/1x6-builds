@@ -1,0 +1,10 @@
+{
+  "name": "blazecrest",
+  "private": true,
+  "description": "Static site + Vercel functions; dependencies are used only by api/tagicon.js (NSFW check of tag icons)",
+  "dependencies": {
+    "@tensorflow/tfjs": "4.22.0",
+    "nsfwjs": "4.2.1",
+    "pngjs": "7.0.0"
+  }
+}
