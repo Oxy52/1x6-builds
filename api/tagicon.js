@@ -28,9 +28,16 @@ async function premium(uid) {
   return r.ok && (await r.json()) === true;
 }
 
-// модель грузится один раз на экземпляр функции
+// модель NSFW.js (MobileNetV2, лицензия MIT — api/_nsfw/LICENSE) лежит рядом: прямые require, чтобы Vercel положил её в функцию
+const CLASSES = ["Drawing", "Hentai", "Neutral", "Porn", "Sexy"];
 let MODEL_P = null;
-const nsfwModel = () => MODEL_P || (MODEL_P = (async () => { const tf = require("@tensorflow/tfjs"), nsfw = require("nsfwjs"); await tf.ready(); return { tf, m: await nsfw.load("MobileNetV2") }; })().catch(e => { MODEL_P = null; throw e; }));
+const nsfwModel = () => MODEL_P || (MODEL_P = (async () => {
+  const tf = require("@tensorflow/tfjs");
+  const mj = require("./_nsfw/model.js"), wb = require("./_nsfw/weights.js");
+  const buf = Buffer.from(wb, "base64"), weightData = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
+  const m = await tf.loadLayersModel(tf.io.fromMemory({ modelTopology: mj.modelTopology, weightSpecs: mj.weightsManifest[0].weights, weightData }));
+  return { tf, m };
+})().catch(e => { MODEL_P = null; throw e; }));
 
 async function nsfwCheck(png) {
   const { tf, m } = await nsfwModel();
@@ -38,11 +45,10 @@ async function nsfwCheck(png) {
   const px = new Uint8Array(png.width * png.height * 3);
   for (let i = 0, j = 0; i < png.data.length; i += 4, j += 3) { const a = png.data[i + 3] / 255;
     for (let c = 0; c < 3; c++) px[j + c] = Math.round(png.data[i + c] * a + 128 * (1 - a)); }
-  const img = tf.tensor3d(px, [png.height, png.width, 3]);
-  try {
-    const p = Object.fromEntries((await m.classify(img, 5)).map(x => [x.className, x.probability]));
-    return { bad: (p.Porn || 0) >= 0.35 || (p.Hentai || 0) >= 0.45 || (p.Sexy || 0) >= 0.6, p };
-  } finally { img.dispose(); }
+  const out = tf.tidy(() => m.predict(tf.image.resizeBilinear(tf.tensor3d(px, [png.height, png.width, 3]).toFloat().div(255), [224, 224], true).reshape([1, 224, 224, 3])));
+  const v = await out.data(); out.dispose();
+  const p = Object.fromEntries(CLASSES.map((c, i) => [c, v[i]]));
+  return { bad: p.Porn >= 0.35 || p.Hentai >= 0.45 || p.Sexy >= 0.6, p };
 }
 
 async function claudeCheck(b64) {
