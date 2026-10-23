@@ -1,9 +1,20 @@
-19 None
-5027 patch 🙂 Разработчики продолжают работать над оптимизацией! | Сегодня ночью вышел патч, в котором модель тележки 🥹Doorman&#39;а была упрощена  True
-5026 community 🥳 Вайпер засветилась на официальном докладе Valve! | На днях прошла крупнейшая конференция по игровому звуку — GameSoundCon. На котор True
-5025 patch 😔 ЙОШИ ОБЬЕДИНИЛ ЕУ И РУ СЕРВЕРА? | Ночью Динозаврик😃 сообщил об обновлении серверной части игры, направленном на да True
-5024 community 😠 ВИКТОР В С Е (по крайней мере пока что) | Разработчики решили временно убрать 🥹персонажа, чтобы исправить новоиспеченные б True
-5023 community 🚽 Большие киберспортивные организации уже близко? | Minesweeper поделился слухами о грядущих контрактах на про-сцене:<br>😄: Птичка н True
-5021 patch 👀 Кто из новых героев понравился вам больше всего? | Настало время подводить итоги обновления City Never Sleeps, в связи с чем возник True
-5020 patch 👏 Медсестра Хэрроу балансная? | Все новые герои вышли, поэтому настало время посмотреть на процент побед последн True
-5019 players 🫰 Даже Бустеру нравится Дедлок! | В последнее время популярный стример поигрывает в нашу любимую игру на втором ка True
+== g=cs&cat=rifle&start=0&sort=exp
+Souvenir AK-47 | Bloodsport (Minimal Wea 7 Тайное [2044.94]
+Souvenir Galil AR | Rocket Pop (Factory  4 Армейское [1873.83]
+Souvenir M4A1-S | Welcome to the Jungle  7 Тайное [1843.24]
+AK-47 | Gold Arabesque (Field-Tested) 7 Тайное [1800]
+== g=cs&cat=rifle&start=0&sort=cheap
+FAMAS | Byproduct (Well-Worn) 2 Ширпотреб [0.03]
+FAMAS | Palm (Minimal Wear) 2 Ширпотреб [0.03]
+Galil AR | Grey Smoke (Well-Worn) 2 Ширпотреб [0.03]
+Galil AR | Grey Smoke (Battle-Scarred) 2 Ширпотреб [0.03]
+== g=dota&cat=immortal&start=0
+Everglyph Goggles 8 Бессмертное [0.04]
+Trust of the Benefactor 2020 8 Бессмертное [2.95]
+Arms of Desolation 8 Бессмертное [10.98]
+Wings of Daybreak 8 Бессмертное [2.22]
+== g=cs&cat=knife&start=0
+★ StatTrak™ Huntsman Knife | Freehand (M 8 Тайное [101.86]
+★ Bayonet | Doppler (Factory New) 8 Тайное [420]
+★ Navaja Knife | Ultraviolet (Field-Test 8 Тайное [55.31]
+★ Kukri Knife | Scorched (Field-Tested) 8 Тайное [53.21]
