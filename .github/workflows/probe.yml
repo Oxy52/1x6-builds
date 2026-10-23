@@ -7,9 +7,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          id=$(curl -s https://api.opendota.com/api/proMatches | python3 -c "import json,sys;print(json.load(sys.stdin)[3]['match_id'])")
-          curl -s https://api.opendota.com/api/matches/$id | gzip > pro.json.gz
-          id2=$(curl -s https://api.opendota.com/api/publicMatches | python3 -c "import json,sys;print(json.load(sys.stdin)[0]['match_id'])")
-          curl -s https://api.opendota.com/api/matches/$id2 | gzip > pub.json.gz
-          echo "$id $id2" > out.txt
-          git config user.name p; git config user.email p@p; git add -A out.txt pro.json.gz pub.json.gz; git commit -m r; git push
+          K=sb_publishable_tJy3dl_kfNZXP6PXMqsQVQ_RUXqoPmn; U=https://vsmjjlrgjyujaioknlkn.supabase.co/rest/v1
+          { for t in grids grid_likes news_posts posts feed_posts; do echo "== $t"; curl -s "$U/$t?select=*&limit=1" -H "apikey: $K" | head -c 300; echo; done; } > out.txt
+          git config user.name p; git config user.email p@p; git add -A out.txt; git commit -m r; git push
