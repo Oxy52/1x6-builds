@@ -9,13 +9,7 @@ jobs:
         with: { ref: probe }
       - run: |
           set +e
-          {
-          for n in cs2_exe_news cs2exe_news cs2_exe cs_exe_news csgo_exe_news cs2exe cs2_exe_ru deadlock_exe_news deadlockexe_news deadlock_exe deadlock_news deadlockru deadlock_ru deadlocknews deadlock_rus deadlock_exe_ru; do
-            h=$(curl -s -L "https://t.me/s/$n")
-            t=$(echo "$h" | grep -o '<meta property="og:title" content="[^"]*"' | head -1)
-            c=$(echo "$h" | grep -c 'tgme_widget_message_wrap')
-            last=$(echo "$h" | grep -o 'datetime="[^"]*"' | tail -1)
-            echo "$n | $t | posts=$c | $last"
-          done
-          } > out.txt 2>&1
+          curl -s -L "https://t.me/s/deadlocknews" | grep -o 'tgme_widget_message_text[^>]*>[^<]\{0,160\}' | tail -6 > out.txt
+          curl -s -L "https://t.me/s/deadlocknews" | grep -o 'tgme_channel_info_description">[^<]\{0,200\}' >> out.txt
+          curl -s -L "https://t.me/s/deadlocknews" | grep -o 'counter_value">[^<]*' >> out.txt
           git config user.name probe; git config user.email probe@x; git add -A; git commit -qm out; git push
