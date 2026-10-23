@@ -98,10 +98,18 @@ const CAT = {
     gloves: ["Type", "tag_Type_Hands"], smg: ["Type", "tag_CSGO_Type_SMG"], case: ["Type", "tag_CSGO_Type_WeaponCase"], sticker: ["Type", "tag_CSGO_Tool_Sticker"] },
   dota: { arcana: ["Rarity", "tag_Rarity_Arcana"], immortal: ["Rarity", "tag_Rarity_Immortal"], legendary: ["Rarity", "tag_Rarity_Legendary"], mythical: ["Rarity", "tag_Rarity_Mythical"],
     courier: ["Type", "tag_courier"], ward: ["Type", "tag_ward"], set: ["Type", "tag_bundle"] } };
-async function market(g, cat, query, start) {
+// редкость из типа предмета Steam: ранг для сортировки и русское название
+const RAR = [[/contraband/i, 10, "Контрабанда"], [/extraordinary/i, 8, "Экстраординарное"], [/covert/i, 7, "Тайное"], [/exotic/i, 6, "Экзотичное"], [/classified/i, 6, "Засекреченное"],
+  [/remarkable/i, 5, "Примечательное"], [/restricted/i, 5, "Запрещённое"], [/high grade/i, 4, "Высшего класса"], [/mil-spec/i, 4, "Армейское"], [/industrial/i, 3, "Промышленное"],
+  [/consumer/i, 2, "Ширпотреб"], [/base grade/i, 1, "Базового класса"],
+  [/arcana/i, 9, "Аркана"], [/immortal/i, 8, "Бессмертное"], [/ancient/i, 7, "Древнее"], [/legendary/i, 6, "Легендарное"], [/mythical/i, 5, "Мифическое"], [/rare/i, 4, "Редкое"], [/uncommon/i, 3, "Необычное"], [/common/i, 2, "Обычное"]];
+function rarity(type) { const t = String(type || ""); const x = RAR.find(([re]) => re.test(t)); return x ? { r: x[1] + (/★/.test(t) ? 1 : 0), rn: x[2] } : { r: 0, rn: "" }; }
+const SORT = { pop: ["popular", "desc"], cheap: ["price", "asc"], exp: ["price", "desc"], name: ["name", "asc"], rar: ["popular", "desc"] };
+async function market(g, cat, query, start, sort) {
   if (!APP[g]) g = "cs";
   const app = APP[g], u = new URL("https://steamcommunity.com/market/search/render/");
-  Object.entries({ appid: app, norender: 1, count: 10, start, sort_column: "popular", sort_dir: "desc" }).forEach(([k, v]) => u.searchParams.set(k, v));
+  const so = SORT[sort] || SORT.pop;
+  Object.entries({ appid: app, norender: 1, count: 10, start, sort_column: so[0], sort_dir: so[1], l: "english" }).forEach(([k, v]) => u.searchParams.set(k, v));
   const C = CAT[g], c = C[cat] || Object.values(C)[0];
   if (query) u.searchParams.set("query", query); else u.searchParams.append(`category_${app}_${c[0]}[]`, c[1]);
   const keys = Object.keys(SRC).filter(k => !SRC[k].only || SRC[k].only === g);
@@ -112,7 +120,7 @@ async function market(g, cat, query, start) {
     const p = [{ k: "steam", name: "Steam", d: "steamcommunity.com", v: r.sell_price ? r.sell_price / 100 : null, n: r.sell_listings || 0, u: `https://steamcommunity.com/market/listings/${app}/${encodeURIComponent(n)}` }];
     keys.forEach((k, i) => { const m = maps[i]; if (!m) return; const x = m.get(n), S = SRC[k];
       p.push({ k, name: val(S.name, g), d: val(S.d, g), v: x ? x.v : null, n: x ? x.n || 0 : 0, u: (x && x.u) || S.search(g, n), daily: !!S.daily }); });
-    return { n, img: ad.icon_url ? `https://community.cloudflare.steamstatic.com/economy/image/${ad.icon_url}/160fx120f` : "", col: ad.name_color || "", p }; });
+    return { n, ...rarity(ad.type), img: ad.icon_url ? `https://community.cloudflare.steamstatic.com/economy/image/${ad.icon_url}/160fx120f` : "", col: ad.name_color || "", p }; });
   return { g, fx, total: st.total_count || 0, items };
 }
 
@@ -166,7 +174,7 @@ module.exports = async (req, res) => {
     else if (q === "dlHeroes") out = await dlHeroes(lang);
     else if (q === "dlItems") out = await dlItems(lang);
     else if (q === "csMarket" || q === "market") { const qs = String(req.query.s || "").trim().slice(0, 60), s0 = Math.max(0, Math.min(90, +req.query.start || 0)), start = s0 - s0 % 10;
-      if (qs && qs.length < 2) return fail(400, "bad_query"); out = await market(q === "csMarket" ? "cs" : String(req.query.g || "cs"), String(req.query.cat || ""), qs, start); }
+      if (qs && qs.length < 2) return fail(400, "bad_query"); out = await market(q === "csMarket" ? "cs" : String(req.query.g || "cs"), String(req.query.cat || ""), qs, start, String(req.query.sort || "pop")); }
     else { const id = +req.query.id; if (!(id > 0 && id < 1000)) return fail(400, "bad_id"); out = q === "dlOrder" ? await dlOrder(id, lang) : await dlHero(id); }
     res.setHeader("Cache-Control", `public, s-maxage=${TTL[q]}, stale-while-revalidate=86400`);
     res.status(200).json(out);
