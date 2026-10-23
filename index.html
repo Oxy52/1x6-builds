@@ -1515,6 +1515,7 @@
   .ncard::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 0 3px 3px 0; background: var(--nc); box-shadow: 0 0 12px var(--nc); }
   .ncard.patch { --nc: #ffb547; } .ncard.players { --nc: #c47bff; } .ncard.events { --nc: #4ade80; } .ncard.community { --nc: #ff6b8b; } .ncard.leaks { --nc: #2ee6d6; } .ncard.valve { --nc: #ff5a3c; }
   .nsrc { font-size: 11.5px; font-weight: 700; color: #5fb4ff; }
+  .nsrc.st { color: #8fa3b8; }
   .ncard.auto p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   .nic { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-size: 21px; background: color-mix(in srgb, var(--nc) 16%, transparent); border: 1px solid color-mix(in srgb, var(--nc) 35%, transparent); }
   button.nic { padding: 0; overflow: hidden; cursor: pointer; border: 2px solid var(--c1); background: var(--c2); transition: transform .2s; }
@@ -6957,15 +6958,22 @@ const GAMES = (() => {
 
   const NC = { cs: "#f5a524", deadlock: "#4fd1b5" }, GN = { cs: "Counter-Strike 2", deadlock: "Deadlock" };
   const newsUrl = app => `/api/news?app=${app}&lang=${L()}`;
+  const TGN = { cs: "CS2.exe", deadlock: "Deadlock News" };
+  // официальные новости Steam + Telegram-канал игры (сервер обновляет раз в час), вместе по дате
+  const allNews = app => Promise.all([once(newsUrl(app)).catch(() => null), once(`/api/news?src=tg&ch=${app}`).catch(() => null)]).then(([a, b]) => {
+    if (!a && !b) throw new Error("news");
+    const tg = ((b && b.items) || []).map(n => ({ ...n, gid: "tg" + n.post }));
+    return { items: ((a && a.items) || []).concat(tg).sort((x, y) => y.ts - x.ts) };
+  });
   function news(el, app){
     el.innerHTML = `<div class="nlist">${sk(4)}</div>`;
-    once(newsUrl(app)).then(d => {
-      el.innerHTML = `<div class="nlist">${(d.items || []).map((n, i) => `<article class="ncard valve auto g-news" data-app="${app}" data-gid="${esc(n.gid)}" role="button" tabindex="0" style="--i:${Math.min(i, 10)}">${n.img ? `<span class="nic g-nimg"><img alt="" loading="lazy" src="${esc(n.img)}"></span>` : `<span class="nic">📰</span>`}<div><div class="nmeta"><span>${day(n.ts * 1000)}</span></div><h3 translate="no">${n.t}</h3>${n.x ? `<p translate="no">${n.x}</p>` : ""}</div></article>`).join("")}</div>
-        <p class="db-note">Официальные новости разработчиков из Steam. Нажми на новость — откроется полный текст.</p>`;
+    allNews(app).then(d => {
+      el.innerHTML = `<div class="nlist">${(d.items || []).map((n, i) => `<article class="ncard valve auto g-news" data-app="${app}" data-gid="${esc(n.gid)}" role="button" tabindex="0" style="--i:${Math.min(i, 10)}">${n.img ? `<span class="nic g-nimg"><img alt="" loading="lazy" src="${esc(n.img)}"></span>` : `<span class="nic">📰</span>`}<div><div class="nmeta">${n.src === "tg" ? `<span class="nsrc" translate="no">✈ ${TGN[app]}</span>` : `<span class="nsrc st">Steam</span>`}<span>${day(n.ts * 1000)}</span></div><h3 translate="no">${n.t}</h3>${n.x ? `<p translate="no">${n.x}</p>` : ""}</div></article>`).join("")}</div>
+        <p class="db-note">Официальные новости из Steam и свежие посты Telegram-канала ${TGN[app]} (обновляются раз в час). Нажми на новость — откроется полный текст.</p>`;
     }).catch(() => { el.innerHTML = err; });
   }
   async function openNews(app, gid){
-    let list; try { list = (await once(newsUrl(app))).items || []; } catch(e) { return; }
+    let list; try { list = (await allNews(app)).items || []; } catch(e) { return; }
     const idx = list.findIndex(x => x.gid === gid), n = list[idx]; if (!n) return;
     const was = !modal.hidden;
     if (modal._cleanup){ try { modal._cleanup(); } catch(e) {} modal._cleanup = null; }
@@ -6975,7 +6983,7 @@ const GAMES = (() => {
         <button type="button" class="close" aria-label="Закрыть">✕</button></div>
       <div class="nbody"><div class="nmeta"><span class="ntag">${GN[app]}</span><span>${day(n.ts * 1000)}</span></div>
         <h3 translate="no">${n.t}</h3><div class="g-full" translate="no">${sk(3)}</div>
-        <div class="nacts"><a class="btn btn-ghost" href="${esc(n.url)}" target="_blank" rel="noopener">Открыть в Steam ↗</a></div></div></div>`;
+        <div class="nacts"><a class="btn btn-ghost" href="${esc(n.url)}" target="_blank" rel="noopener">${n.src === "tg" ? "Открыть в Telegram ↗" : "Открыть в Steam ↗"}</a></div></div></div>`;
     modal.classList.toggle("swap", was); modal.hidden = false; lockScroll();
     const sh = modal.querySelector(".g-sheet"); if (was) sh.scrollTop = 0;
     const go = d => openNews(app, list[(idx + d + list.length) % list.length].gid);
@@ -6983,6 +6991,7 @@ const GAMES = (() => {
     modal.querySelector(".navh.prev").onclick = () => go(-1); modal.querySelector(".navh.next").onclick = () => go(1);
     modal.querySelector(".close").onclick = closeModal; if (!was) modal.querySelector(".close").focus({ preventScroll: true });
     const box = sh.querySelector(".g-full");
+    if (n.src === "tg"){ box.innerHTML = `<p>${n.x || ""}</p>`; return; }
     try { const f = await once(newsUrl(app) + "&gid=" + encodeURIComponent(gid)); if (!sh.isConnected) return;
       // первая картинка текста обычно та же, что в шапке
       box.innerHTML = (f.h || n.x || "").replace(/^(<p>)?<img [^>]*>(<\/p>)?(<br>)*/, m => n.img && m.includes(n.img) ? "" : m);
@@ -7039,7 +7048,8 @@ const GAMES = (() => {
       <div class="mk-legend"></div>
       <div class="mk-list">${sk(4)}</div>
       <p class="db-note"><span>Цены — самый дешёвый лот на каждой площадке, в валюте сайта по текущему курсу.</span> <span>Steam, Lis-skins, Skinport и Market обновляются раз в час.</span>${g === "cs" ? ` <span>CS.money и CSFloat — раз в сутки (отмечены ⏱).</span>` : ""} <span>Зелёная — самая выгодная.</span> <span>Нажми на площадку — откроется эта вещь на её сайте.</span> <span>Мы ничего не продаём, только показываем цены.</span></p>`;
-    el.onclick = e => { const mp = e.target.closest("a.mk-p"); if (mp && curWarn(mp, e)) return;
+    if (!el._mkw){ el._mkw = 1; el.addEventListener("click", e => { if (el._mk && el.querySelector(".mk-bar")) el._mk(e); }); }
+    el._mk = e => { const mp = e.target.closest("a.mk-p"); if (mp && curWarn(mp, e)) return;
       const fv = e.target.closest(".mk-fav");
       if (fv){ e.preventDefault(); const n = fv.dataset.n, list = favs(g), k = list.findIndex(x => x.n === n);
         if (k >= 0){ list.splice(k, 1); PROF.toast("Убрано из избранного"); } else { const it = m.items.find(x => x.n === n); if (it){ list.unshift(it); PROF.toast("Добавлено в избранное ★"); } }
