@@ -9,23 +9,15 @@ jobs:
         with: { ref: probe }
       - run: |
           set +e
+          curl -s -H "Accept-Language: en" "https://steamcommunity.com/market/listings/570/Blades%20of%20Voth%20Domosh" > page.html
           {
-          for n in "Blades%20of%20Voth%20Domosh" "Fractal%20Horns%20of%20Inner%20Abysm" "Manifold%20Paradox"; do
-          echo "== $n"
-          curl -s -w "\nHTTP %{http_code}\n" "https://steamcommunity.com/market/listings/570/$n/render/?query=&start=0&count=4&country=US&language=english&currency=1" > r.json; tail -1 r.json; head -c 200 r.json; echo
-          python3 -c "
-          import json,re
-          t=open('r.json').read().rsplit('\nHTTP',1)[0]
-          d=json.loads(t)
-          print('total', d.get('total_count'))
-          for lid,l in list(d.get('listinginfo',{}).items())[:4]:
-            a=l['asset']; ad=d['assets'][str(a['appid'])][a['contextid']][a['id']]
-            print('price', l.get('converted_price'), l.get('converted_fee'), ad.get('name'))
-            for x in ad.get('descriptions',[]):
-              v=re.sub('<[^>]+>',' ',x.get('value',''))
-              if v.strip(): print('   D:', v.strip()[:140], x.get('color',''))
-          "
-          sleep 3
-          done
+          wc -c page.html
+          grep -o 'g_rg[A-Za-z]*' page.html | sort | uniq -c
+          grep -o 'Duels[^"<]\{0,60\}' page.html | head -5
+          grep -o '"descriptions":\[[^]]\{0,400\}' page.html | head -3
+          grep -o '<script[^>]*>[^<]\{0,80\}' page.html | head -20
+          grep -o 'window\.[A-Za-z_]*\s*=' page.html | sort | uniq -c | head
+          grep -o 'data-[a-z_-]*=' page.html | sort | uniq -c | sort -rn | head
           } > out.txt 2>&1
-          git config user.name probe; git config user.email probe@x; git add out.txt; git commit -qm out; git push
+          gzip -c page.html > page.html.gz
+          git config user.name probe; git config user.email probe@x; git add out.txt page.html.gz; git commit -qm out; git push
