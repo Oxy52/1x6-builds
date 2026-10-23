@@ -483,15 +483,29 @@ const GRIDS = (() => {
   /* ---------- мастерская ---------- */
   const SBT = () => (PROF.rt && PROF.rt()) || null;
   let shopSort = "new", shopQ = "";
-  function big(cfg){ const c = document.createElement("canvas"), W = 1193, sc = W / GW; c.width = W; c.height = Math.round(GH * sc); const g = c.getContext("2d");
-    g.fillStyle = "#0e1a1c"; g.fillRect(0, 0, c.width, c.height); paint(g, cfg.categories || [], sc, 1); return c.toDataURL("image/png"); }
-  function thumb(cfg){
-    const c = document.createElement("canvas"), W = 420, sc = W / GW; c.width = W; c.height = Math.round(GH * sc);
-    const g = c.getContext("2d"); g.fillStyle = "#0e1a1c"; g.fillRect(0, 0, c.width, c.height);
-    const cs = cfg.categories || []; paint(g, cs.filter(k => !isSym(k)), sc, 1);
-    g.fillStyle = "rgba(235,240,240,.9)"; cs.filter(isSym).forEach(k => { const n = Math.max(1, k.category_name.trim().length); g.fillRect(k.x_position * sc + 1, k.y_position * sc + 9 * sc, Math.max(.8, n > 1 ? n * 5 * sc : .9), .9); });
-    return c.toDataURL("image/png");
+  /* превью сетки — как в редакторе: тот же фон, портреты героев, подписи и символы настоящим шрифтом */
+  const IMC = new Map(); const pimg = src => { let im = IMC.get(src); if (!im){ im = new Image(); im.decoding = "async"; im.src = src; IMC.set(src, im); } return im; };
+  function drawCfg(cv, cfg, W){
+    if (!cv || !W) return; const dpr = Math.min(2, devicePixelRatio || 1), sc = W / GW, Hh = Math.round(GH * sc); cv.width = Math.round(W * dpr); cv.height = Math.round(Hh * dpr);
+    const g = cv.getContext("2d"); let t = 0;
+    const run = () => { g.setTransform(dpr, 0, 0, dpr, 0, 0); let wait = [];
+      const lg = g.createLinearGradient(0, 0, 0, Hh); lg.addColorStop(0, "#102022"); lg.addColorStop(1, "#0a1214"); g.fillStyle = lg; g.fillRect(0, 0, W, Hh);
+      const rg = g.createRadialGradient(W / 2, Hh * .38, 4, W / 2, Hh * .38, W * .62); rg.addColorStop(0, "rgba(48,84,86,.38)"); rg.addColorStop(1, "rgba(48,84,86,0)"); g.fillStyle = rg; g.fillRect(0, 0, W, Hh);
+      g.font = `600 ${LF * sc}px "Segoe UI", system-ui, sans-serif`;
+      for (const k of cfg.categories || []){ const x = k.x_position * sc, y = k.y_position * sc, sym = isSym(k);
+        if (k.hero_ids && k.hero_ids.length){ const f = fit(k);
+          k.hero_ids.forEach((id, n) => { const tx = x + (n % f.cols) * (f.tw + PG) * sc, ty = y + Math.floor(n / f.cols) * (f.th + PG) * sc, tw = f.tw * sc, th = f.th * sc, h = HB[id], im = h && pimg(h.img);
+            if (im && im.complete && im.naturalWidth){ const sw = Math.min(im.naturalWidth, im.naturalHeight * tw / th); g.drawImage(im, (im.naturalWidth - sw) / 2, 0, sw, im.naturalHeight, tx, ty, tw, th); }
+            else { if (im) wait.push(im); const a = ATTR.find(z => h && z[0] === h.a); g.fillStyle = a ? a[2] : "#334"; g.globalAlpha = .55; g.fillRect(tx, ty, tw, th); g.globalAlpha = 1; } }); }
+        else if (!sym){ g.setLineDash([3, 3]); g.strokeStyle = "rgba(255,255,255,.16)"; g.lineWidth = 1; g.strokeRect(x + .5, y + .5, k.width * sc, k.height * sc); g.setLineDash([]); }
+        if (k.category_name){ g.fillStyle = sym ? "rgba(235,240,240,.92)" : "rgba(255,255,255,.85)"; g.textBaseline = sym ? "top" : "bottom"; g.fillText(k.category_name, x, y); } }
+      // портреты догружаются — перерисуем, когда придут
+      if (wait.length){ const again = () => { clearTimeout(t); t = setTimeout(() => { if (cv.isConnected) run(); }, 150); }; [...new Set(wait)].forEach(im => im.addEventListener("load", again, { once: true })); } };
+    run();
   }
+  // карточек много (сцены по 18 тысяч точек) — рисуем только те, что видны
+  const IO = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; IO.unobserve(e.target); const f = e.target._draw; if (f) f(); }), { rootMargin: "300px" }) : null;
+  function lazyDraw(cv, cfg){ const f = () => drawCfg(cv, cfg, cv.parentElement.clientWidth || 420); if (IO){ cv._draw = f; IO.observe(cv); } else f(); }
   async function shop(){
     const el = document.getElementById("grShop"); await heroes().catch(() => {});
     el.innerHTML = `<div class="gr-ws"><div><span class="gr-wst">Мастерская</span><h3>Сетки от игроков сайта</h3><p>Публикуй свои сетки — их смогут открыть в редакторе, скачать и лайкнуть. Лучшие поднимаются в «Популярных».</p></div>
@@ -515,13 +529,16 @@ const GRIDS = (() => {
       box.innerHTML = sc.map(card).join(""); bindCards(box, sc); more.hidden = next >= total; more.textContent = `Ещё сцены (${total - next})`; };
     more.onclick = batch; batch();
   }
-  function card(g){ const cs = g.data.categories || [], sy = chars(cs.filter(isSym)); return `<div class="gr-card"><button type="button" class="gr-th" data-a="view" aria-label="Посмотреть сетку"><img alt="" src="${thumb(g.data)}"></button><div class="gr-ci"><b>${esc(g.name)}</b><small>${esc(g.nick || "")}${g.d ? " · " + esc(g.d) : ""}${g.at ? " · " + esc(g.at) : ""}</small>${g.data.descr ? `<p class="gr-ds">${esc(g.data.descr)}</p>` : ""}
+  function card(g){ const cs = g.data.categories || [], sy = chars(cs.filter(isSym)); return `<div class="gr-card"><button type="button" class="gr-th" data-a="view" aria-label="Посмотреть сетку"><canvas></canvas></button><div class="gr-ci"><b>${esc(g.name)}</b><small>${esc(g.nick || "")}${g.d ? " · " + esc(g.d) : ""}${g.at ? " · " + esc(g.at) : ""}</small>${g.data.descr ? `<p class="gr-ds">${esc(g.data.descr)}</p>` : ""}
     <small class="gr-meta">Категорий: ${cs.length}${sy ? ` · символов: ${sy}` : ""}${g.likes != null ? ` · ❤ ${g.likes} · ⬇ ${g.downloads || 0}` : ""}</small>
-    <div class="gr-ca"><button type="button" class="gr-b" data-a="open">✏ В редактор</button><button type="button" class="gr-b" data-a="dl">⬇ Файл</button>${g.id ? `<button type="button" class="gr-b gr-like" data-a="like" aria-pressed="${!!g.liked}" aria-label="Нравится">${g.liked ? "❤️" : "🤍"} ${g.likes || 0}</button>` : ""}${g.mine ? `<button type="button" class="gr-b gr-red" data-a="del">Удалить</button>` : ""}</div></div></div>`; }
+    <div class="gr-ca"><button type="button" class="gr-b" data-a="open">✏ В редактор</button><button type="button" class="gr-b" data-a="dl">⬇ Файл</button>${g.id ? `<button type="button" class="gr-b" data-a="com" aria-label="Комментарии">💬 ${g.cm || 0}</button>` : ""}${g.id ? `<button type="button" class="gr-b gr-like" data-a="like" aria-pressed="${!!g.liked}" aria-label="Нравится">${g.liked ? "❤️" : "🤍"} ${g.likes || 0}</button>` : ""}${g.mine ? `<button type="button" class="gr-b gr-red" data-a="del">Удалить</button>` : ""}</div></div></div>`; }
   function bindCards(box, list){
+    box.querySelectorAll(".gr-card").forEach((c, i) => lazyDraw(c.querySelector(".gr-th canvas"), list[i].data));
     box.querySelectorAll(".gr-card").forEach((c, i) => c.querySelectorAll("[data-a]").forEach(b => b.onclick = async () => { const g = list[i], a = b.dataset.a, sb = SBT();
       if (a === "open"){ FILE.configs.push(keepG({ configs: [{ ...g.data, config_name: g.name }] }).configs[0]); cur = FILE.configs.length - 1; sel = -1; selG = null; save(); go("edit"); PROF.toast(`«${esc(g.name)}» открыта в редакторе`); if (g.id && sb) sb.rpc("grid_dl", { gid: g.id }).then(() => {}, () => {}); }
-      if (a === "view"){ const [mb, close2] = modal(`<h3>${esc(g.name)}</h3><p class="gr-mut">${esc(g.nick || "")}${g.data.descr ? " — " + esc(g.data.descr) : ""}</p><img class="gr-pvi" alt="" src="${big(g.data)}"><div class="gr-acts"><span class="gr-mut">Категорий: ${(g.data.categories || []).length}</span><span><button type="button" class="btn btn-ghost" id="grVO">✏ В редактор</button> <button type="button" class="btn btn-primary" id="grVD">⬇ Скачать файл</button></span></div>`);
+      if (a === "view" || a === "com"){ const [mb, close2] = modal(`<h3>${esc(g.name)}</h3><p class="gr-mut">${esc(g.nick || "")}${g.data.descr ? " — " + esc(g.data.descr) : ""}</p><div class="gr-pvw"><canvas class="gr-pvi"></canvas></div><div class="gr-acts"><span class="gr-mut">Категорий: ${(g.data.categories || []).length}</span><span><button type="button" class="btn btn-ghost" id="grVO">✏ В редактор</button> <button type="button" class="btn btn-primary" id="grVD">⬇ Скачать файл</button></span></div>${g.id ? `<div class="gr-cm" id="grCm"><h4>Комментарии</h4><div class="gr-cml"><div class="feed-sk"></div></div><form class="gr-cmf"><input maxlength="500" placeholder="Напиши, как тебе сетка…" aria-label="Комментарий"><button type="submit" class="btn btn-primary">Отправить</button></form></div>` : ""}`);
+        requestAnimationFrame(() => drawCfg(mb.querySelector(".gr-pvi"), g.data, mb.querySelector(".gr-pvw").clientWidth));
+        if (g.id) comments(mb.querySelector("#grCm"), g, () => users()); if (a === "com") setTimeout(() => mb.querySelector("#grCm").scrollIntoView({ block: "start", behavior: "smooth" }), 80);
         mb.querySelector("#grVO").onclick = () => { close2(); c.querySelector('[data-a="open"]').click(); }; mb.querySelector("#grVD").onclick = () => { close2(); c.querySelector('[data-a="dl"]').click(); }; return; }
       if (a === "dl"){ saveFile({ version: 3, configs: [{ ...g.data, config_name: g.name }] }); if (g.id && sb) sb.rpc("grid_dl", { gid: g.id }).then(() => {}, () => {}); }
       if (a === "like"){ const u = PROF.user(); if (!u){ PROF.open(); return; } const r = await sb.from("grid_likes").insert({ grid_id: g.id }); if (r.error){ await sb.from("grid_likes").delete().eq("grid_id", g.id).eq("user_id", u.id); } users(); }
@@ -541,15 +558,34 @@ const GRIDS = (() => {
     if (!data.length){ box.innerHTML = `<div class="gempty">${shopSort === "mine" ? "Ты ещё ничего не публиковал." : shopQ ? "Ничего не нашли." : "Пока пусто — опубликуй свою сетку первым: «📤 Опубликовать свою сетку» выше."}</div>`; return; }
     const u = PROF.user(); let liked = new Set();
     if (u){ try { const r = await sb.from("grid_likes").select("grid_id").in("grid_id", data.map(x => x.id)); liked = new Set((r.data || []).map(x => x.grid_id)); } catch(e) {} }
+    let cmN = {}; try { const r = await sb.from("grid_comments").select("grid_id").in("grid_id", data.map(x => x.id)).limit(2000); if (!r.error) (r.data || []).forEach(x => { cmN[x.grid_id] = (cmN[x.grid_id] || 0) + 1; }); } catch(e) {}
     const ago = t => { const d = (Date.now() - Date.parse(t)) / 864e5; return d < 1 ? "сегодня" : d < 2 ? "вчера" : d < 30 ? Math.floor(d) + " дн. назад" : new Date(t).toLocaleDateString(); };
     await Promise.all(data.map(async r => { if (r.data && r.data.packed){ try { const v = await unpack(r.data.packed); r.data = { ...v, config_name: r.data.config_name, descr: r.data.descr }; } catch(e) { r.data = { config_name: r.name, categories: [] }; } } }));
-    const list = data.map(r => ({ id: r.id, name: r.name, nick: r.nick, data: r.data, likes: r.likes, downloads: r.downloads, mine: u && u.id === r.user_id, liked: liked.has(r.id), at: ago(r.created_at) }));
+    const list = data.map(r => ({ id: r.id, name: r.name, nick: r.nick, data: r.data, likes: r.likes, downloads: r.downloads, mine: u && u.id === r.user_id, liked: liked.has(r.id), at: ago(r.created_at), cm: cmN[r.id] || 0 }));
     box.innerHTML = list.map(card).join(""); bindCards(box, list);
+  }
+  /* комментарии к сетке */
+  async function comments(el, g, onChange){
+    const sb = SBT(), list = el.querySelector(".gr-cml"), f = el.querySelector(".gr-cmf"), inp = f.querySelector("input");
+    const when = t => { const d = (Date.now() - Date.parse(t)) / 6e4; return d < 1 ? "только что" : d < 60 ? Math.floor(d) + " мин" : d < 1440 ? Math.floor(d / 60) + " ч" : new Date(t).toLocaleDateString(); };
+    async function load(){ const { data, error } = await sb.from("grid_comments").select("id,user_id,nick,body,created_at").eq("grid_id", g.id).order("created_at", { ascending: true }).limit(200);
+      if (error){ list.innerHTML = `<div class="gempty">Комментарии скоро включатся.</div>`; f.hidden = true; return; }
+      const u = PROF.user(), adm = PROF.isAdmin && PROF.isAdmin();
+      list.innerHTML = data.length ? data.map(c => `<div class="gr-c"><b translate="no">${esc(c.nick)}</b><span>${when(c.created_at)}</span>${u && (u.id === c.user_id || g.mine || adm) ? `<button type="button" class="gr-cx" data-id="${c.id}" aria-label="Удалить">✕</button>` : ""}<p>${esc(c.body)}</p></div>`).join("") : `<div class="gempty">Пока без комментариев — будь первым.</div>`;
+      list.querySelectorAll(".gr-cx").forEach(b => b.onclick = async () => { await sb.from("grid_comments").delete().eq("id", +b.dataset.id); load(); onChange && onChange(); }); }
+    f.onsubmit = async e => { e.preventDefault(); const v = inp.value.trim(); if (!v) return; if (!PROF.user()){ PROF.open(); return; }
+      const bt = f.querySelector("button"); bt.disabled = true;
+      const { error } = await sb.from("grid_comments").insert({ grid_id: g.id, body: v.slice(0, 500), nick: String(PROF.me() || "Игрок").slice(0, 40) });
+      bt.disabled = false; if (error){ PROF.toast(/too_fast/.test(error.message || "") ? "Слишком часто — подожди минутку." : "Не получилось отправить комментарий."); return; }
+      inp.value = ""; load(); onChange && onChange(); };
+    if (!sb){ list.innerHTML = `<div class="gempty">Комментарии работают на основном сайте.</div>`; f.hidden = true; return; }
+    load();
   }
   async function publish(){
     const sb = SBT(), u = PROF.user(); if (!sb){ PROF.toast("Публикация работает на основном сайте."); return; } if (!u){ PROF.open(); return; }
     const c = clean({ configs: [C()] }).configs[0]; if (!c.categories.length){ PROF.toast("Сетка пустая — добавь категории и героев."); return; }
-    const [b, close] = modal(`<h3>Опубликовать в мастерской</h3><p class="gr-mut">Сетку увидят все: её можно будет открыть в редакторе, скачать и лайкнуть.</p><img class="gr-pvi" alt="" src="${big(c)}"><input id="grPN" maxlength="60" value="${esc(c.config_name)}" placeholder="Название"><textarea id="grPD" maxlength="200" rows="2" placeholder="Пара слов о сетке: для какой роли, что внутри (необязательно)"></textarea><p class="gr-mut">Без оскорблений и рекламы — такие сетки удаляем.</p><div class="gr-acts"><span></span><button type="button" class="btn btn-primary" id="grPG">Опубликовать</button></div><div class="gr-err" id="grPE"></div>`);
+    const [b, close] = modal(`<h3>Опубликовать в мастерской</h3><p class="gr-mut">Сетку увидят все: её можно будет открыть в редакторе, скачать и лайкнуть.</p><div class="gr-pvw"><canvas class="gr-pvi"></canvas></div><input id="grPN" maxlength="60" value="${esc(c.config_name)}" placeholder="Название"><textarea id="grPD" maxlength="200" rows="2" placeholder="Пара слов о сетке: для какой роли, что внутри (необязательно)"></textarea><p class="gr-mut">Без оскорблений и рекламы — такие сетки удаляем.</p><div class="gr-acts"><span></span><button type="button" class="btn btn-primary" id="grPG">Опубликовать</button></div><div class="gr-err" id="grPE"></div>`);
+    requestAnimationFrame(() => drawCfg(b.querySelector(".gr-pvi"), c, b.querySelector(".gr-pvw").clientWidth));
     b.querySelector("#grPG").onclick = async () => { const name = b.querySelector("#grPN").value.trim() || c.config_name; b.querySelector("#grPG").disabled = true;
       const descr = b.querySelector("#grPD").value.trim().slice(0, 200);
       // большие арт-сетки (тысячи точек) не влезали в лимит сервера — храним их сжатыми, при показе распаковываем

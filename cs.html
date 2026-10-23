@@ -1957,7 +1957,13 @@
   .gr-wst { font-size: 11px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase; color: #f3c35a; } .gr-wsa { display: grid; gap: 6px; justify-items: center; } .gr-wsa small { color: var(--muted); font-size: 12.5px; }
   button.gr-th { display: block; width: 100%; padding: 0; border: 0; cursor: zoom-in; } .gr-ds { margin: 4px 0 0; font-size: 13px; color: rgba(255,255,255,.75); line-height: 1.4; }
   .gr-like[aria-pressed="true"] { border-color: rgba(255,90,110,.5); background: rgba(255,90,110,.12); }
-  .gr-pvi { width: 100%; border-radius: 12px; border: 1px solid var(--line); display: block; }
+  .gr-pvi { width: 100%; border-radius: 12px; border: 1px solid var(--line); display: block; } .gr-pvw { width: 100%; }
+  .gr-th { aspect-ratio: 1193 / 593 !important; background: #0e1a1c; } .gr-th canvas { width: 100%; height: 100%; display: block; }
+  .gr-cm { border-top: 1px solid var(--line); padding-top: 12px; } .gr-cm h4 { margin: 0 0 8px; font-family: var(--display); }
+  .gr-cml { display: grid; gap: 6px; max-height: 300px; overflow-y: auto; overscroll-behavior: contain; margin-bottom: 10px; }
+  .gr-c { position: relative; padding: 9px 34px 9px 12px; border-radius: 12px; background: var(--bg-soft); border: 1px solid var(--line); } .gr-c b { font-size: 13.5px; } .gr-c span { margin-left: 8px; font-size: 12px; color: var(--muted); }
+  .gr-c p { margin: 4px 0 0; font-size: 14px; line-height: 1.4; white-space: pre-wrap; word-break: break-word; } .gr-cx { position: absolute; top: 6px; right: 6px; background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 13px; padding: 4px; }
+  .gr-cmf { display: flex; gap: 8px; } .gr-cmf input { flex: 1; min-width: 0; } .gr-cmf .btn { padding: 10px 16px; font-size: 14px; }
   .gr-name { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
   .gr-nm { flex: 1 1 260px; display: flex; align-items: center; gap: 10px; padding: 4px 6px 4px 14px; border-radius: 16px; border: 1px solid var(--line); background: var(--panel); transition: border-color .2s, box-shadow .2s; cursor: text; }
   .gr-nm:focus-within { border-color: rgba(243,195,90,.6); box-shadow: 0 0 0 3px rgba(243,195,90,.14); }
@@ -7201,7 +7207,7 @@ drawRecent();
 render();
 </script>
 
-<script src="/grids.js?v=13" defer></script>
+<script src="/grids.js?v=14" defer></script>
 <script src="/ruin.js?v=5" defer></script>
 </body>
 </html>
