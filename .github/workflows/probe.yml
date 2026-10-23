@@ -9,5 +9,5 @@ jobs:
         with: { ref: probe }
       - run: |
           set +e
-          curl -s "https://blazecrest.vercel.app/api/news?src=tg&ch=deadlock" | python3 -c "import sys,json;d=json.load(sys.stdin);print(len(d.get('items',[])),d.get('error'));[print(i['post'],i['cat'],i['t'][:80],'|',i['x'][:80],bool(i['img'])) for i in d.get('items',[])[:8]]" > out.txt 2>&1
+          for q in "g=cs&cat=rifle&start=0&sort=exp" "g=cs&cat=rifle&start=0&sort=cheap" "g=dota&cat=immortal&start=0" "g=cs&cat=knife&start=0"; do echo "== $q"; curl -s "https://blazecrest.vercel.app/api/games?q=market&$q" | python3 -c "import sys,json;d=json.load(sys.stdin);[print(i['n'][:40],i.get('r'),i.get('rn'),[p['v'] for p in i['p']][:1]) for i in d.get('items',[])[:4]]"; done > out.txt 2>&1
           git config user.name probe; git config user.email probe@x; git add out.txt; git commit -qm out; git push
