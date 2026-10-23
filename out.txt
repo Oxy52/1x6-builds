@@ -1,20 +1,35 @@
-== g=cs&cat=rifle&start=0&sort=exp
-Souvenir AK-47 | Bloodsport (Minimal Wea 7 Тайное [2044.94]
-Souvenir Galil AR | Rocket Pop (Factory  4 Армейское [1873.83]
-Souvenir M4A1-S | Welcome to the Jungle  7 Тайное [1843.24]
-AK-47 | Gold Arabesque (Field-Tested) 7 Тайное [1800]
-== g=cs&cat=rifle&start=0&sort=cheap
-FAMAS | Byproduct (Well-Worn) 2 Ширпотреб [0.03]
-FAMAS | Palm (Minimal Wear) 2 Ширпотреб [0.03]
-Galil AR | Grey Smoke (Well-Worn) 2 Ширпотреб [0.03]
-Galil AR | Grey Smoke (Battle-Scarred) 2 Ширпотреб [0.03]
-== g=dota&cat=immortal&start=0
-Everglyph Goggles 8 Бессмертное [0.04]
-Trust of the Benefactor 2020 8 Бессмертное [2.95]
-Arms of Desolation 8 Бессмертное [10.98]
-Wings of Daybreak 8 Бессмертное [2.22]
-== g=cs&cat=knife&start=0
-★ StatTrak™ Huntsman Knife | Freehand (M 8 Тайное [101.86]
-★ Bayonet | Doppler (Factory New) 8 Тайное [420]
-★ Navaja Knife | Ultraviolet (Field-Test 8 Тайное [55.31]
-★ Kukri Knife | Scorched (Field-Tested) 8 Тайное [53.21]
+== filters 570
+570_Quality [('unique', 'Standard'), ('strange', 'Inscribed'), ('genuine', 'Genuine'), ('lucky', 'Auspicious'), ('tournament', 'Heroic'), ('base', 'Base'), ('haunted', 'Cursed'), ('frozen', 'Frozen'), ('unusual', 'Unusual'), ('infused', 'Infused'), ('autographed', 'Autographed'), ('exalted', 'Exalted'), ('corrupted', 'Corrupted'), ('glitter', 'Glitter'), ('gold', 'Gold'), ('holo', 'Holo'), ('vintage', 'Elder'), ('legacy', 'Legacy')]
+570_Rarity [('Rarity_Rare', 'Rare'), ('Rarity_Common', 'Common'), ('Rarity_Uncommon', 'Uncommon'), ('Rarity_Mythical', 'Mythical'), ('Rarity_Immortal', 'Immortal'), ('Rarity_Legendary', 'Legendary'), ('Rarity_Arcana', 'Arcana'), ('Rarity_Ancient', 'Ancient')]
+570_Type [('wearable', 'Wearable'), ('loading_screen', 'Loading Screen'), ('socket_gem', 'Gem / Rune'), ('bundle', 'Bundle'), ('taunt', 'Taunt'), ('announcer', 'Announcer'), ('courier', 'Courier'), ('showcase_decoration', 'Showcase Decoration'), ('treasure_chest', 'Treasure'), ('ward', 'Ward'), ('player_card', 'Player Card'), ('hud_skin', 'HUD Skin'), ('sticker_capsule', 'Sticker Capsule'), ('tool', 'Tool'), ('cursor_pack', 'Cursor Pack'), ('music', 'Music'), ('sticker', 'Sticker'), ('misc', 'Misc'), ('radiantsiegecreeps', 'Radiant Siege Creeps'), ('radiantcreeps', 'Radiant Creeps'), ('direcreeps', 'Dire Creeps'), ('diretowers', 'Dire Towers'), ('pennant', 'Pennant'), ('diresiegecreeps', 'Dire Siege Creeps'), ('radianttowers', 'Radiant Towers'), ('league', 'League'), ('emoticon_tool', 'Emoticon Tool'), ('terrain', 'Terrain'), ('versus_screen', 'Versus Screen'), ('ancient', 'Ancient'), ('key', 'Treasure Key'), ('retired_treasure_chest', 'Retired Chest'), ('emblem', 'Emblem')]
+== filters 730
+730_Exterior [('WearCategory2', 'Field-Tested'), ('WearCategory1', 'Minimal Wear'), ('WearCategory4', 'Battle-Scarred'), ('WearCategory0', 'Factory New'), ('WearCategory3', 'Well-Worn'), ('WearCategoryNA', 'Not Painted')]
+730_Quality [('normal', 'Normal'), ('strange', 'StatTrak™'), ('tournament', 'Souvenir'), ('unusual', '★'), ('highlight', 'Highlight'), ('customized', 'Customized'), ('unusual_strange', '★ StatTrak™')]
+730_Rarity [('Rarity_Common_Weapon', 'Consumer Grade'), ('Rarity_Uncommon_Weapon', 'Industrial Grade'), ('Rarity_Rare_Weapon', 'Mil-Spec Grade'), ('Rarity_Mythical_Weapon', 'Restricted'), ('Rarity_Legendary_Weapon', 'Classified'), ('Rarity_Ancient_Weapon', 'Covert'), ('Rarity_Rare', 'High Grade'), ('Rarity_Common', 'Base Grade'), ('Rarity_Mythical', 'Remarkable'), ('Rarity_Ancient', 'Extraordinary'), ('Rarity_Legendary', 'Exotic'), ('Rarity_Legendary_Character', 'Superior'), ('Rarity_Rare_Character', 'Distinguished'), ('Rarity_Mythical_Character', 'Exceptional'), ('Rarity_Ancient_Character', 'Master'), ('Rarity_Contraband', 'Contraband')]
+730_Type [('CSGO_Type_SMG', 'SMG'), ('CSGO_Type_Pistol', 'Pistol'), ('CSGO_Type_Rifle', 'Rifle'), ('CSGO_Type_SniperRifle', 'Sniper Rifle'), ('CSGO_Type_Shotgun', 'Shotgun'), ('CSGO_Type_Machinegun', 'Machinegun'), ('CSGO_Type_Equipment', 'Equipment'), ('CSGO_Tool_Keychain', 'Charm'), ('CSGO_Type_Knife', 'Knife'), ('CSGO_Type_WeaponCase', 'Container'), ('Type_CustomPlayer', 'Agent'), ('CSGO_Tool_Sticker', 'Sticker'), ('Type_Hands', 'Gloves'), ('CSGO_Type_Spray', 'Graffiti'), ('CSGO_Type_MusicKit', 'Music Kit'), ('CSGO_Tool_Patch', 'Patch'), ('CSGO_Type_Collectible', 'Collectible'), ('CSGO_Type_Ticket', 'Pass'), ('CSGO_Tool_WeaponCase_KeyTag', 'Key'), ('CSGO_Tool_GiftTag', 'Gift'), ('CSGO_Tool_Name_TagTag', 'Tag'), ('CSGO_Type_Tool', 'Tool')]
+== LC arcana listings
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "/usr/lib/python3.12/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+== gem search
+Prismatic: Reflection's Shade Mythical Prismatic Gem
+Prismatic Grace Mythical Bundle
+Prismatic: Unhallowed Ground Mythical Prismatic Gem
+Prismatic: Dredge Earth Mythical Prismatic Gem
+Prismatic: Earth Green Mythical Prismatic Gem
+Infused Blade of Prismatic Grace Mythical Blade
+Offhand Blade of Prismatic Grace Mythical Offhand blade
+Blade of Prismatic Grace Mythical Blade
+Autographed Tail of Prismatic Grace Mythical Tail
+Prismatic: Light Green Mythical Prismatic Gem
