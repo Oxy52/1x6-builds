@@ -483,6 +483,8 @@ const GRIDS = (() => {
   /* ---------- мастерская ---------- */
   const SBT = () => (PROF.rt && PROF.rt()) || null;
   let shopSort = "new", shopQ = "";
+  function big(cfg){ const c = document.createElement("canvas"), W = 1193, sc = W / GW; c.width = W; c.height = Math.round(GH * sc); const g = c.getContext("2d");
+    g.fillStyle = "#0e1a1c"; g.fillRect(0, 0, c.width, c.height); paint(g, cfg.categories || [], sc, 1); return c.toDataURL("image/png"); }
   function thumb(cfg){
     const c = document.createElement("canvas"), W = 420, sc = W / GW; c.width = W; c.height = Math.round(GH * sc);
     const g = c.getContext("2d"); g.fillStyle = "#0e1a1c"; g.fillRect(0, 0, c.width, c.height);
@@ -492,13 +494,16 @@ const GRIDS = (() => {
   }
   async function shop(){
     const el = document.getElementById("grShop"); await heroes().catch(() => {});
-    el.innerHTML = `<div class="gr-shead"><div class="rkchips">${[["new", "Новые"], ["top", "Популярные"]].map(x => `<button type="button" class="rkc" data-ss="${x[0]}" aria-pressed="${x[0] === shopSort}">${x[1]}</button>`).join("")}</div>
+    el.innerHTML = `<div class="gr-ws"><div><span class="gr-wst">Мастерская</span><h3>Сетки от игроков сайта</h3><p>Публикуй свои сетки — их смогут открыть в редакторе, скачать и лайкнуть. Лучшие поднимаются в «Популярных».</p></div>
+        <div class="gr-wsa"><button type="button" class="btn btn-primary" id="grWsPub">📤 Опубликовать свою сетку</button><small id="grWsN"></small></div></div>
+      <div class="gr-shead"><div class="rkchips">${[["new", "Новые"], ["top", "Популярные"], ["dl", "Скачивают"], ["mine", "Мои"]].map(x => `<button type="button" class="rkc" data-ss="${x[0]}" aria-pressed="${x[0] === shopSort}">${x[1]}</button>`).join("")}</div>
       <label class="d2-search gr-sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="grSQ" placeholder="Название или автор" value="${esc(shopQ)}"></label></div>
-      <h3 class="gr-h3">Новые арт-сетки</h3><div class="gr-cards" id="grNew2"><div class="feed-sk"></div></div>
       <h3 class="gr-h3">Сетки игроков</h3><div class="gr-cards" id="grUsr"><div class="feed-sk"></div></div>
+      <h3 class="gr-h3">Новые арт-сетки</h3><div class="gr-cards" id="grNew2"><div class="feed-sk"></div></div>
       <h3 class="gr-h3">Арт-сцены от Aegis</h3><p class="gr-mut">Позиции 1–5 в рамке и герой, нарисованный точками. Свою сцену — с любой картинкой — собери в редакторе: «🎨 Арт / сцена».</p><div class="gr-cards" id="grScn"><div class="feed-sk"></div></div><button type="button" class="btn btn-ghost gr-more" id="grMore" hidden>Ещё сцены</button>
       <h3 class="gr-h3">Обычные сетки</h3><div class="gr-cards" id="grPre"></div>`;
-    el.querySelectorAll("[data-ss]").forEach(b => b.onclick = () => { shopSort = b.dataset.ss; shop(); });
+    el.querySelectorAll("[data-ss]").forEach(b => b.onclick = () => { shopSort = b.dataset.ss; el.querySelectorAll("[data-ss]").forEach(x => x.setAttribute("aria-pressed", x === b)); users(); });
+    el.querySelector("#grWsPub").onclick = () => { if (!C().categories.length){ PROF.toast("Сначала собери сетку в редакторе — потом опубликуй её здесь."); go("edit"); return; } publish(); };
     let qt = 0; el.querySelector("#grSQ").oninput = e => { clearTimeout(qt); qt = setTimeout(() => { shopQ = e.target.value.trim(); users(); }, 300); };
     const pre = PRESETS.map(p => ({ name: p.n, nick: "Aegis", d: p.d, data: { config_name: p.n, categories: H.length ? p.f() : [] } }));
     const pb = el.querySelector("#grPre"); pb.innerHTML = pre.map(card).join(""); bindCards(pb, pre);
@@ -510,12 +515,14 @@ const GRIDS = (() => {
       box.innerHTML = sc.map(card).join(""); bindCards(box, sc); more.hidden = next >= total; more.textContent = `Ещё сцены (${total - next})`; };
     more.onclick = batch; batch();
   }
-  function card(g){ const cs = g.data.categories || [], sy = chars(cs.filter(isSym)); return `<div class="gr-card"><div class="gr-th"><img alt="" src="${thumb(g.data)}"></div><div class="gr-ci"><b>${esc(g.name)}</b><small>${esc(g.nick || "")}${g.d ? " · " + esc(g.d) : ""}</small>
+  function card(g){ const cs = g.data.categories || [], sy = chars(cs.filter(isSym)); return `<div class="gr-card"><button type="button" class="gr-th" data-a="view" aria-label="Посмотреть сетку"><img alt="" src="${thumb(g.data)}"></button><div class="gr-ci"><b>${esc(g.name)}</b><small>${esc(g.nick || "")}${g.d ? " · " + esc(g.d) : ""}${g.at ? " · " + esc(g.at) : ""}</small>${g.data.descr ? `<p class="gr-ds">${esc(g.data.descr)}</p>` : ""}
     <small class="gr-meta">Категорий: ${cs.length}${sy ? ` · символов: ${sy}` : ""}${g.likes != null ? ` · ❤ ${g.likes} · ⬇ ${g.downloads || 0}` : ""}</small>
-    <div class="gr-ca"><button type="button" class="gr-b" data-a="open">✏ В редактор</button><button type="button" class="gr-b" data-a="dl">⬇ Файл</button>${g.id ? `<button type="button" class="gr-b" data-a="like">❤</button>` : ""}${g.mine ? `<button type="button" class="gr-b gr-red" data-a="del">Удалить</button>` : ""}</div></div></div>`; }
+    <div class="gr-ca"><button type="button" class="gr-b" data-a="open">✏ В редактор</button><button type="button" class="gr-b" data-a="dl">⬇ Файл</button>${g.id ? `<button type="button" class="gr-b gr-like" data-a="like" aria-pressed="${!!g.liked}" aria-label="Нравится">${g.liked ? "❤️" : "🤍"} ${g.likes || 0}</button>` : ""}${g.mine ? `<button type="button" class="gr-b gr-red" data-a="del">Удалить</button>` : ""}</div></div></div>`; }
   function bindCards(box, list){
     box.querySelectorAll(".gr-card").forEach((c, i) => c.querySelectorAll("[data-a]").forEach(b => b.onclick = async () => { const g = list[i], a = b.dataset.a, sb = SBT();
       if (a === "open"){ FILE.configs.push(keepG({ configs: [{ ...g.data, config_name: g.name }] }).configs[0]); cur = FILE.configs.length - 1; sel = -1; selG = null; save(); go("edit"); PROF.toast(`«${esc(g.name)}» открыта в редакторе`); if (g.id && sb) sb.rpc("grid_dl", { gid: g.id }).then(() => {}, () => {}); }
+      if (a === "view"){ const [mb, close2] = modal(`<h3>${esc(g.name)}</h3><p class="gr-mut">${esc(g.nick || "")}${g.data.descr ? " — " + esc(g.data.descr) : ""}</p><img class="gr-pvi" alt="" src="${big(g.data)}"><div class="gr-acts"><span class="gr-mut">Категорий: ${(g.data.categories || []).length}</span><span><button type="button" class="btn btn-ghost" id="grVO">✏ В редактор</button> <button type="button" class="btn btn-primary" id="grVD">⬇ Скачать файл</button></span></div>`);
+        mb.querySelector("#grVO").onclick = () => { close2(); c.querySelector('[data-a="open"]').click(); }; mb.querySelector("#grVD").onclick = () => { close2(); c.querySelector('[data-a="dl"]').click(); }; return; }
       if (a === "dl"){ saveFile({ version: 3, configs: [{ ...g.data, config_name: g.name }] }); if (g.id && sb) sb.rpc("grid_dl", { gid: g.id }).then(() => {}, () => {}); }
       if (a === "like"){ const u = PROF.user(); if (!u){ PROF.open(); return; } const r = await sb.from("grid_likes").insert({ grid_id: g.id }); if (r.error){ await sb.from("grid_likes").delete().eq("grid_id", g.id).eq("user_id", u.id); } users(); }
       if (a === "del"){ if (!confirmIn(b, "Точно?")) return; await sb.from("grids").delete().eq("id", g.id); users(); }
@@ -524,20 +531,27 @@ const GRIDS = (() => {
   async function users(){
     const box = document.getElementById("grUsr"); if (!box) return; const sb = SBT();
     if (!sb){ box.innerHTML = `<div class="gempty">Мастерская работает на основном сайте.</div>`; return; }
-    let q = sb.from("grids").select("id,user_id,nick,name,data,likes,downloads,created_at").limit(48).order(shopSort === "top" ? "likes" : "created_at", { ascending: false });
+    const u0 = PROF.user(); if (shopSort === "mine" && !u0){ box.innerHTML = `<div class="gempty">Войди, чтобы видеть свои публикации.</div>`; return; }
+    let q = sb.from("grids").select("id,user_id,nick,name,data,likes,downloads,created_at", { count: "exact" }).limit(48).order(shopSort === "top" ? "likes" : shopSort === "dl" ? "downloads" : "created_at", { ascending: false });
+    if (shopSort === "mine") q = q.eq("user_id", u0.id);
     if (shopQ) q = q.or(`name.ilike.%${shopQ.replace(/[%,()]/g, "")}%,nick.ilike.%${shopQ.replace(/[%,()]/g, "")}%`);
-    const { data, error } = await q;
-    if (error){ box.innerHTML = `<div class="gempty">Мастерская скоро откроется. А пока делись сеткой по ссылке 🔗</div>`; return; }
-    if (!data.length){ box.innerHTML = `<div class="gempty">Пока пусто — опубликуй свою сетку первым: «📤 В мастерскую» в редакторе.</div>`; return; }
-    const u = PROF.user(), list = data.map(r => ({ id: r.id, name: r.name, nick: r.nick, data: r.data, likes: r.likes, downloads: r.downloads, mine: u && u.id === r.user_id }));
+    const { data, error, count } = await q;
+    if (error){ box.innerHTML = `<div class="gempty">Не удалось загрузить мастерскую. Обнови страницу через минуту.</div>`; return; }
+    const wn = document.getElementById("grWsN"); if (wn && shopSort !== "mine" && !shopQ) wn.textContent = count ? `Опубликовано сеток: ${count}` : "Будь первым — опубликуй свою сетку!";
+    if (!data.length){ box.innerHTML = `<div class="gempty">${shopSort === "mine" ? "Ты ещё ничего не публиковал." : shopQ ? "Ничего не нашли." : "Пока пусто — опубликуй свою сетку первым: «📤 Опубликовать свою сетку» выше."}</div>`; return; }
+    const u = PROF.user(); let liked = new Set();
+    if (u){ try { const r = await sb.from("grid_likes").select("grid_id").in("grid_id", data.map(x => x.id)); liked = new Set((r.data || []).map(x => x.grid_id)); } catch(e) {} }
+    const ago = t => { const d = (Date.now() - Date.parse(t)) / 864e5; return d < 1 ? "сегодня" : d < 2 ? "вчера" : d < 30 ? Math.floor(d) + " дн. назад" : new Date(t).toLocaleDateString(); };
+    const list = data.map(r => ({ id: r.id, name: r.name, nick: r.nick, data: r.data, likes: r.likes, downloads: r.downloads, mine: u && u.id === r.user_id, liked: liked.has(r.id), at: ago(r.created_at) }));
     box.innerHTML = list.map(card).join(""); bindCards(box, list);
   }
   async function publish(){
     const sb = SBT(), u = PROF.user(); if (!sb){ PROF.toast("Публикация работает на основном сайте."); return; } if (!u){ PROF.open(); return; }
     const c = clean({ configs: [C()] }).configs[0]; if (!c.categories.length){ PROF.toast("Сетка пустая — добавь категории и героев."); return; }
-    const [b, close] = modal(`<h3>Опубликовать в мастерской</h3><p class="gr-mut">Сетку увидят все: её можно будет открыть в редакторе и скачать.</p><input id="grPN" maxlength="60" value="${esc(c.config_name)}" placeholder="Название"><div class="gr-acts"><span></span><button type="button" class="btn btn-primary" id="grPG">Опубликовать</button></div><div class="gr-err" id="grPE"></div>`);
+    const [b, close] = modal(`<h3>Опубликовать в мастерской</h3><p class="gr-mut">Сетку увидят все: её можно будет открыть в редакторе, скачать и лайкнуть.</p><img class="gr-pvi" alt="" src="${big(c)}"><input id="grPN" maxlength="60" value="${esc(c.config_name)}" placeholder="Название"><textarea id="grPD" maxlength="200" rows="2" placeholder="Пара слов о сетке: для какой роли, что внутри (необязательно)"></textarea><p class="gr-mut">Без оскорблений и рекламы — такие сетки удаляем.</p><div class="gr-acts"><span></span><button type="button" class="btn btn-primary" id="grPG">Опубликовать</button></div><div class="gr-err" id="grPE"></div>`);
     b.querySelector("#grPG").onclick = async () => { const name = b.querySelector("#grPN").value.trim() || c.config_name; b.querySelector("#grPG").disabled = true;
-      const { error } = await sb.from("grids").insert({ name, nick: PROF.me() || "Игрок", data: { ...c, config_name: name } });
+      const descr = b.querySelector("#grPD").value.trim().slice(0, 200);
+      const { error } = await sb.from("grids").insert({ name, nick: PROF.me() || "Игрок", data: { ...c, config_name: name, ...(descr ? { descr } : {}) } });
       if (error){ b.querySelector("#grPE").textContent = /relation|does not exist|schema/i.test(error.message || "") ? "Мастерская ещё не включена на сервере." : "Не получилось опубликовать: " + error.message; b.querySelector("#grPG").disabled = false; return; }
       close(); PROF.toast("Сетка опубликована 🎉"); shopSort = "new"; go("shop"); };
   }

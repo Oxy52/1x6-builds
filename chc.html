@@ -1874,6 +1874,19 @@
   .gr-pv { width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); display: block; }
   .gr-box { width: min(900px, 100%); }
 
+
+  /* лента новостей под вкладками */
+  .nstrip { display: flex; align-items: center; gap: 8px; margin: -4px 0 14px; padding: 6px 6px 6px 12px; border-radius: 16px; border: 1px solid var(--line); background: var(--panel); min-width: 0; }
+  .nstrip[hidden], .hub .nstrip, body[data-game="cs"] .nstrip, body[data-game="deadlock"] .nstrip, body[data-tab="news"] .nstrip, body[data-tab="1x6"] .nstrip { display: none; }
+  .ns-l { flex: none; font-size: 11px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase; color: #ff7a6e; }
+  .ns-s { flex: 1; min-width: 0; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; scroll-snap-type: x proximity; mask-image: linear-gradient(90deg, #000 92%, transparent); } .ns-s::-webkit-scrollbar { display: none; }
+  .ns-i { flex: none; scroll-snap-align: start; display: flex; align-items: center; gap: 8px; max-width: 260px; padding: 4px 12px 4px 4px; border-radius: 12px; border: 1px solid transparent; background: rgba(255,255,255,.04); color: var(--fg); font: inherit; font-size: 13px; cursor: pointer; transition: background .2s, border-color .2s; }
+  .ns-i:hover { background: rgba(255,255,255,.08); border-color: var(--line); } .ns-i span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ns-i img, .ns-c { width: 34px; height: 26px; border-radius: 8px; object-fit: cover; flex: none; } .ns-c { display: grid; place-items: center; background: rgba(255,255,255,.06); color: var(--muted); } .ns-c svg { width: 15px; height: 15px; }
+  .ns-i.new { border-color: rgba(232,86,74,.45); } .ns-i.new::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #e8564a; flex: none; }
+  .ns-all { flex: none; background: none; border: 0; color: var(--muted); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; padding: 6px 8px; } .ns-all:hover { color: var(--fg); }
+  .ncard.nhl { animation: nHl 1.6s ease; } @keyframes nHl { 0%, 50% { box-shadow: 0 0 0 2px #f3c35a, 0 0 30px -6px #f3c35a; } 100% { box-shadow: none; } }
+  @media (max-width: 600px) { .ns-l { display: none; } .nstrip { padding-left: 6px; } .ns-i { max-width: 210px; font-size: 12.5px; } }
   /* ---------- Кто заруинил? ---------- */
   .ru-hero { position: relative; isolation: isolate; overflow: hidden; min-height: 340px; padding: 34px 30px; border-radius: 28px; border: 1px solid color-mix(in srgb, #e8564a 30%, var(--line)); background: radial-gradient(70% 90% at 85% 100%, rgba(232,86,74,.22), transparent 65%), linear-gradient(160deg, #1a0f12, #0b0b10 70%); }
   .ru-f { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2; }
@@ -1939,6 +1952,12 @@
   #grEdit.gr-full { position: fixed; inset: 0; z-index: 300; background: var(--bg); padding: max(12px, env(safe-area-inset-top)) 12px 12px; overflow: auto; overscroll-behavior: contain; }
   #grEdit.gr-full .gr-ph { max-height: calc(100vh - 160px); }
   html.gr-lock, html.gr-lock body { overflow: hidden; }
+  .gr-ws { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; margin-bottom: 14px; padding: 18px 20px; border-radius: 22px; border: 1px solid rgba(243,195,90,.25); background: radial-gradient(70% 120% at 100% 0%, rgba(243,195,90,.14), transparent 60%), var(--panel); }
+  .gr-ws > div:first-child { flex: 1 1 320px; } .gr-ws h3 { margin: 6px 0 4px; font-family: var(--display); font-size: 22px; } .gr-ws p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.45; }
+  .gr-wst { font-size: 11px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase; color: #f3c35a; } .gr-wsa { display: grid; gap: 6px; justify-items: center; } .gr-wsa small { color: var(--muted); font-size: 12.5px; }
+  button.gr-th { display: block; width: 100%; padding: 0; border: 0; cursor: zoom-in; } .gr-ds { margin: 4px 0 0; font-size: 13px; color: rgba(255,255,255,.75); line-height: 1.4; }
+  .gr-like[aria-pressed="true"] { border-color: rgba(255,90,110,.5); background: rgba(255,90,110,.12); }
+  .gr-pvi { width: 100%; border-radius: 12px; border: 1px solid var(--line); display: block; }
   .gr-name { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
   .gr-nm { flex: 1 1 260px; display: flex; align-items: center; gap: 10px; padding: 4px 6px 4px 14px; border-radius: 16px; border: 1px solid var(--line); background: var(--panel); transition: border-color .2s, box-shadow .2s; cursor: text; }
   .gr-nm:focus-within { border-color: rgba(243,195,90,.6); box-shadow: 0 0 0 3px rgba(243,195,90,.14); }
@@ -2078,6 +2097,7 @@
       <button type="button" class="tab" role="tab" data-tab="rating" aria-selected="false"><span class="tab-ic">🏆</span><span class="tl">Рейтинг</span><span class="ts">Топ</span></button>
     </div>
   </div>
+  <div class="nstrip" id="nStrip" aria-label="Лента новостей" hidden></div>
   <div class="panes" id="panes">
   <div class="tabpane" data-pane="1x6" role="tabpanel">
   <section class="hero">
@@ -6618,8 +6638,25 @@ const NEWS = (() => {
 
   function dot(){ const fresh = TOP > seen || autoTop() > seenT; document.querySelectorAll('.tab[data-tab="news"]').forEach(tb => { let d = tb.querySelector(".ndot");
     if (fresh && !d){ d = document.createElement("i"); d.className = "ndot"; d.setAttribute("aria-hidden", "true"); tb.appendChild(d); } else if (!fresh && d) d.remove(); });
-    const mo = document.getElementById("tabMore"); if (mo){ let d = mo.querySelector(".ndot"); if (fresh && !d){ d = document.createElement("i"); d.className = "ndot"; d.setAttribute("aria-hidden", "true"); mo.appendChild(d); } else if (!fresh && d) d.remove(); } }
+    strip(); const mo = document.getElementById("tabMore"); if (mo){ let d = mo.querySelector(".ndot"); if (fresh && !d){ d = document.createElement("i"); d.className = "ndot"; d.setAttribute("aria-hidden", "true"); mo.appendChild(d); } else if (!fresh && d) d.remove(); } }
   function go(){ setTab("news"); }
+  // перейти к посту: вкладка новостей, прокрутка к карточке с подсветкой и сразу открытый пост
+  function show(id){
+    setTab("news", { noScroll: true }); if (cat !== "all" && !VIEW.some(x => x.id === id)){ cat = "all"; draw(); }
+    requestAnimationFrame(() => { const c = document.querySelector(`#nList .ncard[data-id="${id}"]`);
+      if (c){ c.scrollIntoView({ block: "center", behavior: REDUCED ? "auto" : "smooth" }); c.classList.remove("nhl"); void c.offsetWidth; c.classList.add("nhl"); }
+      setTimeout(() => openNews(id), c ? 450 : 0); });
+  }
+  // лента новостей: тонкая полоска под вкладками с последними постами, клик — сразу на пост
+  function strip(){
+    const el = document.getElementById("nStrip"); if (!el) return;
+    const list = ALL().slice().sort((a, b) => (b.auto ? b.ts : 0) - (a.auto ? a.ts : 0) || (a.auto || b.auto ? 0 : b.id - a.id)).slice(0, 10);
+    const fresh = n => !firstVisit && (n.auto ? n.ts > seenT : n.id > seen);
+    el.innerHTML = `<span class="ns-l" aria-hidden="true">Лента</span><div class="ns-s">${list.map(n => { const p = pic(n), T = tt(n);
+      return `<button type="button" class="ns-i${fresh(n) ? " new" : ""}" data-id="${n.id}">${p ? `<img alt="" loading="lazy" src="${p.src}">` : `<i class="ns-c">${cic(n.cat)}</i>`}<span${NT()}>${plain(T.t)}</span></button>`; }).join("")}</div><button type="button" class="ns-all">Все →</button>`;
+    el.hidden = false;
+    el.onclick = e => { const b = e.target.closest(".ns-i"); if (b){ const v = b.dataset.id; show(isNaN(+v) ? v : +v); return; } if (e.target.closest(".ns-all")) go(); };
+  }
   function icon(n){ const h = n.hero && H(n.hero);
     return h ? `<button type="button" class="nic" data-s="${h.slug}" style="${vars(h)}" aria-label="Сборка ${h.en}" title="Сборка ${h.en}"><img alt="" loading="lazy" src="face/${h.slug}.webp"></button>`
       : (p => p ? `<span class="nic nthumb k-${p.k}" aria-hidden="true"><img alt="" loading="lazy" src="${p.src}"></span>` : `<span class="nic ncat" aria-hidden="true">${cic(n.cat)}</span>`)(pic(n)); }
@@ -6705,7 +6742,7 @@ const NEWS = (() => {
   /* бегущая строка «Свежее» в шапке */
   let teaser = () => {};
   (() => { const hl = ITEMS.filter(n => n.hl), el = document.getElementById("hNewsT"), b = document.getElementById("hNews"); if (!el || !b) return;
-    let k = 0; teaser = () => { if (TRN) el.setAttribute("translate", "no"); else el.removeAttribute("translate"); el.textContent = tt(hl[k]).t; }; teaser(); b.onclick = go;
+    let k = 0; teaser = () => { if (TRN) el.setAttribute("translate", "no"); else el.removeAttribute("translate"); el.textContent = tt(hl[k]).t; }; teaser(); b.onclick = () => show(hl[k].id);
     if (hl.length > 1 && !REDUCED) setInterval(() => { if (document.hidden) return; k = (k + 1) % hl.length; el.style.opacity = 0; setTimeout(() => { teaser(); el.style.opacity = 1; }, 250); }, 4500);
     el.style.transition = "opacity .25s ease"; })();
   // смена языка — подгружаем перевод и перерисовываем
@@ -6713,7 +6750,7 @@ const NEWS = (() => {
   document.addEventListener("langchange", e => { if (e.detail !== TL) relang(e.detail); });
   if (typeof I18N !== "undefined" && I18N.get() !== "ru") relang(I18N.get()); else setTimeout(loadAuto, 800);
   dot();
-  return { open, go, dot, fromHash };
+  return { open, go, dot, fromHash, show };
 })();
 
 /* ---------- топ MMR: рейтинг Valve ---------- */
@@ -7024,6 +7061,7 @@ function setTab(name, opts){
   if (name === "ladder") LADDER.open();
   if (name === "cs" || name === "deadlock") GAMES.open(name);
   { const g = name === "cs" || name === "deadlock" ? name : "dota"; if (g === "dota") lastDota = name; document.body.dataset.game = g; { const gc = document.getElementById("gbCur"); if (gc && gc.dataset.g !== g){ gc.dataset.g = g; const G = { dota: ["dota", "Dota 2"], cs: ["cs", "CS2"], deadlock: ["deadlock", "Deadlock"] }[g]; gc.innerHTML = `<img alt="" src="/games/${G[0]}.png"><b translate="no">${G[1]}</b>`; } } document.querySelectorAll("#gsw [data-g]").forEach(b => b.setAttribute("aria-current", b.dataset.g === g && (!opts.instant || !document.documentElement.classList.contains("hub")) ? "page" : "false")); }
+  document.body.dataset.tab = name;
   if (!opts.instant) document.documentElement.classList.remove("hub");
   if (!opts.keepHash){ try { history.replaceState(null, "", name === "1x6" ? location.pathname + location.search : "#" + name); } catch(e) {} }
   if (prev !== name && !opts.noScroll){ const tb = document.querySelector(".tabs"); const y = tb.getBoundingClientRect().top + scrollY - 70; if (scrollY > y) window.scrollTo({ top: y, behavior: REDUCED ? "auto" : "smooth" }); }
@@ -7163,7 +7201,7 @@ drawRecent();
 render();
 </script>
 
-<script src="/grids.js?v=11" defer></script>
+<script src="/grids.js?v=12" defer></script>
 <script src="/ruin.js?v=5" defer></script>
 </body>
 </html>
