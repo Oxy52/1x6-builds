@@ -12,16 +12,16 @@ jobs:
           cat > s.js <<'JS'
           const { chromium } = require('playwright');
           (async () => { const b = await chromium.launch(); const out = [];
-            for (const u of ['https://lis-skins.com/market/csgo/', 'https://cs.money/market/buy/', 'https://csfloat.com/search', 'https://market.csgo.com/', 'https://skinport.com/market']) {
+            for (const u of ['https://lis-skins.me/en/market/csgo/', 'https://www.lis-skins-ru.com/en/market/', 'https://cs.money/market/buy/', 'https://csfloat.com/search']) {
               const ctx = await b.newContext({ userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36', locale: 'en-US' });
               const p = await ctx.newPage(); const hits = new Map();
               p.on('response', async r => { try { const ct = r.headers()['content-type'] || ''; if (!/javascript|json/.test(ct)) return; const t = await r.text();
-                const re = /.{0,100}["'](UAH|KZT)["'].{0,160}/g; let m; let n = 0; while ((m = re.exec(t)) && n < 3) { hits.set(m[0], r.url()); n++; } } catch (e) {} });
+                const re = /.{0,140}["'](RUB|UAH)["'].{0,140}/g; let m; let n = 0; while ((m = re.exec(t)) && n < 4) { hits.set(m[0], r.url()); n++; } } catch (e) {} });
               try { await p.goto(u, { waitUntil: 'domcontentloaded', timeout: 45000 }); await p.waitForTimeout(12000); } catch (e) { out.push('ERR ' + u + ' ' + e.message.slice(0, 100)); }
               const txt = await p.evaluate(() => document.body ? document.body.innerText : '').catch(() => '');
               out.push('==== ' + u + ' title=' + (await p.title().catch(() => '')) + ' textlen=' + txt.length);
               out.push('codes in text: ' + [...new Set((txt.match(/\b(USD|EUR|RUB|UAH|KZT|PLN|TRY|CNY|GBP|BRL|BYN)\b/g) || []))].join(','));
-              [...hits].slice(0, 6).forEach(([k, v]) => out.push('  [' + v.slice(0, 90) + '] ' + k.replace(/\s+/g, ' ')));
+              [...hits].slice(0, 10).forEach(([k, v]) => out.push('  [' + v.slice(0, 90) + '] ' + k.replace(/\s+/g, ' ')));
               await ctx.close(); }
             require('fs').writeFileSync('out.txt', out.join('\n')); await b.close(); })();
           JS
