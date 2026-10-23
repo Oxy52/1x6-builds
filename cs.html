@@ -1649,6 +1649,11 @@
   @media (prefers-reduced-motion: reduce) { .hb-row { animation: none; } }
   @media (prefers-reduced-motion: reduce) { .hub .gsw-c, .hub .hub-h { animation: none; } }
   .hub-h { display: none; }
+  .hub-brand { display: none; } .hub .hub-brand { display: flex; align-items: center; justify-content: center; gap: 12px; margin: clamp(22px, 6vh, 64px) 0 0; animation: gswIn .7s cubic-bezier(.2,.8,.2,1) both; }
+  .hub-brand img { width: 52px; height: 52px; object-fit: contain; filter: drop-shadow(0 0 18px rgba(232,86,74,.55)); }
+  .hub-brand span { font-family: var(--display); font-weight: 800; font-size: clamp(26px, 4.4vw, 40px); letter-spacing: 3px; text-transform: uppercase; background: linear-gradient(180deg, #ffe7a3, #f3c35a 45%, #e8564a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hub .hub-brand + .hub-h { margin-top: 10px; }
+  .sup-tg { margin-top: 10px; padding: 8px 14px; font-size: 13.5px; }
   .hub .tabs-wrap, .hub #panes { display: none !important; }
   .hub .hub-h { display: block; margin: clamp(28px, 9vh, 96px) 0 22px; font-family: var(--display); font-weight: 800; font-size: clamp(30px, 5vw, 48px); letter-spacing: -1px; text-align: center; }
   .hub .gsw { gap: 18px; margin-bottom: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; }
@@ -2081,6 +2086,7 @@
   </nav>
 
   <div class="hub-bg" id="hubBg" aria-hidden="true"></div>
+  <div class="hub-brand"><img src="/logo.png" alt="" width="56" height="56"><span translate="no">Blazecrest</span></div>
   <h1 class="hub-h">Выбери игру</h1>
   <div class="hub-onl"><span class="onl" hidden><i aria-hidden="true"></i>Онлайн на сайте: <b translate="no">0</b></span></div>
   <nav class="gsw" id="gsw" aria-label="Игры">
@@ -3892,7 +3898,7 @@ const PROF = (() => {
   function support(){
     if (!CLOUD){ shell("", `<div class="sup-head"><h3>💬 Поддержка</h3><small>Чат поддержки работает на сайте blazecrest.vercel.app</small></div><div style="height:24px"></div>`, "Поддержка"); return; }
     if (!U){
-      const box = shell("", `<div class="sup-head"><h3>💬 Поддержка 1x6</h3><small>Вопрос, баг или идея — напиши нам, ответим прямо здесь.</small></div>
+      const box = shell("", `<div class="sup-head"><h3>💬 Поддержка Blazecrest</h3><small>Вопрос, баг или идея — напиши нам, ответим прямо здесь.</small></div>
         <div class="psec">${signupCard ? `<div class="su-card"><div class="su-ic">💬</div><div class="su-b"><b>Войди, чтобы написать в поддержку</b><ul><li>Ответ придёт сюда же, в чат на сайте</li><li>Вся переписка сохранится</li></ul></div><button type="button" class="btn btn-primary su-go">Войти или зарегистрироваться</button><small class="su-n">Google, Discord, Telegram или почта. Бесплатно.</small></div>` : ""}</div><div style="height:12px"></div>`, "Поддержка");
       box.querySelector(".su-go").onclick = () => auth("in"); return;
     }
@@ -3900,8 +3906,9 @@ const PROF = (() => {
     thread(U.id, false);
   }
   async function inbox(){
-    const box = shell("", `<div class="sup-head"><h3>📥 Обращения</h3><small>Все диалоги игроков с поддержкой. Нажми, чтобы ответить.</small></div><div class="psec" id="supIn"><div class="feed-sk"></div><div class="feed-sk"></div></div><div style="height:20px"></div>`, "Обращения");
-    supView = null;
+    const box = shell("", `<div class="sup-head"><h3>📥 Обращения</h3><small>Все диалоги игроков с поддержкой. Нажми, чтобы ответить.</small><button type="button" class="btn btn-ghost sup-tg" id="supTg">🔔 Уведомления в Telegram</button></div><div class="psec" id="supIn"><div class="feed-sk"></div><div class="feed-sk"></div></div><div style="height:20px"></div>`, "Обращения");
+    supView = null; loadTgScript();
+    box.querySelector("#supTg").onclick = e => supLinkTg(e.currentTarget);
     const el = box.querySelector("#supIn");
     const { data, error } = await sb.from("support_threads").select("*").order("last_at", { ascending: false }).limit(100);
     if (!box.isConnected) return;
@@ -3913,7 +3920,7 @@ const PROF = (() => {
   async function thread(uid, asAdmin){
     let nick = "", av = "";
     if (asAdmin){ try { const { data } = await sb.from("profiles").select("nick,avatar,frame").eq("id", uid).maybeSingle(); if (data){ nick = data.nick; av = data.avatar; } } catch(e) {} }
-    const box = shell("", `<div class="sup-head">${asAdmin ? `<button type="button" class="sup-back" id="supBack">← Все обращения</button><h3 translate="no">${esc(nick || "Игрок")}</h3><small>Ответ увидит только этот игрок.</small>` : `<h3>💬 Поддержка 1x6</h3><small>Вопрос, баг или идея — пиши. Ответим здесь же, обычно в течение дня.</small>`}</div>
+    const box = shell("", `<div class="sup-head">${asAdmin ? `<button type="button" class="sup-back" id="supBack">← Все обращения</button><h3 translate="no">${esc(nick || "Игрок")}</h3><small>Ответ увидит только этот игрок.</small>` : `<h3>💬 Поддержка Blazecrest</h3><small>Вопрос, баг или идея — пиши. Ответим здесь же, обычно в течение дня.</small>`}</div>
       <div class="sup-list" id="supList"><div class="feed-sk"></div></div>
       <form class="sup-form" id="supF"><textarea maxlength="2000" rows="1" placeholder="${asAdmin ? "Ответ игроку…" : "Напиши сообщение…"}"></textarea><button type="submit" class="btn btn-primary" aria-label="Отправить" disabled>➤</button></form>
       <div class="sup-err" id="supE" hidden></div>`, asAdmin ? "Диалог с игроком" : "Поддержка");
@@ -3942,18 +3949,35 @@ const PROF = (() => {
     ta.onkeydown = e => { if (e.key === "Enter" && !e.shiftKey && matchMedia("(pointer:fine)").matches){ e.preventDefault(); form.requestSubmit(); } };
     form.onsubmit = async e => { e.preventDefault(); const body = ta.value.trim(); if (!body) return;
       go.disabled = true; err.hidden = true;
-      const { error } = await sb.from("support_messages").insert({ user_id: uid, sender: asAdmin ? "admin" : "user", body });
+      const { data: ins, error } = await supIns({ user_id: uid, sender: asAdmin ? "admin" : "user", body });
       if (error){ err.hidden = false; err.textContent = supErr(error.message); go.disabled = false; return; }
+      if (!asAdmin) supNotify(ins && ins.id);
       ta.value = ""; fit(); await reload(); };
     await reload();
     const iv = setInterval(() => { if (!box.isConnected){ clearInterval(iv); if (supView && supView.box === box) supView = null; return; } reload(); }, 8000);
     if (matchMedia("(pointer:fine)").matches) ta.focus();
   }
 
+  // новое сообщение игрока — бот пишет админу в Telegram (если админ включил уведомления)
+  async function supIns(row){ const q = sb.from("support_messages").insert(row); return q.select ? await q.select("id").single() : await q; }
+  async function supNotify(id){ if (!id) return; try { const { data } = await sb.auth.getSession(); const t = data && data.session && data.session.access_token; if (!t) return;
+    fetch("/api/telegram?act=notify", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + t }, body: JSON.stringify({ id }) }).catch(() => {}); } catch(e) {} }
+  async function supLinkTg(b){
+    const c = await tgConf(); if (!c || !c.enabled){ toast("Бот Telegram не настроен на сервере."); return; }
+    if (!window.Telegram || !Telegram.Login){ loadTgScript(); toast("Telegram загружается — нажми ещё раз через секунду."); return; }
+    Telegram.Login.auth({ bot_id: c.bot_id, request_access: "write", lang: "ru" }, async data => {
+      if (!data) return; b.disabled = true;
+      try { const { data: sd } = await sb.auth.getSession(); const t = sd && sd.session && sd.session.access_token;
+        const r = await fetch("/api/telegram?act=link", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + t }, body: JSON.stringify({ user: data }) });
+        const j = await r.json().catch(() => ({}));
+        toast(r.ok ? (j.delivered ? "🔔 Готово! Проверь Telegram — бот прислал сообщение." : "Включено, но бот не смог написать — открой бота в Telegram и нажми Start.") : j.error === "not_admin" ? "Это только для админа." : "Не получилось включить уведомления.");
+      } catch(e) { toast("Не получилось включить уведомления."); } b.disabled = false; });
+  }
   // заявка из других разделов (например, инвайт в Deadlock): уходит сообщением в чат поддержки
   async function supportRequest(body){
     if (!CLOUD || !U){ support(); return "auth"; }
-    const { error } = await sb.from("support_messages").insert({ user_id: U.id, sender: "user", body });
+    const { data: ins, error } = await supIns({ user_id: U.id, sender: "user", body });
+    if (!error) supNotify(ins && ins.id);
     return !error;
   }
 
@@ -6480,7 +6504,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=14").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=15").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
@@ -7103,6 +7127,7 @@ document.querySelectorAll(".tab[data-tab]").forEach(b => b.onclick = () => setTa
   document.addEventListener("keydown", e => { if (e.key === "Escape") close(); }); }
 { const cp = document.getElementById("chcPromo"); if (cp) cp.onclick = () => setTab("custom"); }
 document.getElementById("supFab").onclick = () => PROF.support();
+if (new URLSearchParams(location.search).get("support")) setTimeout(() => { PROF.support(); try { const u = new URL(location.href); u.searchParams.delete("support"); history.replaceState(null, "", u.pathname + u.search + u.hash); } catch(e) {} }, 1200);
 I18N.init();
 CURSEL.init();
 addEventListener("resize", () => { const a = document.querySelector('.tab[aria-selected="true"]'); if (a) inkTo(a, true); });

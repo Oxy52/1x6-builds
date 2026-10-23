@@ -1,6 +1,8 @@
 // Вход через Telegram для Blazecrest.
 // GET  /api/telegram          -> { enabled, bot_id }  (публичные данные для кнопки)
 // POST /api/telegram {user}   -> { token_hash }        (проверяет подпись Telegram и выдаёт одноразовый вход в Supabase)
+// POST /api/telegram?act=link {user}  + Bearer JWT админа -> уведомления о новых сообщениях поддержки в Telegram
+// POST /api/telegram?act=notify {id}  + Bearer JWT автора  -> бот пишет админам о новом сообщении в поддержку
 //
 // Переменные окружения на Vercel (Settings → Environment Variables):
 //   TELEGRAM_BOT_TOKEN        — токен бота от @BotFather (секрет)
@@ -32,6 +34,50 @@ function verify(data) {
   return null;
 }
 
+const SITE = (process.env.SITE_URL || "https://blazecrest.vercel.app").replace(/\/$/, "");
+const PUB = process.env.SUPABASE_PUBLISHABLE_KEY || "sb_publishable_tJy3dl_kfNZXP6PXMqsQVQ_RUXqoPmn";
+async function whoAmI(req) {
+  const tok = String(req.headers.authorization || "").replace(/^Bearer\s+/i, ""); if (!tok) return null;
+  const r = await fetch(`${SUPABASE_URL}/auth/v1/user`, { headers: { apikey: PUB, Authorization: "Bearer " + tok } });
+  if (!r.ok) return null; const u = await r.json().catch(() => null); return u && u.id ? u : null;
+}
+const rest = (path, opt) => fetch(`${SUPABASE_URL}/rest/v1/${path}`, { ...(opt || {}), headers: { ...adminHeaders(), ...((opt || {}).headers || {}) } });
+async function adminIds() { const r = await rest("admins?select=user_id"); const j = r.ok ? await r.json() : []; return (j || []).map(x => x.user_id); }
+async function tgSend(chat, text) {
+  const r = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, { method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ chat_id: chat, text, disable_web_page_preview: true }) });
+  return r.ok;
+}
+const sent = new Set();
+// уведомления поддержки: chat id админа хранится в app_metadata его аккаунта (без новых таблиц)
+async function act(req, res, a, body) {
+  const me = await whoAmI(req); if (!me) return res.status(401).json({ error: "login" });
+  if (a === "link") {
+    const admins = await adminIds(); if (!admins.includes(me.id)) return res.status(403).json({ error: "not_admin" });
+    const err = verify(body && body.user); if (err) return res.status(401).json({ error: err });
+    const chat = String(body.user.id).replace(/\D/g, "");
+    const up = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${me.id}`, { method: "PUT", headers: adminHeaders(), body: JSON.stringify({ app_metadata: { tg_notify: chat } }) });
+    if (!up.ok) return res.status(502).json({ error: "save_failed" });
+    const ok = await tgSend(chat, "✅ Уведомления Blazecrest включены. Сюда будут приходить новые сообщения в поддержку.");
+    return res.status(200).json({ ok: true, delivered: ok });
+  }
+  if (a === "notify") {
+    const id = Number(body && body.id); if (!id || sent.has(id)) return res.status(200).json({ ok: true });
+    const r = await rest(`support_messages?id=eq.${id}&select=id,user_id,sender,body,created_at`); const m = r.ok ? (await r.json())[0] : null;
+    if (!m || m.user_id !== me.id || m.sender !== "user" || Date.now() - Date.parse(m.created_at) > 5 * 60e3) return res.status(200).json({ ok: false });
+    sent.add(id);
+    const pr = await rest(`profiles?id=eq.${me.id}&select=nick`); const nick = (pr.ok ? ((await pr.json())[0] || {}).nick : "") || (me.user_metadata && (me.user_metadata.full_name || me.user_metadata.user_name)) || "Игрок";
+    const text = `💬 Новое сообщение в поддержку\nОт: ${nick}\n\n${String(m.body).slice(0, 3000)}\n\nОтветить: ${SITE}/?support=1`;
+    let n = 0;
+    for (const aid of await adminIds()) {
+      const u = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${aid}`, { headers: adminHeaders() }); const j = u.ok ? await u.json() : null;
+      const chat = j && j.app_metadata && j.app_metadata.tg_notify; if (chat && await tgSend(chat, text)) n++;
+    }
+    return res.status(200).json({ ok: true, sent: n });
+  }
+  return res.status(400).json({ error: "bad_act" });
+}
+
 module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
   const enabled = Boolean(BOT_TOKEN && SECRET);
@@ -43,6 +89,8 @@ module.exports = async (req, res) => {
 
   let body = req.body;
   if (typeof body === "string") { try { body = JSON.parse(body); } catch (e) { body = null; } }
+  const a = String((req.query || {}).act || "");
+  if (a) { try { return await act(req, res, a, body); } catch (e) { return res.status(500).json({ error: "server_error" }); } }
   const user = body && body.user;
   const err = verify(user);
   if (err) return res.status(401).json({ error: err });
