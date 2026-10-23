@@ -1,26 +1,12 @@
-skinport USD: 200 [{"market_hash_name":"Sticker | z4KR | Cologne 2026","version":null,"currency":"USD","suggested_price":0.03,"item_page":"https://skinport.com/item/sti
-skinport EUR: 200 [{"market_hash_name":"Sticker | z4KR | Cologne 2026","version":null,"currency":"EUR","suggested_price":0.03,"item_page":"https://skinport.com/item/sti
-skinport RUB: 200 [{"market_hash_name":"Sticker | z4KR | Cologne 2026","version":null,"currency":"RUB","suggested_price":2.79,"item_page":"https://skinport.com/item/sti
-skinport UAH: 400 {"errors":[{"id":"validation_error","message":"Parameter currency failed validation: The given value is invalid"}]}
-skinport KZT: 400 {"errors":[{"id":"validation_error","message":"Parameter currency failed validation: The given value is invalid"}]}
-tm USD: 200
-tm EUR: 200
-tm RUB: 200
-tm UAH: 404
-== https://lis-skins.com/ 5692
-
-== https://lis-skins.com/market/csgo/ 5749
-
-== https://cs.money/ 5537
-
-== https://csfloat.com/ 81111
-
-grep: b.js: No such file or directory
-grep: b.js: No such file or directory
-== https://market.csgo.com/ 73127
-
-grep: b.js: No such file or directory
-grep: b.js: No such file or directory
-== https://skinport.com/ 2108
-
-  js https://skinport.com/static/main.c249b69ba45fca87.js:       2 "RUB" 
+==== https://lis-skins.com/market/csgo/ title=Just a moment... textlen=261
+codes in text: 
+==== https://cs.money/market/buy/ title=CS.MONEY — Buy CS:GO/CS2 skins | Skin Marketplace textlen=11779
+codes in text: 
+==== https://csfloat.com/search title=CSFloat - Buy & Sell CS2 Skins on the Most Advanced Marketplace textlen=2758
+codes in text: USD
+  [https://csfloat.com/chunk-NVYZBVE4.js] CZK="CZK",e.DKK="DKK",e.GEL="GEL",e.HKD="HKD",e.HUF="HUF",e.IDR="IDR",e.ILS="ILS",e.KHR="KHR",e.KZT="KZT",e.MYR="MYR",e.MXN="MXN",e.NOK="NOK",e.NZD="NZD",e.PLN="PLN",e.RON="RON",e.RSD="RSD",e.SAR="SAR",e.SEK="SEK",e.SGD="SGD",e.THB="THB",e.TRY="TRY",e.TWD="TWD",e.U
+  [https://csfloat.com/chunk-NVYZBVE4.js] AH="UAH",e.USDC="USDC",e})(i||{}),u={[i.USD]:{code:i.USD,symbol:"$"},[i.EUR]:{code:i.EUR,symbol:"\u20AC",symbolOnRight:!0},[i.GBP]:{code:i.GBP,symbol:"\xA3"},[i.CAD]:{c
+==== https://market.csgo.com/ title=Buy CSGO Skins - Trade and Sell CS2 Skins and Items Safely | Market CSGO textlen=9906
+codes in text: USD
+==== https://skinport.com/market title=Buy CS:GO/CS2 Skins and Items - Skinport textlen=838
+codes in text: 
