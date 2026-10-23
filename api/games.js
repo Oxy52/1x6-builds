@@ -98,14 +98,16 @@ const SRC = {
 };
 const price = (k, g) => memo(k + g, SRC[k].ttl * 60e3, () => SRC[k].load(g));
 const CAT = {
-  cs: { rifle: ["Type", "tag_CSGO_Type_Rifle"], sniper: ["Type", "tag_CSGO_Type_SniperRifle"], pistol: ["Type", "tag_CSGO_Type_Pistol"], knife: ["Type", "tag_CSGO_Type_Knife"],
+  cs: { all: null, rifle: ["Type", "tag_CSGO_Type_Rifle"], sniper: ["Type", "tag_CSGO_Type_SniperRifle"], pistol: ["Type", "tag_CSGO_Type_Pistol"], knife: ["Type", "tag_CSGO_Type_Knife"],
     gloves: ["Type", "tag_Type_Hands"], agent: ["Type", "tag_Type_CustomPlayer"], smg: ["Type", "tag_CSGO_Type_SMG"], case: ["Type", "tag_CSGO_Type_WeaponCase"], sticker: ["Type", "tag_CSGO_Tool_Sticker"] },
-  dota: { arcana: ["Rarity", "tag_Rarity_Arcana"], immortal: ["Rarity", "tag_Rarity_Immortal"], legendary: ["Rarity", "tag_Rarity_Legendary"], mythical: ["Rarity", "tag_Rarity_Mythical"],
+  dota: { all: null, arcana: ["Rarity", "tag_Rarity_Arcana"], immortal: ["Rarity", "tag_Rarity_Immortal"], legendary: ["Rarity", "tag_Rarity_Legendary"], mythical: ["Rarity", "tag_Rarity_Mythical"],
     courier: ["Type", "tag_courier"], ward: ["Type", "tag_ward"], set: ["Type", "tag_bundle"], gem: ["Type", "tag_socket_gem"] } };
 // качество: износ и StatTrak/Сувенир в CS2, Inscribed/Genuine/Exalted… в Dota 2 (фильтры Steam)
 const QL = {
   cs: { fn: ["Exterior", "tag_WearCategory0"], mw: ["Exterior", "tag_WearCategory1"], ft: ["Exterior", "tag_WearCategory2"], ww: ["Exterior", "tag_WearCategory3"], bs: ["Exterior", "tag_WearCategory4"],
-    st: ["Quality", "tag_strange"], sv: ["Quality", "tag_tournament"] },
+    st: ["Quality", "tag_strange"], sv: ["Quality", "tag_tournament"],
+    // редкость агентов
+    a4: ["Rarity", "tag_Rarity_Ancient_Character"], a3: ["Rarity", "tag_Rarity_Legendary_Character"], a2: ["Rarity", "tag_Rarity_Mythical_Character"], a1: ["Rarity", "tag_Rarity_Rare_Character"] },
   dota: { ins: ["Quality", "tag_strange"], gen: ["Quality", "tag_genuine"], exa: ["Quality", "tag_exalted"], unu: ["Quality", "tag_unusual"], aut: ["Quality", "tag_autographed"],
     cor: ["Quality", "tag_corrupted"], fro: ["Quality", "tag_frozen"], her: ["Quality", "tag_tournament"], eld: ["Quality", "tag_vintage"], inf: ["Quality", "tag_infused"] } };
 // редкость из типа предмета Steam: ранг для сортировки и русское название
@@ -115,17 +117,35 @@ const RAR = [[/contraband/i, 10, "Контрабанда"], [/extraordinary/i, 8
   [/arcana/i, 9, "Аркана"], [/immortal/i, 8, "Бессмертное"], [/ancient/i, 7, "Древнее"], [/legendary/i, 6, "Легендарное"], [/mythical/i, 5, "Мифическое"], [/rare/i, 4, "Редкое"], [/uncommon/i, 3, "Необычное"], [/common/i, 2, "Обычное"]];
 function rarity(type) { const t = String(type || ""); const x = RAR.find(([re]) => re.test(t)); return x ? { r: x[1] + (/★/.test(t) ? 1 : 0), rn: x[2] } : { r: 0, rn: "" }; }
 const SORT = { pop: ["popular", "desc"], cheap: ["price", "asc"], exp: ["price", "desc"], name: ["name", "asc"], rar: ["popular", "desc"] };
-async function market(g, cat, query, start, sort, ql) {
+// сторона агента — по отряду после « | » в названии
+const AG_CT = /FBI|SEAL|KSK|SAS|TACP|Gendarmerie|SWAT|Brazilian/;
+const agSide = n => AG_CT.test(String(n).split(" | ").pop()) ? "ct" : "t";
+// все агенты разом (их ~60, Steam отдаёт по 10) — нужно, чтобы отфильтровать по стороне; кеш на час
+const allAgents = (ql) => memo("agents|" + ql, 36e5, async () => { const out = []; let total = 1;
+  for (let s = 0; s < Math.min(total, 120); s += 10) {
+    const u = new URL("https://steamcommunity.com/market/search/render/");
+    Object.entries({ appid: 730, norender: 1, count: 10, start: s, sort_column: "popular", sort_dir: "desc", l: "english" }).forEach(([k, v]) => u.searchParams.set(k, v));
+    u.searchParams.append("category_730_Type[]", "tag_Type_CustomPlayer"); const q2 = QL.cs[ql]; if (q2) u.searchParams.append(`category_730_${q2[0]}[]`, q2[1]);
+    const j = await get(u.href); total = j.total_count || 0; out.push(...(j.results || [])); if (!(j.results || []).length) break; }
+  return out; });
+
+async function market(g, cat, query, start, sort, ql, side) {
   if (!APP[g]) g = "cs";
   const app = APP[g], u = new URL("https://steamcommunity.com/market/search/render/");
   const so = SORT[sort] || SORT.pop;
   Object.entries({ appid: app, norender: 1, count: 10, start, sort_column: so[0], sort_dir: so[1], l: "english" }).forEach(([k, v]) => u.searchParams.set(k, v));
-  const C = CAT[g], c = C[cat] || Object.values(C)[0];
-  if (query) u.searchParams.set("query", query); else u.searchParams.append(`category_${app}_${c[0]}[]`, c[1]);
+  const C = CAT[g], c = cat in C ? C[cat] : Object.values(C)[0];
+  if (query) u.searchParams.set("query", query); else if (c) u.searchParams.append(`category_${app}_${c[0]}[]`, c[1]);
   const q2 = (QL[g] || {})[ql]; if (q2) u.searchParams.append(`category_${app}_${q2[0]}[]`, q2[1]);
+  // агенты одной стороны: берём всех, фильтруем и сортируем сами
+  const bySide = g === "cs" && cat === "agent" && !query && (side === "ct" || side === "t");
+  const steamList = bySide ? allAgents(ql).then(all => { const l = all.filter(r => agSide(r.hash_name) === side);
+    if (sort === "cheap" || sort === "exp") l.sort((a, b) => (sort === "cheap" ? 1 : -1) * ((a.sell_price || 1e9) - (b.sell_price || 1e9)));
+    else if (sort === "name") l.sort((a, b) => a.hash_name.localeCompare(b.hash_name));
+    return { total_count: l.length, results: l.slice(start, start + 10) }; }) : get(u.href);
   const keys = Object.keys(SRC).filter(k => !SRC[k].only || SRC[k].only === g);
   // площадка, которая не ответила, просто не показывается — остальные работают
-  const [st, fx, ...maps] = await Promise.all([get(u.href), rates().catch(() => null), ...keys.map(k => price(k, g).catch(() => null))]);
+  const [st, fx, ...maps] = await Promise.all([steamList, rates().catch(() => null), ...keys.map(k => price(k, g).catch(() => null))]);
   const val = (x, gg) => typeof x === "function" ? x(gg) : x;
   const items = (st.results || []).map(r => { const n = r.hash_name, ad = r.asset_description || {};
     const p = [{ k: "steam", name: "Steam", d: "steamcommunity.com", v: r.sell_price ? r.sell_price / 100 : null, n: r.sell_listings || 0, u: `https://steamcommunity.com/market/listings/${app}/${encodeURIComponent(n)}` }];
@@ -325,7 +345,7 @@ module.exports = async (req, res) => {
     else if (q === "dlHeroes") out = await dlHeroes(lang);
     else if (q === "dlItems") out = await dlItems(lang);
     else if (q === "csMarket" || q === "market") { const qs = String(req.query.s || "").trim().slice(0, 60), s0 = Math.max(0, Math.min(90, +req.query.start || 0)), start = s0 - s0 % 10;
-      if (qs && qs.length < 2) return fail(400, "bad_query"); out = await market(q === "csMarket" ? "cs" : String(req.query.g || "cs"), String(req.query.cat || ""), qs, start, String(req.query.sort || "pop"), String(req.query.ql || "")); }
+      if (qs && qs.length < 2) return fail(400, "bad_query"); out = await market(q === "csMarket" ? "cs" : String(req.query.g || "cs"), String(req.query.cat || ""), qs, start, String(req.query.sort || "pop"), String(req.query.ql || ""), String(req.query.side || "")); }
     else if (q === "lots") { const n = String(req.query.s || "").slice(0, 120); if (n.length < 2) return fail(400, "bad_query"); out = await lots(String(req.query.g || "cs"), n); }
     else { const id = +req.query.id; if (!(id > 0 && id < 1000)) return fail(400, "bad_id"); out = q === "dlOrder" ? await dlOrder(id, lang) : await dlHero(id); }
     const ttl = out && out._ttl || TTL[q]; if (out) delete out._ttl;

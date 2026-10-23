@@ -6885,7 +6885,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=22").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=23").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
@@ -7329,10 +7329,12 @@ const GAMES = (() => {
 
   // ---------- торговые площадки: одна и та же вещь на Steam, CS.money, Lis-skins, Skinport, Market и CSFloat ----------
   // Только просмотр: цены приходят с нашего сервера одним запросом (кеш на час), сайт не тянет прайсы площадок сам.
-  const MC = { cs: [["rifle", "Винтовки"], ["sniper", "Снайперские"], ["pistol", "Пистолеты"], ["smg", "ПП"], ["knife", "Ножи"], ["gloves", "Перчатки"], ["agent", "Агенты"], ["case", "Кейсы"], ["sticker", "Наклейки"]],
-    dota: [["arcana", "Арканы"], ["immortal", "Бессмертные"], ["legendary", "Легендарные"], ["mythical", "Мифические"], ["set", "Наборы"], ["courier", "Курьеры"], ["ward", "Варды"], ["gem", "Гемы"]] };
+  const MC = { cs: [["all", "Все"], ["rifle", "Винтовки"], ["sniper", "Снайперские"], ["pistol", "Пистолеты"], ["smg", "ПП"], ["knife", "Ножи"], ["gloves", "Перчатки"], ["agent", "Агенты"], ["case", "Кейсы"], ["sticker", "Наклейки"]],
+    dota: [["all", "Все"], ["arcana", "Арканы"], ["immortal", "Бессмертные"], ["legendary", "Легендарные"], ["mythical", "Мифические"], ["set", "Наборы"], ["courier", "Курьеры"], ["ward", "Варды"], ["gem", "Гемы"]] };
   const QLS = { cs: [["", "Любое качество"], ["fn", "Прямо с завода"], ["mw", "Немного поношенное"], ["ft", "После полевых испытаний"], ["ww", "Поношенное"], ["bs", "Закалённое в боях"], ["st", "StatTrak™"], ["sv", "Сувенир"]],
     dota: [["", "Любое качество"], ["ins", "Inscribed — со счётчиком"], ["gen", "Genuine"], ["exa", "Exalted"], ["unu", "Unusual"], ["aut", "Autographed"], ["cor", "Corrupted"], ["fro", "Frozen"], ["her", "Heroic"], ["eld", "Elder"], ["inf", "Infused"]] };
+  // у агентов вместо износа — редкость и сторона
+  const QLA = [["", "Любая редкость"], ["a4", "Мастер"], ["a3", "Превосходный"], ["a2", "Исключительный"], ["a1", "Заслуженный"]], SIDES = [["", "Обе стороны"], ["ct", "Спецназ"], ["t", "Террористы"]];
   const PH = { cs: "Найти скин, например AK-47 Redline", dota: "Найти предмет, например Manifold Paradox" };
   const LOGO = { steam: "/games/steam.png", lis: "/games/lisskins.png", csm: "/games/csmoney.png" };
   const logo = p => LOGO[p.k] || `https://www.google.com/s2/favicons?domain=${encodeURIComponent(p.d)}&sz=64`;
@@ -7389,9 +7391,11 @@ const GAMES = (() => {
   function market(el, g){
     const m = MKS[g] = MKS[g] || { g, cat: MC[g][0][0], q: "", start: 0, items: [], fx: null, total: 0, t: 0, ql: "", sort: (() => { try { return localStorage.getItem("ub-mksort") || "pop"; } catch(e) { return "pop"; } })() };
     m.el = el;
+    const ag = g === "cs" && m.cat === "agent" && !m.q;
     el.innerHTML = `<div class="mk-bar"><div class="rkchips sub mk-cats"><button type="button" class="rkc mk-favc" data-mc="fav" aria-pressed="${!m.q && m.cat === "fav"}"><span aria-hidden="true">★</span> <span>Избранное</span><span class="mk-fc">${favs(g).length || ""}</span></button>${MC[g].map(([k, t]) => `<button type="button" class="rkc" data-mc="${k}" aria-pressed="${!m.q && m.cat === k}">${t}</button>`).join("")}</div>
         <label class="d2-search mk-q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" class="mkQ" placeholder="${PH[g]}" autocomplete="off" value="${esc(m.q)}"></label>
-        <label class="mk-sort"><span>Качество</span><select class="mkQl" aria-label="Качество">${QLS[g].map(([k, t]) => `<option value="${k}"${m.ql === k ? " selected" : ""}>${t}</option>`).join("")}</select></label>
+        ${ag ? `<label class="mk-sort"><span>Сторона</span><select class="mkSide" aria-label="Сторона">${SIDES.map(([k, t]) => `<option value="${k}"${(m.side || "") === k ? " selected" : ""}>${t}</option>`).join("")}</select></label>` : ""}
+        <label class="mk-sort"><span>${ag ? "Редкость" : "Качество"}</span><select class="mkQl" aria-label="${ag ? "Редкость" : "Качество"}">${(ag ? QLA : QLS[g]).map(([k, t]) => `<option value="${k}"${m.ql === k ? " selected" : ""}>${t}</option>`).join("")}</select></label>
         <label class="mk-sort"><span>Сортировка</span><select class="mkSort" aria-label="Сортировка">${MSORT.map(([k, t]) => `<option value="${k}"${m.sort === k ? " selected" : ""}>${t}</option>`).join("")}</select></label></div>
       <div class="mk-legend"></div>
       <div class="mk-list">${sk(4)}</div>
@@ -7403,10 +7407,11 @@ const GAMES = (() => {
         if (k >= 0){ list.splice(k, 1); PROF.toast("Убрано из избранного"); } else { const it = m.items.find(x => x.n === n); if (it){ list.unshift(it); PROF.toast("Добавлено в избранное ★"); } }
         favSet(g, list); favCount(m); if (m.cat === "fav" && !m.q){ m.items = favs(g); m.total = m.items.length; mkDraw(m); }
         else { const on = list.some(x => x.n === n); fv.setAttribute("aria-pressed", on); fv.textContent = on ? "★" : "☆"; fv.setAttribute("aria-label", on ? "Убрать из избранного" : "В избранное"); } return; }
-      const c = e.target.closest("[data-mc]"); if (c){ m.cat = c.dataset.mc; m.q = ""; m.start = 0; m.items = []; market(el, g); return; }
+      const c = e.target.closest("[data-mc]"); if (c){ if ((c.dataset.mc === "agent") !== (m.cat === "agent")){ m.ql = ""; m.side = ""; } m.cat = c.dataset.mc; m.q = ""; m.start = 0; m.items = []; market(el, g); return; }
       const lt = e.target.closest(".mk-lots"); if (lt){ openLots(m, lt.dataset.n); return; }
       if (e.target.closest(".mk-more")){ m.start += 10; mkLoad(m, true); } };
     el.querySelector(".mkQl").onchange = e => { m.ql = e.target.value; if (m.cat === "fav" && !m.q){ m.cat = MC[g][0][0]; market(el, g); return; } m.start = 0; m.items = []; mkLoad(m); };
+    { const sd = el.querySelector(".mkSide"); if (sd) sd.onchange = e => { m.side = e.target.value; m.start = 0; m.items = []; mkLoad(m); }; }
     el.querySelector(".mkSort").onchange = e => { m.sort = e.target.value; try { localStorage.setItem("ub-mksort", m.sort); } catch(_) {}
       // цена и название сортируются на стороне Steam (по всем скинам), редкость — среди загруженных
       if (m.cat === "fav" && !m.q){ mkDraw(m); return; } if (m.sort === "rar" && m.items.length && !m.q){ mkDraw(m); return; } m.start = 0; mkLoad(m); };
@@ -7418,9 +7423,9 @@ const GAMES = (() => {
     const box = m.el.querySelector(".mk-list"); if (!box) return;
     if (!more) box.innerHTML = sk(4); else { const b = m.el.querySelector(".mk-more"); if (b) b.disabled = true; }
     if (!m.q && m.cat === "fav"){ favLoad(m); return; }
-    const want = m.q + "|" + m.cat + "|" + m.sort + "|" + m.ql, srv = m.sort === "rar" ? "pop" : m.sort;
-    try { const d = await once(`/api/games?q=market&g=${m.g}&${m.q ? "s=" + encodeURIComponent(m.q) : "cat=" + m.cat}&start=${m.start}${srv !== "pop" ? "&sort=" + srv : ""}${m.ql ? "&ql=" + m.ql : ""}`);
-      if (want !== m.q + "|" + m.cat + "|" + m.sort + "|" + m.ql) return;
+    const side = !m.q && m.cat === "agent" ? m.side || "" : "", want = m.q + "|" + m.cat + "|" + m.sort + "|" + m.ql + "|" + side, srv = m.sort === "rar" ? "pop" : m.sort;
+    try { const d = await once(`/api/games?q=market&g=${m.g}&${m.q ? "s=" + encodeURIComponent(m.q) : "cat=" + m.cat}&start=${m.start}${srv !== "pop" ? "&sort=" + srv : ""}${m.ql ? "&ql=" + m.ql : ""}${side ? "&side=" + side : ""}`);
+      if (want !== m.q + "|" + m.cat + "|" + m.sort + "|" + m.ql + "|" + (!m.q && m.cat === "agent" ? m.side || "" : "")) return;
       Object.assign(m, { items: more ? m.items.concat(d.items) : d.items, fx: d.fx || m.fx, total: d.total }); mkDraw(m);
     } catch(e) { if (!more) box.innerHTML = err; else { const b = m.el.querySelector(".mk-more"); if (b) b.disabled = false; } }
   }

@@ -23,6 +23,24 @@ const BASE = "https://api.opendota.com/api";
 const KEY = process.env.OPENDOTA_API_KEY || "";
 const UA = { Accept: "application/json", "User-Agent": "1x6-builds (+https://blazecrest.vercel.app)" };
 
+// запасная копия: последний удачный ответ общих данных лежит в Supabase (таблица api_cache, только сервер).
+// Если OpenDota упала — отдаём его, чтобы мета, герои и предметы на сайте не пропадали.
+const SB_URL = process.env.SUPABASE_URL || "https://vsmjjlrgjyujaioknlkn.supabase.co";
+const SB_KEY = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+const SB_H = () => { const h = { apikey: SB_KEY, "Content-Type": "application/json" }; if (SB_KEY.startsWith("eyJ")) h.Authorization = "Bearer " + SB_KEY; return h; };
+const BACKUP = new Set(["heroStats", "items", "itemIds", "abilities", "ladderTop", "pros", "builds", "itemPopularity", "itemTimings", "laneRoles", "matchups", "ladder"]);
+const backupKey = (q, p) => [q, p.hero || "", p.region || ""].join(":");
+async function backupSave(k, body) {
+  if (!SB_KEY || body.length > 4e6) return;
+  try { await fetch(`${SB_URL}/rest/v1/api_cache`, { method: "POST", signal: AbortSignal.timeout(4000), headers: { ...SB_H(), Prefer: "resolution=merge-duplicates,return=minimal" },
+    body: JSON.stringify({ k, body, at: new Date().toISOString() }) }); } catch (e) { /* не страшно */ }
+}
+async function backupLoad(k) {
+  if (!SB_KEY) return null;
+  try { const r = await fetch(`${SB_URL}/rest/v1/api_cache?k=eq.${encodeURIComponent(k)}&select=body,at`, { signal: AbortSignal.timeout(5000), headers: SB_H() });
+    const j = r.ok ? await r.json() : []; return j[0] || null; } catch (e) { return null; }
+}
+
 const ROUTES = {
   heroStats: () => "/heroStats",
   items: () => "/constants/items",
@@ -225,8 +243,12 @@ module.exports = async (req, res) => {
     let ttl = TTL[q] || 21600;
     if (q === "ruin") { try { if (JSON.parse(out).parsed) ttl = 86400; else ttl = 120; } catch (e) {} }
     res.setHeader("Cache-Control", `public, max-age=${Math.min(600, ttl)}, s-maxage=${ttl}, stale-while-revalidate=${ttl * 4}`);
+    if (BACKUP.has(q)) await backupSave(backupKey(q, p), out);
     return res.status(200).send(out);
   } catch (e) {
+    if (BACKUP.has(q)) { const b = await backupLoad(backupKey(q, p));
+      if (b) { res.setHeader("Content-Type", "application/json; charset=utf-8"); res.setHeader("X-Backup-From", b.at); res.setHeader("Cache-Control", "public, max-age=120, s-maxage=300");
+        return res.status(200).send(b.body); } }
     return fail(502, e.status ? "upstream_" + e.status : "upstream_unreachable");
   }
 };

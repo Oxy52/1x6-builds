@@ -881,3 +881,6 @@ create policy "media upload own folder" on storage.objects for insert to authent
   with check (bucket_id = 'media' and (storage.foldername(name))[1] = (select auth.uid())::text and storage.filename(name) <> 'tag.png');
 create policy "media update own folder" on storage.objects for update to authenticated
   using (bucket_id = 'media' and (storage.foldername(name))[1] = (select auth.uid())::text and storage.filename(name) <> 'tag.png');
+-- Запасная копия ответов OpenDota (пишет и читает только сервер /api/dota, у браузера доступа нет)
+create table if not exists public.api_cache (k text primary key, body text not null, at timestamptz not null default now());
+alter table public.api_cache enable row level security;
