@@ -1,4 +1,26 @@
-== list
-[{"id":5,"name":"Связь течис"}]
-== cm
-[]
+skinport USD: 200 [{"market_hash_name":"Sticker | z4KR | Cologne 2026","version":null,"currency":"USD","suggested_price":0.03,"item_page":"https://skinport.com/item/sti
+skinport EUR: 200 [{"market_hash_name":"Sticker | z4KR | Cologne 2026","version":null,"currency":"EUR","suggested_price":0.03,"item_page":"https://skinport.com/item/sti
+skinport RUB: 200 [{"market_hash_name":"Sticker | z4KR | Cologne 2026","version":null,"currency":"RUB","suggested_price":2.79,"item_page":"https://skinport.com/item/sti
+skinport UAH: 400 {"errors":[{"id":"validation_error","message":"Parameter currency failed validation: The given value is invalid"}]}
+skinport KZT: 400 {"errors":[{"id":"validation_error","message":"Parameter currency failed validation: The given value is invalid"}]}
+tm USD: 200
+tm EUR: 200
+tm RUB: 200
+tm UAH: 404
+== https://lis-skins.com/ 5692
+
+== https://lis-skins.com/market/csgo/ 5749
+
+== https://cs.money/ 5537
+
+== https://csfloat.com/ 81111
+
+grep: b.js: No such file or directory
+grep: b.js: No such file or directory
+== https://market.csgo.com/ 73127
+
+grep: b.js: No such file or directory
+grep: b.js: No such file or directory
+== https://skinport.com/ 2108
+
+  js https://skinport.com/static/main.c249b69ba45fca87.js:       2 "RUB" 
