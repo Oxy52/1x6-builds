@@ -1731,7 +1731,7 @@
   .csx-l, .dlx-l { display: grid; gap: 6px; }
   .csx { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); grid-template-areas: "t t t" "a s b"; align-items: center; gap: 4px 12px; padding: 9px 14px 11px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg-soft); cursor: pointer; transition: border-color .2s, transform .2s; }
   .csx:hover, .dlx[data-dm]:hover { border-color: color-mix(in srgb, var(--t1) 55%, var(--line)); transform: translateY(-1px); }
-  .csx.live { border-color: rgba(255,77,77,.45); }
+  .csx.s-live { border-color: rgba(255,77,77,.45); }
   .csx-t { grid-area: t; display: flex; align-items: center; gap: 6px; min-width: 0; font-size: 12px; color: var(--muted); } .csx-t img { width: 16px; height: 16px; object-fit: contain; }
   .csx-t > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .csx-t em { font-style: normal; font-weight: 700; padding: 0 6px; border-radius: 5px; background: rgba(255,255,255,.06); } .csx-t small { margin-left: auto; white-space: nowrap; }
   .csx-tm { display: flex; align-items: center; gap: 8px; min-width: 0; } .csx-tm.a { grid-area: a; justify-content: flex-end; text-align: right; } .csx-tm.b { grid-area: b; }
@@ -1756,7 +1756,7 @@
   .cmx-p i { font-style: normal; color: var(--muted); margin: 0 2px; } .cmx-n { text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px; }
   .cmx-av { width: 34px; height: 34px; border-radius: 50%; overflow: hidden; background: rgba(255,255,255,.05); } .cmx-av img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
   .cmx-rt { font-weight: 800; }
-  @media (max-width: 760px) { .cmx-p { grid-template-columns: 30px minmax(0, 1fr) 76px 38px 40px 50px; } .cmx-p > :nth-child(6), .cmx-p > :nth-child(7), .cmx-p > :nth-child(8) { display: none; } .cmx-av { width: 30px; height: 30px; }
+  @media (max-width: 760px) { .cmx-p { grid-template-columns: 28px minmax(0, 1fr) 70px 32px 32px 40px; gap: 5px; padding: 6px 7px; font-size: 12.5px; } .cmx-n { font-size: 13px; } .cmx-p > :nth-child(6), .cmx-p > :nth-child(7), .cmx-p > :nth-child(8) { display: none; } .cmx-av { width: 30px; height: 30px; }
     .csx { padding: 8px 10px 10px; gap: 4px 8px; } .csx-tm img { width: 22px; height: 22px; } .csx-tm b { font-size: 14px; } .csx-sc { min-width: 52px; } .csx-sc b { font-size: 17px; } }
   .dlx-q { display: flex; gap: 8px; margin-bottom: 6px; } .dlx-q .d2-search { flex: 1; min-width: 0; }
   .dlx { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); grid-template-areas: "t t t" "a s b"; align-items: center; gap: 6px 10px; padding: 9px 12px 11px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg-soft); }
@@ -7309,7 +7309,7 @@ const GAMES = (() => {
   const MT = {}; // турнир матча из списка (у bo3.gg в карточке одного матча его нет)
   function mrow(m){ if (m.t) MT[m.s] = m.t;
     const mid = m.st === "live" ? `<span class="csx-live">LIVE</span><b>${m.a.sc ?? 0}<i>:</i>${m.b.sc ?? 0}</b>` : m.st === "soon" ? `<span class="csx-at">${when(m.d)}</span>` : `<b>${m.a.sc ?? "—"}<i>:</i>${m.b.sc ?? "—"}</b>`;
-    return `<div class="csx ${m.st}" data-cm="${esc(m.s)}" role="button" tabindex="0">
+    return `<div class="csx s-${m.st}" data-cm="${esc(m.s)}" role="button" tabindex="0">
       <span class="csx-t">${m.t ? `${m.t.img ? `<img alt="" loading="lazy" src="${esc(m.t.img)}" onerror="this.remove()">` : ""}<span translate="no">${esc(m.t.n)}</span>` : ""}<em>BO${m.bo || 1}</em>${m.st === "done" ? `<small>${day(m.d)}</small>` : ""}</span>
       <span class="csx-tm a${m.w === 1 ? " win" : m.w ? " lose" : ""}"><b translate="no">${esc(m.a.n)}</b>${tlogo(m.a)}</span>
       <span class="csx-sc">${mid}</span>
