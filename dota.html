@@ -7110,7 +7110,7 @@ const GAMES = (() => {
   // лоты одного предмета в Steam: что на них — гемы, счётчики (Inscribed), наклейки, флоат
   async function openLots(m, n){
     const was = !modal.hidden; if (modal._cleanup){ try { modal._cleanup(); } catch(e) {} modal._cleanup = null; }
-    modal.innerHTML = `<div class="sheet nsheet lots-sheet" role="dialog" aria-modal="true" aria-label="Лоты Steam"><div class="lots-h"><div><small>${m.g === "dota" ? "Гемы и счётчики" : "Наклейки и флоат"} · лоты Steam</small><h3 translate="no">${esc(n)}</h3></div><button type="button" class="close" aria-label="Закрыть">✕</button></div><div class="lots-b">${sk(4)}</div></div>`;
+    modal.innerHTML = `<div class="sheet nsheet lots-sheet" role="dialog" aria-modal="true" aria-label="Лоты Steam"><div class="lots-h"><div><small>${m.g === "dota" ? "Гемы и счётчики" : "Наклейки и брелоки"} · лоты Steam</small><h3 translate="no">${esc(n)}</h3></div><button type="button" class="close" aria-label="Закрыть">✕</button></div><div class="lots-b">${sk(4)}</div></div>`;
     modal.classList.toggle("swap", was); modal.hidden = false; lockScroll(); modal.querySelector(".close").onclick = closeModal;
     const box = modal.querySelector(".lots-b");
     try { const d = await once(`/api/games?q=lots&g=${m.g}&s=${encodeURIComponent(n)}`); if (!box.isConnected) return;
@@ -7177,7 +7177,7 @@ const GAMES = (() => {
       return `<article class="mk-it"${i.col ? ` style="--rc:#${esc(i.col)}"` : ""}><button type="button" class="mk-fav" data-n="${esc(i.n)}" aria-pressed="${fo}" aria-label="${fo ? "Убрать из избранного" : "В избранное"}">${fo ? "★" : "☆"}</button><div class="mk-img">${i.img ? `<img alt="" loading="lazy" src="${esc(i.img)}">` : ""}</div>
         <div class="mk-n"><b translate="no">${esc(i.n)}</b>${i.rn ? `<small class="mk-rar">${esc(i.rn)}</small>` : ""}${lo ? `<small class="mk-from"><span>Дешевле всего:</span> <b>${money(m, lo.v)}</b> · <span translate="no">${esc(lo.name)}</span></small>` : ""}${save >= 5 && has.length > 1 ? `<small class="mk-save"><span>Выгода до</span> ${save}%</small>` : ""}</div>
         <div class="mk-ps">${ps.map(p => `<a class="mk-p${lo && p === lo ? " best" : ""}${p.v == null ? " none" : ""}" data-k="${esc(p.k)}" data-n="${esc(p.name)}" href="${esc(p.u)}" target="_blank" rel="noopener nofollow"><img alt="" loading="lazy" src="${esc(logo(p))}"><span><small translate="no">${esc(p.name)}${p.n ? ` · ${p.n}` : ""}${p.daily ? " ⏱" : ""}</small><b>${p.v == null ? "Поиск" : money(m, p.v)}</b></span></a>`).join("")}</div>
-        <button type="button" class="mk-lots" data-n="${esc(i.n)}">${m.g === "dota" ? "💎 Гемы и счётчики в лотах Steam" : "🔍 Наклейки и флоат в лотах Steam"}</button></article>`; }).join("")
+        <button type="button" class="mk-lots" data-n="${esc(i.n)}">${m.g === "dota" ? "💎 Гемы и счётчики в лотах Steam" : "🔍 Наклейки и брелоки в лотах Steam"}</button></article>`; }).join("")
       + (m.items.length < Math.min(m.total, 100) ? `<button type="button" class="btn btn-ghost lad-more mk-more">Показать ещё</button>` : "");
   }
 
