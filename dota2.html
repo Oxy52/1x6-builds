@@ -1726,6 +1726,57 @@
   [data-pane="cs"] .ncard { --nc: #f5a524; } [data-pane="deadlock"] .ncard { --nc: #4fd1b5; }
   .g-nimg { overflow: hidden; border-radius: 12px; } .g-nimg img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .cs-pts { flex: none; margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 800; color: var(--muted); }
+  /* матчи CS2 и Deadlock */
+  .csx-h { margin: 18px 2px 8px; font-size: 15px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; } .csx-h:first-child { margin-top: 4px; }
+  .csx-l, .dlx-l { display: grid; gap: 6px; }
+  .csx { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); grid-template-areas: "t t t" "a s b"; align-items: center; gap: 4px 12px; padding: 9px 14px 11px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg-soft); cursor: pointer; transition: border-color .2s, transform .2s; }
+  .csx:hover, .dlx[data-dm]:hover { border-color: color-mix(in srgb, var(--t1) 55%, var(--line)); transform: translateY(-1px); }
+  .csx.live { border-color: rgba(255,77,77,.45); }
+  .csx-t { grid-area: t; display: flex; align-items: center; gap: 6px; min-width: 0; font-size: 12px; color: var(--muted); } .csx-t img { width: 16px; height: 16px; object-fit: contain; }
+  .csx-t > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .csx-t em { font-style: normal; font-weight: 700; padding: 0 6px; border-radius: 5px; background: rgba(255,255,255,.06); } .csx-t small { margin-left: auto; white-space: nowrap; }
+  .csx-tm { display: flex; align-items: center; gap: 8px; min-width: 0; } .csx-tm.a { grid-area: a; justify-content: flex-end; text-align: right; } .csx-tm.b { grid-area: b; }
+  .csx-tm img { width: 28px; height: 28px; object-fit: contain; flex: none; } .csx-tm b { font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .csx-tm.lose b { color: var(--muted); font-weight: 600; } .csx-tm.win b::after { content: " ✓"; color: #4ade80; }
+  .csx-sc { grid-area: s; display: flex; align-items: center; gap: 8px; justify-content: center; min-width: 64px; } .csx-sc b { font-family: var(--display); font-size: 20px; font-variant-numeric: tabular-nums; } .csx-sc i { font-style: normal; color: var(--muted); margin: 0 3px; }
+  .csx-at { font-size: 13px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+  .csx-live { font-size: 10.5px; font-weight: 800; letter-spacing: .5px; padding: 2px 7px; border-radius: 6px; background: #ff4d4d; color: #fff; animation: csxp 1.6s ease-in-out infinite; } @keyframes csxp { 50% { opacity: .55; } }
+  .lad-pick .csx-l { padding: 4px 0 8px; }
+  .cmx .d2m-side.a b, .cmx .d2m-score .r { color: #f5a524; } .cmx .d2m-side.b b, .cmx .d2m-score .d { color: #5aa9ff; }
+  .cmx-maps { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin: 10px 16px 4px; }
+  .cmx-mp { display: grid; gap: 1px; min-width: 96px; padding: 7px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-soft); color: var(--fg); cursor: pointer; text-align: center; }
+  .cmx-mp small { font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; } .cmx-mp.on { border-color: var(--t1); box-shadow: 0 0 0 1px var(--t1) inset; } .cmx-mp:disabled { opacity: .45; cursor: default; }
+  .cmx-mp.w1 small { color: #f5a524; } .cmx-mp.w2 small { color: #5aa9ff; }
+  .cmx-rs { display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; margin: 12px 16px 4px; }
+  .cmx-r { width: 24px; height: 24px; display: grid; place-items: center; border-radius: 6px; font-size: 12px; } .cmx-r.t1 { background: rgba(245,165,36,.28); box-shadow: inset 0 -2px #f5a524; } .cmx-r.t2 { background: rgba(90,169,255,.26); box-shadow: inset 0 -2px #5aa9ff; } .cmx-r.t0 { background: rgba(255,255,255,.06); }
+  .cmx-half { width: 1px; margin: 0 5px; background: var(--line); align-self: stretch; }
+  .cmx-rl { display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center; font-size: 11.5px; color: var(--muted); margin: 4px 16px 8px; } .cmx-rl .t1 { color: #f5a524; } .cmx-rl .t2 { color: #5aa9ff; }
+  .cmx-team.t1 .d2m-th b { color: #f5a524; } .cmx-team.t2 .d2m-th b { color: #5aa9ff; }
+  .cmx-p { display: grid; grid-template-columns: 34px minmax(80px, 1fr) 84px 44px 44px 50px 44px 50px 58px; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 12px; background: var(--bg-soft); border: 1px solid var(--line); font-size: 13.5px; font-variant-numeric: tabular-nums; text-align: center; }
+  .cmx-team.t1 .cmx-p:not(.cmx-hd) { border-left: 3px solid #f5a524; } .cmx-team.t2 .cmx-p:not(.cmx-hd) { border-left: 3px solid #5aa9ff; }
+  .cmx-p.cmx-hd { background: none; border-color: transparent; font-size: 10.5px; color: var(--muted); padding-top: 0; padding-bottom: 0; } .cmx-hd span:nth-child(2) { text-align: left; }
+  .cmx-p i { font-style: normal; color: var(--muted); margin: 0 2px; } .cmx-n { text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px; }
+  .cmx-av { width: 34px; height: 34px; border-radius: 50%; overflow: hidden; background: rgba(255,255,255,.05); } .cmx-av img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .cmx-rt { font-weight: 800; color: var(--t1); }
+  @media (max-width: 760px) { .cmx-p { grid-template-columns: 30px minmax(0, 1fr) 76px 38px 40px 50px; } .cmx-p > :nth-child(6), .cmx-p > :nth-child(7), .cmx-p > :nth-child(8) { display: none; } .cmx-av { width: 30px; height: 30px; }
+    .csx { padding: 8px 10px 10px; gap: 4px 8px; } .csx-tm img { width: 22px; height: 22px; } .csx-tm b { font-size: 14px; } .csx-sc { min-width: 52px; } .csx-sc b { font-size: 17px; } }
+  .dlx-q { display: flex; gap: 8px; margin-bottom: 6px; } .dlx-q .d2-search { flex: 1; min-width: 0; }
+  .dlx { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); grid-template-areas: "t t t" "a s b"; align-items: center; gap: 6px 10px; padding: 9px 12px 11px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg-soft); }
+  .dlx[data-dm] { cursor: pointer; transition: border-color .2s, transform .2s; } .dlx.live { grid-template-areas: "t t t" "a s b" "n n n"; }
+  .dlx-top { grid-area: t; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); } .dlx-top em { font-style: normal; font-weight: 700; } .dlx-top small { margin-left: auto; white-space: nowrap; }
+  .dlx-rk { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; color: var(--fg); font-size: 12px; } .dlx-rk img { width: 22px; height: 22px; object-fit: contain; }
+  .dlx-hs { display: flex; gap: 3px; min-width: 0; } .dlx-hs.t0 { grid-area: a; justify-content: flex-end; } .dlx-hs.t1 { grid-area: b; }
+  .dlx-hs img, .dlx-hs i { width: 30px; height: 30px; border-radius: 7px; object-fit: cover; background: rgba(255,255,255,.05); flex: 0 1 30px; min-width: 0; }
+  .dlx-hs.t0 img { box-shadow: inset 0 -2px #f0a43a; border-bottom: 2px solid #f0a43a; } .dlx-hs.t1 img { border-bottom: 2px solid #5b8cff; }
+  .dlx-hs.win { position: relative; } .dlx-hs:not(.win) img { opacity: .6; } .dlx.live .dlx-hs img { opacity: 1; }
+  .dlx-k { grid-area: s; font-family: var(--display); font-size: 19px; font-variant-numeric: tabular-nums; } .dlx-k i { font-style: normal; color: var(--muted); margin: 0 3px; }
+  .dlx .t0, .dlm .d2m-score .r, .dlm .d2m-side.rad b, .dlm .d2m-gn .r, .dlm .dlm-t0 .d2m-th b { color: #f0a43a; } .dlx .t1, .dlm .d2m-score .d, .dlm .d2m-side.dire b, .dlm .d2m-gn .d, .dlm .dlm-t1 .d2m-th b { color: #5b8cff; }
+  .d2m-p.dlm-p { grid-template-columns: 58px minmax(90px, 1fr) 62px 56px 50px 50px 54px 176px; }
+  .dlx-nw { grid-area: s; width: 70px; height: 8px; border-radius: 6px; background: #5b8cff; overflow: hidden; } .dlx-nw i { display: block; height: 100%; background: #f0a43a; }
+  .dlx-nwn { grid-area: n; display: flex; justify-content: center; align-items: baseline; gap: 10px; font-size: 13px; font-variant-numeric: tabular-nums; } .dlx-nwn small { color: var(--muted); font-size: 11px; }
+  .dlm .d2m-gold .gr { fill: rgba(240,164,58,.24); } .dlm .d2m-gold .gd { fill: rgba(91,140,255,.24); } .dlm .d2m-gold .glr { fill: #f0a43a; } .dlm .d2m-gold .gld { fill: #5b8cff; }
+  .dlm-t0 .d2m-p { border-left-color: #f0a43a !important; } .dlm-t1 .d2m-p { border-left-color: #5b8cff !important; } .dlm-t0 .d2m-th em, .dlm-t1 .d2m-th em { background: rgba(74,222,128,.14); color: #4ade80; }
+  .dlm .d2m-h img { object-fit: cover; object-position: center 20%; } .dlm-its { flex-wrap: wrap; gap: 3px; max-width: 290px; } .dlm-its img { width: 26px !important; height: 26px !important; border-radius: 6px; }
+  .dlm-it.weapon img { box-shadow: inset 0 0 0 1px #e8a33a; background: rgba(232,163,58,.15); } .dlm-it.vitality img { background: rgba(122,201,67,.15); } .dlm-it.spirit img { background: rgba(178,120,255,.15); }
+  @media (max-width: 760px) { .d2m-p.dlm-p { grid-template-columns: 52px minmax(0, 1fr) 62px 50px; } .dlm-its { max-width: none; } .dlx-hs img, .dlx-hs i { width: 24px; height: 24px; border-radius: 6px; } .dlx { padding: 8px 8px 10px; gap: 6px; } .dlx-k { font-size: 16px; } .dlx-nw { width: 44px; } }
   .cs-ms { display: grid; gap: 4px; } .cs-m { display: flex; align-items: center; gap: 10px; padding: 7px 12px; border-radius: 10px; background: var(--bg-soft); border: 1px solid var(--line); font-size: 14px; min-width: 0; }
   .cs-d { flex: none; width: 64px; color: var(--muted-2); font-size: 12.5px; } .cs-r { flex: none; font-weight: 800; } .cs-m.w .cs-r { color: #4ade80; } .cs-m.l .cs-r { color: #ff6b6b; }
   .cs-m b { font-weight: 600; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .cs-m b.win, .cs-m.w b, .cs-m.l b { color: var(--fg); } .cs-m b.win::after { content: " ✓"; color: #4ade80; }
@@ -2266,7 +2317,7 @@
   <div class="tabpane" data-pane="deadlock" role="tabpanel" hidden>
     <section class="section first">
       <div class="section-head"><h2>Deadlock</h2><p>Все герои с винрейтом и сборки, посчитанные по реальным матчам, инвайт в игру и официальные новости.</p></div>
-      <div class="rkchips g-sub" data-g="deadlock" role="group" aria-label="Раздел"><button type="button" class="rkc" data-v="heroes" aria-pressed="true">Герои</button><button type="button" class="rkc" data-v="invite" aria-pressed="false">🎟️ Инвайт</button><button type="button" class="rkc" data-v="news" aria-pressed="false">Новости</button></div>
+      <div class="rkchips g-sub" data-g="deadlock" role="group" aria-label="Раздел"><button type="button" class="rkc" data-v="heroes" aria-pressed="true">Герои</button><button type="button" class="rkc" data-v="matches" aria-pressed="false">Матчи</button><button type="button" class="rkc" data-v="invite" aria-pressed="false">🎟️ Инвайт</button><button type="button" class="rkc" data-v="news" aria-pressed="false">Новости</button></div>
       <div id="dlBox" class="g-box"></div>
     </section>
   </div>
@@ -7021,19 +7072,21 @@ const GAMES = (() => {
   const err = `<div class="gempty">Не удалось загрузить данные. Попробуй чуть позже.</div>`;
   const day = s => { try { return new Date(s).toLocaleDateString(L(), { day: "numeric", month: "short" }); } catch(e) { return String(s).slice(0, 10); } };
   const st = { cs: "market", deadlock: "heroes", sort: "name", hero: 0 };
-  const VIEWS = { cs: { market: el => market(el, "cs"), news: el => news(el, "cs"), teams: csTeams, matches: csMatches }, deadlock: { heroes: dlHeroes, invite: dlInvite, news: el => news(el, "deadlock") } };
+  const VIEWS = { cs: { market: el => market(el, "cs"), news: el => news(el, "cs"), teams: csTeams, matches: csMatches }, deadlock: { heroes: dlHeroes, matches: dlMatches, invite: dlInvite, news: el => news(el, "deadlock") } };
   let wired = false;
 
   function open(g){
     if (!wired){ wired = true;
       document.querySelectorAll(".g-sub").forEach(bar => bar.onclick = e => { const b = e.target.closest("[data-v]"); if (!b) return; const g = bar.dataset.g; st[g] = b.dataset.v; if (g === "deadlock") st.hero = 0; draw(g); });
       const nw = e => { const n = e.target.closest("[data-gid]"); if (n){ openNews(n.dataset.app, n.dataset.gid); return true; } };
-      const key = e => { if ((e.key === "Enter" || e.key === " ") && e.target.matches("[data-gid], [data-p], [data-h]")){ e.preventDefault(); e.target.click(); } };
+      const key = e => { if ((e.key === "Enter" || e.key === " ") && e.target.matches("[data-gid], [data-p], [data-h], [data-cm], [data-dm]")){ e.preventDefault(); e.target.click(); } };
       const csBox = document.getElementById("csBox"), dlBox = document.getElementById("dlBox");
-      csBox.onclick = e => { if (nw(e)) return; const t = e.target.closest("[data-p]"); if (t) team(t);
+      csBox.onclick = e => { if (nw(e)) return; const cm = e.target.closest("[data-cm]"); if (cm) return csMatchOpen(cm.dataset.cm);
+        const t = e.target.closest("[data-p]"); if (t) team(t);
       };
       document.addEventListener("curchange", () => Object.values(MKS).forEach(m => { if (m.el.isConnected) mkDraw(m); }));
-      dlBox.onclick = e => { if (nw(e)) return; const s = e.target.closest("[data-s]"); if (s){ st.sort = s.dataset.s; return draw("deadlock"); }
+      dlBox.onclick = e => { if (nw(e)) return; const dm = e.target.closest("[data-dm]"); if (dm) return dlMatchOpen(dm.dataset.dm);
+        const s = e.target.closest("[data-s]"); if (s){ st.sort = s.dataset.s; return draw("deadlock"); }
         const h = e.target.closest("[data-h]"); if (h){ st.hero = +h.dataset.h; draw("deadlock"); toTop(dlBox); return; }
         if (e.target.closest("#dlBack")){ st.hero = 0; draw("deadlock"); toTop(dlBox); } };
       csBox.onkeydown = dlBox.onkeydown = key;
@@ -7232,24 +7285,155 @@ const GAMES = (() => {
     el.innerHTML = sk(5);
     once("/api/games?q=csTeams").then(d => {
       el.innerHTML = `<p class="lad-upd"><span>Рейтинг команд Valve (VRS) от</span> ${day(d.date)}</p>
-        <div class="lad-list">${d.teams.map(t => `<div class="lad-row cs-team${t.n <= 3 ? " p" + t.n : ""}" data-p="${esc(t.p)}" role="button" tabindex="0"><span class="lad-n">${t.n}</span><span class="lad-m"><b translate="no">${esc(t.team)}</b><small translate="no">${t.roster.map(esc).join(" · ")}</small></span><span class="cs-pts">${t.pts}</span></div>`).join("")}</div>
-        <p class="db-note">Официальный рейтинг Valve, по нему зовут на мейджоры. Обновляется раз в месяц. Нажми на команду — покажем её последние матчи.</p>`;
+        <div class="lad-list">${d.teams.map(t => `<div class="lad-row cs-team${t.n <= 3 ? " p" + t.n : ""}" data-p="${esc(t.p)}" data-n="${esc(t.team)}" role="button" tabindex="0"><span class="lad-n">${t.n}</span><span class="lad-m"><b translate="no">${esc(t.team)}</b><small translate="no">${t.roster.map(esc).join(" · ")}</small></span><span class="cs-pts">${t.pts}</span></div>`).join("")}</div>
+        <p class="db-note">Официальный рейтинг Valve, по нему зовут на мейджоры. Обновляется раз в месяц. Нажми на команду — покажем её последние и ближайшие матчи, а нажатие на матч откроет карты и статистику игроков.</p>`;
     }).catch(() => { el.innerHTML = err; });
   }
   async function team(row){
     const nx = row.nextElementSibling, open = nx && nx.classList.contains("lad-pick");
     document.querySelectorAll("#csBox .lad-pick").forEach(x => x.remove()); if (open) return;
     const box = document.createElement("div"); box.className = "lad-pick"; box.innerHTML = sk(1); row.after(box);
-    try { const d = await once("/api/games?q=csTeam&p=" + encodeURIComponent(row.dataset.p));
-      box.innerHTML = d.matches.length ? `<div class="cs-ms">${d.matches.slice(0, 12).map(m => `<div class="cs-m ${m.w ? "w" : "l"}"><span class="cs-d">${day(m.d)}</span><span class="cs-r">${m.w ? "✓" : "✗"}</span><b translate="no">${esc(m.vs)}</b></div>`).join("")}</div>` : `<div class="gempty">Матчей в отчёте Valve нет.</div>`;
+    // сначала матчи с bo3.gg (кликабельные), если команду там не нашли — список из отчёта Valve
+    const d = await once("/api/games?q=csTeamM&n=" + encodeURIComponent(row.dataset.n || "")).catch(() => null);
+    if (d && d.found && d.matches.length){ box.innerHTML = `<div class="csx-l">${d.matches.slice(0, 12).map(mrow).join("")}</div>`; return; }
+    try { const v = await once("/api/games?q=csTeam&p=" + encodeURIComponent(row.dataset.p));
+      box.innerHTML = v.matches.length ? `<div class="cs-ms">${v.matches.slice(0, 12).map(m => `<div class="cs-m ${m.w ? "w" : "l"}"><span class="cs-d">${day(m.d)}</span><span class="cs-r">${m.w ? "✓" : "✗"}</span><b translate="no">${esc(m.vs)}</b></div>`).join("")}</div>` : `<div class="gempty">Матчей в отчёте Valve нет.</div>`;
     } catch(e) { box.innerHTML = err; }
+  }
+
+  // ---------- матчи CS2 (bo3.gg): список и экран матча ----------
+  const when = t => { try { return new Date(t).toLocaleString(L(), { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }); } catch(e) { return ""; } };
+  const kk = v => v >= 1000 ? (v / 1000).toFixed(1) + "k" : String(v || 0);
+  const mmss = t => Math.floor(t / 60) + ":" + String(Math.round(t % 60)).padStart(2, "0");
+  const tlogo = t => t.img ? `<img alt="" loading="lazy" src="${esc(t.img)}" onerror="this.remove()">` : "";
+  function mrow(m){
+    const mid = m.st === "live" ? `<span class="csx-live">LIVE</span><b>${m.a.sc ?? 0}<i>:</i>${m.b.sc ?? 0}</b>` : m.st === "soon" ? `<span class="csx-at">${when(m.d)}</span>` : `<b>${m.a.sc ?? "—"}<i>:</i>${m.b.sc ?? "—"}</b>`;
+    return `<div class="csx ${m.st}" data-cm="${esc(m.s)}" role="button" tabindex="0">
+      <span class="csx-t">${m.t ? `${m.t.img ? `<img alt="" loading="lazy" src="${esc(m.t.img)}" onerror="this.remove()">` : ""}<span translate="no">${esc(m.t.n)}</span>` : ""}<em>BO${m.bo || 1}</em>${m.st === "done" ? `<small>${day(m.d)}</small>` : ""}</span>
+      <span class="csx-tm a${m.w === 1 ? " win" : m.w ? " lose" : ""}"><b translate="no">${esc(m.a.n)}</b>${tlogo(m.a)}</span>
+      <span class="csx-sc">${mid}</span>
+      <span class="csx-tm b${m.w === 2 ? " win" : m.w ? " lose" : ""}">${tlogo(m.b)}<b translate="no">${esc(m.b.n)}</b></span></div>`;
   }
   function csMatches(el){
     el.innerHTML = sk(5);
-    once("/api/games?q=csMatches").then(d => {
-      el.innerHTML = `<div class="cs-ms big">${d.matches.map(m => `<div class="cs-m"><span class="cs-d">${day(m.d)}</span><b class="${m.win === m.a ? "win" : ""}" translate="no">${esc(m.a)}</b><span class="cs-vs">vs</span><b class="${m.win === m.b ? "win" : ""}" translate="no">${esc(m.b)}</b></div>`).join("")}</div>
-        <p class="db-note">Последние матчи топ-16 команд из рейтинга Valve, победитель выделен. Обновляется раз в месяц вместе с рейтингом, так что самых свежих игр здесь может не быть.</p>`;
+    fetch("/api/games?q=csMatches").then(r => { if (!r.ok) throw 0; return r.json(); }).then(d => {
+      const sec = (h, list) => list.length ? `<h3 class="csx-h">${h}</h3><div class="csx-l">${list.map(mrow).join("")}</div>` : "";
+      el.innerHTML = sec("Сейчас идут", d.live) + sec("Скоро", d.soon) + sec("Прошедшие", d.done)
+        + `<p class="db-note">Матчи турниров высшего уровня (тиры S и A) по данным bo3.gg. Нажми на матч — откроются карты, раунды и статистика каждого игрока.</p>`;
     }).catch(() => { el.innerHTML = err; });
+  }
+  // раунды карты: квадратик на раунд, цвет — победившая команда, значок — как закончился раунд
+  const RI = { bomb: "💣", defuse: "✂", time: "⏱", kill: "☠" }, RT = { bomb: "бомба взорвалась", defuse: "бомбу обезвредили", time: "время вышло", kill: "все убиты" };
+  const roundsHtml = (rs, A, B) => rs.length ? `<div class="cmx-rs">${rs.map((r, i) => `${i === 12 ? `<span class="cmx-half"></span>` : ""}<span class="cmx-r t${r[0]} ${r[2]}" title="${i + 1}: ${esc(r[0] === 1 ? A : B)} — ${RT[r[1]]}">${RI[r[1]]}</span>`).join("")}</div>
+    <p class="cmx-rl"><span class="t1">■ <span translate="no">${esc(A)}</span></span><span class="t2">■ <span translate="no">${esc(B)}</span></span><span>💣 взрыв · ✂ разминирование · ⏱ время · ☠ все убиты</span></p>` : "";
+  // статистика по всем сыгранным картам: суммы, ADR и KAST — средние с весом по раундам
+  function total(maps){
+    const P = {};
+    maps.filter(x => x.players.length).forEach(x => { const R = x.rounds.length || (x.sc[0] || 0) + (x.sc[1] || 0) || 1;
+      x.players.forEach(p => { const o = P[p.n] || (P[p.n] = { n: p.n, img: p.img, tm: p.tm, k: 0, d: 0, a: 0, hs: 0, fk: 0, fd: 0, adr: 0, kast: 0, r: 0, R: 0, cl: 0 });
+        ["k", "d", "a", "hs", "fk", "fd", "cl"].forEach(f => o[f] += p[f] || 0); o.adr += p.adr * R; o.kast += p.kast * R; o.r += (p.r || 0) * R; o.R += R; }); });
+    return Object.values(P).map(o => ({ ...o, adr: Math.round(o.adr / o.R), kast: Math.round(o.kast / o.R), r: o.r ? +(o.r / o.R).toFixed(2) : null }));
+  }
+  function cmTeam(ps, t, name, img, win){
+    const list = ps.filter(p => p.tm === t).sort((a, b) => (b.r || 0) - (a.r || 0) || b.k - a.k);
+    if (!list.length) return "";
+    return `<div class="d2m-team cmx-team t${t}${win ? " win" : ""}"><div class="d2m-th">${img ? `<img alt="" src="${esc(img)}" onerror="this.remove()">` : ""}<b translate="no">${esc(name)}</b>${win ? `<em>Победа</em>` : ""}</div>
+      <div class="cmx-p cmx-hd"><span></span><span>Игрок</span><span>K / D / A</span><span>+/−</span><span>ADR</span><span>KAST</span><span>HS</span><span>Первые</span><span>Рейтинг</span></div>
+      ${list.map(p => `<div class="cmx-p"><span class="cmx-av">${p.img ? `<img alt="" loading="lazy" src="${esc(p.img)}" onerror="this.remove()">` : ""}</span><b class="cmx-n" translate="no">${esc(p.n)}</b>
+        <span class="cmx-k">${p.k}<i>/</i>${p.d}<i>/</i>${p.a}</span><span class="${p.k - p.d >= 0 ? "g-up" : "g-dn"}">${p.k - p.d > 0 ? "+" : ""}${p.k - p.d}</span><span>${p.adr}</span><span>${p.kast}%</span>
+        <span>${p.k ? Math.round(p.hs / p.k * 100) : 0}%</span><span>${p.fk}<i>:</i>${p.fd}</span><span class="cmx-rt">${p.r != null ? p.r.toFixed(2) : "—"}</span></div>`).join("")}</div>`;
+  }
+  async function csMatchOpen(slug){
+    const g = openPanel(`<div class="d2h d2m cmx"><div class="d2h-top"><div><h3>Матч</h3><small>Загружаем…</small></div></div><div class="psec">${sk(3)}</div></div>`);
+    let m = null; try { const r = await fetch("/api/games?q=csMatch&s=" + encodeURIComponent(slug)); m = r.ok ? await r.json() : null; } catch(e) {}
+    if (!g.isConnected) return;
+    const box = g.querySelector(".cmx");
+    if (!m){ box.innerHTML = `<div class="d2h-top"><div><h3>Матч</h3><small>Не удалось загрузить матч. Попробуй чуть позже.</small></div></div>`; return; }
+    const played = m.maps.filter(x => x.players.length || x.rounds.length);
+    let cur = played.length > 1 ? "all" : played.length ? played[0].n : null;
+    const status = m.st === "live" ? `<span class="csx-live">LIVE</span>` : m.st === "soon" ? `начало ${when(m.d)}` : when(m.d);
+    const draw = () => {
+      const mp = cur === "all" ? null : m.maps.find(x => x.n === cur), ps = mp ? mp.players : total(played);
+      box.innerHTML = `<div class="d2m-head">
+          <div class="d2m-side a${m.w === 1 ? " win" : ""}">${tlogo(m.a)}<b translate="no">${esc(m.a.n)}</b></div>
+          <div class="d2m-score"><span class="r">${m.a.sc ?? 0}</span><i>:</i><span class="d">${m.b.sc ?? 0}</span><small>BO${m.bo || 1} · ${status}</small></div>
+          <div class="d2m-side b${m.w === 2 ? " win" : ""}">${tlogo(m.b)}<b translate="no">${esc(m.b.n)}</b></div></div>
+        ${m.t ? `<p class="d2m-meta" translate="no">${esc(m.t.n)}</p>` : ""}
+        ${m.maps.length ? `<div class="cmx-maps">${played.length > 1 ? `<button type="button" class="cmx-mp${cur === "all" ? " on" : ""}" data-mp="all"><b>Все карты</b><small>итог матча</small></button>` : ""}${m.maps.map(x => `<button type="button" class="cmx-mp${cur === x.n ? " on" : ""}${x.w ? " w" + x.w : ""}" data-mp="${x.n}"${x.players.length || x.rounds.length ? "" : " disabled"}><b translate="no">${esc(x.map.replace(/^./, c => c.toUpperCase()))}</b><small>${x.live ? "идёт · " : ""}${x.sc[0] ?? 0} : ${x.sc[1] ?? 0}</small></button>`).join("")}</div>` : ""}
+        ${mp ? roundsHtml(mp.rounds, m.a.n, m.b.n) : ""}
+        ${ps.length ? `<div class="psec">${cmTeam(ps, 1, m.a.n, m.a.img, mp ? mp.w === 1 : m.w === 1)}${cmTeam(ps, 2, m.b.n, m.b.img, mp ? mp.w === 2 : m.w === 2)}</div>
+          <p class="d2m-tip">ADR — средний урон за раунд, KAST — доля раундов с убийством, помощью, выживанием или разменом, «Первые» — первые убийства и первые смерти в раунде, рейтинг — оценка bo3.gg.</p>`
+          : `<div class="gempty">${m.st === "soon" ? `Матч ещё не начался — начало ${when(m.d)}.` : "Статистики по игрокам пока нет — она появляется после окончания карты."}</div>`}
+        <div class="pacts"><a class="btn btn-ghost" href="${esc(m.url)}" target="_blank" rel="noopener">Открыть на bo3.gg ↗</a></div><div style="height:20px"></div>`;
+      box.querySelectorAll("[data-mp]").forEach(b => b.onclick = () => { cur = b.dataset.mp === "all" ? "all" : +b.dataset.mp; draw(); });
+    };
+    draw();
+  }
+
+  // ---------- матчи Deadlock: идут сейчас, недавние высокого ранга, поиск по номеру ----------
+  const DLT = ["Янтарная рука", "Сапфировое пламя"];
+  const heroesMap = () => once(`/api/games?q=dlHeroes&lang=${L()}`).then(hs => Object.fromEntries(hs.map(h => [h.id, h]))).catch(() => ({}));
+  const hface = (H, id) => { const h = H[id]; return h ? `<img alt="" loading="lazy" src="${esc(h.img)}" title="${esc(h.name)}">` : `<i></i>`; };
+  function dlMatches(el){
+    el.innerHTML = sk(5);
+    Promise.all([heroesMap(), fetch(`/api/games?q=dlMatches&lang=${L()}`).then(r => { if (!r.ok) throw 0; return r.json(); })]).then(([H0, d]) => {
+      const now = Date.now() / 1000, H = { ...(d.H || {}), ...H0 };
+      const live = d.live.map(m => { const t = m.nw[0] + m.nw[1] || 1;
+        return `<div class="dlx live"><span class="dlx-top"><span class="csx-live">LIVE</span>${m.ranked ? "<em>Рейтинговый</em>" : ""}<small>${Math.max(1, Math.round((now - m.start) / 60))} мин · 👁 ${m.spec}</small></span>
+          <span class="dlx-hs t0">${m.h[0].map(i => hface(H, i)).join("")}</span><span class="dlx-nw"><i style="width:${(m.nw[0] / t * 100).toFixed(1)}%"></i></span><span class="dlx-hs t1">${m.h[1].map(i => hface(H, i)).join("")}</span>
+          <span class="dlx-nwn"><b class="t0">${kk(m.nw[0])}</b><small>души</small><b class="t1">${kk(m.nw[1])}</b></span></div>`; }).join("");
+      const done = d.done.map(m => `<div class="dlx" data-dm="${m.id}" role="button" tabindex="0"><span class="dlx-top">${m.rank ? `<span class="dlx-rk">${m.rank.img ? `<img alt="" loading="lazy" src="${esc(m.rank.img)}">` : ""}${esc(m.rank.n)} ${m.rank.sub}</span>` : ""}<small>⏱ ${mmss(m.dur)} · ${day(m.start * 1000)}</small></span>
+          <span class="dlx-hs t0${m.w === 0 ? " win" : ""}">${m.h[0].map(i => hface(H, i)).join("")}</span><span class="dlx-k"><b class="t0">${m.k[0]}</b><i>:</i><b class="t1">${m.k[1]}</b></span><span class="dlx-hs t1${m.w === 1 ? " win" : ""}">${m.h[1].map(i => hface(H, i)).join("")}</span></div>`).join("");
+      el.innerHTML = `<form class="dlx-q" id="dlQ"><label class="d2-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" inputmode="numeric" id="dlQi" placeholder="Номер матча, например ${d.done[0] ? d.done[0].id : "122982139"}" autocomplete="off"></label><button type="submit" class="btn btn-primary">Открыть</button></form>
+        ${live ? `<h3 class="csx-h">Сейчас идут</h3><div class="dlx-l">${live}</div>` : ""}
+        ${done ? `<h3 class="csx-h">Недавние матчи высокого ранга</h3><div class="dlx-l">${done}</div>` : ""}
+        <p class="db-note">Данные deadlock-api.com. Сейчас идут — самые смотрибельные матчи прямо сейчас, подробности появятся после их окончания. Нажми на прошедший матч — откроются игроки, предметы и души по ходу игры. Номер матча есть в игре в истории матчей.</p>`;
+      el.querySelector("#dlQ").onsubmit = e => { e.preventDefault(); const v = el.querySelector("#dlQi").value.replace(/\D/g, ""); if (v) dlMatchOpen(v); };
+    }).catch(() => { el.innerHTML = err; });
+  }
+  function soulsSvg(adv){
+    if (!adv || adv.length < 2) return "";
+    const W = 600, Hh = 140, T = adv[adv.length - 1][0] || 1, max = Math.max(1000, ...adv.map(a => Math.abs(a[1]))), x = t => t / T * W, y = v => Hh / 2 - v / max * (Hh / 2 - 6);
+    const line = adv.map((a, i) => `${i ? "L" : "M"}${x(a[0]).toFixed(1)},${y(a[1]).toFixed(1)}`).join(" "), area = `${line} L${W},${Hh / 2} L0,${Hh / 2} Z`;
+    const ticks = []; for (let m = 10; m * 60 < T; m += 10) ticks.push(`<line x1="${x(m * 60)}" x2="${x(m * 60)}" y1="0" y2="${Hh}" class="gt"/><text x="${x(m * 60) + 3}" y="${Hh - 4}">${m}′</text>`);
+    return `<svg class="d2m-gold dlm-g" viewBox="0 0 ${W} ${Hh}" preserveAspectRatio="none" role="img" aria-label="Преимущество по душам">
+      <defs><clipPath id="dcA"><rect x="0" y="0" width="${W}" height="${Hh / 2}"/></clipPath><clipPath id="dcS"><rect x="0" y="${Hh / 2}" width="${W}" height="${Hh / 2}"/></clipPath></defs>
+      ${ticks.join("")}<line x1="0" x2="${W}" y1="${Hh / 2}" y2="${Hh / 2}" class="g0"/>
+      <path d="${area}" class="gr" clip-path="url(#dcA)"/><path d="${area}" class="gd" clip-path="url(#dcS)"/><path d="${line}" class="gl"/>
+      <text x="6" y="14" class="glr">+${(max / 1000).toFixed(1)}k</text><text x="6" y="${Hh - 18}" class="gld">−${(max / 1000).toFixed(1)}k</text></svg>`;
+  }
+  async function dlMatchOpen(id){
+    id = String(id).replace(/\D/g, ""); if (!id) return;
+    const g = openPanel(`<div class="d2h d2m dlm"><div class="d2h-top"><div><h3>Матч ${esc(id)}</h3><small>Загружаем…</small></div></div><div class="psec">${sk(3)}</div></div>`);
+    let H = {}, IT = {}, m = null;
+    try { [H, IT, m] = await Promise.all([heroesMap(), once(`/api/games?q=dlItems&lang=${L()}`).catch(() => ({})), once(`/api/games?q=dlMatch&id=${id}&lang=${L()}`)]); } catch(e) {}
+    if (!g.isConnected) return;
+    const box = g.querySelector(".dlm");
+    if (!m || !m.players){ box.innerHTML = `<div class="d2h-top"><div><h3>Матч ${esc(id)}</h3><small>Не удалось загрузить матч. Проверь номер; если матч только что закончился — попробуй через пару минут.</small></div></div>`; return; }
+    H = { ...(m.H || {}), ...H };
+    const items = p => { const seen = new Set(); return p.items.filter(([i]) => IT[i] && !seen.has(i) && seen.add(i)).map(([i, t]) => `<span class="d2m-sl dlm-it ${esc(IT[i].slot || "")}" title="${esc(IT[i].name)} — ${t}′"><img alt="" loading="lazy" src="${esc(IT[i].img)}"><em>${t}′</em></span>`).join(""); };
+    const row = p => { const h = H[p.hero] || {};
+      return `<div class="d2m-p dlm-p"><span class="d2m-h">${h.img ? `<img alt="" loading="lazy" src="${esc(h.img)}">` : ""}<b>${p.lvl || ""}</b></span>
+        <span class="d2m-n"><b translate="no">${esc(p.n || "Игрок")}</b><small translate="no">${esc(h.name || "")}${p.left ? ` · <span class="g-dn">вышел на ${Math.round(p.left / 60)}′</span>` : ""}</small></span>
+        <span class="d2m-k"><b>${p.k}<i>/</i>${p.d}<i>/</i>${p.a}</b><small>K/D/A</small></span>
+        <span class="d2m-s"><b>${p.lh}<i>/</i>${p.dn}</b><small>LH/DN</small></span>
+        <span class="d2m-s"><b>${kk(p.dmg)}</b><small>урон</small></span>
+        <span class="d2m-s gold"><b>${kk(p.nw)}</b><small>души</small></span>
+        <span class="d2m-s"><b>${kk(p.heal)}</b><small>лечение</small></span>
+        <span class="d2m-it dlm-its">${items(p)}</span></div>`; };
+    const team = t => { const ps = m.players.filter(p => p.tm === t).sort((a, b) => b.nw - a.nw), win = m.w === t, sum = f => ps.reduce((a, p) => a + (p[f] || 0), 0), rk = m.rank[t];
+      return `<div class="d2m-team ${t ? "dire" : "rad"} dlm-t${t}${win ? " win" : ""}"><div class="d2m-th"><b>${DLT[t]}</b>${win ? `<em>Победа</em>` : ""}${rk ? `<span class="dlx-rk">${rk.img ? `<img alt="" src="${esc(rk.img)}">` : ""}${esc(rk.n)} ${rk.sub}</span>` : ""}<small>${sum("k")} убийств · ${kk(sum("nw"))} душ</small></div>${ps.map(row).join("")}</div>`; };
+    const K = t => m.players.filter(p => p.tm === t).reduce((a, p) => a + p.k, 0), fin = m.adv.length ? m.adv[m.adv.length - 1][1] : 0;
+    box.innerHTML = `<div class="d2m-head">
+        <div class="d2m-side rad${m.w === 0 ? " win" : ""}"><b>${DLT[0]}</b></div>
+        <div class="d2m-score"><span class="r">${K(0)}</span><i>:</i><span class="d">${K(1)}</span><small>${mmss(m.dur)}</small></div>
+        <div class="d2m-side dire${m.w === 1 ? " win" : ""}"><b>${DLT[1]}</b></div></div>
+      <p class="d2m-meta">Победа: ${DLT[m.w] || "—"} · ${m.ranked ? "Рейтинговый" : "Обычный"} · ${when(m.start * 1000)} · разрушено строений ${m.obj[0]} : ${m.obj[1]} · мид-босс ${m.boss[0]} : ${m.boss[1]}</p>
+      ${m.adv.length > 1 ? `<div class="psec"><h4>Преимущество по душам</h4>${soulsSvg(m.adv)}<p class="d2m-gn"><span class="r">▲ ${DLT[0]}</span><span>в конце: ${fin >= 0 ? DLT[0] : DLT[1]} +${kk(Math.abs(fin))}</span><span class="d">▼ ${DLT[1]}</span></p></div>` : ""}
+      <div class="psec">${team(0)}${team(1)}</div>
+      <p class="d2m-tip">Предметы — те, что были у героя в конце матча; под каждым — минута покупки.</p>
+      <div class="pacts"><button type="button" class="btn btn-primary" id="dlMSh">📤 Поделиться матчем</button></div><div style="height:20px"></div>`;
+    box.querySelector("#dlMSh").onclick = () => { const u = `${SITE_URL}/deadlock?dlm=${m.id}`; if (typeof shareLink === "function") shareLink(u, `Матч Deadlock ${m.id}`, `${K(0)} : ${K(1)}, ${mmss(m.dur)}`); else navigator.clipboard && navigator.clipboard.writeText(u); };
   }
 
   const pct = v => v == null ? "—" : `<span class="${v >= 50 ? "g-up" : "g-dn"}">${v.toFixed(1)}%</span>`;
@@ -7288,7 +7472,7 @@ const GAMES = (() => {
       }).catch(() => { const box = document.getElementById("dlOrd"); if (box) box.remove(); });
     }).catch(() => { el.innerHTML = err + `<button type="button" class="btn btn-ghost dl-back" id="dlBack">← Все герои</button>`; });
   }
-  return { open, market, news: g => { st[g] = "news"; setTab(g); if (wired) draw(g); } };
+  return { open, market, dlMatch: id => dlMatchOpen(id), news: g => { st[g] = "news"; setTab(g); if (wired) draw(g); } };
 })();
 
 /* ---------- вкладки ---------- */
@@ -7343,6 +7527,8 @@ document.getElementById("plQ").addEventListener("input", e => PROF.loadPlayers(e
   if (dh && /^\d{1,3}$/.test(dh)) setTimeout(() => { setTab("dota", { noScroll: true }); D2.hero(+dh); }, 700);
   const dm = qs.get("d2m"), dp = qs.get("d2p");
   if (dm && /^\d{5,12}$/.test(dm)) setTimeout(() => { setTab("dota", { noScroll: true }); D2.match(dm); }, 700);
+  const dlm = new URLSearchParams(location.search).get("dlm");
+  if (dlm && /^\d{5,12}$/.test(dlm)) setTimeout(() => { setTab("deadlock", { noScroll: true }); GAMES.dlMatch(dlm); }, 700);
   if (dp && /^\d{1,12}$/.test(dp)) setTimeout(() => { setTab("dota", { noScroll: true }); D2.player(dp); }, 700); }
 if (/^#news-\d+$/.test(location.hash)) setTimeout(NEWS.fromHash, 500);
 addEventListener("hashchange", () => { document.documentElement.classList.remove("hub"); const h = (location.hash || "").slice(1); if (TABS.includes(h) && h !== curTab) setTab(h, { keepHash: true }); if (/^news-\d+$/.test(h)) NEWS.fromHash(); if (/^premium/.test(h)) PROF.premium({ wait: h === "premium-ok" }); });

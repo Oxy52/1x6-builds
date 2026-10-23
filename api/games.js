@@ -1,7 +1,11 @@
 // CS2 и Deadlock: открытые источники без ключей, кеш на Vercel.
 //   GET /api/games?q=csTeams                 -> рейтинг команд Valve (VRS): место, очки, команда, состав
 //   GET /api/games?q=csTeam&p=<details path> -> последние матчи команды из отчёта Valve
-//   GET /api/games?q=csMatches               -> последние матчи топ-16 команд
+//   GET /api/games?q=csMatches               -> матчи про-сцены (bo3.gg, тиры S и A): идут сейчас, скоро, прошедшие
+//   GET /api/games?q=csMatch&s=<slug>        -> матч: карты, раунды, статистика игроков по картам
+//   GET /api/games?q=csTeamM&n=<команда>     -> последние и ближайшие матчи команды (bo3.gg)
+//   GET /api/games?q=dlMatches               -> Deadlock: матчи, которые идут сейчас, и недавние матчи высокого ранга
+//   GET /api/games?q=dlMatch&id=<match id>   -> матч Deadlock: игроки, герои, K/D/A, души, урон, предметы, души по ходу игры
 //   GET /api/games?q=dlHeroes&lang=ru        -> герои Deadlock: имя, картинки, винрейт, пикрейт
 //   GET /api/games?q=dlItems&lang=ru         -> предметы магазина: id -> имя, картинка, слот, тир
 //   GET /api/games?q=dlHero&id=1             -> сборка героя по статистике: основа и лучшие по винрейту
@@ -15,7 +19,7 @@ const DL = "https://api.deadlock-api.com/v1";
 // язык сайта -> язык Valve в Deadlock (как в api/news.js)
 const LNG = { ru: "russian", uk: "ukrainian", en: "english", es: "spanish", pt: "brazilian", de: "german", pl: "polish", tr: "turkish",
   fr: "french", it: "italian", kk: "russian", be: "russian", nl: "english", zh: "schinese", ja: "japanese", ko: "koreana" };
-const TTL = { csTeams: 21600, csTeam: 21600, csMatches: 21600, dlHeroes: 21600, dlHero: 21600, dlOrder: 43200, dlItems: 86400, csMarket: 3600, market: 3600, lots: 1800 };
+const TTL = { csTeams: 21600, csTeam: 21600, csMatches: 120, csMatch: 86400, csTeamM: 600, dlMatches: 120, dlMatch: 86400, dlHeroes: 21600, dlHero: 21600, dlOrder: 43200, dlItems: 86400, csMarket: 3600, market: 3600, lots: 1800 };
 
 async function get(url, type = "json") {
   const r = await fetch(url, { headers: UA, signal: AbortSignal.timeout(20000) });
@@ -168,6 +172,97 @@ async function lots(g, name) {
   return { g, n: name, total: page.total_count || list.length, url: `https://steamcommunity.com/market/listings/${APP[g]}/${encodeURIComponent(name)}`, items: list };
 }
 
+// ---------- матчи CS2: bo3.gg (открытое API их сайта, без ключа) ----------
+const B3 = "https://api.bo3.gg/api/v1";
+const b3 = path => get(B3 + path);
+const b3team = t => t ? { n: t.name, img: t.image_url || "", slug: t.slug } : { n: "TBD", img: "" };
+const b3match = m => ({ s: m.slug, st: m.status === "current" ? "live" : m.status === "upcoming" ? "soon" : "done", d: m.start_date, bo: m.bo_type,
+  a: { ...b3team(m.team1), sc: m.team1_score }, b: { ...b3team(m.team2), sc: m.team2_score }, w: m.winner_team_id ? (m.winner_team_id === m.team1_id ? 1 : 2) : 0,
+  t: m.tournament ? { n: m.tournament.name, img: m.tournament.image_url || "" } : null, tier: m.tier });
+const LIST = "&filter[matches.discipline_id][eq]=1&with=teams,tournament";
+
+async function csMatches() {
+  const [now, done] = await Promise.all([
+    b3(`/matches?page[limit]=16&sort=start_date&filter[matches.status][in]=current,upcoming&filter[matches.tier][in]=s,a${LIST}`),
+    b3(`/matches?page[limit]=30&sort=-start_date&filter[matches.status][in]=finished&filter[matches.tier][in]=s,a${LIST}`)]);
+  const up = (now.results || []).map(b3match);
+  return { live: up.filter(m => m.st === "live"), soon: up.filter(m => m.st === "soon").slice(0, 10), done: (done.results || []).map(b3match) };
+}
+
+// конец раунда -> коротко: bomb (взрыв), defuse, time (время вышло), kill (все убиты)
+const END = r => /TargetBombed|Bomb(ed)?$/.test(r) ? "bomb" : /Defused/.test(r) ? "defuse" : /Saved/.test(r) ? "time" : "kill";
+async function csMatch(slug) {
+  if (!/^[\w-]{3,120}$/.test(slug)) throw Object.assign(new Error("bad slug"), { code: 400 });
+  const m = await b3(`/matches/${slug}?with=teams,tournament`), base = b3match(m);
+  const games = ((await b3(`/games?filter[games.match_id][eq]=${m.id}&page[limit]=7`)).results || []).sort((a, b) => a.number - b.number);
+  const side = n => n === m.team1?.name ? 1 : n === m.team2?.name ? 2 : 0;
+  const maps = await Promise.all(games.map(async g => {
+    const live = g.status !== "finished", ws = side(g.winner_clan_name);
+    const [ps, gr] = await Promise.all([b3(`/games/${g.id}/players_stats?x=1`).catch(() => []), b3(`/games/${g.id}?with=players_stats`).catch(() => ({}))]);
+    const sc = ws === 2 ? [g.loser_clan_score, g.winner_clan_score] : [g.winner_clan_score, g.loser_clan_score];
+    return { n: g.number, map: String(g.map_name || "").replace(/^de_/, ""), live, w: live ? 0 : ws, sc,
+      rounds: (gr.game_rounds || []).sort((a, b) => a.round_number - b.round_number).map(r => [side(r.winner_clan_name), END(r.end_reason || ""), r.winner_clan_side === "CT" ? "ct" : "t"]),
+      players: (Array.isArray(ps) ? ps : []).map(x => ({ n: x.steam_profile?.player?.nickname || x.steam_profile?.nickname || "?", img: x.steam_profile?.player?.image_url || "",
+        tm: side(x.clan_name), k: x.kills, d: x.death, a: x.assists, hs: x.headshots, fk: x.first_kills, fd: x.first_death, adr: Math.round(x.adr || 0),
+        kast: Math.round((x.kast || 0) * 100), r: x.player_rating != null ? +(+x.player_rating).toFixed(2) : null, cl: x.clutches || 0 })) };
+  }));
+  return { ...base, maps, url: `https://bo3.gg/matches/${slug}`, _ttl: base.st === "done" ? 86400 : 60 };
+}
+
+// матчи команды из рейтинга Valve: ищем ту же команду на bo3.gg по названию
+async function csTeamM(name) {
+  name = String(name).slice(0, 60); if (name.length < 2) throw Object.assign(new Error("bad name"), { code: 400 });
+  const f = "&filter[teams.discipline_id][eq]=1&page[limit]=5";
+  let t = ((await b3(`/teams?filter[teams.name][eq]=${encodeURIComponent(name)}${f}`)).results || [])[0];
+  if (!t) t = ((await b3(`/teams?filter[teams.slug][eq]=${encodeURIComponent(name.toLowerCase().replace(/[^a-z0-9]+/g, "-"))}${f}`)).results || [])[0];
+  if (!t) return { found: false, matches: [] };
+  const r = await b3(`/matches?page[limit]=16&sort=-start_date&filter[matches.team_ids][overlap]=${t.id}${LIST}`);
+  return { found: true, team: { n: t.name, img: t.image_url || "", rank: t.rank }, matches: (r.results || []).map(b3match) };
+}
+
+// ---------- матчи Deadlock (deadlock-api.com) ----------
+const ranks = lang => memo("dlRanks" + lang, 864e5, () => get(`${DL}/assets/ranks?language=${lang}`));
+// средний значок матча: десятки — ранг, единицы — ступень (114 = Этернус 4)
+const badge = async (b, lang) => { if (!b) return null; const R = await ranks(lang).catch(() => []), t = Math.floor(b / 10), sub = b % 10, r = R.find(x => x.tier === t);
+  return r ? { n: clean(r.name), sub, img: r.images?.[`small_subrank${sub}_webp`] || r.images?.small_subrank1_webp || r.images?.large_webp || "" } : null; };
+async function names(ids) {
+  ids = [...new Set(ids.filter(Boolean))]; if (!ids.length) return {};
+  const r = await get(`${DL}/players/steam?${ids.map(i => "account_ids=" + i).join("&")}`).catch(() => []);
+  return Object.fromEntries((Array.isArray(r) ? r : []).map(p => [p.account_id, { n: p.personaname, av: p.avatarmedium || p.avatar || "" }]));
+}
+// все герои, включая новых и тестовых (в матчах встречаются и они): id -> имя и иконка
+const heroAll = lang => memo("dlHA" + lang, 6 * 36e5, async () => Object.fromEntries((await get(`${DL}/assets/heroes?language=${lang}`)).map(h => [h.id, { name: clean(h.name), img: h.images?.icon_image_small_webp || h.images?.icon_image_small || "" }])));
+const pickH = (all, ids) => Object.fromEntries([...new Set(ids)].filter(i => all[i]).map(i => [i, all[i]]));
+async function dlMatches(lang) {
+  const [act, rec] = await Promise.all([get(`${DL}/matches/active`).catch(() => []),
+    get(`${DL}/matches/metadata?include_info=true&include_player_info=true&include_player_kda=true&game_mode=normal&min_average_badge=100&min_duration_s=900&order_by=match_id&order_direction=desc&limit=24`).catch(() => [])]);
+  const live = act.filter(m => m.game_mode === 1 && m.players?.length === 12).sort((a, b) => b.spectators - a.spectators || b.match_score - a.match_score).slice(0, 8)
+    .map(m => ({ id: m.match_id, start: m.start_time, nw: [m.net_worth_team_0, m.net_worth_team_1], spec: m.spectators, ranked: m.match_mode === 4,
+      h: [0, 1].map(t => m.players.filter(p => p.team === t).map(p => p.hero_id)) }));
+  const done = await Promise.all(rec.map(async m => ({ id: m.match_id, start: Date.parse(m.start_time.replace(" ", "T") + "Z") / 1000, dur: m.duration_s, w: m.winning_team === "Team1" ? 1 : 0,
+    rank: await badge(m.average_badge, lang), h: [0, 1].map(t => m.players.filter(p => p.team === "Team" + t).map(p => p.hero_id)),
+    k: [0, 1].map(t => m.players.filter(p => p.team === "Team" + t).reduce((a, p) => a + (p.kills || 0), 0)) })));
+  if (!live.length && !done.length) throw new Error("no matches");
+  const all = await heroAll(lang).catch(() => ({}));
+  return { live, done, H: pickH(all, [...live, ...done].flatMap(m => m.h.flat())) };
+}
+async function dlMatch(id, lang) {
+  const d = await get(`${DL}/matches/${id}/metadata`), m = d.match_info || d;
+  if (!m.players) throw new Error("no match");
+  const [N, all] = await Promise.all([names(m.players.map(p => p.account_id)), heroAll(lang).catch(() => ({}))]);
+  const last = p => (p.stats || [])[(p.stats || []).length - 1] || {};
+  // души команд по ходу игры (для графика преимущества): плюс — команда 0, минус — команда 1
+  const ts = (m.players[0]?.stats || []).map(s => s.time_stamp_s);
+  const adv = ts.map((t, i) => [t, m.players.reduce((a, p) => a + (((p.stats || [])[i] || {}).net_worth || 0) * (p.team === 0 ? 1 : -1), 0)]);
+  const players = m.players.map(p => { const s = last(p);
+    return { acc: p.account_id, ...(N[p.account_id] || { n: "" }), hero: p.hero_id, tm: p.team, lane: p.assigned_lane, k: p.kills, d: p.deaths, a: p.assists,
+      nw: p.net_worth, lh: p.last_hits, dn: p.denies, lvl: p.level, dmg: s.player_damage || 0, heal: s.player_healing || 0, obj: s.boss_damage || 0,
+      items: (p.items || []).filter(i => !i.sold_time_s).map(i => [i.item_id, Math.round(i.game_time_s / 60)]), left: p.abandon_match_time_s || 0 }; });
+  return { id: m.match_id, start: m.start_time, dur: m.duration_s, w: m.winning_team, rank: [await badge(m.average_badge_team0, lang), await badge(m.average_badge_team1, lang)],
+    ranked: m.match_mode === 4, boss: [0, 1].map(t => (m.mid_boss || []).filter(b => b.team_claimed === t).length),
+    obj: [0, 1].map(t => (m.objectives || []).filter(o => o.team !== t && o.destroyed_time_s > 0).length), adv: adv.length > 1 ? adv : [], players, H: pickH(all, players.map(p => p.hero)) };
+}
+
 async function dlHeroes(lang) {
   const [hs, st] = await Promise.all([get(`${DL}/assets/heroes?only_active=true&language=${lang}`), get(`${DL}/analytics/hero-stats`)]);
   const tot = st.reduce((a, x) => a + x.matches, 0) || 1, S = new Map(st.map(x => [x.hero_id, x]));
@@ -215,13 +310,18 @@ module.exports = async (req, res) => {
     if (q === "csTeams") out = await csTeams();
     else if (q === "csMatches") out = await csMatches();
     else if (q === "csTeam") out = await csTeam(String(req.query.p || ""));
+    else if (q === "csMatch") out = await csMatch(String(req.query.s || ""));
+    else if (q === "csTeamM") out = await csTeamM(String(req.query.n || ""));
+    else if (q === "dlMatches") out = await dlMatches(lang);
+    else if (q === "dlMatch") { const id = +req.query.id; if (!(id > 0 && id < 1e10)) return fail(400, "bad_id"); out = await dlMatch(id, lang); }
     else if (q === "dlHeroes") out = await dlHeroes(lang);
     else if (q === "dlItems") out = await dlItems(lang);
     else if (q === "csMarket" || q === "market") { const qs = String(req.query.s || "").trim().slice(0, 60), s0 = Math.max(0, Math.min(90, +req.query.start || 0)), start = s0 - s0 % 10;
       if (qs && qs.length < 2) return fail(400, "bad_query"); out = await market(q === "csMarket" ? "cs" : String(req.query.g || "cs"), String(req.query.cat || ""), qs, start, String(req.query.sort || "pop"), String(req.query.ql || "")); }
     else if (q === "lots") { const n = String(req.query.s || "").slice(0, 120); if (n.length < 2) return fail(400, "bad_query"); out = await lots(String(req.query.g || "cs"), n); }
     else { const id = +req.query.id; if (!(id > 0 && id < 1000)) return fail(400, "bad_id"); out = q === "dlOrder" ? await dlOrder(id, lang) : await dlHero(id); }
-    res.setHeader("Cache-Control", `public, s-maxage=${TTL[q]}, stale-while-revalidate=86400`);
+    const ttl = out && out._ttl || TTL[q]; if (out) delete out._ttl;
+    res.setHeader("Cache-Control", `public, s-maxage=${ttl}, stale-while-revalidate=${ttl < 300 ? 60 : 86400}`);
     res.status(200).json(out);
   } catch (e) { fail(e.code === 400 ? 400 : 502, "upstream"); }
 };
