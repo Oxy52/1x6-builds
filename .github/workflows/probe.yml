@@ -9,11 +9,6 @@ jobs:
         with: { ref: probe }
       - run: |
           set +e
-          {
-          for n in dota2exe dota2_exe dotaexe dota_exe dota2exe_news dota2exenews exedota dota2dotexe dotaa2exe dota2_exe_news dota2exeru dota2exe_ru; do
-            t=$(curl -s -L "https://t.me/s/$n" | grep -o '<meta property="og:title" content="[^"]*"' | head -1)
-            c=$(curl -s -L "https://t.me/s/$n" | grep -c 'tgme_widget_message_wrap')
-            echo "$n | $t | posts=$c"
-          done
-          } > out.txt 2>&1
-          git config user.name probe; git config user.email probe@x; git add out.txt; git commit -qm out; git push
+          curl -s -L -H "Accept-Language: ru" "https://t.me/s/dota2_exe_news" > tg.html
+          echo done > out.txt
+          git config user.name probe; git config user.email probe@x; git add out.txt tg.html; git commit -qm out; git push
