@@ -1,8 +1,9 @@
-deadlockkiber | "Deadlock | Дедлок: новости, инвайты, гайды" | counter_value">3.11K | posts=6 photos=20 | datetime="2025-05-09T15:48:27+00:00" .. datetime="2025-08-18T21:46:51+00:00" | dims: 640x640   800x450 | ads=0
-deadlockrf | "DEADLOCK ONE — новости Deadlock / Valve" | counter_value">32K | posts=18 photos=15 | datetime="2026-10-20T21:10:47+00:00" .. datetime="2026-10-23T10:53:17+00:00" | dims: 645x800    | ads=3
-play_dead_lock | "DeadLock | Новая игра от Valve" | counter_value">115 | posts=20 photos=6 | datetime="2024-08-26T15:38:51+00:00" .. datetime="2024-10-15T04:57:09+00:00" | dims: 800x450   800x450 | ads=0
-Deadlock37 | "Deadlock News" | counter_value">16.9K | posts=20 photos=16 | datetime="2026-10-20T21:52:42+00:00" .. datetime="2026-10-23T10:30:53+00:00" | dims: 800x450   800x375 | ads=0
-YourDeadlock | "Deadlock Community" | counter_value">17.4K | posts=17 photos=12 | datetime="2026-10-19T18:06:35+00:00" .. datetime="2026-10-23T10:45:57+00:00" | dims: 800x450   800x450 | ads=0
-dlocknew | "Deadlock NEWS | Valve" | counter_value">13.1K | posts=20 photos=11 | datetime="2026-10-21T11:55:23+00:00" .. datetime="2026-10-23T08:43:07+00:00" | dims: 800x800   800x800 | ads=3
-deadlockuainfo | "DEADLOCK UA" | counter_value">2.21K | posts=15 photos=17 | datetime="2026-10-16T21:36:34+00:00" .. datetime="2026-10-21T21:16:17+00:00" | dims: 800x379   365x302 | ads=0
-deadlocknews | "DEADLOCK PROJECT 8" | counter_value">23.3K | posts=16 photos=11 | datetime="2026-10-21T07:14:21+00:00" .. datetime="2026-10-23T09:44:44+00:00" | dims: 800x385   800x800 | ads=4
+19 None
+5027 patch 🙂 Разработчики продолжают работать над оптимизацией! | Сегодня ночью вышел патч, в котором модель тележки 🥹Doorman&#39;а была упрощена  True
+5026 community 🥳 Вайпер засветилась на официальном докладе Valve! | На днях прошла крупнейшая конференция по игровому звуку — GameSoundCon. На котор True
+5025 patch 😔 ЙОШИ ОБЬЕДИНИЛ ЕУ И РУ СЕРВЕРА? | Ночью Динозаврик😃 сообщил об обновлении серверной части игры, направленном на да True
+5024 community 😠 ВИКТОР В С Е (по крайней мере пока что) | Разработчики решили временно убрать 🥹персонажа, чтобы исправить новоиспеченные б True
+5023 community 🚽 Большие киберспортивные организации уже близко? | Minesweeper поделился слухами о грядущих контрактах на про-сцене:<br>😄: Птичка н True
+5021 patch 👀 Кто из новых героев понравился вам больше всего? | Настало время подводить итоги обновления City Never Sleeps, в связи с чем возник True
+5020 patch 👏 Медсестра Хэрроу балансная? | Все новые герои вышли, поэтому настало время посмотреть на процент побед последн True
+5019 players 🫰 Даже Бустеру нравится Дедлок! | В последнее время популярный стример поигрывает в нашу любимую игру на втором ка True
