@@ -9,7 +9,5 @@ jobs:
         with: { ref: probe }
       - run: |
           set +e
-          curl -s -L "https://t.me/s/deadlocknews" | grep -o 'tgme_widget_message_text[^>]*>[^<]\{0,160\}' | tail -6 > out.txt
-          curl -s -L "https://t.me/s/deadlocknews" | grep -o 'tgme_channel_info_description">[^<]\{0,200\}' >> out.txt
-          curl -s -L "https://t.me/s/deadlocknews" | grep -o 'counter_value">[^<]*' >> out.txt
+          for c in dota cs deadlock; do echo "== $c"; curl -s "https://blazecrest.vercel.app/api/news?src=tg&ch=$c" | python3 -c "import sys,json;d=json.load(sys.stdin);print(len(d.get('items',[])),d.get('error'));[print(i['post'],i['cat'],i['t'][:70],bool(i['img'])) for i in d.get('items',[])[:4]]"; done > out.txt 2>&1
           git config user.name probe; git config user.email probe@x; git add -A; git commit -qm out; git push
