@@ -1342,6 +1342,9 @@
   .ob.google { background: #fff; color: #1f1f1f; }
   .ob.discord { background: #5865f2; color: #fff; border-color: transparent; }
   .ob.telegram { background: #229ed9; color: #fff; border-color: transparent; }
+  .ob.steam { background: linear-gradient(135deg, #1b2838, #2a475e); color: #fff; border-color: rgba(102,192,244,.35); }
+  .steam-safe { margin: 10px 0 2px; padding: 10px 12px; border-radius: 12px; background: rgba(102,192,244,.07); border: 1px solid rgba(102,192,244,.2); font-size: 13px; text-align: left; }
+  .steam-safe summary { cursor: pointer; color: #9fd3f5; font-weight: 700; } .steam-safe ul { margin: 8px 0 0; padding-left: 18px; color: var(--muted); line-height: 1.45; } .steam-safe li { margin-bottom: 4px; } .steam-safe b { color: var(--fg); }
   .ob em { position: absolute; right: 12px; font-style: normal; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 99px; background: rgba(0,0,0,.25); }
   .ob:disabled { cursor: default; }
   .ob.off { opacity: .45; cursor: not-allowed; }
@@ -2065,6 +2068,10 @@
   }
   @media (max-width: 379px) { .pxh { width: 32px; height: 32px; } .curbtn, .langbtn { width: 34px; min-width: 34px; height: 36px; } .logo .lt { font-size: 13px; } }
   @media (max-width: 345px) { .logo .lt { display: none; } }
+  footer.ft { display: grid; grid-template-columns: 1.2fr repeat(3, 1fr); gap: 18px; align-items: start; }
+  .ft-b { display: flex; align-items: center; gap: 8px; } .ft-b img { width: 28px; height: 28px; object-fit: contain; } .ft-b b { font-family: var(--display); font-size: 16px; color: var(--fg); }
+  .ft-c { display: grid; gap: 6px; } .ft-c b { color: var(--fg); font-size: 13.5px; } .ft-c a { color: var(--muted); text-decoration: none; font-size: 13px; } .ft-c a:hover { color: var(--fg); }
+  @media (max-width: 600px) { footer.ft { grid-template-columns: repeat(3, 1fr); } .ft-b { grid-column: 1 / -1; } }
 </style>
 </head>
 <body>
@@ -2251,7 +2258,10 @@
   </div>
   </div>
 
-  <footer><span translate="no">Blazecrest</span> · <span>Арт героев — Valve.</span><br><a href="/heroes">Сборки всех героев</a> · <a href="/chc">Custom Hero Chaos</a> · <a href="/dota2">Мета Dota 2</a></footer>
+  <footer class="ft"><div class="ft-b"><img src="/logo.png" alt="" width="28" height="28"><b translate="no">Blazecrest</b></div>
+    <div class="ft-c"><b>Dota 2</b><a href="/heroes">Сборки всех героев</a><a href="/chc">Custom Hero Chaos</a><a href="/dota2">Мета Dota 2</a></div>
+    <div class="ft-c"><b>CS2</b><a href="/cs">Цены скинов</a><a href="/cs">Новости и матчи</a><a href="/cs">Топ команд</a></div>
+    <div class="ft-c"><b>Deadlock</b><a href="/deadlock">Герои и сборки</a><a href="/deadlock">Инвайт в игру</a><a href="/deadlock">Новости</a></div></footer>
 </div>
 
 <div class="menu-ov" id="menuOv" hidden></div>
@@ -2988,6 +2998,11 @@ const PROF = (() => {
   const CLOUD = !!sb;
   let P = null, U = null, autoOpened = false;
   const HAD_CODE = /[?&]code=|access_token=/.test(location.href);
+  // возврат со входа через Steam: одноразовый токен приходит в адресе (#steam=...), сразу убираем его из адресной строки
+  (() => { const h = location.hash || "", m = /^#steam=([\w%-]+)$/.exec(h), e = /^#steam_err=(\w+)$/.exec(h); if (!m && !e) return;
+    try { history.replaceState(null, "", location.pathname + location.search); } catch(_) {}
+    if (e){ setTimeout(() => toast(e[1] === "cancel" ? "Вход через Steam отменён." : e[1] === "off" ? "Вход через Steam ещё не настроен на сервере." : "Не получилось войти через Steam. Попробуй ещё раз."), 600); return; }
+    if (!sb) return; sb.auth.verifyOtp({ type: "magiclink", token_hash: decodeURIComponent(m[1]) }).then(({ error }) => { setTimeout(() => toast(error ? "Не получилось войти через Steam. Попробуй ещё раз." : "Вход через Steam выполнен ✅"), 400); }); })();
   let LOCAL = null; try { LOCAL = JSON.parse(localStorage.getItem(LKEY) || "null"); } catch(e) {}
   if (!CLOUD) P = LOCAL;
 
@@ -3000,7 +3015,7 @@ const PROF = (() => {
     if (t === "url" && !/^https:\/\//.test(v)) return null; return { t, v }; };
   const fromRow = r => ({ nick: r.nick, st: r.status || "", av: dec(r.avatar) || { t: "hero", v: "pudge" }, bn: dec(r.banner) || { t: "grad", v: "" }, frame: r.frame || "" });
   function seen(){ try { return JSON.parse(localStorage.getItem("ub-seen") || "[]"); } catch(e) { return []; } }
-  const provName = u => { if (u && u.user_metadata && u.user_metadata.provider === "telegram") return "Telegram"; const p = u && u.app_metadata && u.app_metadata.provider; return p === "google" ? "Google" : p === "discord" ? "Discord" : p === "email" ? "почта" : p || ""; };
+  const provName = u => { if (u && u.user_metadata && u.user_metadata.provider === "telegram") return "Telegram"; if (u && u.user_metadata && u.user_metadata.provider === "steam") return "Steam"; const p = u && u.app_metadata && u.app_metadata.provider; return p === "google" ? "Google" : p === "discord" ? "Discord" : p === "email" ? "почта" : p || ""; };
 
   /* ---------- верхняя панель и меню ---------- */
   function topbar(){ setTimeout(() => { try { claimRef(); } catch(e) {} }, 0);
@@ -3063,7 +3078,9 @@ const PROF = (() => {
           <button type="button" class="ob google" data-p="google">${IC.google}<span>Войти через Google</span></button>
           <button type="button" class="ob discord" data-p="discord">${IC.discord}<span>Войти через Discord</span></button>
           <button type="button" class="ob telegram off" id="tgBtn" disabled>${IC.telegram}<span>Войти через Telegram</span><em>скоро</em></button>
+          <button type="button" class="ob steam" id="stBtn"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 11h4M8 9v4M15 12h.01M18 10h.01"/><path d="M17.3 5H6.7a4 4 0 0 0-3.95 3.37l-.94 6.07A3 3 0 0 0 4.77 18c.98 0 1.9-.48 2.46-1.29L8.5 15h7l1.27 1.71A3 3 0 0 0 19.23 18a3 3 0 0 0 2.96-3.56l-.94-6.07A4 4 0 0 0 17.3 5z"/></svg><span>Войти через Steam</span></button>
         </div>
+        <details class="steam-safe"><summary>🔒 Вход через Steam безопасен — почему?</summary><ul><li>Ты входишь на <b>официальном сайте Steam</b> (steamcommunity.com) — пароль и код Steam Guard вводишь там, а не у нас.</li><li>Steam сообщает нам только твой <b>Steam ID</b>. Ник и аватар берём из открытого профиля.</li><li>Мы <b>не получаем</b> пароль, почту, инвентарь, скины, баланс и не можем ничего делать от твоего имени.</li><li>Это стандартный вход «Sign in through Steam», как на Dotabuff и торговых площадках.</li></ul></details>
         <div class="or"><span>или по почте</span></div>`}
         <form class="aform" id="aForm" novalidate>
           <input type="email" id="aEmail" autocomplete="email" placeholder="Почта" required>
@@ -3081,6 +3098,7 @@ const PROF = (() => {
     box.querySelectorAll(".alinks [data-m]").forEach(b => b.onclick = () => auth(b.dataset.m));
     providers().then(ex => { if (!ex) return; box.querySelectorAll(".ob[data-p]").forEach(b => { if (!ex[b.dataset.p]){ b.disabled = true; b.classList.add("off"); if (!b.querySelector("em")) b.insertAdjacentHTML("beforeend", "<em>скоро</em>"); } }); });
     const eye = box.querySelector("#aEye"); if (eye) eye.onclick = () => { const i = box.querySelector("#aPass"); i.type = i.type === "password" ? "text" : "password"; };
+    const st = box.querySelector("#stBtn"); if (st) st.onclick = () => { try { sessionStorage.setItem("ub-auth-pending", "1"); } catch(_) {} st.disabled = true; location.href = "/api/steam?go=1"; };
     const tg = box.querySelector("#tgBtn");
     if (tg) tgConf().then(c => { if (!c || !c.enabled || !tg.isConnected) return;
       tg.classList.remove("off"); tg.disabled = false; const em = tg.querySelector("em"); if (em) em.remove();
@@ -3994,7 +4012,7 @@ const PROF = (() => {
 
   /* ---------- настройки аккаунта ---------- */
   const streamer = () => { try { return localStorage.getItem("ub-stream") === "1"; } catch(e) { return false; } };
-  const realEmail = u => u && u.email && !/@1x6-eta\.vercel\.app$/.test(u.email) ? u.email : "";
+  const realEmail = u => u && u.email && !/@(1x6-eta|blazecrest)\.vercel\.app$/.test(u.email) ? u.email : "";
   const maskEmail = e => { const [a, d] = String(e || "").split("@"); if (!d) return ""; const dot = d.lastIndexOf("."); const dn = dot > 0 ? d.slice(0, dot) : d, tld = dot > 0 ? d.slice(dot) : "";
     return a.slice(0, 1) + "•".repeat(Math.max(3, Math.min(6, a.length - 1))) + "@" + dn.slice(0, 1) + "•".repeat(Math.max(2, Math.min(5, dn.length - 1))) + tld; };
   const maskPhone = p => { p = String(p || ""); return p ? p.slice(0, 4) + " ••• •• " + p.slice(-2) : ""; };
@@ -4003,7 +4021,7 @@ const PROF = (() => {
     return `Вход: ${esc(provName(u))}${em ? " · " + esc(maskEmail(em)) : un ? " · @" + esc(un) : ""}`; };
   function settings(){
     if (!CLOUD || !U) return CLOUD ? auth("in") : null;
-    const em = realEmail(U), ph = (U.user_metadata && U.user_metadata.phone_contact) || "", oauth = /google|discord/.test((U.app_metadata && U.app_metadata.provider) || "") || (U.user_metadata && U.user_metadata.provider === "telegram");
+    const em = realEmail(U), ph = (U.user_metadata && U.user_metadata.phone_contact) || "", oauth = /google|discord/.test((U.app_metadata && U.app_metadata.provider) || "") || (U.user_metadata && /telegram|steam/.test(U.user_metadata.provider || ""));
     const box = shell("", `<div class="sup-head"><h3>⚙️ Настройки аккаунта</h3><small>Эти данные видишь только ты. В профиле и ленте почта и номер не показываются.</small></div>
       <div class="psec set">
         <div class="set-card"><div class="set-row"><span class="set-ic">🔑</span><div><b>Способ входа</b><small>${esc(provName(U)) || "почта"}</small></div></div></div>
