@@ -7,6 +7,7 @@ const RUIN = (() => {
   const k1 = v => v >= 10000 ? (v / 1000).toFixed(v >= 100000 ? 0 : 1).replace(".0", "") + "k" : String(Math.round(v || 0));
   const pct = v => Math.round((v || 0) * 100) + "%";
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const POS = { 1: "керри (1)", 2: "мидер (2)", 3: "оффлейнер (3)", 4: "поддержка (4)", 5: "полная поддержка (5)" };
   let built = false, box, out, HS = [], HB = {}, cur = null, poll = 0, fieldStop = null, rot = 0;
 
   /* ---------- герои ---------- */
@@ -82,7 +83,19 @@ const RUIN = (() => {
       T.forEach(p => { const r = (HB[p.hero_id] || {}).roles || [], sup = r.includes("Support") && !r.includes("Carry");
         p.cs = (4 - byG.indexOf(p)) + 2 * (p.last_hits || 0) / lhMax + (r.includes("Carry") ? 1 : 0) - (sup ? 2.5 : 0) - (p.is_roaming ? 1.5 : 0) + ((p.obs_placed || 0) + (p.sen_placed || 0) >= 8 ? -1.5 : 0); });
       const byC = [...T].sort((a, b) => b.cs - a.cs);
-      T.forEach(p => { p.core = byC.indexOf(p) < 3; p.kp = ((p.kills || 0) + (p.assists || 0)) / Math.max(1, kills); p.nwShare = p.nw / Math.max(1, nw); p.avgD = avgD;
+      // позиция по линии в этой игре: лёгкая — 1 и 5, мид — 2, сложная — 3 и 4; кто фармил больше на линии — кор
+      const farm = p => p.nw + (p.last_hits || 0) * 40, lanes = { 1: [], 2: [], 3: [] }, pool = [];
+      T.forEach(p => { const l = p.lane_role; if (!p.is_roaming && lanes[l]) lanes[l].push(p); else pool.push(p); });
+      Object.values(lanes).forEach(a => a.sort((x, y) => farm(y) - farm(x)));
+      const pos = new Map(), take = (p, n) => pos.set(p, n);
+      if (lanes[1][0]) take(lanes[1][0], 1); if (lanes[2][0]) take(lanes[2][0], 2); if (lanes[3][0]) take(lanes[3][0], 3);
+      lanes[1].slice(1).forEach(p => pool.push(Object.assign(p, { _pref: 5 }))); lanes[2].slice(1).forEach(p => pool.push(p)); lanes[3].slice(1).forEach(p => pool.push(Object.assign(p, { _pref: 4 })));
+      pool.sort((x, y) => farm(y) - farm(x));
+      [1, 2, 3].forEach(n => { if ([...pos.values()].includes(n)) return; const i = pool.findIndex(p => !p._pref); const q = i >= 0 ? pool.splice(i, 1)[0] : null; if (q) take(q, n); });
+      pool.forEach(p => { const free = [4, 5].filter(n => ![...pos.values()].includes(n)); take(p, p._pref && free.includes(p._pref) ? p._pref : free[0] || p._pref || 5); });
+      const hasLanes = T.some(p => p.lane_role);
+      T.forEach(p => { p.pos = hasLanes ? pos.get(p) : (byC.indexOf(p) < 3 ? byC.indexOf(p) + 1 : byC.indexOf(p) + 1); delete p._pref; });
+      T.forEach(p => { p.core = p.pos <= 3; p.kp = ((p.kills || 0) + (p.assists || 0)) / Math.max(1, kills); p.nwShare = p.nw / Math.max(1, nw); p.avgD = avgD;
         const b = p.bench || {}, keys = p.core ? ["gold_per_min", "xp_per_min", "hero_damage_per_min", "last_hits_per_min", "tower_damage", "kills_per_min"] : ["xp_per_min", "hero_damage_per_min", "kills_per_min", "gold_per_min"];
         const v = keys.map(k => b[k]).filter(x => x != null); p.perf = v.length ? v.reduce((a, x) => a + x, 0) / v.length : .5;
         const maxD = Math.max(6, avgD * 1.6), c1 = 1 - p.perf, c2 = Math.min(1, (p.deaths || 0) / maxD), c3 = 1 - Math.min(1, p.kp / .7);
@@ -137,7 +150,7 @@ const RUIN = (() => {
   function card(p, m, A, main){
     const mk = mistakes(p, m), nm = p.personaname || "Аноним";
     return `<article class="ru-card${main ? " main" : ""}">
-      <div class="ru-ch"><img class="ru-hi" alt="" src="${esc(main ? himg(p.hero_id) : hicon(p.hero_id))}"><div><span class="ru-lbl">${main ? "Главный руинер" : "Второе место"}</span><b translate="no">${esc(nm)}</b><small>${esc(hname(p.hero_id))} · ${p.core ? "кор" : "поддержка"}</small></div>
+      <div class="ru-ch"><img class="ru-hi" alt="" src="${esc(main ? himg(p.hero_id) : hicon(p.hero_id))}"><div><span class="ru-lbl">${main ? "Главный руинер" : "Второе место"}</span><b translate="no">${esc(nm)}</b><small>${esc(hname(p.hero_id))} · ${POS[p.pos] || (p.core ? "кор" : "поддержка")}</small></div>
         <div class="ru-score"><b>${p.harm}</b><small>влияние на поражение</small></div></div>
       ${main ? `<p class="ru-why">По статистике сильнее всех потянул вниз: ${esc(why(p, m))} Уверенность модели — <b>${A.conf}%</b>.</p>` : ""}
       <div class="ru-ms">${metric("K / D / A", `${p.kills}/${p.deaths}/${p.assists}`)}${metric("GPM / XPM", `${p.gold_per_min} / ${p.xp_per_min}`)}${metric("Богатство", k1(p.nw))}${metric("Добито крипов", p.last_hits)}${metric("Участие в драках", pct(p.kp))}${metric("Урон по строениям", k1(p.tower_damage))}</div>
@@ -145,7 +158,7 @@ const RUIN = (() => {
     </article>`;
   }
   function table(T, m, A, lost){
-    const rows = (lost ? [...T].sort((a, b) => b.harm - a.harm) : T).map(p => `<tr class="ru-row${p.i === cur.me ? " me" : ""}" data-i="${p.i}" tabindex="0" aria-expanded="false" title="Нажми — слоты и тайминги предметов"><td class="ru-th"><img alt="" loading="lazy" src="${esc(hicon(p.hero_id))}"><span><b translate="no">${esc(p.personaname || "Аноним")}</b><small>${esc(hname(p.hero_id))}</small></span></td>
+    const rows = (lost ? [...T].sort((a, b) => b.harm - a.harm) : T).map(p => `<tr class="ru-row${p.i === cur.me ? " me" : ""}" data-i="${p.i}" tabindex="0" aria-expanded="false" title="Нажми — слоты и тайминги предметов"><td class="ru-th"><img alt="" loading="lazy" src="${esc(hicon(p.hero_id))}"><span><b translate="no">${esc(p.personaname || "Аноним")}</b><small>${esc(hname(p.hero_id))}${p.pos ? " · поз. " + p.pos : ""}</small></span></td>
       <td>${p.kills}/${p.deaths}/${p.assists}</td><td>${p.gold_per_min}</td><td>${p.xp_per_min}</td><td>${k1(p.hero_damage)}</td><td>${k1(p.nw)}</td>${lost ? `<td><span class="ru-bar" style="--v:${p.harm}%"><i></i><b>${p.harm}</b></span></td>` : ""}</tr>`).join("");
     return `<div class="ru-tw"><table class="ru-t"><thead><tr><th>Игрок</th><th>K/D/A</th><th>GPM</th><th>XPM</th><th>Урон</th><th>Богатство</th>${lost ? "<th>Вред</th>" : ""}</tr></thead><tbody>${rows}</tbody></table></div>`;
   }
