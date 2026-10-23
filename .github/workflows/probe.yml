@@ -8,22 +8,6 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           set +e
-          npm i -s playwright@1.48.2 >/dev/null 2>&1; npx playwright install --with-deps chromium >/dev/null 2>&1
-          cat > s.js <<'JS'
-          const { chromium } = require('playwright');
-          (async () => { const b = await chromium.launch(); const out = [];
-            for (const u of ['https://lis-skins.me/en/market/csgo/', 'https://www.lis-skins-ru.com/en/market/', 'https://cs.money/market/buy/', 'https://csfloat.com/search']) {
-              const ctx = await b.newContext({ userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36', locale: 'en-US' });
-              const p = await ctx.newPage(); const hits = new Map();
-              p.on('response', async r => { try { const ct = r.headers()['content-type'] || ''; if (!/javascript|json/.test(ct)) return; const t = await r.text();
-                const re = /.{0,140}["'](RUB|UAH)["'].{0,140}/g; let m; let n = 0; while ((m = re.exec(t)) && n < 4) { hits.set(m[0], r.url()); n++; } } catch (e) {} });
-              try { await p.goto(u, { waitUntil: 'domcontentloaded', timeout: 45000 }); await p.waitForTimeout(12000); } catch (e) { out.push('ERR ' + u + ' ' + e.message.slice(0, 100)); }
-              const txt = await p.evaluate(() => document.body ? document.body.innerText : '').catch(() => '');
-              out.push('==== ' + u + ' title=' + (await p.title().catch(() => '')) + ' textlen=' + txt.length);
-              out.push('codes in text: ' + [...new Set((txt.match(/\b(USD|EUR|RUB|UAH|KZT|PLN|TRY|CNY|GBP|BRL|BYN)\b/g) || []))].join(','));
-              [...hits].slice(0, 10).forEach(([k, v]) => out.push('  [' + v.slice(0, 90) + '] ' + k.replace(/\s+/g, ' ')));
-              await ctx.close(); }
-            require('fs').writeFileSync('out.txt', out.join('\n')); await b.close(); })();
-          JS
-          node s.js
+          for n in aegis aegis-dota aegisdota aegis-gg aegis-1x6 aegis1x6 aegis-builds aegis-site aegisgg aegis-hub; do
+            r=$(curl -s -m 15 -o /tmp/b -w '%{http_code}' https://$n.vercel.app/); echo "$n $r $(head -c 120 /tmp/b | tr '\n' ' ')"; done > out.txt
           set -e; git config user.name p; git config user.email p@p; git add -A out.txt; git commit -m r; git push
