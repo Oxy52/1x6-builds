@@ -6906,14 +6906,15 @@ const GAMES = (() => {
   const logo = p => LOGO[p.k] || `https://www.google.com/s2/favicons?domain=${encodeURIComponent(p.d)}&sz=64`;
   const SYM = { uah: "₴", usd: "$", rub: "₽", eur: "€" };
   // в какой валюте можно платить на площадке (Steam — в валюте кошелька, поэтому подходит любая)
-  const MCUR = { lis: ["usd", "eur"], skinport: ["usd", "eur"], csm: ["usd"], csfloat: ["usd", "eur"], tm: ["rub", "usd", "eur"] };
+  // проверено 23.10.2026: Skinport и Market.CSGO — по их API, CSFloat — по списку валют в коде сайта, Lis-skins — гривна есть в выборе валют, CS.money — нет ни рублей, ни гривен
+  const MCUR = { lis: ["usd", "eur", "uah", "rub"], skinport: ["usd", "eur", "rub"], csm: ["usd", "eur"], csfloat: ["usd", "eur", "uah"], tm: ["rub", "usd", "eur"] };
   const CNAME = { uah: "гривен", usd: "долларов", rub: "рублей", eur: "евро" }, CSYM = c => SYM[c] || c;
   function curWarn(a, e){
     const k = a.dataset.k, ok = MCUR[k], c = cur(); if (!ok || ok.includes(c)) return false;
     try { if (localStorage.getItem("ub-curwarn-off") === "1") return false; } catch(_) {}
     e.preventDefault(); const name = a.dataset.n || "площадке", url = a.href;
     const g = openPanel(`<div class="curwarn"><div class="cw-ic">${CSYM(c)}</div><h3>На ${esc(name)} нет ${CNAME[c] || c.toUpperCase()}</h3>
-      <p>У тебя на сайте выбрана валюта <b>${c.toUpperCase()}</b>, а ${esc(name)} принимает только ${ok.map(x => `<b>${x.toUpperCase()} ${CSYM(x)}</b>`).join(" и ")}. Цены там будут в другой валюте, а при оплате банк может взять комиссию за конвертацию.</p>
+      <p>У тебя на сайте выбрана валюта <b>${c.toUpperCase()}</b>, а ${esc(name)} работает с ${ok.map(x => `<b>${x.toUpperCase()} ${CSYM(x)}</b>`).join(", ")}. Цены там будут в другой валюте, а при оплате банк может взять комиссию за конвертацию.</p>
       <label class="cw-no"><input type="checkbox" id="cwNo"> Больше не показывать</label>
       <div class="cw-a"><button type="button" class="btn btn-ghost" id="cwBack">Остаться</button><button type="button" class="btn btn-primary" id="cwGo">Перейти на ${esc(name)}</button></div></div>`);
     const save = () => { if (g.querySelector("#cwNo").checked) try { localStorage.setItem("ub-curwarn-off", "1"); } catch(_) {} };
