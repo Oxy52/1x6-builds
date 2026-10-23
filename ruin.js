@@ -74,9 +74,15 @@ const RUIN = (() => {
   function analyze(m){
     const P = m.players.map((p, i) => ({ ...p, i, rad: p.player_slot < 128 })), lostRad = !m.rw;
     const team = r => P.filter(p => p.rad === r), L = team(lostRad), Wn = team(!lostRad);
-    const prep = T => { const kills = T.reduce((a, p) => a + (p.kills || 0), 0), nw = T.reduce((a, p) => a + (p.net_worth || 0), 0), avgD = T.reduce((a, p) => a + (p.deaths || 0), 0) / Math.max(1, T.length);
-      const byNw = [...T].sort((a, b) => (b.net_worth || 0) - (a.net_worth || 0));
-      T.forEach(p => { p.core = byNw.indexOf(p) < 3; p.kp = ((p.kills || 0) + (p.assists || 0)) / Math.max(1, kills); p.nwShare = (p.net_worth || 0) / Math.max(1, nw); p.avgD = avgD;
+    // богатство: если OpenDota не отдал (бывает 0–1 у ливнувших и коротких игр) — считаем по GPM
+    P.forEach(p => { p.nw = (p.net_worth || 0) > 500 ? p.net_worth : Math.round((p.gold_per_min || 0) * (m.dur || 0) / 60); });
+    const prep = T => { const kills = T.reduce((a, p) => a + (p.kills || 0), 0), nw = T.reduce((a, p) => a + p.nw, 0), avgD = T.reduce((a, p) => a + (p.deaths || 0), 0) / Math.max(1, T.length);
+      // кор или поддержка: по заработанному золоту и добитым крипам + роли героя (Лич — саппорт, Бист — кор)
+      const lhMax = Math.max(1, ...T.map(p => p.last_hits || 0)), byG = [...T].sort((a, b) => b.nw - a.nw);
+      T.forEach(p => { const r = (HB[p.hero_id] || {}).roles || [], sup = r.includes("Support") && !r.includes("Carry");
+        p.cs = (4 - byG.indexOf(p)) + 2 * (p.last_hits || 0) / lhMax + (r.includes("Carry") ? 1 : 0) - (sup ? 2.5 : 0) - (p.is_roaming ? 1.5 : 0) + ((p.obs_placed || 0) + (p.sen_placed || 0) >= 8 ? -1.5 : 0); });
+      const byC = [...T].sort((a, b) => b.cs - a.cs);
+      T.forEach(p => { p.core = byC.indexOf(p) < 3; p.kp = ((p.kills || 0) + (p.assists || 0)) / Math.max(1, kills); p.nwShare = p.nw / Math.max(1, nw); p.avgD = avgD;
         const b = p.bench || {}, keys = p.core ? ["gold_per_min", "xp_per_min", "hero_damage_per_min", "last_hits_per_min", "tower_damage", "kills_per_min"] : ["xp_per_min", "hero_damage_per_min", "kills_per_min", "gold_per_min"];
         const v = keys.map(k => b[k]).filter(x => x != null); p.perf = v.length ? v.reduce((a, x) => a + x, 0) / v.length : .5;
         const maxD = Math.max(6, avgD * 1.6), c1 = 1 - p.perf, c2 = Math.min(1, (p.deaths || 0) / maxD), c3 = 1 - Math.min(1, p.kp / .7);
@@ -134,14 +140,30 @@ const RUIN = (() => {
       <div class="ru-ch"><img class="ru-hi" alt="" src="${esc(main ? himg(p.hero_id) : hicon(p.hero_id))}"><div><span class="ru-lbl">${main ? "Главный руинер" : "Второе место"}</span><b translate="no">${esc(nm)}</b><small>${esc(hname(p.hero_id))} · ${p.core ? "кор" : "поддержка"}</small></div>
         <div class="ru-score"><b>${p.harm}</b><small>влияние на поражение</small></div></div>
       ${main ? `<p class="ru-why">По статистике сильнее всех потянул вниз: ${esc(why(p, m))} Уверенность модели — <b>${A.conf}%</b>.</p>` : ""}
-      <div class="ru-ms">${metric("K / D / A", `${p.kills}/${p.deaths}/${p.assists}`)}${metric("GPM / XPM", `${p.gold_per_min} / ${p.xp_per_min}`)}${metric("Богатство", k1(p.net_worth))}${metric("Добито крипов", p.last_hits)}${metric("Участие в драках", pct(p.kp))}${metric("Урон по строениям", k1(p.tower_damage))}</div>
+      <div class="ru-ms">${metric("K / D / A", `${p.kills}/${p.deaths}/${p.assists}`)}${metric("GPM / XPM", `${p.gold_per_min} / ${p.xp_per_min}`)}${metric("Богатство", k1(p.nw))}${metric("Добито крипов", p.last_hits)}${metric("Участие в драках", pct(p.kp))}${metric("Урон по строениям", k1(p.tower_damage))}</div>
       ${mk.bad.length ? `<ul class="ru-l bad">${mk.bad.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}${mk.good.length && main ? `<ul class="ru-l good">${mk.good.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
     </article>`;
   }
   function table(T, m, A, lost){
-    const rows = (lost ? [...T].sort((a, b) => b.harm - a.harm) : T).map(p => `<tr${p.i === cur.me ? ' class="me"' : ""}><td class="ru-th"><img alt="" loading="lazy" src="${esc(hicon(p.hero_id))}"><span><b translate="no">${esc(p.personaname || "Аноним")}</b><small>${esc(hname(p.hero_id))}</small></span></td>
-      <td>${p.kills}/${p.deaths}/${p.assists}</td><td>${p.gold_per_min}</td><td>${p.xp_per_min}</td><td>${k1(p.hero_damage)}</td><td>${k1(p.net_worth)}</td>${lost ? `<td><span class="ru-bar" style="--v:${p.harm}%"><i></i><b>${p.harm}</b></span></td>` : ""}</tr>`).join("");
+    const rows = (lost ? [...T].sort((a, b) => b.harm - a.harm) : T).map(p => `<tr class="ru-row${p.i === cur.me ? " me" : ""}" data-i="${p.i}" tabindex="0" aria-expanded="false" title="Нажми — слоты и тайминги предметов"><td class="ru-th"><img alt="" loading="lazy" src="${esc(hicon(p.hero_id))}"><span><b translate="no">${esc(p.personaname || "Аноним")}</b><small>${esc(hname(p.hero_id))}</small></span></td>
+      <td>${p.kills}/${p.deaths}/${p.assists}</td><td>${p.gold_per_min}</td><td>${p.xp_per_min}</td><td>${k1(p.hero_damage)}</td><td>${k1(p.nw)}</td>${lost ? `<td><span class="ru-bar" style="--v:${p.harm}%"><i></i><b>${p.harm}</b></span></td>` : ""}</tr>`).join("");
     return `<div class="ru-tw"><table class="ru-t"><thead><tr><th>Игрок</th><th>K/D/A</th><th>GPM</th><th>XPM</th><th>Урон</th><th>Богатство</th>${lost ? "<th>Вред</th>" : ""}</tr></thead><tbody>${rows}</tbody></table></div>`;
+  }
+  // раскрытая строка игрока: 6 слотов, рюкзак и нейтралка с минутой сборки, плюс порядок крупных покупок
+  function slots(p, nc){
+    const tm = t => t == null ? "" : mmss(t), it = (iid, cls) => { const o = D2.itemById(iid); if (!o) return `<span class="ru-it e ${cls || ""}"><i></i><small></small></span>`;
+      const t = cls === "nt" ? null : D2.buyTime(p.pl, o.key); return `<span class="ru-it ${cls || ""}" title="${esc(o.name)}"><img alt="" loading="lazy" src="${esc(o.img)}"><small>${tm(t)}</small></span>`; };
+    const big = (p.pl || []).map(([t, k]) => { const o = D2.items() && D2.items()[k]; return o && o.cost >= 1400 ? [t, k, o] : null; }).filter(Boolean);
+    const seen = new Set(), tl = big.filter(([, k]) => !seen.has(k) && seen.add(k));
+    return `<tr class="ru-x"><td colspan="${nc}"><div class="ru-xc"><div class="ru-sl">${[0, 1, 2, 3, 4, 5].map(i => it(p["item_" + i])).join("")}<span class="ru-sep"></span>${[0, 1, 2].map(i => it(p["backpack_" + i], "bp")).join("")}<span class="ru-sep"></span>${it(p.item_neutral, "nt")}</div>
+      ${tl.length ? `<div class="ru-tl">${tl.map(([t, k, o]) => `<span title="${esc(o.dname || k)}"><img alt="" loading="lazy" src="${esc(D2.img(o.img))}">${mmss(t)}</span>`).join("")}</div>` : (cur.m && !cur.m.parsed ? `<p class="ru-nt">Тайминги появятся после разбора реплея.</p>` : "")}
+      ${p.account_id && p.account_id !== 4294967295 ? `<div class="ru-xa"><button type="button" class="btn btn-ghost" data-acc="${p.account_id}">Профиль игрока</button></div>` : ""}</div></td></tr>`;
+  }
+  function bindRows(){
+    out.querySelectorAll(".ru-row").forEach(tr => { const tog = () => { const nx = tr.nextElementSibling; if (nx && nx.classList.contains("ru-x")){ nx.remove(); tr.classList.remove("open"); tr.setAttribute("aria-expanded", "false"); return; }
+        const p = cur.A.P[+tr.dataset.i]; tr.insertAdjacentHTML("afterend", slots(p, tr.children.length)); tr.classList.add("open"); tr.setAttribute("aria-expanded", "true");
+        const b = tr.nextElementSibling.querySelector("[data-acc]"); if (b) b.onclick = e => { e.stopPropagation(); D2.player(b.dataset.acc); }; };
+      tr.onclick = tog; tr.onkeydown = e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); tog(); } }; });
   }
   function render(m){
     const A = analyze(m), top = A.rank[0], sec = A.rank[1];
@@ -158,10 +180,11 @@ const RUIN = (() => {
       <h3 class="ru-h3">Ключевые моменты — ${esc(hname(top.hero_id))}</h3>
       ${m.parsed ? (mo.length ? `<ol class="ru-mo">${mo.map(([t, s, x]) => `<li class="${s > 0 ? "good" : "bad"}"><time>${mmss(t)}</time><i>${s > 0 ? "+" : "−"}</i><span>${esc(x)}</span></li>`).join("")}</ol>` : `<p class="gempty">Особых моментов не нашли.</p>`)
         : `<div class="ru-parse"><p>Реплей этого матча ещё не разобран — драки, смерти по таймингам и варды появятся после разбора. Обычно это занимает 1–3 минуты.</p><button type="button" class="btn btn-ghost" id="ruParse">Разобрать реплей</button></div>`}
-      <h3 class="ru-h3">Проигравшие — ${A.lostRad ? "Свет" : "Тьма"}</h3>${table(A.L, m, A, true)}
+      <h3 class="ru-h3">Проигравшие — ${A.lostRad ? "Свет" : "Тьма"} <small class="ru-hh">нажми на игрока — слоты и тайминги</small></h3>${table(A.L, m, A, true)}
       <h3 class="ru-h3">Победители — ${A.lostRad ? "Тьма" : "Свет"}</h3>${table(A.Wn, m, A, false)}
       <p class="db-note">Оценка — подсказка по статистике, а не приговор: она не видит, кто ошибся на драфте, кто отдал линию и кто кому кричал в микрофон. «Влияние на поражение» — 0–100, считается по сравнению с игроками на том же герое (бенчмарки OpenDota), смертям, участию в драках и богатству/вардам. Данные — <a href="https://www.opendota.com/matches/${m.id}" target="_blank" rel="noopener">OpenDota</a>.</p>`;
     const pb = out.querySelector("#ruParse"); if (pb) pb.onclick = () => parse(m.id, pb);
+    cur.m = m; bindRows();
     try { localStorage.setItem("ub-ruin", String(m.id)); } catch(e) {}
   }
   async function parse(id, b){
@@ -173,7 +196,7 @@ const RUIN = (() => {
   }
   async function analyzeMatch(id, acc){
     clearInterval(poll); cur = { id, acc }; out.innerHTML = `<div class="feed-sk"></div><div class="feed-sk"></div>`;
-    try { await heroes(); const m = await api("ruin", id); if (cur.id !== id) return;
+    try { await Promise.all([heroes(), D2.itemsMeta()]); const m = await api("ruin", id); if (cur.id !== id) return;
       if (m && m.players && m.players.length && m.players.every(p => !p.hero_id)){ out.innerHTML = `<div class="gempty">Матч ещё идёт или данных пока нет. Попробуй после окончания игры.</div>`; return; }
       if (!m || !m.players || m.players.length < 10){ out.innerHTML = `<div class="gempty">В этом матче нет данных об игроках. Проверь номер.</div>`; return; }
       render(m); out.scrollIntoView({ block: "start", behavior: "smooth" });
@@ -197,5 +220,6 @@ const RUIN = (() => {
     else if (fieldStop) fieldStop();
   }
   setTimeout(() => { if (typeof curTab !== "undefined" && curTab === "ruin") open(); }, 0);
-  return { open };
+  function load(id){ open(); const q = box && box.querySelector("#ruQ"); if (q) q.value = id; analyzeMatch(String(id)); }
+  return { open, load };
 })();

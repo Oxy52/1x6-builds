@@ -61,6 +61,9 @@ function slimItems(text) {
       attr: Array.isArray(it.attrib) ? it.attrib.map(attr).filter(s => /[A-Za-z]/.test(s)).slice(0, 8) : [], cd: it.cd || 0, mc: it.mc || 0 }; }
   return JSON.stringify(slim);
 }
+// покупки игрока: время и предмет (без рецептов и расходников) — для таймингов слотов
+const JUNK_BUY = /^(recipe_|tpscroll|ward_|smoke_of_deceit|tango|flask|clarity|faerie_fire|enchanted_mango|dust|blood_grenade|branches)/;
+const plog = p => (p.purchase_log || []).filter(x => x && x.key && !JUNK_BUY.test(x.key)).map(x => [x.time, x.key]);
 function slimMatch(text) {
   const m = JSON.parse(text);
   if (!m || !m.match_id) return text;
@@ -69,13 +72,14 @@ function slimMatch(text) {
   return JSON.stringify({ id: m.match_id, start: m.start_time, dur: m.duration, rw: m.radiant_win, rs: m.radiant_score, ds: m.dire_score, mode: m.game_mode, lobby: m.lobby_type,
     league: m.league && m.league.name || "", rt: team(m.radiant_team) || (m.radiant_name ? { name: m.radiant_name, tag: "", logo: m.radiant_logo || "" } : null), dt: team(m.dire_team) || (m.dire_name ? { name: m.dire_name, tag: "", logo: m.dire_logo || "" } : null),
     pb: (m.picks_bans || []).map(x => [x.hero_id, x.is_pick ? 1 : 0, x.team, x.order]), gold: m.radiant_gold_adv || [], xp: m.radiant_xp_adv || [], fb: m.first_blood_time || 0,
-    players: (m.players || []).map(p => Object.fromEntries(keep.map(k => [k, p[k] == null ? null : p[k]]))) });
+    players: (m.players || []).map(p => ({ ...Object.fromEntries(keep.map(k => [k, p[k] == null ? null : p[k]])), pl: plog(p) })) });
 }
 // «Кто заруинил?»: всё, что нужно для оценки вклада каждого игрока, без лишнего (полный матч весит мегабайты)
 function slimRuin(text) {
   const m = JSON.parse(text);
   if (!m || !m.match_id) return text;
   const keep = ["account_id", "personaname", "player_slot", "hero_id", "kills", "deaths", "assists", "last_hits", "denies", "gold_per_min", "xp_per_min", "net_worth", "hero_damage", "tower_damage", "hero_healing", "level",
+    "item_0", "item_1", "item_2", "item_3", "item_4", "item_5", "backpack_0", "backpack_1", "backpack_2", "item_neutral", "aghanims_scepter", "aghanims_shard",
     "lane_role", "is_roaming", "teamfight_participation", "obs_placed", "sen_placed", "stuns", "camps_stacked", "lane_efficiency_pct", "buyback_count", "towers_killed", "roshans_killed", "life_state_dead", "observer_kills", "sentry_kills", "rank_tier"];
   const bench = b => b ? Object.fromEntries(Object.entries(b).map(([k, v]) => [k, v && v.pct != null ? Math.round(v.pct * 1000) / 1000 : null])) : null;
   const OBJ = new Set(["building_kill", "CHAT_MESSAGE_ROSHAN_KILL", "CHAT_MESSAGE_FIRSTBLOOD", "CHAT_MESSAGE_AEGIS"]);
@@ -84,7 +88,7 @@ function slimRuin(text) {
     obj: (m.objectives || []).filter(o => OBJ.has(o.type)).map(o => [o.time, o.type, o.team != null ? o.team : null, o.key || "", o.slot != null ? o.slot : null]),
     tf: (m.teamfights || []).map(t => [t.start, t.end, t.deaths, (t.players || []).map(p => [p.deaths || 0, p.damage || 0, p.healing || 0, p.gold_delta || 0, Object.values(p.killed || {}).reduce((a, b) => a + b, 0)])]),
     players: (m.players || []).map(p => ({ ...Object.fromEntries(keep.map(k => [k, p[k] == null ? null : p[k]])), bench: bench(p.benchmarks),
-      kl: (p.kills_log || []).map(k => [k.time, String(k.key || "").replace("npc_dota_hero_", "")]) })) });
+      kl: (p.kills_log || []).map(k => [k.time, String(k.key || "").replace("npc_dota_hero_", "")]), pl: plog(p) })) });
 }
 function slimHeroes(text) {
   const keep = ["id", "name", "localized_name", "primary_attr", "attack_type", "roles", "img", "icon", "turbo_picks", "turbo_wins", "pro_pick", "pro_win", "pro_ban", "pub_pick", "pub_win"];

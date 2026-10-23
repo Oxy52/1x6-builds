@@ -1913,6 +1913,15 @@
   .ru-t td { padding: 8px 10px; border-top: 1px solid var(--line); font-variant-numeric: tabular-nums; white-space: nowrap; } .ru-t tr.me td { background: rgba(243,195,90,.08); }
   .ru-th { display: flex; align-items: center; gap: 8px; min-width: 170px; } .ru-th img { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; } .ru-th b { display: block; max-width: 130px; overflow: hidden; text-overflow: ellipsis; } .ru-th small { color: var(--muted); font-size: 11.5px; }
   .ru-bar { position: relative; display: block; width: 90px; height: 20px; border-radius: 6px; background: rgba(255,255,255,.06); overflow: hidden; } .ru-bar i { position: absolute; inset: 0 auto 0 0; width: var(--v); background: linear-gradient(90deg, #f3c35a, #e8564a); } .ru-bar b { position: relative; padding-left: 7px; font-size: 12px; line-height: 20px; }
+  .d2m-sl { position: relative; display: inline-flex; flex-direction: column; align-items: center; } .d2m-sl em { font-style: normal; font-size: 9.5px; line-height: 1; color: var(--muted); margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .d2m-tip { margin: 6px 0 0; color: var(--muted); font-size: 12px; } .pacts { gap: 8px; }
+  .ru-t tbody tr.ru-row { cursor: pointer; } .ru-t tbody tr.ru-row:hover td { background: rgba(255,255,255,.03); } .ru-t tr.ru-row td:first-child::after { content: "▾"; margin-left: 6px; color: var(--muted); font-size: 11px; } .ru-t tr.ru-row.open td:first-child::after { content: "▴"; }
+  .ru-x td { background: var(--bg-soft); padding: 12px; white-space: normal; } .ru-xc { position: sticky; left: 12px; max-width: min(100%, calc(100vw - 64px)); }
+  .ru-sl { display: flex; flex-wrap: wrap; gap: 6px; align-items: flex-end; } .ru-it { display: flex; flex-direction: column; align-items: center; gap: 3px; width: 54px; } .ru-it img { width: 54px; height: 40px; object-fit: cover; border-radius: 7px; background: #111; } .ru-it.e i { width: 54px; height: 40px; border-radius: 7px; background: rgba(255,255,255,.04); border: 1px dashed var(--line); display: block; }
+  .ru-it small { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; min-height: 1em; } .ru-it.bp img { opacity: .55; width: 44px; height: 32px; } .ru-it.nt img { border-radius: 50%; width: 40px; height: 40px; } .ru-sep { width: 1px; align-self: stretch; background: var(--line); margin: 0 4px; }
+  .ru-tl { margin: 10px 0 0; display: flex; flex-wrap: wrap; gap: 6px; } .ru-tl span { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px 3px 3px; border-radius: 8px; background: rgba(255,255,255,.04); font-size: 12px; font-variant-numeric: tabular-nums; } .ru-tl img { width: 26px; height: 19px; border-radius: 4px; object-fit: cover; }
+  .ru-xa { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; } .ru-xa .btn { padding: 8px 14px; font-size: 13px; }
+  .ru-hh { font-family: inherit; font-size: 12.5px; font-weight: 500; color: var(--muted); margin-left: 6px; } .ru-nt { margin: 8px 0 0; font-size: 12.5px; color: var(--muted); }
   .ru-rec { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 8px; }
   .ru-r { display: flex; align-items: center; gap: 10px; padding: 9px 12px 9px 9px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); font: inherit; text-align: left; cursor: pointer; transition: border-color .2s, transform .2s; }
   .ru-r:hover { transform: translateY(-2px); border-color: rgba(232,86,74,.5); } .ru-r img { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; } .ru-r span { flex: 1; min-width: 0; } .ru-r b { display: block; font-size: 14px; } .ru-r small { color: var(--muted); font-size: 12px; }
@@ -2055,15 +2064,15 @@
     <div class="tabs" role="tablist" aria-label="Разделы">
       <button type="button" class="tab" role="tab" data-tab="dota" aria-selected="false"><span class="tab-ic d2ic">D2</span><span class="tl">Dota 2</span><span class="ts">Мета</span></button>
       <button type="button" class="tab" role="tab" data-tab="grids" aria-selected="false" aria-label="Сетки героев"><span class="tab-ic">▦</span><span class="tl">Сетки</span><span class="ts">Сетки</span></button>
-      <button type="button" class="tab" role="tab" data-tab="news" aria-selected="false" aria-label="Новости"><span class="tab-ic">📰</span><span class="tl">Новости</span><span class="ts">Новости</span></button>
       <button type="button" class="tab" role="tab" data-tab="ladder" aria-selected="false" aria-label="Топ MMR"><span class="tab-ic">🥇</span><span class="tl">Топ MMR</span><span class="ts">Топ MMR</span></button>
+      <button type="button" class="tab" role="tab" data-tab="ruin" aria-selected="false" aria-label="Кто заруинил?"><span class="tab-ic">🧨</span><span class="tl">Руинер</span><span class="ts">Руин</span></button>
       <button type="button" class="tab" role="tab" data-tab="1x6" aria-selected="true"><span class="tab-ic">1×6</span><span class="tl">Dota 1x6</span><span class="ts">Сборки</span></button>
       <button type="button" class="tab" role="tab" data-tab="custom" aria-selected="false"><span class="tab-ic">🧩</span><span class="tl">Hero Chaos</span><span class="ts">CHC</span></button>
       <button type="button" class="tab tab-more" id="tabMore" aria-haspopup="true" aria-expanded="false" aria-selected="false"><span class="tab-ic">⋯</span><span class="tl">Ещё</span><span class="ts">Ещё</span><span class="tab-car" aria-hidden="true">▾</span></button>
       <i class="tab-ink" id="tabInk"></i>
     </div>
     <div class="tab-menu" id="tabMenu" hidden>
-      <button type="button" class="tab" role="tab" data-tab="ruin" aria-selected="false"><span class="tab-ic">🧨</span><span class="tl">Кто заруинил?</span><span class="ts">Руин</span></button>
+      <button type="button" class="tab" role="tab" data-tab="news" aria-selected="false" aria-label="Новости"><span class="tab-ic">📰</span><span class="tl">Новости</span><span class="ts">Новости</span></button>
       <button type="button" class="tab" role="tab" data-tab="games" aria-selected="false"><span class="tab-ic">🎮</span><span class="tl">Мини-игры</span><span class="ts">Игры</span></button>
       <button type="button" class="tab" role="tab" data-tab="feed" aria-selected="false"><span class="tab-ic">💬</span><span class="tl">Лента</span><span class="ts">Лента</span></button>
       <button type="button" class="tab" role="tab" data-tab="rating" aria-selected="false"><span class="tab-ic">🏆</span><span class="tl">Рейтинг</span><span class="ts">Топ</span></button>
@@ -5847,7 +5856,9 @@ const D2 = (() => {
     if (!m || !m.players){ box.innerHTML = `<div class="d2h-top"><div><h3>Матч ${esc(id)}</h3><small>Не удалось загрузить матч. Возможно, он ещё не обработан — попробуй через пару минут.</small></div></div>`; return; }
     const H = hid => HEROES_D2 && HEROES_D2.find(x => x.id === +hid);
     const it = iid => { if (!iid) return null; const key = IDS && IDS[iid]; return key ? itemOf(key) : null; };
-    const slot = (iid, cls) => { const o = it(iid); return o ? `<img class="${cls || ""}" alt="" loading="lazy" src="${esc(o.img)}" title="${esc(o.name)}">` : `<i class="${cls || ""} e"></i>`; };
+    const tmm = t => t == null ? "" : (t < 0 ? "-" : "") + Math.floor(Math.abs(t) / 60) + ":" + String(Math.abs(t) % 60).padStart(2, "0");
+    const slot = (iid, cls, pl) => { const o = it(iid); if (!o) return `<i class="${cls || ""} e"></i>`; const t = pl ? buyTime(pl, o.key) : null;
+      return t != null ? `<span class="d2m-sl ${cls || ""}" title="${esc(o.name)} — ${tmm(t)}"><img alt="" loading="lazy" src="${esc(o.img)}"><em>${tmm(t)}</em></span>` : `<img class="${cls || ""}" alt="" loading="lazy" src="${esc(o.img)}" title="${esc(o.name)}">`; };
     const k = v => v >= 1000 ? (v / 1000).toFixed(1) + "k" : String(v || 0);
     const side = rad => m.players.filter(p => (p.player_slot < 128) === rad);
     const tname = rad => { const t = rad ? m.rt : m.dt; return t && t.name ? t.name : rad ? "Свет" : "Тьма"; };
@@ -5861,7 +5872,7 @@ const D2 = (() => {
         <span class="d2m-s"><b>${p.gold_per_min}<i>/</i>${p.xp_per_min}</b><small>GPM/XPM</small></span>
         <span class="d2m-s gold"><b>${k(p.net_worth)}</b><small>ценность</small></span>
         <span class="d2m-s"><b>${k(p.hero_damage)}</b><small>урон</small></span>
-        <span class="d2m-it">${[0, 1, 2, 3, 4, 5].map(i => slot(p["item_" + i])).join("")}${slot(p.item_neutral, "nt")}${p.aghanims_scepter ? `<span class="agh" title="Aghanim's Scepter">A</span>` : ""}${p.aghanims_shard ? `<span class="agh sh" title="Aghanim's Shard">S</span>` : ""}</span></div>`; };
+        <span class="d2m-it">${[0, 1, 2, 3, 4, 5].map(i => slot(p["item_" + i], "", p.pl)).join("")}${slot(p.item_neutral, "nt")}${p.aghanims_scepter ? `<span class="agh" title="Aghanim's Scepter">A</span>` : ""}${p.aghanims_shard ? `<span class="agh sh" title="Aghanim's Shard">S</span>` : ""}</span></div>`; };
     const team = rad => { const ps = side(rad), win = rad === !!m.rw, sum = f => ps.reduce((a, p) => a + (p[f] || 0), 0);
       return `<div class="d2m-team ${rad ? "rad" : "dire"}${win ? " win" : ""}"><div class="d2m-th">${tlogo(rad)}<b translate="no">${esc(tname(rad))}</b>${win ? `<em>Победа</em>` : ""}<small>${sum("kills")} убийств · ${k(sum("net_worth"))} золота</small></div>${ps.map(row).join("")}</div>`; };
     const pb = (m.pb || []).length ? `<div class="psec"><h4>Драфт</h4><div class="d2m-pb">${[0, 1].map(t => `<div class="${t ? "dire" : "rad"}"><b translate="no">${esc(tname(!t))}</b><div>${m.pb.filter(x => x[2] === t).sort((a, b) => a[3] - b[3]).map(x => { const h = H(x[0]); return h ? `<img class="${x[1] ? "pk" : "bn"}" alt="" loading="lazy" src="${esc(hicon(h))}" title="${esc(h.localized_name)}${x[1] ? "" : " (бан)"}">` : ""; }).join("")}</div></div>`).join("")}</div></div>` : "";
@@ -5873,7 +5884,9 @@ const D2 = (() => {
       <p class="d2m-meta">${m.rw ? "Победа Света" : "Победа Тьмы"} · ${esc(MODES[m.mode] || "Матч")}${m.league ? ` · <span translate="no">${esc(m.league)}</span>` : ""} · ${ago(m.start)}${m.fb ? ` · первая кровь ${dur(m.fb)}` : ""}</p>
       ${m.gold && m.gold.length > 1 ? `<div class="psec"><h4>Преимущество по золоту</h4>${goldSvg(m.gold)}<p class="d2m-gn"><span class="r">▲ Свет</span><span>в конце: ${fin >= 0 ? "Свет" : "Тьма"} +${k(Math.abs(fin))}</span><span class="d">▼ Тьма</span></p></div>` : ""}
       <div class="psec">${team(true)}${team(false)}</div>${pb}
-      <div class="pacts"><button type="button" class="btn btn-primary" id="d2MSh">📤 Поделиться матчем</button></div><div style="height:20px"></div>`;
+      ${(m.players || []).some(p => p.pl && p.pl.length) ? `<p class="d2m-tip">Под предметами — минута, на которой предмет был собран.</p>` : ""}
+      <div class="pacts"><button type="button" class="btn btn-ghost" id="d2MRu">🧨 Кто заруинил?</button><button type="button" class="btn btn-primary" id="d2MSh">📤 Поделиться матчем</button></div><div style="height:20px"></div>`;
+    box.querySelector("#d2MRu").onclick = () => { closeModal(); setTab("ruin"); if (typeof RUIN !== "undefined") RUIN.load(m.id); };
     box.querySelectorAll("[data-acc]").forEach(el => { const go = () => player(el.dataset.acc); el.onclick = go; el.onkeydown = e => { if (e.key === "Enter"){ e.preventDefault(); go(); } }; });
     box.querySelector("#d2MSh").onclick = () => shareLink(`${SITE_URL}/?d2m=${m.id}`, `Матч ${m.id} — ${tname(true)} vs ${tname(false)}`, `Счёт ${m.rs}:${m.ds}, ${dur(m.dur)}`);
   }
@@ -5994,7 +6007,10 @@ const D2 = (() => {
   }
   const loadHeroes = async () => { if (!HEROES_D2) HEROES_D2 = await get("heroStats"); return HEROES_D2; };
   const pickHeroSafe = async (title, ex, cb) => { try { await loadHeroes(); } catch(e) { return; } pickHero(title, ex, cb); };
-  return { open, hero, heroBySlug, player, match, sub, get, img, itemsMeta, items: () => ITEMS, heroes: () => HEROES_D2, loadHeroes, pickHero: pickHeroSafe };
+  const itemById = iid => { if (!iid) return null; const key = IDS && IDS[iid]; return key ? itemOf(key) : null; };
+  // во сколько игрок собрал предмет из слота: последняя покупка этого предмета
+  const buyTime = (pl, key) => { if (!pl || !key) return null; let t = null; for (const [tm, k] of pl) if (k === key) t = tm; return t; };
+  return { open, hero, heroBySlug, player, match, sub, get, img, itemsMeta, itemById, buyTime, items: () => ITEMS, heroes: () => HEROES_D2, loadHeroes, pickHero: pickHeroSafe };
 })();
 
 /* ---------- AI-помощник (запросы к /api/ai) ---------- */
@@ -6601,7 +6617,8 @@ const NEWS = (() => {
   const updTxt = () => { const d = new Date(UPDATED + "T12:00:00"); try { return d.toLocaleDateString(TL === "ru" ? "ru-RU" : TL, { day: "numeric", month: "long", year: "numeric" }); } catch(e) { return UPDATED; } };
 
   function dot(){ const fresh = TOP > seen || autoTop() > seenT; document.querySelectorAll('.tab[data-tab="news"]').forEach(tb => { let d = tb.querySelector(".ndot");
-    if (fresh && !d){ d = document.createElement("i"); d.className = "ndot"; d.setAttribute("aria-hidden", "true"); tb.appendChild(d); } else if (!fresh && d) d.remove(); }); }
+    if (fresh && !d){ d = document.createElement("i"); d.className = "ndot"; d.setAttribute("aria-hidden", "true"); tb.appendChild(d); } else if (!fresh && d) d.remove(); });
+    const mo = document.getElementById("tabMore"); if (mo){ let d = mo.querySelector(".ndot"); if (fresh && !d){ d = document.createElement("i"); d.className = "ndot"; d.setAttribute("aria-hidden", "true"); mo.appendChild(d); } else if (!fresh && d) d.remove(); } }
   function go(){ setTab("news"); }
   function icon(n){ const h = n.hero && H(n.hero);
     return h ? `<button type="button" class="nic" data-s="${h.slug}" style="${vars(h)}" aria-label="Сборка ${h.en}" title="Сборка ${h.en}"><img alt="" loading="lazy" src="face/${h.slug}.webp"></button>`
@@ -7147,6 +7164,6 @@ render();
 </script>
 
 <script src="/grids.js?v=11" defer></script>
-<script src="/ruin.js?v=1" defer></script>
+<script src="/ruin.js?v=3" defer></script>
 </body>
 </html>
