@@ -29,7 +29,7 @@
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Blazecrest", "url": "https://blazecrest.vercel.app/", "inLanguage": "ru", "description": "Сборки для кастомки Dota 1x6: 54 героя, предметы по этапам игры. Готовые билды Custom Hero Chaos, мета и винрейты Dota 2, мини-игры, рейтинг и онлайн-дуэли."}</script>
-<script>window.START_TAB = "1x6";</script>
+<script>window.START_TAB = "dota";</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.100.0/dist/umd/supabase.min.js"></script>
 <script>window.SB_CONF = { url: "https://vsmjjlrgjyujaioknlkn.supabase.co", key: "sb_publishable_tJy3dl_kfNZXP6PXMqsQVQ_RUXqoPmn" };</script>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -7479,7 +7479,7 @@ const GAMES = (() => {
 
 /* ---------- вкладки ---------- */
 const TABS = ["dota", "grids", "news", "ladder", "1x6", "custom", "ruin", "games", "feed", "rating", "cs", "deadlock"];
-let curTab = "1x6", lastDota = "1x6";
+let curTab = "1x6", lastDota = "dota";
 function inkTo(btn, instant){ const ink = document.getElementById("tabInk"), bar = btn.parentElement; if (!ink) return;
   if (instant){ ink.style.transition = "none"; requestAnimationFrame(() => ink.style.transition = ""); }
   ink.style.width = btn.offsetWidth + "px"; ink.style.transform = `translateX(${btn.offsetLeft - 5 + 5}px)`; }
@@ -7523,7 +7523,7 @@ document.querySelectorAll(".gcard").forEach(c => c.onclick = () => ({ arena: () 
 document.getElementById("feedMore").onclick = () => PROF.feedMore();
 document.querySelectorAll(".rkc").forEach(b => b.onclick = () => PROF.ratingOpen(b.dataset.k));
 document.getElementById("plQ").addEventListener("input", e => PROF.loadPlayers(e.target.value));
-{ let h = (location.hash || "").slice(1); if (h === "soon") h = "custom"; if (!TABS.includes(h) && window.START_TAB) h = window.START_TAB; setTab(TABS.includes(h) ? h : "1x6", { instant: true, keepHash: true, noScroll: true }); }
+{ let h = (location.hash || "").slice(1); if (h === "soon") h = "custom"; if (!TABS.includes(h) && window.START_TAB) h = window.START_TAB; setTab(TABS.includes(h) ? h : "dota", { instant: true, keepHash: true, noScroll: true }); }
 { const qs = new URLSearchParams(location.search), hs = qs.get("h"), dh = qs.get("d2h");
   if (hs){ const h = HEROES.find(x => x.slug === hs); if (h) setTimeout(() => openHero(h), 700); }
   if (dh && /^\d{1,3}$/.test(dh)) setTimeout(() => { setTab("dota", { noScroll: true }); D2.hero(+dh); }, 700);
