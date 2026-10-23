@@ -63,10 +63,36 @@ const NEEDS_ID = new Set(["player", "wl", "recent", "pheroes", "match", "pmatche
 const TTL = { items: 86400, itemIds: 86400, abilities: 86400, builds: 43200, pros: 21600, ladder: 1800, ladderTop: 1800, search: 600, player: 300, wl: 300, recent: 300, pheroes: 600, match: 86400, pmatches: 300, ruin: 900 };
 
 const withKey = url => KEY ? url + (url.includes("?") ? "&" : "?") + "api_key=" + encodeURIComponent(KEY) : url;
-async function od(path) {
-  const r = await fetch(withKey(BASE + path), { signal: AbortSignal.timeout(9000), headers: UA });
+async function odLive(path) {
+  const r = await fetch(withKey(BASE + path), { signal: AbortSignal.timeout(8000), headers: UA });
   if (!r.ok) { const e = new Error("upstream"); e.status = r.status; throw e; }
   return r.text();
+}
+// если OpenDota лежит: справочники (/constants/...) берём из их же репозитория на GitHub,
+// остальное — из последней копии этого адреса в интернет-архиве (Wayback Machine)
+const ARCH = new Map();
+async function odBackup(path) {
+  const c = /^\/constants\/([a-z_]+)$/.exec(path);
+  if (c) { const r = await fetch(`https://raw.githubusercontent.com/odota/dotaconstants/master/build/${c[1]}.json`, { signal: AbortSignal.timeout(8000), headers: UA });
+    if (r.ok) return r.text(); }
+  if (path.startsWith("/explorer")) return null;
+  const hit = ARCH.get(path); if (hit && Date.now() - hit.t < 36e5) return hit.text;
+  const a = await fetch(`https://archive.org/wayback/available?url=${encodeURIComponent("api.opendota.com/api" + path)}`, { signal: AbortSignal.timeout(8000), headers: UA }).then(r => r.json()).catch(() => null);
+  const snap = a && a.archived_snapshots && a.archived_snapshots.closest;
+  if (!snap || !snap.available || String(snap.status) !== "200") return null;
+  const r = await fetch(`https://web.archive.org/web/${snap.timestamp}id_/https://api.opendota.com/api${path}`, { signal: AbortSignal.timeout(12000), headers: UA });
+  if (!r.ok) return null; const text = await r.text(); try { JSON.parse(text); } catch (e) { return null; }
+  ARCH.set(path, { t: Date.now(), text }); return text;
+}
+// упала — пару минут не ждём её зря и сразу идём в запасной источник
+let odDownUntil = 0, bkHits = 0;
+async function od(path) {
+  if (Date.now() > odDownUntil) {
+    try { return await odLive(path); }
+    catch (e) { if (!e.status || e.status >= 500) odDownUntil = Date.now() + 120e3; const b = await odBackup(path).catch(() => null); if (b){ bkHits++; return b; } throw e; }
+  }
+  const b = await odBackup(path).catch(() => null); if (b){ bkHits++; return b; }
+  return odLive(path);
 }
 const clean = s => String(s || "").replace(/<[^>]+>/g, "").replace(/%[a-z_]+%%?/gi, "").replace(/\s+/g, " ").trim();
 
@@ -228,7 +254,7 @@ module.exports = async (req, res) => {
   if (NEEDS_ID.has(q) && !/^\d{1,12}$/.test(String(p.id || ""))) return fail(400, "bad_id");
   if (q === "search" && !(String(p.name || "").trim().length >= 2 && String(p.name).length <= 40)) return fail(400, "bad_name");
   try {
-    let out;
+    let out; const bk0 = bkHits;
     if (q === "abilities") out = await abilities();
     else if (q === "builds") out = await builds(+p.hero);
     else if (q === "pros") out = await pros();
@@ -243,7 +269,9 @@ module.exports = async (req, res) => {
     let ttl = TTL[q] || 21600;
     if (q === "ruin") { try { if (JSON.parse(out).parsed) ttl = 86400; else ttl = 120; } catch (e) {} }
     res.setHeader("Cache-Control", `public, max-age=${Math.min(600, ttl)}, s-maxage=${ttl}, stale-while-revalidate=${ttl * 4}`);
-    if (BACKUP.has(q)) await backupSave(backupKey(q, p), out);
+    // данные из запасного источника кешируем ненадолго, чтобы после возвращения OpenDota быстро стали свежими
+    if (bkHits !== bk0) { res.setHeader("Cache-Control", "public, max-age=300, s-maxage=900"); res.setHeader("X-Backup-From", "archive"); }
+    else if (BACKUP.has(q)) await backupSave(backupKey(q, p), out);
     return res.status(200).send(out);
   } catch (e) {
     if (BACKUP.has(q)) { const b = await backupLoad(backupKey(q, p));
