@@ -1,12 +1,1 @@
-dota2exe | <meta property="og:title" content="Евгений" | posts=0
-dota2_exe | <meta property="og:title" content="Mumba Mumbetovich" | posts=0
-dotaexe | <meta property="og:title" content="A R" | posts=0
-dota_exe | <meta property="og:title" content="vlad" | posts=0
-dota2exe_news | <meta property="og:title" content="Telegram: Contact @dota2exe_news" | posts=0
-dota2exenews | <meta property="og:title" content="dota" | posts=1
-exedota | <meta property="og:title" content="octinomos" | posts=1
-dota2dotexe | <meta property="og:title" content="Telegram: Contact @dota2dotexe" | posts=0
-dotaa2exe | <meta property="og:title" content="Telegram: Contact @dotaa2exe" | posts=0
-dota2_exe_news | <meta property="og:title" content="Dota2.exe" | posts=20
-dota2exeru | <meta property="og:title" content="Telegram: Contact @dota2exeru" | posts=0
-dota2exe_ru | <meta property="og:title" content="Telegram: Contact @dota2exe_ru" | posts=0
+done
