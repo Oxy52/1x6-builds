@@ -19,7 +19,7 @@ const DL = "https://api.deadlock-api.com/v1";
 // язык сайта -> язык Valve в Deadlock (как в api/news.js)
 const LNG = { ru: "russian", uk: "ukrainian", en: "english", es: "spanish", pt: "brazilian", de: "german", pl: "polish", tr: "turkish",
   fr: "french", it: "italian", kk: "russian", be: "russian", nl: "english", zh: "schinese", ja: "japanese", ko: "koreana" };
-const TTL = { csTeams: 21600, csTeam: 21600, csMatches: 120, csMatch: 86400, csTeamM: 600, dlMatches: 120, dlMatch: 86400, dlHeroes: 21600, dlHero: 21600, dlOrder: 43200, dlItems: 86400, csMarket: 3600, market: 3600, lots: 1800 };
+const TTL = { csTeams: 21600, csTeam: 21600, csMatches: 120, csMatch: 86400, img: 604800, csTeamM: 600, dlMatches: 120, dlMatch: 86400, dlHeroes: 21600, dlHero: 21600, dlOrder: 43200, dlItems: 86400, csMarket: 3600, market: 3600, lots: 1800 };
 
 async function get(url, type = "json") {
   const r = await fetch(url, { headers: UA, signal: AbortSignal.timeout(20000) });
@@ -175,10 +175,12 @@ async function lots(g, name) {
 // ---------- матчи CS2: bo3.gg (открытое API их сайта, без ключа) ----------
 const B3 = "https://api.bo3.gg/api/v1";
 const b3 = path => get(B3 + path);
-const b3team = t => t ? { n: t.name, img: t.image_url || "", slug: t.slug } : { n: "TBD", img: "" };
+// картинки bo3.gg отдаём через свой сервер: у части зрителей их домен заблокирован
+const px = u => /^https:\/\/files\.bo3\.gg\//.test(u || "") ? "/api/games?q=img&u=" + encodeURIComponent(u) : "";
+const b3team = t => t ? { n: t.name, img: px(t.image_url), slug: t.slug } : { n: "TBD", img: "" };
 const b3match = m => ({ s: m.slug, st: m.status === "current" ? "live" : m.status === "upcoming" ? "soon" : "done", d: m.start_date, bo: m.bo_type,
   a: { ...b3team(m.team1), sc: m.team1_score }, b: { ...b3team(m.team2), sc: m.team2_score }, w: m.winner_team_id ? (m.winner_team_id === m.team1_id ? 1 : 2) : 0,
-  t: m.tournament ? { n: m.tournament.name, img: m.tournament.image_url || "" } : null, tier: m.tier });
+  t: m.tournament ? { n: m.tournament.name, img: px(m.tournament.image_url) } : null, tier: m.tier });
 const LIST = "&filter[matches.discipline_id][eq]=1&with=teams,tournament";
 
 async function csMatches() {
@@ -203,7 +205,7 @@ async function csMatch(slug) {
     const sc = ws === 2 ? [g.loser_clan_score, g.winner_clan_score] : [g.winner_clan_score, g.loser_clan_score];
     return { n: g.number, map: String(g.map_name || "").replace(/^de_/, ""), live, w: live ? 0 : ws, sc,
       rounds: (gr.game_rounds || []).sort((a, b) => a.round_number - b.round_number).map(r => [side(r.winner_clan_name), END(r.end_reason || ""), r.winner_clan_side === "CT" ? "ct" : "t"]),
-      players: (Array.isArray(ps) ? ps : []).map(x => ({ n: x.steam_profile?.player?.nickname || x.steam_profile?.nickname || "?", img: x.steam_profile?.player?.image_url || "",
+      players: (Array.isArray(ps) ? ps : []).map(x => ({ n: x.steam_profile?.player?.nickname || x.steam_profile?.nickname || "?", img: px(x.steam_profile?.player?.image_url),
         tm: side(x.clan_name), k: x.kills, d: x.death, a: x.assists, hs: x.headshots, fk: x.first_kills, fd: x.first_death, adr: Math.round(x.adr || 0),
         kast: Math.round((x.kast || 0) * 100), r: x.player_rating != null ? +(+x.player_rating).toFixed(2) : null, cl: x.clutches || 0 })) };
   }));
@@ -218,7 +220,7 @@ async function csTeamM(name) {
   if (!t) t = ((await b3(`/teams?filter[teams.slug][eq]=${encodeURIComponent(name.toLowerCase().replace(/[^a-z0-9]+/g, "-"))}${f}`)).results || [])[0];
   if (!t) return { found: false, matches: [] };
   const r = await b3(`/matches?page[limit]=16&sort=-start_date&filter[matches.team_ids][overlap]=${t.id}${LIST}`);
-  return { found: true, team: { n: t.name, img: t.image_url || "", rank: t.rank }, matches: (r.results || []).map(b3match) };
+  return { found: true, team: { n: t.name, img: px(t.image_url), rank: t.rank }, matches: (r.results || []).map(b3match) };
 }
 
 // ---------- матчи Deadlock (deadlock-api.com) ----------
@@ -306,6 +308,11 @@ module.exports = async (req, res) => {
   const q = String(req.query.q || ""), lang = LNG[String(req.query.lang || "ru")] || "english";
   const fail = (code, error) => { res.setHeader("Cache-Control", "public, s-maxage=60"); res.status(code).json({ error }); };
   if (!TTL[q]) return fail(400, "bad_query");
+  if (q === "img") { const u = String(req.query.u || "");
+    if (!/^https:\/\/files\.bo3\.gg\/uploads\/[\w\/.-]+\.(webp|png|jpe?g)$/.test(u)) return fail(400, "bad_url");
+    try { const r = await fetch(u, { headers: { "User-Agent": UA["User-Agent"] }, signal: AbortSignal.timeout(15000) }); if (!r.ok) return fail(404, "no_image");
+      res.setHeader("Content-Type", r.headers.get("content-type") || "image/webp"); res.setHeader("Cache-Control", "public, max-age=604800, s-maxage=2592000, immutable");
+      return res.status(200).send(Buffer.from(await r.arrayBuffer())); } catch (e) { return fail(502, "upstream"); } }
   try {
     let out;
     if (q === "csTeams") out = await csTeams();
