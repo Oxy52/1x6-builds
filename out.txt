@@ -1,9 +1,44 @@
-emberwing vercel=200 com=302 gg=404 <!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initia
-blazecrest vercel=404 com=302 gg=404 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  cle1::ztg4g-1792723670344-119ba33debe4 
-pyrewing vercel=404 com=302 gg=404 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  cle1::cmgwb-1792723670759-5ad2daa7461b 
-ashguard vercel=200 com=302 gg=404 <!DOCTYPE html><html lang="en" class="geist_2ae47f08-module__h69qWW__variable geist_mono_eb58308d-module__w_p2Lq__variab
-emberguard vercel=200 com=302 gg=404 <!DOCTYPE html><html><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" d
-firecrest vercel=404 com=302 gg=429 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  cle1::l86l9-1792723672449-d1ad4ccda5bf 
-crestfall vercel=200 com=429 gg=429 <!doctype html> <html lang="en">   <head>     <meta charset="UTF-8" />     <meta name="viewport" content="width=device-w
-wingforge vercel=404 com=429 gg=429 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  cle1::x2hnq-1792723673253-165ef3f68513 
-pyrecrest vercel=404 com=429 gg=429 The deployment could not be found on Vercel.  DEPLOYMENT_NOT_FOUND  cle1::k855r-1792723673571-ca21256ff0d4 
+== setup webhook
+{"ok":true,"description":"Webhook was set"}
+== tg conf
+{"enabled":true,"bot_id":"8921419184","bot":"builds1x6_bot"}
+== poll
+{"wait":true}
+== headers
+content-security-policy: frame-ancestors 'self'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests
+cross-origin-opener-policy: same-origin-allow-popups
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+referrer-policy: strict-origin-when-cross-origin
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+== security.txt
+200
+== anon select payments
+[]
+== anon select subscriptions
+[{"user_id":"cea5467a-22bb-4791-9416-0c1b6576cada","until":"2026-10-24T18:49:39.131218+00:00","plan":"trial","since":"2026-10-21T18:49:39.131218+00:00","updated_at":"2026-10-21T18:49:39.131218+00:00"}]
+== anon select admins
+[{"user_id":"cea5467a-22bb-4791-9416-0c1b6576cada"}]
+== anon select ai_usage
+{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.ai_usage' in the schema cache"}
+== anon select support_messages
+[]
+== anon select xp_daily
+[]
+== anon select referrals
+[]
+== anon insert profiles
+{"code":"42501","details":null,"hint":null,"message":"new row violates row-level security policy for table \"profiles\""}
+== anon update profiles
+[]
+== anon insert admins
+{"code":"42501","details":null,"hint":null,"message":"new row violates row-level security policy for table \"admins\""}
+== anon insert subscriptions
+{"code":"42501","details":null,"hint":null,"message":"new row violates row-level security policy for table \"subscriptions\""}
+== storage tglogin public
+{"statusCode":"404","error":"Bucket not found","message":"Bucket not found","code":"NoSuchBucket"}
+== storage list buckets anon
+[]
+== rpc list
+{"message":"Secret API key required","hint":"Only secret API keys can be used for this endpoint."}
