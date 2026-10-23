@@ -1348,6 +1348,7 @@
   .oauth { display: grid; gap: 10px; }
   .ob { position: relative; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 50px; border-radius: 14px; font: inherit; font-weight: 700; font-size: 15px; cursor: pointer; border: 1px solid var(--line); transition: transform .15s, filter .2s; }
   .ob svg { width: 20px; height: 20px; flex: none; }
+  .ob .ob-ic { width: 22px; height: 22px; flex: none; border-radius: 50%; display: block; }
   .ob:active:not(:disabled) { transform: scale(.98); }
   .ob:hover:not(:disabled) { filter: brightness(1.08); }
   .ob.google { background: #fff; color: #1f1f1f; }
@@ -3090,7 +3091,7 @@ const PROF = (() => {
           <button type="button" class="ob google" data-p="google">${IC.google}<span>Войти через Google</span></button>
           <button type="button" class="ob discord" data-p="discord">${IC.discord}<span>Войти через Discord</span></button>
           <button type="button" class="ob telegram off" id="tgBtn" disabled>${IC.telegram}<span>Войти через Telegram</span><em>скоро</em></button>
-          <button type="button" class="ob steam" id="stBtn"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 11h4M8 9v4M15 12h.01M18 10h.01"/><path d="M17.3 5H6.7a4 4 0 0 0-3.95 3.37l-.94 6.07A3 3 0 0 0 4.77 18c.98 0 1.9-.48 2.46-1.29L8.5 15h7l1.27 1.71A3 3 0 0 0 19.23 18a3 3 0 0 0 2.96-3.56l-.94-6.07A4 4 0 0 0 17.3 5z"/></svg><span>Войти через Steam</span></button>
+          <button type="button" class="ob steam" id="stBtn"><img class="ob-ic" src="/games/steam.png" alt="" width="22" height="22"><span>Войти через Steam</span></button>
         </div>
         <details class="steam-safe"><summary>🔒 Вход через Steam безопасен — почему?</summary><ul><li>Ты входишь на <b>официальном сайте Steam</b> (steamcommunity.com) — пароль и код Steam Guard вводишь там, а не у нас.</li><li>Steam сообщает нам только твой <b>Steam ID</b>. Ник и аватар берём из открытого профиля.</li><li>Мы <b>не получаем</b> пароль, почту, инвентарь, скины, баланс и не можем ничего делать от твоего имени.</li><li>Это стандартный вход «Sign in through Steam», как на Dotabuff и торговых площадках.</li></ul></details>
         <div class="or"><span>или по почте</span></div>`}
