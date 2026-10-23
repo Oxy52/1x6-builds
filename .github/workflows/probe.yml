@@ -8,6 +8,6 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           set +e
-          for n in aegis aegis-dota aegisdota aegis-gg aegis-1x6 aegis1x6 aegis-builds aegis-site aegisgg aegis-hub; do
+          for n in aegisforge aegisvault aegisarena aegisnest aegiscore aegisx aegisly aegisio aegispick aegisdraft aegiszone aegisplay aegishq myaegis getaegis aegisworld; do
             r=$(curl -s -m 15 -o /tmp/b -w '%{http_code}' https://$n.vercel.app/); echo "$n $r $(head -c 120 /tmp/b | tr '\n' ' ')"; done > out.txt
           set -e; git config user.name p; git config user.email p@p; git add -A out.txt; git commit -m r; git push
