@@ -1887,6 +1887,9 @@
   .ns-all { flex: none; background: none; border: 0; color: var(--muted); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; padding: 6px 8px; } .ns-all:hover { color: var(--fg); }
   .ncard.nhl { animation: nHl 1.6s ease; } @keyframes nHl { 0%, 50% { box-shadow: 0 0 0 2px #f3c35a, 0 0 30px -6px #f3c35a; } 100% { box-shadow: none; } }
   @media (max-width: 600px) { .ns-l { display: none; } .nstrip { padding-left: 6px; } .ns-i { max-width: 210px; font-size: 12.5px; } }
+  .curwarn { display: grid; gap: 12px; text-align: center; padding: 6px 2px; } .curwarn h3 { margin: 0; font-family: var(--display); font-size: 21px; } .curwarn p { margin: 0; color: var(--muted); line-height: 1.5; font-size: 14.5px; }
+  .cw-ic { justify-self: center; width: 58px; height: 58px; border-radius: 18px; display: grid; place-items: center; font-size: 28px; font-weight: 800; color: #f3c35a; background: rgba(243,195,90,.12); border: 1px solid rgba(243,195,90,.35); }
+  .cw-no { justify-self: center; display: inline-flex; gap: 8px; align-items: center; color: var(--muted); font-size: 13.5px; cursor: pointer; } .cw-a { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
   /* ---------- Кто заруинил? ---------- */
   .ru-hero { position: relative; isolation: isolate; overflow: hidden; min-height: 340px; padding: 34px 30px; border-radius: 28px; border: 1px solid color-mix(in srgb, #e8564a 30%, var(--line)); background: radial-gradient(70% 90% at 85% 100%, rgba(232,86,74,.22), transparent 65%), linear-gradient(160deg, #1a0f12, #0b0b10 70%); }
   .ru-f { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2; }
@@ -1959,6 +1962,7 @@
   .gr-like[aria-pressed="true"] { border-color: rgba(255,90,110,.5); background: rgba(255,90,110,.12); }
   .gr-pvi { width: 100%; border-radius: 12px; border: 1px solid var(--line); display: block; } .gr-pvw { width: 100%; }
   .gr-th { aspect-ratio: 1193 / 593 !important; background: #0e1a1c; } .gr-th canvas { width: 100%; height: 100%; display: block; }
+  .gr-no { padding: 14px 16px; border-radius: 14px; border: 1px solid rgba(255,122,110,.45); background: rgba(255,90,70,.08); } .gr-no b:first-child { display: block; color: #ff7a6e; font-size: 16px; margin-bottom: 6px; } .gr-no p { margin: 0; line-height: 1.5; font-size: 14px; }
   .gr-cm { border-top: 1px solid var(--line); padding-top: 12px; } .gr-cm h4 { margin: 0 0 8px; font-family: var(--display); }
   .gr-cml { display: grid; gap: 6px; max-height: 300px; overflow-y: auto; overscroll-behavior: contain; margin-bottom: 10px; }
   .gr-c { position: relative; padding: 9px 34px 9px 12px; border-radius: 12px; background: var(--bg-soft); border: 1px solid var(--line); } .gr-c b { font-size: 13.5px; } .gr-c span { margin-left: 8px; font-size: 12px; color: var(--muted); }
@@ -6901,6 +6905,22 @@ const GAMES = (() => {
   const LOGO = { steam: "/games/steam.png", lis: "/games/lisskins.png", csm: "/games/csmoney.png" };
   const logo = p => LOGO[p.k] || `https://www.google.com/s2/favicons?domain=${encodeURIComponent(p.d)}&sz=64`;
   const SYM = { uah: "₴", usd: "$", rub: "₽", eur: "€" };
+  // в какой валюте можно платить на площадке (Steam — в валюте кошелька, поэтому подходит любая)
+  const MCUR = { lis: ["usd", "eur"], skinport: ["usd", "eur"], csm: ["usd"], csfloat: ["usd", "eur"], tm: ["rub", "usd", "eur"] };
+  const CNAME = { uah: "гривен", usd: "долларов", rub: "рублей", eur: "евро" }, CSYM = c => SYM[c] || c;
+  function curWarn(a, e){
+    const k = a.dataset.k, ok = MCUR[k], c = cur(); if (!ok || ok.includes(c)) return false;
+    try { if (localStorage.getItem("ub-curwarn-off") === "1") return false; } catch(_) {}
+    e.preventDefault(); const name = a.dataset.n || "площадке", url = a.href;
+    const g = openPanel(`<div class="curwarn"><div class="cw-ic">${CSYM(c)}</div><h3>На ${esc(name)} нет ${CNAME[c] || c.toUpperCase()}</h3>
+      <p>У тебя на сайте выбрана валюта <b>${c.toUpperCase()}</b>, а ${esc(name)} принимает только ${ok.map(x => `<b>${x.toUpperCase()} ${CSYM(x)}</b>`).join(" и ")}. Цены там будут в другой валюте, а при оплате банк может взять комиссию за конвертацию.</p>
+      <label class="cw-no"><input type="checkbox" id="cwNo"> Больше не показывать</label>
+      <div class="cw-a"><button type="button" class="btn btn-ghost" id="cwBack">Остаться</button><button type="button" class="btn btn-primary" id="cwGo">Перейти на ${esc(name)}</button></div></div>`);
+    const save = () => { if (g.querySelector("#cwNo").checked) try { localStorage.setItem("ub-curwarn-off", "1"); } catch(_) {} };
+    g.querySelector("#cwBack").onclick = () => { save(); closeModal(); };
+    g.querySelector("#cwGo").onclick = () => { save(); closeModal(); window.open(url, "_blank", "noopener"); };
+    return true;
+  }
   const MKS = {};
   const cur = () => typeof CURSEL !== "undefined" ? CURSEL.get() : "usd";
   const money = (m, v) => { if (v == null) return "—"; const c = m.fx ? cur() : "usd", x = v * (m.fx ? m.fx[c] || 1 : 1);
@@ -6926,7 +6946,8 @@ const GAMES = (() => {
       <div class="mk-legend"></div>
       <div class="mk-list">${sk(4)}</div>
       <p class="db-note"><span>Цены — самый дешёвый лот на каждой площадке, в валюте сайта по текущему курсу.</span> <span>Steam, Lis-skins, Skinport и Market обновляются раз в час.</span>${g === "cs" ? ` <span>CS.money и CSFloat — раз в сутки (отмечены ⏱).</span>` : ""} <span>Зелёная — самая выгодная.</span> <span>Нажми на площадку — откроется эта вещь на её сайте.</span> <span>Мы ничего не продаём, только показываем цены.</span></p>`;
-    el.onclick = e => { const fv = e.target.closest(".mk-fav");
+    el.onclick = e => { const mp = e.target.closest("a.mk-p"); if (mp && curWarn(mp, e)) return;
+      const fv = e.target.closest(".mk-fav");
       if (fv){ e.preventDefault(); const n = fv.dataset.n, list = favs(g), k = list.findIndex(x => x.n === n);
         if (k >= 0){ list.splice(k, 1); PROF.toast("Убрано из избранного"); } else { const it = m.items.find(x => x.n === n); if (it){ list.unshift(it); PROF.toast("Добавлено в избранное ★"); } }
         favSet(g, list); favCount(m); if (m.cat === "fav" && !m.q){ m.items = favs(g); m.total = m.items.length; mkDraw(m); }
@@ -6957,7 +6978,7 @@ const GAMES = (() => {
       const fo = FV.has(i.n);
       return `<article class="mk-it"${i.col ? ` style="--rc:#${esc(i.col)}"` : ""}><button type="button" class="mk-fav" data-n="${esc(i.n)}" aria-pressed="${fo}" aria-label="${fo ? "Убрать из избранного" : "В избранное"}">${fo ? "★" : "☆"}</button><div class="mk-img">${i.img ? `<img alt="" loading="lazy" src="${esc(i.img)}">` : ""}</div>
         <div class="mk-n"><b translate="no">${esc(i.n)}</b>${lo ? `<small class="mk-from"><span>Дешевле всего:</span> <b>${money(m, lo.v)}</b> · <span translate="no">${esc(lo.name)}</span></small>` : ""}${save >= 5 && has.length > 1 ? `<small class="mk-save"><span>Выгода до</span> ${save}%</small>` : ""}</div>
-        <div class="mk-ps">${ps.map(p => `<a class="mk-p${lo && p === lo ? " best" : ""}${p.v == null ? " none" : ""}" href="${esc(p.u)}" target="_blank" rel="noopener nofollow"><img alt="" loading="lazy" src="${esc(logo(p))}"><span><small translate="no">${esc(p.name)}${p.n ? ` · ${p.n}` : ""}${p.daily ? " ⏱" : ""}</small><b>${p.v == null ? "Поиск" : money(m, p.v)}</b></span></a>`).join("")}</div></article>`; }).join("")
+        <div class="mk-ps">${ps.map(p => `<a class="mk-p${lo && p === lo ? " best" : ""}${p.v == null ? " none" : ""}" data-k="${esc(p.k)}" data-n="${esc(p.name)}" href="${esc(p.u)}" target="_blank" rel="noopener nofollow"><img alt="" loading="lazy" src="${esc(logo(p))}"><span><small translate="no">${esc(p.name)}${p.n ? ` · ${p.n}` : ""}${p.daily ? " ⏱" : ""}</small><b>${p.v == null ? "Поиск" : money(m, p.v)}</b></span></a>`).join("")}</div></article>`; }).join("")
       + (m.items.length < Math.min(m.total, 100) ? `<button type="button" class="btn btn-ghost lad-more mk-more">Показать ещё</button>` : "");
   }
 
@@ -7207,7 +7228,7 @@ drawRecent();
 render();
 </script>
 
-<script src="/grids.js?v=15" defer></script>
+<script src="/grids.js?v=16" defer></script>
 <script src="/ruin.js?v=5" defer></script>
 </body>
 </html>
