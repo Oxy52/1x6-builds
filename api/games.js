@@ -99,7 +99,7 @@ const SRC = {
 const price = (k, g) => memo(k + g, SRC[k].ttl * 60e3, () => SRC[k].load(g));
 const CAT = {
   cs: { rifle: ["Type", "tag_CSGO_Type_Rifle"], sniper: ["Type", "tag_CSGO_Type_SniperRifle"], pistol: ["Type", "tag_CSGO_Type_Pistol"], knife: ["Type", "tag_CSGO_Type_Knife"],
-    gloves: ["Type", "tag_Type_Hands"], smg: ["Type", "tag_CSGO_Type_SMG"], case: ["Type", "tag_CSGO_Type_WeaponCase"], sticker: ["Type", "tag_CSGO_Tool_Sticker"] },
+    gloves: ["Type", "tag_Type_Hands"], agent: ["Type", "tag_Type_CustomPlayer"], smg: ["Type", "tag_CSGO_Type_SMG"], case: ["Type", "tag_CSGO_Type_WeaponCase"], sticker: ["Type", "tag_CSGO_Tool_Sticker"] },
   dota: { arcana: ["Rarity", "tag_Rarity_Arcana"], immortal: ["Rarity", "tag_Rarity_Immortal"], legendary: ["Rarity", "tag_Rarity_Legendary"], mythical: ["Rarity", "tag_Rarity_Mythical"],
     courier: ["Type", "tag_courier"], ward: ["Type", "tag_ward"], set: ["Type", "tag_bundle"], gem: ["Type", "tag_socket_gem"] } };
 // качество: износ и StatTrak/Сувенир в CS2, Inscribed/Genuine/Exalted… в Dota 2 (фильтры Steam)

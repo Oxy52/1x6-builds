@@ -6885,7 +6885,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=21").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=22").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
@@ -7329,7 +7329,7 @@ const GAMES = (() => {
 
   // ---------- торговые площадки: одна и та же вещь на Steam, CS.money, Lis-skins, Skinport, Market и CSFloat ----------
   // Только просмотр: цены приходят с нашего сервера одним запросом (кеш на час), сайт не тянет прайсы площадок сам.
-  const MC = { cs: [["rifle", "Винтовки"], ["sniper", "Снайперские"], ["pistol", "Пистолеты"], ["smg", "ПП"], ["knife", "Ножи"], ["gloves", "Перчатки"], ["case", "Кейсы"], ["sticker", "Наклейки"]],
+  const MC = { cs: [["rifle", "Винтовки"], ["sniper", "Снайперские"], ["pistol", "Пистолеты"], ["smg", "ПП"], ["knife", "Ножи"], ["gloves", "Перчатки"], ["agent", "Агенты"], ["case", "Кейсы"], ["sticker", "Наклейки"]],
     dota: [["arcana", "Арканы"], ["immortal", "Бессмертные"], ["legendary", "Легендарные"], ["mythical", "Мифические"], ["set", "Наборы"], ["courier", "Курьеры"], ["ward", "Варды"], ["gem", "Гемы"]] };
   const QLS = { cs: [["", "Любое качество"], ["fn", "Прямо с завода"], ["mw", "Немного поношенное"], ["ft", "После полевых испытаний"], ["ww", "Поношенное"], ["bs", "Закалённое в боях"], ["st", "StatTrak™"], ["sv", "Сувенир"]],
     dota: [["", "Любое качество"], ["ins", "Inscribed — со счётчиком"], ["gen", "Genuine"], ["exa", "Exalted"], ["unu", "Unusual"], ["aut", "Autographed"], ["cor", "Corrupted"], ["fro", "Frozen"], ["her", "Heroic"], ["eld", "Elder"], ["inf", "Infused"]] };
