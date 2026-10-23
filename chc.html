@@ -1766,6 +1766,20 @@
   .mk-img img { max-width: 100%; max-height: 72px; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(0,0,0,.5)); }
   .mk-n { min-width: 0; } .mk-n b { display: block; font-size: 15px; font-weight: 700; line-height: 1.3; } .mk-save { display: inline-block; margin-top: 5px; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #4ade80; background: rgba(74,222,128,.1); }
   .mk-ps { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 6px; }
+  .mk-lots { display: block; width: 100%; margin-top: 10px; padding: 10px 14px; border-radius: 12px; border: 1px dashed color-mix(in srgb, var(--rc, #8fa3b8) 45%, var(--line)); background: color-mix(in srgb, var(--rc, #8fa3b8) 7%, transparent); color: var(--fg); font: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer; text-align: center; }
+  .mk-lots:hover { background: color-mix(in srgb, var(--rc, #8fa3b8) 14%, transparent); }
+  .lots-sheet { max-width: 640px; } .lots-h { position: sticky; top: 0; z-index: 2; display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; padding: 18px 18px 12px; background: var(--panel); border-bottom: 1px solid var(--line); }
+  .lots-h small { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; } .lots-h h3 { margin: 4px 0 0; font-size: 19px; line-height: 1.25; } .lots-h .close { position: static; flex: none; }
+  .lots-b { padding: 14px 18px 22px; } .lots-note { margin: 0 0 12px; color: var(--muted); font-size: 13.5px; }
+  .lots-l { display: grid; gap: 8px; } .lot { display: grid; grid-template-columns: 96px 1fr; gap: 12px; align-items: center; padding: 10px 12px; border-radius: 14px; background: rgba(255,255,255,.035); border: 1px solid var(--line); }
+  .lot-p em { display: block; font-style: normal; font-size: 11.5px; color: var(--muted-2); } .lot-p b { font-size: 16px; color: #4ade80; }
+  .lot-g { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+  .lot-gem { display: inline-flex; align-items: center; gap: 7px; max-width: 100%; padding: 4px 10px 4px 4px; border-radius: 10px; background: color-mix(in srgb, var(--gc, #9aa4b2) 12%, rgba(255,255,255,.03)); border: 1px solid color-mix(in srgb, var(--gc, #9aa4b2) 45%, transparent); }
+  .lot-gem img { width: 36px; height: 24px; object-fit: contain; flex: none; } .lot-gem i { width: 14px; height: 14px; transform: rotate(45deg); border-radius: 3px; background: var(--gc, #9aa4b2); box-shadow: 0 0 10px var(--gc, transparent); margin: 0 3px 0 8px; flex: none; }
+  .lot-gem b { font-size: 13px; color: var(--gc, #fff); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .lot-gem small { font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .lot-x { padding: 4px 10px; border-radius: 10px; background: rgba(255,255,255,.05); border: 1px solid var(--line); font-size: 12.5px; } .lot-none { color: var(--muted-2); font-size: 13px; }
+  .lots-go { display: inline-flex; margin-top: 14px; }
+  @media (max-width: 480px) { .lot { grid-template-columns: 1fr; gap: 8px; } .lot-p { display: flex; gap: 10px; align-items: baseline; } }
   .mk-sort { display: inline-flex; align-items: center; gap: 8px; flex: 0 0 auto; font-size: 13px; color: var(--muted); }
   .mk-sort select { appearance: none; -webkit-appearance: none; padding: 9px 34px 9px 14px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,.04) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='3'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center; color: var(--fg); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
   .mk-sort select option { background: #15151c; color: #fff; }
@@ -7051,7 +7065,9 @@ const GAMES = (() => {
   // ---------- торговые площадки: одна и та же вещь на Steam, CS.money, Lis-skins, Skinport, Market и CSFloat ----------
   // Только просмотр: цены приходят с нашего сервера одним запросом (кеш на час), сайт не тянет прайсы площадок сам.
   const MC = { cs: [["rifle", "Винтовки"], ["sniper", "Снайперские"], ["pistol", "Пистолеты"], ["smg", "ПП"], ["knife", "Ножи"], ["gloves", "Перчатки"], ["case", "Кейсы"], ["sticker", "Наклейки"]],
-    dota: [["arcana", "Арканы"], ["immortal", "Бессмертные"], ["legendary", "Легендарные"], ["mythical", "Мифические"], ["set", "Наборы"], ["courier", "Курьеры"], ["ward", "Варды"]] };
+    dota: [["arcana", "Арканы"], ["immortal", "Бессмертные"], ["legendary", "Легендарные"], ["mythical", "Мифические"], ["set", "Наборы"], ["courier", "Курьеры"], ["ward", "Варды"], ["gem", "Гемы"]] };
+  const QLS = { cs: [["", "Любое качество"], ["fn", "Прямо с завода"], ["mw", "Немного поношенное"], ["ft", "После полевых испытаний"], ["ww", "Поношенное"], ["bs", "Закалённое в боях"], ["st", "StatTrak™"], ["sv", "Сувенир"]],
+    dota: [["", "Любое качество"], ["ins", "Inscribed — со счётчиком"], ["gen", "Genuine"], ["exa", "Exalted"], ["unu", "Unusual"], ["aut", "Autographed"], ["cor", "Corrupted"], ["fro", "Frozen"], ["her", "Heroic"], ["eld", "Elder"], ["inf", "Infused"]] };
   const PH = { cs: "Найти скин, например AK-47 Redline", dota: "Найти предмет, например Manifold Paradox" };
   const LOGO = { steam: "/games/steam.png", lis: "/games/lisskins.png", csm: "/games/csmoney.png" };
   const logo = p => LOGO[p.k] || `https://www.google.com/s2/favicons?domain=${encodeURIComponent(p.d)}&sz=64`;
@@ -7091,11 +7107,26 @@ const GAMES = (() => {
         const f = (d.items || []).find(x => x.n === it.n); if (f){ const list = favs(m.g), k = list.findIndex(x => x.n === it.n); if (k >= 0){ list[k] = f; favSet(m.g, list); } if (m.cat === "fav" && !m.q && box.isConnected){ m.items = favs(m.g); mkDraw(m); } } } catch(e) {} }
   }
   const MSORT = [["pop", "Популярные"], ["cheap", "Сначала дешёвые"], ["exp", "Сначала дорогие"], ["rar", "По редкости"], ["name", "По названию"]];
+  // лоты одного предмета в Steam: что на них — гемы, счётчики (Inscribed), наклейки, флоат
+  async function openLots(m, n){
+    const was = !modal.hidden; if (modal._cleanup){ try { modal._cleanup(); } catch(e) {} modal._cleanup = null; }
+    modal.innerHTML = `<div class="sheet nsheet lots-sheet" role="dialog" aria-modal="true" aria-label="Лоты Steam"><div class="lots-h"><div><small>${m.g === "dota" ? "Гемы и счётчики" : "Наклейки и флоат"} · лоты Steam</small><h3 translate="no">${esc(n)}</h3></div><button type="button" class="close" aria-label="Закрыть">✕</button></div><div class="lots-b">${sk(4)}</div></div>`;
+    modal.classList.toggle("swap", was); modal.hidden = false; lockScroll(); modal.querySelector(".close").onclick = closeModal;
+    const box = modal.querySelector(".lots-b");
+    try { const d = await once(`/api/games?q=lots&g=${m.g}&s=${encodeURIComponent(n)}`); if (!box.isConnected) return;
+      const gem = x => `<span class="lot-gem"${x.c ? ` style="--gc:${esc(x.c)}"` : ""}><i></i><b translate="no">${esc(x.n)}</b><small translate="no">${esc(x.t)}</small></span>`;
+      box.innerHTML = (d.items || []).length ? `<p class="lots-note">Самые дешёвые лоты прямо сейчас (всего ${d.total}). У каждого лота свои гемы и счётчики — смотри, за что платишь.</p>
+        <div class="lots-l">${d.items.map((l, i) => `<div class="lot"><div class="lot-p"><em>#${i + 1}</em><b>${l.v == null ? "—" : money(m, l.v)}</b></div><div class="lot-g">${l.gems.map(gem).join("")}${l.extra.map(t => `<span class="lot-x" translate="no">${esc(t)}</span>`).join("")}${!l.gems.length && !l.extra.length ? `<span class="lot-none">${m.g === "dota" ? "Без гемов — пустые слоты" : "Без наклеек"}</span>` : ""}</div></div>`).join("")}</div>
+        <a class="btn btn-ghost lots-go" href="${esc(d.url)}" target="_blank" rel="noopener">Все лоты в Steam ↗</a>`
+        : `<div class="gempty">Сейчас в Steam нет лотов этого предмета.</div>`;
+    } catch(e) { if (box.isConnected) box.innerHTML = `<div class="gempty">Steam сейчас не отдаёт лоты — попробуй через минуту.</div>`; }
+  }
   function market(el, g){
-    const m = MKS[g] = MKS[g] || { g, cat: MC[g][0][0], q: "", start: 0, items: [], fx: null, total: 0, t: 0, sort: (() => { try { return localStorage.getItem("ub-mksort") || "pop"; } catch(e) { return "pop"; } })() };
+    const m = MKS[g] = MKS[g] || { g, cat: MC[g][0][0], q: "", start: 0, items: [], fx: null, total: 0, t: 0, ql: "", sort: (() => { try { return localStorage.getItem("ub-mksort") || "pop"; } catch(e) { return "pop"; } })() };
     m.el = el;
     el.innerHTML = `<div class="mk-bar"><div class="rkchips sub mk-cats"><button type="button" class="rkc mk-favc" data-mc="fav" aria-pressed="${!m.q && m.cat === "fav"}"><span aria-hidden="true">★</span> <span>Избранное</span><span class="mk-fc">${favs(g).length || ""}</span></button>${MC[g].map(([k, t]) => `<button type="button" class="rkc" data-mc="${k}" aria-pressed="${!m.q && m.cat === k}">${t}</button>`).join("")}</div>
         <label class="d2-search mk-q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" class="mkQ" placeholder="${PH[g]}" autocomplete="off" value="${esc(m.q)}"></label>
+        <label class="mk-sort"><span>Качество</span><select class="mkQl" aria-label="Качество">${QLS[g].map(([k, t]) => `<option value="${k}"${m.ql === k ? " selected" : ""}>${t}</option>`).join("")}</select></label>
         <label class="mk-sort"><span>Сортировка</span><select class="mkSort" aria-label="Сортировка">${MSORT.map(([k, t]) => `<option value="${k}"${m.sort === k ? " selected" : ""}>${t}</option>`).join("")}</select></label></div>
       <div class="mk-legend"></div>
       <div class="mk-list">${sk(4)}</div>
@@ -7108,7 +7139,9 @@ const GAMES = (() => {
         favSet(g, list); favCount(m); if (m.cat === "fav" && !m.q){ m.items = favs(g); m.total = m.items.length; mkDraw(m); }
         else { const on = list.some(x => x.n === n); fv.setAttribute("aria-pressed", on); fv.textContent = on ? "★" : "☆"; fv.setAttribute("aria-label", on ? "Убрать из избранного" : "В избранное"); } return; }
       const c = e.target.closest("[data-mc]"); if (c){ m.cat = c.dataset.mc; m.q = ""; m.start = 0; m.items = []; market(el, g); return; }
+      const lt = e.target.closest(".mk-lots"); if (lt){ openLots(m, lt.dataset.n); return; }
       if (e.target.closest(".mk-more")){ m.start += 10; mkLoad(m, true); } };
+    el.querySelector(".mkQl").onchange = e => { m.ql = e.target.value; if (m.cat === "fav" && !m.q){ m.cat = MC[g][0][0]; market(el, g); return; } m.start = 0; m.items = []; mkLoad(m); };
     el.querySelector(".mkSort").onchange = e => { m.sort = e.target.value; try { localStorage.setItem("ub-mksort", m.sort); } catch(_) {}
       // цена и название сортируются на стороне Steam (по всем скинам), редкость — среди загруженных
       if (m.cat === "fav" && !m.q){ mkDraw(m); return; } if (m.sort === "rar" && m.items.length && !m.q){ mkDraw(m); return; } m.start = 0; mkLoad(m); };
@@ -7120,9 +7153,9 @@ const GAMES = (() => {
     const box = m.el.querySelector(".mk-list"); if (!box) return;
     if (!more) box.innerHTML = sk(4); else { const b = m.el.querySelector(".mk-more"); if (b) b.disabled = true; }
     if (!m.q && m.cat === "fav"){ favLoad(m); return; }
-    const want = m.q + "|" + m.cat + "|" + m.sort, srv = m.sort === "rar" ? "pop" : m.sort;
-    try { const d = await once(`/api/games?q=market&g=${m.g}&${m.q ? "s=" + encodeURIComponent(m.q) : "cat=" + m.cat}&start=${m.start}${srv !== "pop" ? "&sort=" + srv : ""}`);
-      if (want !== m.q + "|" + m.cat + "|" + m.sort) return;
+    const want = m.q + "|" + m.cat + "|" + m.sort + "|" + m.ql, srv = m.sort === "rar" ? "pop" : m.sort;
+    try { const d = await once(`/api/games?q=market&g=${m.g}&${m.q ? "s=" + encodeURIComponent(m.q) : "cat=" + m.cat}&start=${m.start}${srv !== "pop" ? "&sort=" + srv : ""}${m.ql ? "&ql=" + m.ql : ""}`);
+      if (want !== m.q + "|" + m.cat + "|" + m.sort + "|" + m.ql) return;
       Object.assign(m, { items: more ? m.items.concat(d.items) : d.items, fx: d.fx || m.fx, total: d.total }); mkDraw(m);
     } catch(e) { if (!more) box.innerHTML = err; else { const b = m.el.querySelector(".mk-more"); if (b) b.disabled = false; } }
   }
@@ -7143,7 +7176,8 @@ const GAMES = (() => {
       const fo = FV.has(i.n);
       return `<article class="mk-it"${i.col ? ` style="--rc:#${esc(i.col)}"` : ""}><button type="button" class="mk-fav" data-n="${esc(i.n)}" aria-pressed="${fo}" aria-label="${fo ? "Убрать из избранного" : "В избранное"}">${fo ? "★" : "☆"}</button><div class="mk-img">${i.img ? `<img alt="" loading="lazy" src="${esc(i.img)}">` : ""}</div>
         <div class="mk-n"><b translate="no">${esc(i.n)}</b>${i.rn ? `<small class="mk-rar">${esc(i.rn)}</small>` : ""}${lo ? `<small class="mk-from"><span>Дешевле всего:</span> <b>${money(m, lo.v)}</b> · <span translate="no">${esc(lo.name)}</span></small>` : ""}${save >= 5 && has.length > 1 ? `<small class="mk-save"><span>Выгода до</span> ${save}%</small>` : ""}</div>
-        <div class="mk-ps">${ps.map(p => `<a class="mk-p${lo && p === lo ? " best" : ""}${p.v == null ? " none" : ""}" data-k="${esc(p.k)}" data-n="${esc(p.name)}" href="${esc(p.u)}" target="_blank" rel="noopener nofollow"><img alt="" loading="lazy" src="${esc(logo(p))}"><span><small translate="no">${esc(p.name)}${p.n ? ` · ${p.n}` : ""}${p.daily ? " ⏱" : ""}</small><b>${p.v == null ? "Поиск" : money(m, p.v)}</b></span></a>`).join("")}</div></article>`; }).join("")
+        <div class="mk-ps">${ps.map(p => `<a class="mk-p${lo && p === lo ? " best" : ""}${p.v == null ? " none" : ""}" data-k="${esc(p.k)}" data-n="${esc(p.name)}" href="${esc(p.u)}" target="_blank" rel="noopener nofollow"><img alt="" loading="lazy" src="${esc(logo(p))}"><span><small translate="no">${esc(p.name)}${p.n ? ` · ${p.n}` : ""}${p.daily ? " ⏱" : ""}</small><b>${p.v == null ? "Поиск" : money(m, p.v)}</b></span></a>`).join("")}</div>
+        <button type="button" class="mk-lots" data-n="${esc(i.n)}">${m.g === "dota" ? "💎 Гемы и счётчики в лотах Steam" : "🔍 Наклейки и флоат в лотах Steam"}</button></article>`; }).join("")
       + (m.items.length < Math.min(m.total, 100) ? `<button type="button" class="btn btn-ghost lad-more mk-more">Показать ещё</button>` : "");
   }
 

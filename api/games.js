@@ -15,7 +15,7 @@ const DL = "https://api.deadlock-api.com/v1";
 // язык сайта -> язык Valve в Deadlock (как в api/news.js)
 const LNG = { ru: "russian", uk: "ukrainian", en: "english", es: "spanish", pt: "brazilian", de: "german", pl: "polish", tr: "turkish",
   fr: "french", it: "italian", kk: "russian", be: "russian", nl: "english", zh: "schinese", ja: "japanese", ko: "koreana" };
-const TTL = { csTeams: 21600, csTeam: 21600, csMatches: 21600, dlHeroes: 21600, dlHero: 21600, dlOrder: 43200, dlItems: 86400, csMarket: 3600, market: 3600 };
+const TTL = { csTeams: 21600, csTeam: 21600, csMatches: 21600, dlHeroes: 21600, dlHero: 21600, dlOrder: 43200, dlItems: 86400, csMarket: 3600, market: 3600, lots: 1800 };
 
 async function get(url, type = "json") {
   const r = await fetch(url, { headers: UA, signal: AbortSignal.timeout(20000) });
@@ -97,7 +97,13 @@ const CAT = {
   cs: { rifle: ["Type", "tag_CSGO_Type_Rifle"], sniper: ["Type", "tag_CSGO_Type_SniperRifle"], pistol: ["Type", "tag_CSGO_Type_Pistol"], knife: ["Type", "tag_CSGO_Type_Knife"],
     gloves: ["Type", "tag_Type_Hands"], smg: ["Type", "tag_CSGO_Type_SMG"], case: ["Type", "tag_CSGO_Type_WeaponCase"], sticker: ["Type", "tag_CSGO_Tool_Sticker"] },
   dota: { arcana: ["Rarity", "tag_Rarity_Arcana"], immortal: ["Rarity", "tag_Rarity_Immortal"], legendary: ["Rarity", "tag_Rarity_Legendary"], mythical: ["Rarity", "tag_Rarity_Mythical"],
-    courier: ["Type", "tag_courier"], ward: ["Type", "tag_ward"], set: ["Type", "tag_bundle"] } };
+    courier: ["Type", "tag_courier"], ward: ["Type", "tag_ward"], set: ["Type", "tag_bundle"], gem: ["Type", "tag_socket_gem"] } };
+// качество: износ и StatTrak/Сувенир в CS2, Inscribed/Genuine/Exalted… в Dota 2 (фильтры Steam)
+const QL = {
+  cs: { fn: ["Exterior", "tag_WearCategory0"], mw: ["Exterior", "tag_WearCategory1"], ft: ["Exterior", "tag_WearCategory2"], ww: ["Exterior", "tag_WearCategory3"], bs: ["Exterior", "tag_WearCategory4"],
+    st: ["Quality", "tag_strange"], sv: ["Quality", "tag_tournament"] },
+  dota: { ins: ["Quality", "tag_strange"], gen: ["Quality", "tag_genuine"], exa: ["Quality", "tag_exalted"], unu: ["Quality", "tag_unusual"], aut: ["Quality", "tag_autographed"],
+    cor: ["Quality", "tag_corrupted"], fro: ["Quality", "tag_frozen"], her: ["Quality", "tag_tournament"], eld: ["Quality", "tag_vintage"], inf: ["Quality", "tag_infused"] } };
 // редкость из типа предмета Steam: ранг для сортировки и русское название
 const RAR = [[/contraband/i, 10, "Контрабанда"], [/extraordinary/i, 8, "Экстраординарное"], [/covert/i, 7, "Тайное"], [/exotic/i, 6, "Экзотичное"], [/classified/i, 6, "Засекреченное"],
   [/remarkable/i, 5, "Примечательное"], [/restricted/i, 5, "Запрещённое"], [/high grade/i, 4, "Высшего класса"], [/mil-spec/i, 4, "Армейское"], [/industrial/i, 3, "Промышленное"],
@@ -105,13 +111,14 @@ const RAR = [[/contraband/i, 10, "Контрабанда"], [/extraordinary/i, 8
   [/arcana/i, 9, "Аркана"], [/immortal/i, 8, "Бессмертное"], [/ancient/i, 7, "Древнее"], [/legendary/i, 6, "Легендарное"], [/mythical/i, 5, "Мифическое"], [/rare/i, 4, "Редкое"], [/uncommon/i, 3, "Необычное"], [/common/i, 2, "Обычное"]];
 function rarity(type) { const t = String(type || ""); const x = RAR.find(([re]) => re.test(t)); return x ? { r: x[1] + (/★/.test(t) ? 1 : 0), rn: x[2] } : { r: 0, rn: "" }; }
 const SORT = { pop: ["popular", "desc"], cheap: ["price", "asc"], exp: ["price", "desc"], name: ["name", "asc"], rar: ["popular", "desc"] };
-async function market(g, cat, query, start, sort) {
+async function market(g, cat, query, start, sort, ql) {
   if (!APP[g]) g = "cs";
   const app = APP[g], u = new URL("https://steamcommunity.com/market/search/render/");
   const so = SORT[sort] || SORT.pop;
   Object.entries({ appid: app, norender: 1, count: 10, start, sort_column: so[0], sort_dir: so[1], l: "english" }).forEach(([k, v]) => u.searchParams.set(k, v));
   const C = CAT[g], c = C[cat] || Object.values(C)[0];
   if (query) u.searchParams.set("query", query); else u.searchParams.append(`category_${app}_${c[0]}[]`, c[1]);
+  const q2 = (QL[g] || {})[ql]; if (q2) u.searchParams.append(`category_${app}_${q2[0]}[]`, q2[1]);
   const keys = Object.keys(SRC).filter(k => !SRC[k].only || SRC[k].only === g);
   // площадка, которая не ответила, просто не показывается — остальные работают
   const [st, fx, ...maps] = await Promise.all([get(u.href), rates().catch(() => null), ...keys.map(k => price(k, g).catch(() => null))]);
@@ -122,6 +129,43 @@ async function market(g, cat, query, start, sort) {
       p.push({ k, name: val(S.name, g), d: val(S.d, g), v: x ? x.v : null, n: x ? x.n || 0 : 0, u: (x && x.u) || S.search(g, n), daily: !!S.daily }); });
     return { n, ...rarity(ad.type), img: ad.icon_url ? `https://community.cloudflare.steamstatic.com/economy/image/${ad.icon_url}/160fx120f` : "", col: ad.name_color || "", p }; });
   return { g, fx, total: st.total_count || 0, items };
+}
+
+// лоты Steam одного предмета: что внутри — гемы и счётчики (Dota 2), наклейки, брелоки и флоат (CS2)
+const unhtml = t => String(t || "").replace(/<br\s*\/?>/gi, " ").replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/\s+/g, " ").trim();
+function sockets(html) {
+  const out = [];
+  for (const b of String(html).split('<div style="white-space: nowrap; padding: 3px;">').slice(1)) {
+    const m = /<span style="(font-size: 18px[^"]*)">([^<]*)<\/span><br><span[^>]*>([^<]*)<\/span>/.exec(b); if (!m) continue;
+    m[1] = (/color: (rgb\([\d, ]+\))/.exec(m[1]) || [])[1] || "";
+    const ic = (/background-image: url\((https:\/\/[^)]+)\)/.exec(b) || [])[1] || "";
+    const n = unhtml(m[2]), t = unhtml(m[3]); if (!n || /^Empty Socket$/i.test(n)) continue;
+    out.push({ n, t, c: m[1] || "", ic: /^https:\/\/cdn\.(steamstatic|cloudflare\.steamstatic|fastly\.steamstatic)\.com\//.test(ic) ? ic : "" });
+  }
+  return out;
+}
+async function lots(g, name) {
+  if (!APP[g]) g = "cs";
+  const r = await fetch(`https://steamcommunity.com/market/listings/${APP[g]}/${encodeURIComponent(name)}`, { headers: { "User-Agent": "Mozilla/5.0 (compatible; Blazecrest/1.0)", "Accept-Language": "en-US,en" }, signal: AbortSignal.timeout(20000) });
+  if (!r.ok) throw new Error("steam " + r.status);
+  const html = await r.text(), m = /<script type="application\/json" id="valve-ssr-data"[^>]*>([\s\S]*?)<\/script>/.exec(html);
+  if (!m) throw new Error("no data");
+  const qd = JSON.parse(JSON.parse(m[1]).renderContext.queryData), Q = k => (qd.queries.find(q => q.queryKey[0] === k) || {}).state || {};
+  const page = ((Q("market_item_search").data || {}).pages || [])[0] || {};
+  const schema = new Map((((qd.queries.find(q => q.queryKey[0] === "AssetPropertySchema") || {}).state || {}).data || {}).property_schemas?.map(x => [x.propertyid, x.name]) || []);
+  const list = (page.listings || []).slice(0, 20).map(l => {
+    const d = l.description || {}, gems = [], extra = [];
+    for (const x of d.descriptions || []) {
+      if (/padding: 3px;/.test(x.value || "")) { gems.push(...sockets(x.value)); continue; }
+      const t = unhtml(x.value); if (/^(Sticker|Charm|Patch|Kills|Duels|Wins|Assists|Last Hits|Denies)\b[^:]*:/i.test(t)) extra.push(t.slice(0, 200));
+    }
+    for (const p of (l.asset && l.asset.asset_properties) || []) {
+      const v = p.float_value != null ? Number(p.float_value) : p.int_value != null ? p.int_value : p.string_value; const nm = schema.get(p.propertyid) || "";
+      if (v != null && nm) extra.push(`${nm}: ${typeof v === "number" && !Number.isInteger(v) ? v.toFixed(6) : v}`);
+    }
+    return { v: l.eCurrency === 1 ? (l.unPrice + l.unFee) / 100 : null, gems, extra };
+  });
+  return { g, n: name, total: page.total_count || list.length, url: `https://steamcommunity.com/market/listings/${APP[g]}/${encodeURIComponent(name)}`, items: list };
 }
 
 async function dlHeroes(lang) {
@@ -174,7 +218,8 @@ module.exports = async (req, res) => {
     else if (q === "dlHeroes") out = await dlHeroes(lang);
     else if (q === "dlItems") out = await dlItems(lang);
     else if (q === "csMarket" || q === "market") { const qs = String(req.query.s || "").trim().slice(0, 60), s0 = Math.max(0, Math.min(90, +req.query.start || 0)), start = s0 - s0 % 10;
-      if (qs && qs.length < 2) return fail(400, "bad_query"); out = await market(q === "csMarket" ? "cs" : String(req.query.g || "cs"), String(req.query.cat || ""), qs, start, String(req.query.sort || "pop")); }
+      if (qs && qs.length < 2) return fail(400, "bad_query"); out = await market(q === "csMarket" ? "cs" : String(req.query.g || "cs"), String(req.query.cat || ""), qs, start, String(req.query.sort || "pop"), String(req.query.ql || "")); }
+    else if (q === "lots") { const n = String(req.query.s || "").slice(0, 120); if (n.length < 2) return fail(400, "bad_query"); out = await lots(String(req.query.g || "cs"), n); }
     else { const id = +req.query.id; if (!(id > 0 && id < 1000)) return fail(400, "bad_id"); out = q === "dlOrder" ? await dlOrder(id, lang) : await dlHero(id); }
     res.setHeader("Cache-Control", `public, s-maxage=${TTL[q]}, stale-while-revalidate=86400`);
     res.status(200).json(out);
