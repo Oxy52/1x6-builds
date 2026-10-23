@@ -1,18 +1,8 @@
-== dota
-16 None
-7339 community Папсон закрывает Микото+1в — Рапира Пьюру не помогла. True
-7338 community 🤷‍♂️ МИКОТО ОТПУСТИЛ? True
-7337 community 1w пытаются вернуться в игру True
-7336 patch 😮‍💨 БАГ БЕСКОНЕЧНЫЙ МИДАС НА МИПО — Снова он, Valve создали баг, пытая True
-== cs
-18 None
-11000 events 🚨 NAVI НЕ УСПЕВАЮТ НА ВСЕ ТУРНИРЫ? True
-10999 community 😎 РАБОТА МЕЧТЫ True
-10998 community 🚬 АИМ НЕ ГАРАНТИРУЕТ ПОБЕДУ — OverDrive объяснил, что отличает сильные True
-10997 patch 🙂 АПДЕЙТ ВОЙС-ЧАТА В CS2? — в файлах игры обнаружили упоминания встрое True
-== deadlock
-12 None
-6189 community 👁Разработчики убрали текстурку/цвет у 🎨Living ink. True
-6188 patch 👁Yoshi&#39;k пофиксил баг связанный с ультой 👨 Victor&#39;a(мы про*бал True
-6187 players 🎨 Есть другие ТОП организации, что пытались подписать отдельных игроко False
-6186 leaks ❤️Minesweeper (наш любимый бывший инсайдер) написал об том, что про ко True
+deadlockkiber | "Deadlock | Дедлок: новости, инвайты, гайды" | counter_value">3.11K | posts=6 photos=20 | datetime="2025-05-09T15:48:27+00:00" .. datetime="2025-08-18T21:46:51+00:00" | dims: 640x640   800x450 | ads=0
+deadlockrf | "DEADLOCK ONE — новости Deadlock / Valve" | counter_value">32K | posts=18 photos=15 | datetime="2026-10-20T21:10:47+00:00" .. datetime="2026-10-23T10:53:17+00:00" | dims: 645x800    | ads=3
+play_dead_lock | "DeadLock | Новая игра от Valve" | counter_value">115 | posts=20 photos=6 | datetime="2024-08-26T15:38:51+00:00" .. datetime="2024-10-15T04:57:09+00:00" | dims: 800x450   800x450 | ads=0
+Deadlock37 | "Deadlock News" | counter_value">16.9K | posts=20 photos=16 | datetime="2026-10-20T21:52:42+00:00" .. datetime="2026-10-23T10:30:53+00:00" | dims: 800x450   800x375 | ads=0
+YourDeadlock | "Deadlock Community" | counter_value">17.4K | posts=17 photos=12 | datetime="2026-10-19T18:06:35+00:00" .. datetime="2026-10-23T10:45:57+00:00" | dims: 800x450   800x450 | ads=0
+dlocknew | "Deadlock NEWS | Valve" | counter_value">13.1K | posts=20 photos=11 | datetime="2026-10-21T11:55:23+00:00" .. datetime="2026-10-23T08:43:07+00:00" | dims: 800x800   800x800 | ads=3
+deadlockuainfo | "DEADLOCK UA" | counter_value">2.21K | posts=15 photos=17 | datetime="2026-10-16T21:36:34+00:00" .. datetime="2026-10-21T21:16:17+00:00" | dims: 800x379   365x302 | ads=0
+deadlocknews | "DEADLOCK PROJECT 8" | counter_value">23.3K | posts=16 photos=11 | datetime="2026-10-21T07:14:21+00:00" .. datetime="2026-10-23T09:44:44+00:00" | dims: 800x385   800x800 | ads=4
