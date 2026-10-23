@@ -9,6 +9,6 @@ jobs:
         with: { ref: probe }
       - run: |
           set +e
-          curl -s -L -H "Accept-Language: ru" "https://t.me/s/dota2_exe_news" > tg.html
-          echo done > out.txt
-          git config user.name probe; git config user.email probe@x; git add out.txt tg.html; git commit -qm out; git push
+          curl -s "https://blazecrest.vercel.app/api/news?src=tg" | python3 -c "import sys,json;d=json.load(sys.stdin);print(len(d.get('items',[])),d.get('error'));[print(i['post'],i['cat'],i['t'][:70],bool(i['img'])) for i in d.get('items',[])[:5]]" > out.txt 2>&1
+          rm -f tg.html
+          git config user.name probe; git config user.email probe@x; git add -A; git commit -qm out; git push
