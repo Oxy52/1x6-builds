@@ -1552,6 +1552,16 @@
   .ncv-t b { font-family: var(--display); font-weight: 800; font-size: clamp(22px, 4.6vw, 32px); line-height: 1.1; letter-spacing: -.6px; text-wrap: balance; text-shadow: 0 4px 24px rgba(0,0,0,.6); }
   .ncover.k-none { background: radial-gradient(70% 90% at 50% 20%, color-mix(in srgb, var(--nc) 34%, transparent), transparent 70%), repeating-linear-gradient(135deg, rgba(255,255,255,.025) 0 2px, transparent 2px 14px), linear-gradient(160deg, color-mix(in srgb, var(--nc) 22%, #0b0b10), #0a0a0e 70%); }
   .ncover img ~ .ncv-t, .ncover video ~ .ncv-t { display: none; }
+  /* обложка новости с фото: размытый фон из фото, логотип игры и источник; само фото — целиком под текстом */
+  .ncover.k-pbg { height: clamp(180px, 32vw, 250px); background: #0b0b10; }
+  .ncover.k-pbg::before { content: ""; position: absolute; inset: 0; z-index: 1; background: radial-gradient(60% 80% at 50% 45%, color-mix(in srgb, var(--nc) 30%, transparent), transparent 75%), linear-gradient(180deg, rgba(8,8,12,.15), rgba(8,8,12,.55)); pointer-events: none; }
+  .ncover.k-pbg img.ncv-bg { inset: -12%; width: 124%; height: 124%; object-fit: cover; filter: blur(26px) saturate(1.35) brightness(.6); animation: none; transform: scale(1.05); }
+  .ncv-brand { position: relative; z-index: 2; display: grid; justify-items: center; gap: 12px; padding: 0 60px; text-align: center; }
+  .ncover .ncv-brand img { position: static; width: auto; height: 58px; max-width: min(56vw, 320px); object-fit: contain; animation: none; filter: drop-shadow(0 8px 24px rgba(0,0,0,.65)); }
+  .ncv-brand .ncv-src { display: inline-flex; align-items: center; gap: 7px; padding: 7px 15px; border-radius: 999px; background: rgba(0,0,0,.42); border: 1px solid color-mix(in srgb, var(--nc) 45%, rgba(255,255,255,.15)); color: #fff; font-size: 13.5px; font-weight: 800; letter-spacing: .2px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 0 24px color-mix(in srgb, var(--nc) 30%, transparent); }
+  .ncv-brand .ncv-src i { font-style: normal; color: var(--nc); font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+  .nphoto { display: block; margin: 16px 0 4px; border-radius: 16px; overflow: hidden; background: #050507; border: 1px solid var(--line); box-shadow: 0 14px 36px rgba(0,0,0,.45); }
+  .nphoto img { display: block; width: 100%; height: auto; max-height: 78vh; object-fit: contain; }
   .nic.nthumb { overflow: hidden; padding: 0; border-radius: 12px; } .nic.nthumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .nic.nthumb.k-item img, .nic.nthumb.k-doc img { object-fit: contain; }
   .nic.ncat svg { width: 21px; height: 21px; color: var(--nc); }
@@ -6795,16 +6805,16 @@ const NEWS = (() => {
   function openNews(id){
     const n = ALL().find(x => x.id === id); if (!n) return;
     curId = id; const T = tt(n);
-    const p = pic(n), h = n.hero && H(n.hero), pool = VIEW.some(x => x.id === id) ? VIEW : ALL(), idx = pool.findIndex(x => x.id === id);
+    const p = pic(n), pb = !!(n.auto && n.img && p && p.k === "photo"), h = n.hero && H(n.hero), pool = VIEW.some(x => x.id === id) ? VIEW : ALL(), idx = pool.findIndex(x => x.id === id);
     const was = !modal.hidden;
     if (modal._cleanup){ try { modal._cleanup(); } catch(e) {} modal._cleanup = null; }
     modal.innerHTML = `<div class="sheet nsheet" role="dialog" aria-modal="true" aria-label="${plain(T.t)}" style="--nc:${NC[n.cat]};${h ? vars(h) : ""}">
-      <div class="ncover k-${p ? p.k : "none"}">${p ? (p.anim && CAN_ANIM && !REDUCED && !NOFX ? `<video autoplay muted loop playsinline aria-hidden="true" poster="${p.src}" src="${p.anim}" onerror="this.outerHTML='<img alt=&quot;&quot; src=&quot;${p.src}&quot;>'"></video>` : `<img alt="" src="${p.src}" onerror="this.remove()">`) : ""}
+      <div class="ncover k-${pb ? "pbg" : p ? p.k : "none"}">${pb ? `<img class="ncv-bg" alt="" aria-hidden="true" src="${p.src}"><div class="ncv-brand"><img alt="Dota 2" src="/games/dota.png"><span class="ncv-src">${n.src === "tg" ? "✈ Dota2.exe" : "Steam"}</span></div>` : p ? (p.anim && CAN_ANIM && !REDUCED && !NOFX ? `<video autoplay muted loop playsinline aria-hidden="true" poster="${p.src}" src="${p.anim}" onerror="this.outerHTML='<img alt=&quot;&quot; src=&quot;${p.src}&quot;>'"></video>` : `<img alt="" src="${p.src}" onerror="this.remove()">`) : ""}
         <div class="ncv-t" aria-hidden="true">${cic(n.cat)}<span>${CATS[n.cat]}</span><b${NT()}>${plain(T.t)}</b></div>
         <button type="button" class="navh prev" aria-label="Предыдущая новость">‹</button><button type="button" class="navh next" aria-label="Следующая новость">›</button>
         <button type="button" class="close" aria-label="Закрыть">✕</button></div>
       <div class="nbody"><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span><span${NT()}>${td(n.d)}${n.w !== n.d ? ` · ${td(n.w)}` : ""}</span></div>
-        <h3${NT()}>${T.t}</h3><p${NT()}>${T.x}</p>${chips(n)}
+        <h3${NT()}>${T.t}</h3><p${NT()}>${T.x}</p>${pb ? `<a class="nphoto" href="${p.src}" target="_blank" rel="noopener"><img alt="" src="${p.src}" loading="lazy"></a>` : ""}${chips(n)}
         <div class="nacts"><button type="button" class="btn btn-ghost nfavbig" data-id="${id}" aria-pressed="${NF.has(id)}">★ <span>${NF.has(id) ? "В избранном" : "В избранное"}</span></button><button type="button" class="btn btn-ghost" id="nShare">Поделиться</button>${n.url ? `<a class="btn btn-ghost" href="${n.url}" target="_blank" rel="noopener" translate="no">${n.src === "tg" ? "Telegram ↗" : "Steam ↗"}</a>` : ""}<span class="npos">${idx + 1} / ${pool.length}</span></div></div></div>`;
     modal.classList.toggle("swap", was); modal.hidden = false; lockScroll();
     const sh = modal.querySelector(".nsheet"); if (was) sh.scrollTop = 0;
@@ -6978,11 +6988,11 @@ const GAMES = (() => {
     const was = !modal.hidden;
     if (modal._cleanup){ try { modal._cleanup(); } catch(e) {} modal._cleanup = null; }
     modal.innerHTML = `<div class="sheet nsheet g-sheet" role="dialog" aria-modal="true" style="--nc:${NC[app]}">
-      <div class="ncover${n.img ? "" : " k-none"}">${n.img ? `<img alt="" src="${esc(n.img)}">` : ""}
+      <div class="ncover ${n.img ? "k-pbg" : "k-none"}">${n.img ? `<img class="ncv-bg" alt="" aria-hidden="true" src="${esc(n.img)}">` : ""}<div class="ncv-brand"><img alt="${GN[app]}" src="/games/${app}.png"><span class="ncv-src">${n.src === "tg" ? "✈ " + TGN[app] : "Steam"}</span></div>
         <button type="button" class="navh prev" aria-label="Предыдущая новость">‹</button><button type="button" class="navh next" aria-label="Следующая новость">›</button>
         <button type="button" class="close" aria-label="Закрыть">✕</button></div>
       <div class="nbody"><div class="nmeta"><span class="ntag">${GN[app]}</span><span>${day(n.ts * 1000)}</span></div>
-        <h3 translate="no">${n.t}</h3><div class="g-full" translate="no">${sk(3)}</div>
+        <h3 translate="no">${n.t}</h3><div class="g-full" translate="no">${sk(3)}</div>${n.img ? `<a class="nphoto" href="${esc(n.img)}" target="_blank" rel="noopener"><img alt="" src="${esc(n.img)}" loading="lazy"></a>` : ""}
         <div class="nacts"><a class="btn btn-ghost" href="${esc(n.url)}" target="_blank" rel="noopener">${n.src === "tg" ? "Открыть в Telegram ↗" : "Открыть в Steam ↗"}</a></div></div></div>`;
     modal.classList.toggle("swap", was); modal.hidden = false; lockScroll();
     const sh = modal.querySelector(".g-sheet"); if (was) sh.scrollTop = 0;
