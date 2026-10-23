@@ -82,7 +82,9 @@
   .mi:hover, .mi:focus-visible { background: rgba(255,255,255,.06); outline: none; }
   .mi:active { background: rgba(255,255,255,.1); }
   .mi svg { width: 21px; height: 21px; flex: none; color: var(--muted); }
-  .mi span { flex: 1; }
+  .mi span { flex: 1; min-width: 0; }
+  .mi > span[style*="width:21px"], .mi .mpav { flex: none; }
+  .mi .mpav { width: 34px; height: 34px; aspect-ratio: 1; }
   .mi em { font-style: normal; font-size: 13px; color: var(--muted-2); font-variant-numeric: tabular-nums; }
   .tgmi svg { color: #2aa8e0; }
   .mt input { position: absolute; opacity: 0; pointer-events: none; }
@@ -425,7 +427,16 @@
   .pbtn.has { padding: 0; width: 46px; border: 2px solid color-mix(in srgb, var(--t1) 70%, #fff 0%); }
   .pbtn img { width: 100%; height: 100%; object-fit: cover; }
   .mpav { width: 34px; height: 34px; border-radius: 50%; flex: none; overflow: hidden; display: grid; place-items: center; background: rgba(255,255,255,.08); font-size: 16px; }
-  .mpav img { width: 100%; height: 100%; object-fit: cover; }
+  .mpav img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .mygames { display: flex; gap: 8px; flex-wrap: wrap; }
+  .mygames button, .mygames span { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px 7px 8px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,.04); color: var(--fg); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .mygames img { width: 26px; height: 26px; object-fit: contain; }
+  .mygames button[aria-pressed="true"] { border-color: #f3a23a; background: rgba(243,162,58,.14); }
+  .mygames button[aria-pressed="true"]::after { content: "★"; color: #f3c35a; }
+  .gsw-c.myg { order: -1; }
+  .gsw-c .myg-b i { font-style: normal; }
+  .gsw-c .myg-b { position: absolute; top: 10px; right: 12px; z-index: 5; font-style: normal; font-size: 12px; font-weight: 700; color: #1a1206; background: linear-gradient(90deg,#ffd77a,#f3a23a); padding: 3px 9px; border-radius: 999px; }
+  @media (max-width: 600px) { .gsw-c .myg-b { top: 6px; right: 6px; padding: 1px 6px; } .gsw-c .myg-b i { display: none; } }
   .mprof { min-height: 58px; background: rgba(255,255,255,.04); margin-bottom: 4px; }
   .prof { position: relative; padding-bottom: 22px; }
   .pcover { position: relative; height: clamp(150px, 30vw, 230px); overflow: hidden; background: linear-gradient(135deg, var(--t1), var(--t2)); }
@@ -2139,13 +2150,12 @@
     <div class="hero-th" id="heroTh" aria-hidden="true"><img alt="" id="heroThImg"><i class="hero-pxs" id="heroPxs"></i></div>
     <button type="button" class="hnews" id="hNews"><b>Свежее</b><span id="hNewsT">Новости патча и про-сцены</span><i>→</i></button>
     <h1>Сборки для кастомки Dota 1×6</h1>
-    <p>54 героя, у каждого готовая сборка предметов по этапам игры: начало, ранняя, середина и поздняя. У 11 героев можно посмотреть аркану.</p>
+    <p>54 героя, у каждого готовая сборка предметов по этапам игры: начало, ранняя, середина и поздняя.</p>
     <button type="button" class="chc-promo" id="chcPromo"><span class="chc-promo-ic">🧩</span><span><b>Custom Hero Chaos — билды</b><small>Отметь выпавшие способности — получи готовую сборку под комбинацию</small></span><em>Попробовать →</em></button>
     <div class="actions">
       <button class="btn btn-primary" id="toBuilds">Смотреть сборки</button>
       <button class="btn btn-ghost" id="randomBtn">Рулетка героя</button>
       <button class="btn btn-ghost" id="buildRollBtn">Рулетка билдов</button>
-      <button class="btn btn-feed" id="feedBtn"><span class="dot"></span>Лента героев</button>
       <button class="btn btn-ghost" id="quizBtn">Угадай героя по сборке</button>
       <button class="btn btn-game" id="gameBtn">⚔️ Арена 1x6</button>
     </div>
@@ -2154,14 +2164,14 @@
   <section class="section" id="builds">
     <div class="section-head">
       <h2>Все герои</h2>
-      <p>Жми на карточку — внутри все варианты сборки. Герои с золотой рамкой — с арканой.</p>
+      <p>Жми на карточку — внутри все варианты сборки.</p>
     </div>
     <div class="controls">
       <label class="search">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
         <input id="q" type="search" placeholder="Поиск героя (рус или англ)…" autocomplete="off">
       </label>
-      <div class="chips"><button class="btn btn-gold" id="arcOnly" aria-pressed="false">Только с арканой</button><button class="btn btn-gold" id="favOnly" aria-pressed="false">★ Избранное <span id="favN"></span></button></div>
+      <div class="chips"><button class="btn btn-gold" id="favOnly" aria-pressed="false">★ Избранное <span id="favN"></span></button></div>
     </div>
     <div class="recent" id="recent" hidden><span class="recent-l">Недавно смотрели</span><div class="recent-row" id="recentRow"></div></div>
     <div class="count" id="count"></div>
@@ -2185,7 +2195,6 @@
         <button type="button" class="gcard" data-g="quiz"><span class="gc-ic">🧠</span><b>Угадай героя</b><small>Узнай героя по сборке</small><em>Играть</em></button>
         <button type="button" class="gcard" data-g="roll"><span class="gc-ic">🎲</span><b>Рулетка героя</b><small>Кем играть сегодня?</small><em>Крутить</em></button>
         <button type="button" class="gcard" data-g="broll"><span class="gc-ic">🔄</span><b>Рулетка билдов</b><small>Случайный герой и сборка</small><em>Крутить</em></button>
-        <button type="button" class="gcard" data-g="feed"><span class="gc-ic">📱</span><b>Лента героев</b><small>Листай героев как в TikTok</small><em>Смотреть</em></button>
         <button type="button" class="gcard" data-g="top"><span class="gc-ic">🏆</span><b>Топ арены</b><small>Лучшие игроки сайта</small><em>Открыть</em></button>
       </div>
     </section>
@@ -2272,11 +2281,9 @@
   <button type="button" class="mi" data-act="all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>Все герои</span><em>54</em></button>
   <button type="button" class="mi" data-act="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Поиск героя</span></button>
   <button type="button" class="mi" data-act="fav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1.1 5.8L12 16.8l-5.3 2.8 1.1-5.8-4.3-4.1 5.9-.8z"/></svg><span>Избранное</span><em id="menuFavN"></em></button>
-  <button type="button" class="mi" data-act="arc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12l3 6-9 12L3 9z"/><path d="M3 9h18M12 21 8 9l4-6 4 6z"/></svg><span>Герои с арканой</span><em>11</em></button>
   <div class="menu-l">Dota 2</div>
   <button type="button" class="mi" data-act="news"><span style="width:21px;text-align:center">📰</span><span>Новости и патчи</span><em>new</em></button>
   <div class="menu-l">Развлечения</div>
-  <button type="button" class="mi" data-act="feed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="m10.5 9.5 4 2.5-4 2.5z" fill="currentColor"/></svg><span>Лента героев</span></button>
   <button type="button" class="mi" data-act="roll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.3" fill="currentColor"/></svg><span>Рулетка героя</span></button>
   <button type="button" class="mi" data-act="broll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg><span>Рулетка билдов</span></button>
   <button type="button" class="mi" data-act="quiz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.3 9a2.8 2.8 0 0 1 5.4 1c0 2-2.7 2.4-2.7 4"/><circle cx="12" cy="17.3" r=".6" fill="currentColor"/></svg><span>Угадай героя</span></button>
@@ -2386,6 +2393,12 @@ const ARCANA = {
 let query = "", arcOnly = false, favOnly = false;
 const STAR = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.3L12 17.1 6.3 20.2l1.2-6.3L2.8 9.5l6.4-.8z"/></svg>';
 let FAV = new Set();
+const GAMES3 = [["dota","Dota 2"],["cs","CS2"],["deadlock","Deadlock"]];
+let MYG = []; try { MYG = JSON.parse(localStorage.getItem("ub-mygames") || "[]").filter(g => GAMES3.some(x => x[0] === g)); } catch(e) {}
+const favsOut = () => [...[...FAV].filter(x => !String(x).startsWith("g:")), ...MYG.map(g => "g:" + g)];
+function mygShow(){ try { localStorage.setItem("ub-mygames", JSON.stringify(MYG)); } catch(e) {} document.querySelectorAll(".gsw-c[data-g]").forEach(a => { const on = MYG.includes(a.dataset.g); a.classList.toggle("myg", on); let b = a.querySelector(".myg-b"); if (on && !b){ b = document.createElement("span"); b.className = "myg-b"; b.innerHTML = "★<i> Любимая</i>"; a.appendChild(b); } else if (!on && b) b.remove(); }); }
+const mygChips = list => list.length ? `<div class="mygames">${list.map(g => { const x = GAMES3.find(y => y[0] === g); return x ? `<span><img alt="" src="/games/${g}.png">${x[1]}</span>` : ""; }).join("")}</div>` : "";
+document.addEventListener("DOMContentLoaded", mygShow); setTimeout(mygShow, 0);
 try { FAV = new Set(JSON.parse(localStorage.getItem("ub-fav") || "[]")); } catch(e) {}
 function saveFav(){ try { localStorage.setItem("ub-fav", JSON.stringify([...FAV])); } catch(e) {} updFavN(); if (window.__favSync) window.__favSync(); }
 function updFavN(){ const n = document.getElementById("favN"); if (n) n.textContent = FAV.size ? `(${FAV.size})` : ""; const m = document.getElementById("menuFavN"); if (m) m.textContent = FAV.size || ""; }
@@ -2457,7 +2470,7 @@ const io = ('IntersectionObserver' in window) ? new IntersectionObserver(es => {
 
 let qT = 0;
 document.getElementById("q").addEventListener("input", e => { clearTimeout(qT); const v = e.target.value.toLowerCase().trim(); qT = setTimeout(() => { query = v; render(); }, 120); });
-const arcBtn = document.getElementById("arcOnly");
+const arcBtn = document.getElementById("arcOnly") || document.createElement("button");
 arcBtn.onclick = () => { arcOnly = !arcOnly; arcBtn.setAttribute("aria-pressed", arcOnly); render(); };
 const favBtn = document.getElementById("favOnly");
 favBtn.onclick = () => { favOnly = !favOnly; favBtn.setAttribute("aria-pressed", favOnly); render(); };
@@ -2737,7 +2750,7 @@ function openFeed(){
   });
   feed.focus({preventScroll: true});
 }
-document.getElementById("feedBtn").onclick = openFeed;
+{ const fb = document.getElementById("feedBtn"); if (fb) fb.onclick = openFeed; }
 
 
 /* ---------- викторина «угадай героя по сборке» ---------- */
@@ -3171,11 +3184,12 @@ const PROF = (() => {
   function view(){
     if (!P) return CLOUD ? (U ? edit(true) : auth("in")) : edit(true);
     let best = 0; try { best = +localStorage.getItem("ub-best") || 0; } catch(e) {}
-    const fav = [...FAV], rec = (typeof RECENT !== "undefined" ? RECENT : []).slice(0, 8);
+    const fav = [...FAV].filter(x => !String(x).startsWith("g:")), rec = (typeof RECENT !== "undefined" ? RECENT : []).slice(0, 8);
     const box = shell(bnSrc(P.bn), `
       <div class="phead"><div class="pav${frameCls(P.frame)}"><img alt="" src="${esc(avSrc(P.av))}"></div><div class="pname"><h3 translate="no">${esc(P.nick)}</h3>${P.st ? `<div class="pst">${esc(P.st)}</div>` : ""}${CLOUD && U ? `<div class="pvia">${viaLine(U)}</div>` : ""}</div></div>
       <div class="pstats"><div class="pstat"><b>${fav.length}</b><span>в избранном</span></div><div class="pstat"><b>${seen().length}</b><span>героев изучено</span></div><div class="pstat"><b>${best}</b><span>рекорд в квизе</span></div></div>
       ${CLOUD && U ? lvlBlock() : ""}
+      <div class="psec"><h4>Любимые игры</h4>${mygChips(MYG) || `<div class="pnone">Не выбраны — нажми «Редактировать профиль».</div>`}</div>
       <div class="psec"><h4>Избранные герои</h4>${faces(fav) || `<div class="pnone">Пока пусто — жми ★ на карточке героя.</div>`}</div>
       ${CLOUD && U ? `<div class="psec" id="pAch"><h4>Достижения</h4><div class="pnone">Загружаем…</div></div>` : ""}
       ${rec.length ? `<div class="psec"><h4>Недавно смотрел</h4>${faces(rec)}</div>` : ""}
@@ -3229,6 +3243,7 @@ const PROF = (() => {
       <form class="pform" id="pForm" novalidate>
         <div class="pf"><label class="lb" for="fNick">Ник</label><input type="text" id="fNick" maxlength="20" autocomplete="nickname" placeholder="Например, Mirox" value="${esc(d.nick)}"><div class="hint" id="fNickH">От 2 до 20 символов</div></div>
         <div class="pf"><label class="lb" for="fSt">Статус</label><input type="text" id="fSt" maxlength="40" placeholder="Например, мейню Пуджа" value="${esc(d.st)}"></div>
+        <div class="pf">${lb("Любимые игры")}<div class="mygames" id="fGames">${GAMES3.map(([g, n]) => `<button type="button" data-g="${g}" aria-pressed="${MYG.includes(g)}"><img alt="" src="/games/${g}.png">${n}</button>`).join("")}</div><div class="hint">Можно выбрать несколько — они покажутся в профиле и первыми на главной</div></div>
         <div class="pf">${lb("Аватарка")}
           <div class="pick av" id="fAv"><label class="up" title="Своё фото">＋<input type="file" accept="image/*" id="fAvUp"></label>${(d.av.t === "img" || d.av.t === "url") ? `<button type="button" data-t="${d.av.t}" aria-pressed="true"><img alt="" src="${esc(d.av.v)}"></button>` : ""}${HEROES.map(h => `<button type="button" data-t="hero" data-v="${h.slug}" aria-label="${h.en}" aria-pressed="${d.av.t === "hero" && d.av.v === h.slug}"><img alt="" loading="lazy" src="face/${h.slug}.webp"></button>`).join("")}</div>
           <div class="hint">Смайлик героя или своё фото (＋)</div></div>
@@ -3268,10 +3283,12 @@ const PROF = (() => {
     const sel = pk => { const a = pk.querySelector('[aria-pressed="true"]'); if (a) pk.scrollLeft = Math.max(0, a.offsetLeft - 70); };
     if (!isNew) requestAnimationFrame(() => { sel(avPk); sel(bnPk); });
     box.querySelector("#fCancel").onclick = () => P ? view() : closeModal();
+    box.querySelectorAll("#fGames button").forEach(b => b.onclick = () => b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true"));
     box.querySelector("#pForm").onsubmit = async e => { e.preventDefault();
       const nick = box.querySelector("#fNick").value.trim().replace(/\s+/g, " "), st = box.querySelector("#fSt").value.trim();
       const nh = box.querySelector("#fNickH");
       if (nick.length < 2){ nh.textContent = "Ник должен быть от 2 до 20 символов"; nh.classList.add("err"); box.querySelector("#fNick").focus(); return; }
+      MYG = [...box.querySelectorAll('#fGames button[aria-pressed="true"]')].map(b => b.dataset.g); mygShow();
       const np = { nick, st, av: d.av, bn: d.bn, frame: d.frame || "", created: (P && P.created) || Date.now() };
       if (!CLOUD){
         try { localStorage.setItem(LKEY, JSON.stringify(np)); } catch(_) { return showErr("Картинка слишком большая для памяти браузера — выбери другую или героя."); }
@@ -3282,8 +3299,8 @@ const PROF = (() => {
         if (np.av.t === "img" && /^data:/.test(np.av.v)) np.av = { t: "url", v: await uploadData(np.av.v, "avatar") };
         if (np.bn.t === "img" && /^data:/.test(np.bn.v)) np.bn = { t: "url", v: await uploadData(np.bn.v, "banner") };
         if (np.av.t === "img") np.av.t = "url"; if (np.bn.t === "img") np.bn.t = "url";
-        let { error } = await sb.from("profiles").upsert({ id: U.id, nick, status: st, avatar: enc(np.av), banner: enc(np.bn), frame: np.frame, favs: [...FAV], updated_at: new Date().toISOString() });
-        if (error && /frame/.test(error.message || "")) ({ error } = await sb.from("profiles").upsert({ id: U.id, nick, status: st, avatar: enc(np.av), banner: enc(np.bn), favs: [...FAV], updated_at: new Date().toISOString() }));
+        let { error } = await sb.from("profiles").upsert({ id: U.id, nick, status: st, avatar: enc(np.av), banner: enc(np.bn), frame: np.frame, favs: favsOut(), updated_at: new Date().toISOString() });
+        if (error && /frame/.test(error.message || "")) ({ error } = await sb.from("profiles").upsert({ id: U.id, nick, status: st, avatar: enc(np.av), banner: enc(np.bn), favs: favsOut(), updated_at: new Date().toISOString() }));
         if (error){ if (error.code === "23505") { nh.textContent = "Этот ник уже занят — придумай другой"; nh.classList.add("err"); } else showErr(/relation|does not exist|schema cache/i.test(error.message) ? "База профилей ещё не настроена на сервере." : ERR(error.message)); return; }
         const wasNew = !P; P = { nick, st, av: np.av, bn: np.bn, frame: np.frame }; topbar(); view(); if (wasNew) claimDaily();
         if (typeof curTab !== "undefined" && curTab === "feed"){ const c = document.getElementById("feedCmp"); if (c) composer(c, null, () => feedOpen(true)); }
@@ -3296,7 +3313,7 @@ const PROF = (() => {
   /* ---------- синхронизация избранного ---------- */
   let favT = 0;
   function syncFavs(){ if (!CLOUD || !U || !P) return; clearTimeout(favT);
-    favT = setTimeout(() => { sb.from("profiles").update({ favs: [...FAV], updated_at: new Date().toISOString() }).eq("id", U.id).then(() => {}); }, 700); }
+    favT = setTimeout(() => { sb.from("profiles").update({ favs: favsOut(), updated_at: new Date().toISOString() }).eq("id", U.id).then(() => {}); }, 700); }
 
   async function loadUser(u){
     U = u || null;
@@ -3305,7 +3322,9 @@ const PROF = (() => {
     if (error){ P = null; topbar(); return; }
     if (data){
       P = fromRow(data);
-      const server = Array.isArray(data.favs) ? data.favs : [], before = FAV.size;
+      const all = Array.isArray(data.favs) ? data.favs : [], before = FAV.size;
+      const server = all.filter(x => !String(x).startsWith("g:")), sg = all.filter(x => String(x).startsWith("g:")).map(x => x.slice(2));
+      if (sg.length) { MYG = sg.filter(g => GAMES3.some(x => x[0] === g)); mygShow(); } else if (MYG.length) setTimeout(syncFavs, 0);
       server.forEach(s => FAV.add(s));
       if (FAV.size !== before){ try { localStorage.setItem("ub-fav", JSON.stringify([...FAV])); } catch(e) {} updFavN(); if (typeof render === "function") render(); }
       if (FAV.size !== server.length) syncFavs();
@@ -3580,11 +3599,12 @@ const PROF = (() => {
       sb.from("runner_scores").select("best,games").eq("user_id", uid).maybeSingle()]);
     if (!pr){ toast(`<span class="tic">🤷</span><span><b>Профиль не найден</b></span>`, "", 2500); return; }
     const dm = await duelMMR(uid);
-    const q = fromRow(pr), xp = st ? st.xp : 0, lv = lvlOf(xp), mine = U && uid === U.id, favs = Array.isArray(pr.favs) ? pr.favs.slice(0, 12) : [];
+    const q = fromRow(pr), xp = st ? st.xp : 0, lv = lvlOf(xp), mine = U && uid === U.id, pfa = Array.isArray(pr.favs) ? pr.favs : [], favs = pfa.filter(x => !String(x).startsWith("g:")).slice(0, 12), pg = pfa.filter(x => String(x).startsWith("g:")).map(x => x.slice(2));
     const box = shell(bnSrc(q.bn), `
       <div class="phead"><div class="pav${frameCls(q.frame)}"><img alt="" src="${esc(avSrc(q.av))}"></div><div class="pname"><h3 translate="no" class="${isPrem(uid) ? "gold" : ""}">${esc(q.nick)}${premBadge(uid)} <em class="glv">${lv} ур.</em></h3>${q.st ? `<div class="pst">${esc(q.st)}</div>` : ""}</div></div>
       <div class="pstats"><div class="pstat"><b>${lv}</b><span>уровень</span></div><div class="pstat"><b>${rs ? rs.best : 0}</b><span>рекорд арены</span></div><div class="pstat"><b>${dm ? dm.mmr : "—"}</b><span>MMR дуэлей</span></div></div>
       ${dm && dm.wins + dm.losses > 0 ? `<div class="psec">${medalHTML(dm.mmr)} <small class="pnone">${dm.wins} побед · ${dm.losses} поражений</small></div>` : ""}
+      ${pg.length ? `<div class="psec"><h4>Любимые игры</h4>${mygChips(pg)}</div>` : ""}
       ${favs.length ? `<div class="psec"><h4>Любимые герои</h4>${faces(favs)}</div>` : ""}
       <div class="pacts"><button type="button" class="btn btn-primary" id="upStats">📊 Статистика</button>${mine ? `<button type="button" class="btn btn-ghost" id="upEdit">Редактировать профиль</button>` : ""}</div>
       <div class="psec"><h4>Посты</h4><div id="upPosts"></div></div>`, "Профиль игрока");
@@ -6397,7 +6417,7 @@ const I18N = (() => {
 ["Рейтинг","Рейтинг","Rating","Ranking","Ranking","Rangliste","Ranking","Sıralama"],
 ["Топ","Топ","Top","Top","Top","Top","Top","Top"],
 ["Сборки для кастомки Dota 1×6","Збірки для кастомки Dota 1×6","Builds for the Dota 1×6 custom game","Builds para el modo personalizado Dota 1×6","Builds para o modo personalizado Dota 1×6","Builds für den Custom-Modus Dota 1×6","Buildy do trybu Dota 1×6","Dota 1×6 özel modu için buildler"],
-["54 героя, у каждого готовая сборка предметов по этапам игры: начало, ранняя, середина и поздняя. У 11 героев можно посмотреть аркану.","54 героя, у кожного готова збірка предметів за етапами гри: початок, рання, середина і пізня. У 11 героїв можна подивитися аркану.","54 heroes, each with a ready item build for every stage: start, early, mid and late game. 11 heroes have an arcana to view.","54 héroes, cada uno con build de objetos por fases: inicio, temprano, medio y tardío. 11 héroes tienen arcana.","54 heróis, cada um com build de itens por fase: início, early, meio e late. 11 heróis têm arcana.","54 Helden, jeder mit fertigem Item-Build für jede Phase: Start, früh, mittel und spät. 11 Helden haben eine Arcana.","54 bohaterów, każdy z gotowym buildem na każdy etap: start, wczesna, środkowa i późna gra. 11 bohaterów ma arcanę.","54 kahraman, her biri için oyun aşamalarına göre hazır eşya buildi. 11 kahramanın arcanası var."],
+["54 героя, у каждого готовая сборка предметов по этапам игры: начало, ранняя, середина и поздняя.","54 героя, у кожного готова збірка предметів за етапами гри: початок, рання, середина і пізня. У 11 героїв можна подивитися аркану.","54 heroes, each with a ready item build for every stage: start, early, mid and late game. 11 heroes have an arcana to view.","54 héroes, cada uno con build de objetos por fases: inicio, temprano, medio y tardío. 11 héroes tienen arcana.","54 heróis, cada um com build de itens por fase: início, early, meio e late. 11 heróis têm arcana.","54 Helden, jeder mit fertigem Item-Build für jede Phase: Start, früh, mittel und spät. 11 Helden haben eine Arcana.","54 bohaterów, każdy z gotowym buildem na każdy etap: start, wczesna, środkowa i późna gra. 11 bohaterów ma arcanę.","54 kahraman, her biri için oyun aşamalarına göre hazır eşya buildi. 11 kahramanın arcanası var."],
 ["Custom Hero Chaos — билды","Custom Hero Chaos — білди","Custom Hero Chaos — builds","Custom Hero Chaos — builds","Custom Hero Chaos — builds","Custom Hero Chaos — Builds","Custom Hero Chaos — buildy","Custom Hero Chaos — buildler"],
 ["Отметь выпавшие способности — получи готовую сборку под комбинацию","Познач здібності, що випали, — отримай готову збірку під комбінацію","Pick the abilities you rolled — get a ready build for the combo","Marca las habilidades que te salieron y obtén un build para el combo","Marque as habilidades que saíram e receba um build para o combo","Wähle deine gewürfelten Fähigkeiten — erhalte einen fertigen Build","Zaznacz wylosowane umiejętności — otrzymaj gotowy build","Çıkan yetenekleri seç — kombinasyona hazır build al"],
 ["Попробовать →","Спробувати →","Try it →","Probar →","Testar →","Ausprobieren →","Wypróbuj →","Dene →"],
@@ -6408,7 +6428,7 @@ const I18N = (() => {
 ["Угадай героя по сборке","Вгадай героя за збіркою","Guess the hero by the build","Adivina el héroe por el build","Adivinhe o herói pelo build","Errate den Helden am Build","Zgadnij bohatera po buildzie","Builde göre kahramanı tahmin et"],
 ["⚔️ Арена 1x6","⚔️ Арена 1x6","⚔️ 1x6 Arena","⚔️ Arena 1x6","⚔️ Arena 1x6","⚔️ 1x6-Arena","⚔️ Arena 1x6","⚔️ 1x6 Arena"],
 ["Все герои","Усі герої","All heroes","Todos los héroes","Todos os heróis","Alle Helden","Wszyscy bohaterowie","Tüm kahramanlar"],
-["Жми на карточку — внутри все варианты сборки. Герои с золотой рамкой — с арканой.","Тисни на картку — всередині всі варіанти збірки. Герої із золотою рамкою — з арканою.","Tap a card to see every build variant. Heroes with a gold frame have an arcana.","Toca una tarjeta para ver todas las variantes. Los de marco dorado tienen arcana.","Toque num card para ver todas as variantes. Moldura dourada = tem arcana.","Tippe auf eine Karte für alle Build-Varianten. Goldrahmen = Arcana.","Kliknij kartę, aby zobaczyć wszystkie warianty. Złota ramka = arcana.","Tüm varyantlar için karta dokun. Altın çerçeve = arcana."],
+["Жми на карточку — внутри все варианты сборки.","Тисни на картку — всередині всі варіанти збірки. Герої із золотою рамкою — з арканою.","Tap a card to see every build variant. Heroes with a gold frame have an arcana.","Toca una tarjeta para ver todas las variantes. Los de marco dorado tienen arcana.","Toque num card para ver todas as variantes. Moldura dourada = tem arcana.","Tippe auf eine Karte für alle Build-Varianten. Goldrahmen = Arcana.","Kliknij kartę, aby zobaczyć wszystkie warianty. Złota ramka = arcana.","Tüm varyantlar için karta dokun. Altın çerçeve = arcana."],
 ["Только с арканой","Тільки з арканою","Arcana only","Solo con arcana","Só com arcana","Nur mit Arcana","Tylko z arcaną","Sadece arcanalı"],
 ["★ Избранное","★ Обране","★ Favorites","★ Favoritos","★ Favoritos","★ Favoriten","★ Ulubione","★ Favoriler"],
 ["Недавно смотрели","Нещодавно переглянуті","Recently viewed","Vistos recientemente","Vistos recentemente","Zuletzt angesehen","Ostatnio oglądane","Son bakılanlar"],
