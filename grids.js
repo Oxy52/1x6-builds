@@ -514,18 +514,18 @@ const GRIDS = (() => {
       <label class="d2-search gr-sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="grSQ" placeholder="Название или автор" value="${esc(shopQ)}"></label></div>
       <h3 class="gr-h3">Сетки игроков</h3><div class="gr-cards" id="grUsr"><div class="feed-sk"></div></div>
       <h3 class="gr-h3">Новые арт-сетки</h3><div class="gr-cards" id="grNew2"><div class="feed-sk"></div></div>
-      <h3 class="gr-h3">Арт-сцены от Aegis</h3><p class="gr-mut">Позиции 1–5 в рамке и герой, нарисованный точками. Свою сцену — с любой картинкой — собери в редакторе: «🎨 Арт / сцена».</p><div class="gr-cards" id="grScn"><div class="feed-sk"></div></div><button type="button" class="btn btn-ghost gr-more" id="grMore" hidden>Ещё сцены</button>
+      <h3 class="gr-h3">Арт-сцены от Blazecrest</h3><p class="gr-mut">Позиции 1–5 в рамке и герой, нарисованный точками. Свою сцену — с любой картинкой — собери в редакторе: «🎨 Арт / сцена».</p><div class="gr-cards" id="grScn"><div class="feed-sk"></div></div><button type="button" class="btn btn-ghost gr-more" id="grMore" hidden>Ещё сцены</button>
       <h3 class="gr-h3">Обычные сетки</h3><div class="gr-cards" id="grPre"></div>`;
     el.querySelectorAll("[data-ss]").forEach(b => b.onclick = () => { shopSort = b.dataset.ss; el.querySelectorAll("[data-ss]").forEach(x => x.setAttribute("aria-pressed", x === b)); users(); });
     el.querySelector("#grWsPub").onclick = () => { if (!C().categories.length){ PROF.toast("Сначала собери сетку в редакторе — потом опубликуй её здесь."); go("edit"); return; } publish(); };
     let qt = 0; el.querySelector("#grSQ").oninput = e => { clearTimeout(qt); qt = setTimeout(() => { shopQ = e.target.value.trim(); users(); }, 300); };
-    const pre = PRESETS.map(p => ({ name: p.n, nick: "Aegis", d: p.d, data: { config_name: p.n, categories: H.length ? p.f() : [] } }));
+    const pre = PRESETS.map(p => ({ name: p.n, nick: "Blazecrest", d: p.d, data: { config_name: p.n, categories: H.length ? p.f() : [] } }));
     const pb = el.querySelector("#grPre"); pb.innerHTML = pre.map(card).join(""); bindCards(pb, pre);
     users();
-    (async () => { const nb = el.querySelector("#grNew2"), ns = []; for (const d of NEWSC){ try { ns.push({ name: d.n, nick: "Aegis", d: d.t, data: await newScene(d) }); } catch(e) {} } if (!nb.isConnected) return; nb.innerHTML = ns.map(card).join(""); bindCards(nb, ns); })();
+    (async () => { const nb = el.querySelector("#grNew2"), ns = []; for (const d of NEWSC){ try { ns.push({ name: d.n, nick: "Blazecrest", d: d.t, data: await newScene(d) }); } catch(e) {} } if (!nb.isConnected) return; nb.innerHTML = ns.map(card).join(""); bindCards(nb, ns); })();
     const sc = [], box = el.querySelector("#grScn"), more = el.querySelector("#grMore"), total = ALLSC().length; let next = 0;
     const batch = async () => { more.hidden = true; const end = Math.min(total, next + 12);
-      for (; next < end; next++){ const q = sceneOf(next); try { sc.push({ name: "Сцена: " + q.name, nick: "Aegis", d: q.cn, data: await sceneCfg(q.slug, q.name, q.crop, q.side) }); } catch(e) {} if (!box.isConnected) return; }
+      for (; next < end; next++){ const q = sceneOf(next); try { sc.push({ name: "Сцена: " + q.name, nick: "Blazecrest", d: q.cn, data: await sceneCfg(q.slug, q.name, q.crop, q.side) }); } catch(e) {} if (!box.isConnected) return; }
       box.innerHTML = sc.map(card).join(""); bindCards(box, sc); more.hidden = next >= total; more.textContent = `Ещё сцены (${total - next})`; };
     more.onclick = batch; batch();
   }
@@ -602,7 +602,7 @@ const GRIDS = (() => {
     const sb = SBT(), u = PROF.user(); if (!sb){ PROF.toast("Публикация работает на основном сайте."); return; } if (!u){ PROF.open(); return; }
     const c = clean({ configs: [C()] }).configs[0]; if (!c.categories.length){ PROF.toast("Сетка пустая — добавь категории и героев."); return; }
     // готовые сетки Aegis уже лежат в мастерской — публиковать их копию от своего имени нельзя
-    if (C()._src === "aegis"){ const [b2, close2] = modal(`<div class="gr-no"><b>Эту сетку нельзя опубликовать</b><p>Это готовая сетка от <b>Aegis</b> — она уже есть на сайте в мастерской, и любой может её скачать. Опубликовать можно только сетку, которую ты собрал сам: начни с «＋ Новая» или с шаблона и добавь свой рисунок через «🎨 Арт / сцена».</p></div><div class="gr-acts"><span></span><button type="button" class="btn btn-primary" id="grNoOk">Понятно</button></div>`); b2.querySelector("#grNoOk").onclick = close2; return; }
+    if (C()._src === "aegis"){ const [b2, close2] = modal(`<div class="gr-no"><b>Эту сетку нельзя опубликовать</b><p>Это готовая сетка от <b>Blazecrest</b> — она уже есть на сайте в мастерской, и любой может её скачать. Опубликовать можно только сетку, которую ты собрал сам: начни с «＋ Новая» или с шаблона и добавь свой рисунок через «🎨 Арт / сцена».</p></div><div class="gr-acts"><span></span><button type="button" class="btn btn-primary" id="grNoOk">Понятно</button></div>`); b2.querySelector("#grNoOk").onclick = close2; return; }
     const [b, close] = modal(`<h3>Опубликовать в мастерской</h3><p class="gr-mut">Сетку увидят все: её можно будет открыть в редакторе, скачать и лайкнуть.</p><div class="gr-pvw"><canvas class="gr-pvi"></canvas></div><input id="grPN" maxlength="60" value="${esc(c.config_name)}" placeholder="Название"><textarea id="grPD" maxlength="200" rows="2" placeholder="Пара слов о сетке: для какой роли, что внутри (необязательно)"></textarea><p class="gr-mut">Без оскорблений и рекламы — такие сетки удаляем.</p><div class="gr-acts"><span></span><button type="button" class="btn btn-primary" id="grPG">Опубликовать</button></div><div class="gr-err" id="grPE"></div>`);
     requestAnimationFrame(() => drawCfg(b.querySelector(".gr-pvi"), c, b.querySelector(".gr-pvw").clientWidth));
     b.querySelector("#grPG").onclick = async () => { const name = b.querySelector("#grPN").value.trim() || c.config_name; b.querySelector("#grPG").disabled = true;
