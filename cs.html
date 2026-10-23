@@ -1561,6 +1561,11 @@
   .ncv-brand .ncv-src { display: inline-flex; align-items: center; gap: 7px; padding: 7px 15px; border-radius: 999px; background: rgba(0,0,0,.42); border: 1px solid color-mix(in srgb, var(--nc) 45%, rgba(255,255,255,.15)); color: #fff; font-size: 13.5px; font-weight: 800; letter-spacing: .2px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 0 24px color-mix(in srgb, var(--nc) 30%, transparent); }
   .ncv-brand .ncv-src i { font-style: normal; color: var(--nc); font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
   .nphoto { display: block; margin: 16px 0 4px; border-radius: 16px; overflow: hidden; background: #050507; border: 1px solid var(--line); box-shadow: 0 14px 36px rgba(0,0,0,.45); }
+  .nphoto { cursor: zoom-in; }
+  .nzoom { position: fixed; inset: 0; z-index: 10000; display: grid; place-items: center; background: rgba(4,4,6,.94); cursor: zoom-out; animation: nzIn .18s ease-out; touch-action: pinch-zoom; }
+  .nzoom img { max-width: 100vw; max-height: 100dvh; object-fit: contain; }
+  .nzoom button { position: absolute; top: max(14px, env(safe-area-inset-top, 0px)); right: 14px; width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.5); color: #fff; font-size: 20px; cursor: pointer; }
+  @keyframes nzIn { from { opacity: 0; } }
   .nphoto img { display: block; width: auto; max-width: 100%; height: auto; max-height: 78vh; margin: 0 auto; object-fit: contain; }
   .nic.nthumb { overflow: hidden; padding: 0; border-radius: 12px; } .nic.nthumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .nic.nthumb.k-item img, .nic.nthumb.k-doc img { object-fit: contain; }
@@ -2423,6 +2428,13 @@ let LIST = HEROES;
 const grid = document.getElementById("grid");
 const countEl = document.getElementById("count");
 const modal = document.getElementById("modal");
+// фото новости — во весь экран прямо на сайте (прямые ссылки на картинки Telegram в отдельной вкладке не открываются)
+document.addEventListener("click", e => { const a = e.target.closest && e.target.closest(".nphoto"); if (!a) return; e.preventDefault(); e.stopPropagation();
+  const src = (a.querySelector("img") || {}).src; if (!src) return;
+  const z = document.createElement("div"); z.className = "nzoom"; z.setAttribute("role", "dialog"); z.setAttribute("aria-label", "Фото");
+  z.innerHTML = `<img alt="" src="${src.replace(/"/g, "&quot;")}"><button type="button" aria-label="Закрыть">✕</button>`;
+  const close = () => { z.remove(); removeEventListener("keydown", key, true); }, key = ev => { if (ev.key === "Escape"){ ev.stopPropagation(); close(); } };
+  z.onclick = close; addEventListener("keydown", key, true); document.body.appendChild(z); }, true);
 document.addEventListener("load", e => { const t = e.target; if (t && t.tagName === "IMG") t.classList.add("ok"); }, true);
 document.addEventListener("error", e => { const t = e.target; if (t && t.tagName === "IMG") t.classList.add("ok"); }, true);
 const art = h => `hero/${h.slug}.webp`;
@@ -6814,7 +6826,7 @@ const NEWS = (() => {
         <button type="button" class="navh prev" aria-label="Предыдущая новость">‹</button><button type="button" class="navh next" aria-label="Следующая новость">›</button>
         <button type="button" class="close" aria-label="Закрыть">✕</button></div>
       <div class="nbody"><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span><span${NT()}>${td(n.d)}${n.w !== n.d ? ` · ${td(n.w)}` : ""}</span></div>
-        <h3${NT()}>${T.t}</h3><p${NT()}>${T.x}</p>${pb ? `<a class="nphoto" href="${p.src}" target="_blank" rel="noopener"><img alt="" src="${p.src}" loading="lazy"></a>` : ""}${chips(n)}
+        <h3${NT()}>${T.t}</h3><p${NT()}>${T.x}</p>${pb ? `<a class="nphoto" href="${p.src}" role="button" aria-label="Открыть фото"><img alt="" src="${p.src}" loading="lazy"></a>` : ""}${chips(n)}
         <div class="nacts"><button type="button" class="btn btn-ghost nfavbig" data-id="${id}" aria-pressed="${NF.has(id)}">★ <span>${NF.has(id) ? "В избранном" : "В избранное"}</span></button><button type="button" class="btn btn-ghost" id="nShare">Поделиться</button>${n.url ? `<a class="btn btn-ghost" href="${n.url}" target="_blank" rel="noopener" translate="no">${n.src === "tg" ? "Telegram ↗" : "Steam ↗"}</a>` : ""}<span class="npos">${idx + 1} / ${pool.length}</span></div></div></div>`;
     modal.classList.toggle("swap", was); modal.hidden = false; lockScroll();
     const sh = modal.querySelector(".nsheet"); if (was) sh.scrollTop = 0;
@@ -6992,7 +7004,7 @@ const GAMES = (() => {
         <button type="button" class="navh prev" aria-label="Предыдущая новость">‹</button><button type="button" class="navh next" aria-label="Следующая новость">›</button>
         <button type="button" class="close" aria-label="Закрыть">✕</button></div>
       <div class="nbody"><div class="nmeta"><span class="ntag">${GN[app]}</span><span>${day(n.ts * 1000)}</span></div>
-        <h3 translate="no">${n.t}</h3><div class="g-full" translate="no">${sk(3)}</div>${n.img ? `<a class="nphoto" href="${esc(n.img)}" target="_blank" rel="noopener"><img alt="" src="${esc(n.img)}" loading="lazy"></a>` : ""}
+        <h3 translate="no">${n.t}</h3><div class="g-full" translate="no">${sk(3)}</div>${n.img ? `<a class="nphoto" href="${esc(n.img)}" role="button" aria-label="Открыть фото"><img alt="" src="${esc(n.img)}" loading="lazy"></a>` : ""}
         <div class="nacts"><a class="btn btn-ghost" href="${esc(n.url)}" target="_blank" rel="noopener">${n.src === "tg" ? "Открыть в Telegram ↗" : "Открыть в Steam ↗"}</a></div></div></div>`;
     modal.classList.toggle("swap", was); modal.hidden = false; lockScroll();
     const sh = modal.querySelector(".g-sheet"); if (was) sh.scrollTop = 0;
