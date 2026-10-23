@@ -1705,6 +1705,10 @@
   .gb-ar { font-size: 18px; line-height: 1; transition: transform .25s; } .gback:hover .gb-ar { transform: translateX(-4px); }
   .gb-cur { display: flex; align-items: center; gap: 10px; min-width: 0; } .gb-cur img { height: 30px; width: auto; max-width: 90px; object-fit: contain; filter: drop-shadow(0 6px 14px color-mix(in srgb, var(--gcol, #ff4d3d) 50%, transparent)); }
   .gb-cur b { font-family: var(--display); font-size: 19px; letter-spacing: -.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .onlpop { position: fixed; z-index: 9000; width: 280px; padding: 14px; border-radius: 16px; background: #15151c; border: 1px solid rgba(46,204,113,.35); box-shadow: 0 18px 50px rgba(0,0,0,.6); color: var(--fg); font-size: 14px; }
+  .onlpop .onl-g { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; } .onlpop .onl-g span { padding: 3px 9px; border-radius: 999px; background: rgba(255,255,255,.06); font-size: 12px; }
+  .onlpop ul { list-style: none; margin: 0; padding: 0; max-height: 50vh; overflow: auto; } .onlpop li { display: flex; gap: 8px; align-items: center; padding: 6px 0; border-top: 1px solid var(--line); }
+  .onlpop li span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; } .onlpop li em { font-style: normal; color: var(--muted); font-size: 12.5px; } .onlpop small { display: block; margin-top: 8px; color: var(--muted-2); font-size: 11.5px; }
   .onl { display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px; border-radius: 999px; background: rgba(46,204,113,.1); border: 1px solid rgba(46,204,113,.28); color: #bfeccf; font-size: 13.5px; font-weight: 600; white-space: nowrap; } .onl[hidden] { display: none; }
   .onl i { width: 8px; height: 8px; border-radius: 50%; background: #2ecc71; box-shadow: 0 0 0 0 rgba(46,204,113,.6); animation: onlP 2s infinite; } .onl b { color: #fff; font-variant-numeric: tabular-nums; }
   @keyframes onlP { 70% { box-shadow: 0 0 0 7px rgba(46,204,113,0); } 100% { box-shadow: 0 0 0 0 rgba(46,204,113,0); } }
@@ -2428,6 +2432,19 @@ let LIST = HEROES;
 const grid = document.getElementById("grid");
 const countEl = document.getElementById("count");
 const modal = document.getElementById("modal");
+// админ: нажми на «Онлайн» — кто сейчас на сайте и в каком разделе
+document.addEventListener("click", e => {
+  const pill = e.target.closest && e.target.closest(".onl"); const old = document.querySelector(".onlpop");
+  if (old && !e.target.closest(".onlpop")){ old.remove(); window.__onlDraw = null; if (!pill) return; }
+  if (!pill || typeof PROF === "undefined" || !PROF.isAdmin || !PROF.isAdmin() || !window.__onl) return;
+  const GN = { hub: "Выбор игры", dota: "Dota 2", cs: "CS2", deadlock: "Deadlock" }, esc = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const pop = document.createElement("div"); pop.className = "onlpop"; document.body.appendChild(pop);
+  const r = pill.getBoundingClientRect(); pop.style.top = (r.bottom + 8) + "px"; pop.style.left = Math.max(10, Math.min(innerWidth - 290, r.left)) + "px";
+  (window.__onlDraw = () => { const L = window.__onl(), named = L.filter(x => x.n), guests = L.length - named.length, by = {};
+    L.forEach(x => { const g = GN[x.g] ? x.g : "dota"; by[g] = (by[g] || 0) + 1; });
+    pop.innerHTML = `<b>Сейчас на сайте: ${L.length}</b><div class="onl-g">${Object.keys(GN).filter(g => by[g]).map(g => `<span>${GN[g]}: ${by[g]}</span>`).join("")}</div>
+      <ul>${named.map(x => `<li><i>👤</i><span translate="no">${esc(x.n)}</span><em>${GN[x.g] || "Dota 2"}</em></li>`).join("")}${guests ? `<li><i>👀</i><span>Гости без входа</span><em>${guests}</em></li>` : ""}</ul><small>Видишь только ты как админ</small>`; })();
+});
 // фото новости — во весь экран прямо на сайте (прямые ссылки на картинки Telegram в отдельной вкладке не открываются)
 document.addEventListener("click", e => { const a = e.target.closest && e.target.closest(".nphoto"); if (!a) return; e.preventDefault(); e.stopPropagation();
   const src = (a.querySelector("img") || {}).src; if (!src) return;
@@ -3030,8 +3047,14 @@ const PROF = (() => {
   // онлайн на сайте: присутствие в общем канале Supabase Realtime, без таблиц и без входа
   (() => { if (!sb) return; const show = n => document.querySelectorAll(".onl").forEach(e => { e.hidden = !n; const b = e.querySelector("b"); if (b) b.textContent = n; });
     try { const me = Math.random().toString(36).slice(2) + Date.now().toString(36), ch = sb.channel("online", { config: { presence: { key: me } } });
-      ch.on("presence", { event: "sync" }, () => show(Object.keys(ch.presenceState()).length)).subscribe(st => { if (st === "SUBSCRIBED" && ch.track) Promise.resolve(ch.track({ at: Date.now() })).catch(() => {}); });
-      document.addEventListener("visibilitychange", () => { try { document.hidden ? ch.untrack() : ch.track({ at: Date.now() }); } catch(e) {} }); } catch(e) {} })();
+      // кто где: ник (если вошёл) и раздел — админ видит список, нажав на «Онлайн»
+      const info = () => ({ n: (typeof PROF !== "undefined" && PROF.me && PROF.me()) || "", g: document.documentElement.classList.contains("hub") ? "hub" : (document.body.dataset.game || "dota") });
+      let last = "", live = false;
+      const track = () => { if (!live || document.hidden || !ch.track) return; const i = info(), k = JSON.stringify(i); if (k === last) return; last = k; Promise.resolve(ch.track({ at: Date.now(), ...i })).catch(() => { last = ""; }); };
+      ch.on("presence", { event: "sync" }, () => { show(Object.keys(ch.presenceState()).length); if (window.__onlDraw) window.__onlDraw(); }).subscribe(st => { if (st === "SUBSCRIBED"){ live = true; last = ""; track(); } });
+      setInterval(track, 15000); window.__onlTrack = () => setTimeout(track, 50);
+      document.addEventListener("visibilitychange", () => { try { if (document.hidden){ ch.untrack(); last = ""; } else track(); } catch(e) {} });
+      window.__onl = () => Object.values(ch.presenceState()).map(m => m[0] || {}); } catch(e) {} })();
   const CLOUD = !!sb;
   let P = null, U = null, autoOpened = false;
   const HAD_CODE = /[?&]code=|access_token=/.test(location.href);
@@ -3055,7 +3078,7 @@ const PROF = (() => {
   const provName = u => { if (u && u.user_metadata && u.user_metadata.provider === "telegram") return "Telegram"; if (u && u.user_metadata && u.user_metadata.provider === "steam") return "Steam"; const p = u && u.app_metadata && u.app_metadata.provider; return p === "google" ? "Google" : p === "discord" ? "Discord" : p === "email" ? "почта" : p || ""; };
 
   /* ---------- верхняя панель и меню ---------- */
-  function topbar(){ setTimeout(() => { try { claimRef(); } catch(e) {} }, 0);
+  function topbar(){ if (window.__onlTrack) window.__onlTrack(); setTimeout(() => { try { claimRef(); } catch(e) {} }, 0);
     const b = document.getElementById("pBtn"), ma = document.getElementById("mpAv"), mn = document.getElementById("mpName");
     if (P){ b.className = "pbtn has" + frameCls(P.frame); b.innerHTML = `<img alt="" src="${esc(avSrc(P.av))}">${CLOUD && ST ? `<span class="lvb">${lvlOf(ST.xp)}</span>` : ""}`; b.setAttribute("aria-label", `Профиль ${P.nick}`);
       ma.innerHTML = `<img alt="" src="${esc(avSrc(P.av))}">`; mn.textContent = P.nick; }
@@ -4155,7 +4178,7 @@ const PROF = (() => {
       return { rows: data || [] };
     } catch(e) { return { error: "Нет связи с сервером." }; }
   }
-  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf, feedOpen, feedMore, openUser, me: () => P ? P.nick : null, rt: () => sb, duelReport, ratingOpen, medalHTML, statsOpen, premium, support, supportRequest, toast, settings, isPrem, isPremMe: () => isPrem(U && U.id), loadPlayers: q => { clearTimeout(plT); plT = setTimeout(() => loadPlayers(q), 250); } };
+  return { open, syncFavs, cloud: CLOUD, user, avatarOf, submitScore, topScores, grant, nudge, mountVotes, frameCls, lvlOf, feedOpen, feedMore, openUser, me: () => P ? P.nick : null, isAdmin: () => IS_ADMIN, rt: () => sb, duelReport, ratingOpen, medalHTML, statsOpen, premium, support, supportRequest, toast, settings, isPrem, isPremMe: () => isPrem(U && U.id), loadPlayers: q => { clearTimeout(plT); plT = setTimeout(() => loadPlayers(q), 250); } };
 })();
 window.__favSync = () => PROF.syncFavs();
 
@@ -7196,7 +7219,7 @@ let curTab = "1x6", lastDota = "1x6";
 function inkTo(btn, instant){ const ink = document.getElementById("tabInk"), bar = btn.parentElement; if (!ink) return;
   if (instant){ ink.style.transition = "none"; requestAnimationFrame(() => ink.style.transition = ""); }
   ink.style.width = btn.offsetWidth + "px"; ink.style.transform = `translateX(${btn.offsetLeft - 5 + 5}px)`; }
-function setTab(name, opts){
+function setTab(name, opts){ if (window.__onlTrack) window.__onlTrack();
   opts = opts || {}; if (!TABS.includes(name)) name = "1x6";
   const prev = curTab, dir = TABS.indexOf(name) - TABS.indexOf(prev); curTab = name;
   document.querySelectorAll(".tab[data-tab]").forEach(b => { const on = b.dataset.tab === name; b.setAttribute("aria-selected", on); if (on){ const v = b.closest("#tabMenu") ? document.getElementById("tabMore") : b; inkTo(v, opts.instant); v.scrollIntoView({ inline: "nearest", block: "nearest" }); } });
