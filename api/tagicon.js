@@ -60,6 +60,8 @@ async function claudeCheck(b64) {
 
 module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
+  if (req.method === "GET" && req.query.selftest === "1") { try { const t = Date.now(), fs = require("fs"), path = require("path");
+    const png = require("pngjs").PNG.sync.read(fs.readFileSync(path.join(process.cwd(), "games", "cs-tag.png"))); const r = await nsfwCheck(png); return res.status(200).json({ ms: Date.now() - t, ...r }); } catch (e) { return res.status(500).json({ error: String(e.message).slice(0, 200) }); } } // ВРЕМЕННО
   if (req.method !== "POST") return res.status(405).json({ error: "method_not_allowed" });
   if (!SECRET) return res.status(503).json({ error: "not_configured" });
   let body = req.body;
