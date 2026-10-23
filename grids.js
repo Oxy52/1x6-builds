@@ -550,6 +550,7 @@ const GRIDS = (() => {
     if (!sb){ box.innerHTML = `<div class="gempty">Мастерская работает на основном сайте.</div>`; return; }
     const u0 = PROF.user(); if (shopSort === "mine" && !u0){ box.innerHTML = `<div class="gempty">Войди, чтобы видеть свои публикации.</div>`; return; }
     let q = sb.from("grids").select("id,user_id,nick,name,data,likes,downloads,created_at", { count: "exact" }).limit(48).order(shopSort === "top" ? "likes" : shopSort === "dl" ? "downloads" : "created_at", { ascending: false });
+    q = q.is("data->>kind", null); // строки-комментарии (см. comments) в списке сеток не показываем
     if (shopSort === "mine") q = q.eq("user_id", u0.id);
     if (shopQ) q = q.or(`name.ilike.%${shopQ.replace(/[%,()]/g, "")}%,nick.ilike.%${shopQ.replace(/[%,()]/g, "")}%`);
     const { data, error, count } = await q;
@@ -558,26 +559,42 @@ const GRIDS = (() => {
     if (!data.length){ box.innerHTML = `<div class="gempty">${shopSort === "mine" ? "Ты ещё ничего не публиковал." : shopQ ? "Ничего не нашли." : "Пока пусто — опубликуй свою сетку первым: «📤 Опубликовать свою сетку» выше."}</div>`; return; }
     const u = PROF.user(); let liked = new Set();
     if (u){ try { const r = await sb.from("grid_likes").select("grid_id").in("grid_id", data.map(x => x.id)); liked = new Set((r.data || []).map(x => x.grid_id)); } catch(e) {} }
-    let cmN = {}; try { const r = await sb.from("grid_comments").select("grid_id").in("grid_id", data.map(x => x.id)).limit(2000); if (!r.error) (r.data || []).forEach(x => { cmN[x.grid_id] = (cmN[x.grid_id] || 0) + 1; }); } catch(e) {}
+    let cmN = {}; const ids = data.map(x => x.id);
+    try { const r = await sb.from("grid_comments").select("grid_id").in("grid_id", ids).limit(2000); if (!r.error) (r.data || []).forEach(x => { cmN[x.grid_id] = (cmN[x.grid_id] || 0) + 1; }); } catch(e) {}
+    try { const r = await sb.from("grids").select("data->>g").eq("data->>kind", "c").in("data->>g", ids.map(String)).limit(2000); if (!r.error) (r.data || []).forEach(x => { const k = +x.g; cmN[k] = (cmN[k] || 0) + 1; }); } catch(e) {}
     const ago = t => { const d = (Date.now() - Date.parse(t)) / 864e5; return d < 1 ? "сегодня" : d < 2 ? "вчера" : d < 30 ? Math.floor(d) + " дн. назад" : new Date(t).toLocaleDateString(); };
     await Promise.all(data.map(async r => { if (r.data && r.data.packed){ try { const v = await unpack(r.data.packed); r.data = { ...v, config_name: r.data.config_name, descr: r.data.descr }; } catch(e) { r.data = { config_name: r.name, categories: [] }; } } }));
     const list = data.map(r => ({ id: r.id, name: r.name, nick: r.nick, data: r.data, likes: r.likes, downloads: r.downloads, mine: u && u.id === r.user_id, liked: liked.has(r.id), at: ago(r.created_at), cm: cmN[r.id] || 0 }));
     box.innerHTML = list.map(card).join(""); bindCards(box, list);
   }
   /* комментарии к сетке */
+  // Комментарии хранятся в таблице grid_comments, а пока её нет на сервере — отдельными строками в grids
+  // (data.kind = "c", data.g = id сетки): так комментарии работают сразу, без настройки базы.
   async function comments(el, g, onChange){
     const sb = SBT(), list = el.querySelector(".gr-cml"), f = el.querySelector(".gr-cmf"), inp = f.querySelector("input");
     const when = t => { const d = (Date.now() - Date.parse(t)) / 6e4; return d < 1 ? "только что" : d < 60 ? Math.floor(d) + " мин" : d < 1440 ? Math.floor(d / 60) + " ч" : new Date(t).toLocaleDateString(); };
-    async function load(){ const { data, error } = await sb.from("grid_comments").select("id,user_id,nick,body,created_at").eq("grid_id", g.id).order("created_at", { ascending: true }).limit(200);
-      if (error){ list.innerHTML = `<div class="gempty">Комментарии скоро включатся.</div>`; f.hidden = true; return; }
-      const u = PROF.user(), adm = PROF.isAdmin && PROF.isAdmin();
-      list.innerHTML = data.length ? data.map(c => `<div class="gr-c"><b translate="no">${esc(c.nick)}</b><span>${when(c.created_at)}</span>${u && (u.id === c.user_id || g.mine || adm) ? `<button type="button" class="gr-cx" data-id="${c.id}" aria-label="Удалить">✕</button>` : ""}<p>${esc(c.body)}</p></div>`).join("") : `<div class="gempty">Пока без комментариев — будь первым.</div>`;
-      list.querySelectorAll(".gr-cx").forEach(b => b.onclick = async () => { await sb.from("grid_comments").delete().eq("id", +b.dataset.id); load(); onChange && onChange(); }); }
+    let table = null; // "gc" — своя таблица есть, "g" — запасной вариант
+    async function load(){
+      const [a, b] = await Promise.all([
+        sb.from("grid_comments").select("id,user_id,nick,body,created_at").eq("grid_id", g.id).order("created_at", { ascending: true }).limit(200),
+        sb.from("grids").select("id,user_id,nick,data,created_at").eq("data->>kind", "c").eq("data->>g", String(g.id)).order("created_at", { ascending: true }).limit(200) ]);
+      table = a.error ? "g" : "gc";
+      const rows = [...(a.error ? [] : (a.data || []).map(c => ({ ...c, src: "gc" }))), ...(b.error ? [] : (b.data || []).map(c => ({ id: c.id, user_id: c.user_id, nick: c.nick, body: String((c.data || {}).body || ""), created_at: c.created_at, src: "g" })))]
+        .sort((x, y) => Date.parse(x.created_at) - Date.parse(y.created_at));
+      if (a.error && b.error){ list.innerHTML = `<div class="gempty">Не удалось загрузить комментарии.</div>`; return; }
+      const u = PROF.user();
+      list.innerHTML = rows.length ? rows.map(c => `<div class="gr-c"><b translate="no">${esc(c.nick)}</b><span>${when(c.created_at)}</span>${u && (u.id === c.user_id || (g.mine && c.src === "gc")) ? `<button type="button" class="gr-cx" data-id="${c.id}" data-src="${c.src}" aria-label="Удалить">✕</button>` : ""}<p>${esc(c.body)}</p></div>`).join("") : `<div class="gempty">Пока без комментариев — будь первым.</div>`;
+      list.scrollTop = list.scrollHeight;
+      list.querySelectorAll(".gr-cx").forEach(bt => bt.onclick = async () => { await sb.from(bt.dataset.src === "gc" ? "grid_comments" : "grids").delete().eq("id", +bt.dataset.id); load(); onChange && onChange(); });
+    }
+    let lastAt = 0;
     f.onsubmit = async e => { e.preventDefault(); const v = inp.value.trim(); if (!v) return; if (!PROF.user()){ PROF.open(); return; }
-      const bt = f.querySelector("button"); bt.disabled = true;
-      const { error } = await sb.from("grid_comments").insert({ grid_id: g.id, body: v.slice(0, 500), nick: String(PROF.me() || "Игрок").slice(0, 40) });
+      if (Date.now() - lastAt < 8000){ PROF.toast("Слишком часто — подожди пару секунд."); return; }
+      const bt = f.querySelector("button"); bt.disabled = true; const nick = String(PROF.me() || "Игрок").slice(0, 40), body = v.slice(0, 500);
+      const { error } = table === "gc" ? await sb.from("grid_comments").insert({ grid_id: g.id, body, nick })
+        : await sb.from("grids").insert({ name: "💬", nick, data: { kind: "c", g: String(g.id), body } });
       bt.disabled = false; if (error){ PROF.toast(/too_fast/.test(error.message || "") ? "Слишком часто — подожди минутку." : "Не получилось отправить комментарий."); return; }
-      inp.value = ""; load(); onChange && onChange(); };
+      lastAt = Date.now(); inp.value = ""; load(); onChange && onChange(); };
     if (!sb){ list.innerHTML = `<div class="gempty">Комментарии работают на основном сайте.</div>`; f.hidden = true; return; }
     load();
   }
