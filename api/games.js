@@ -19,7 +19,7 @@ const DL = "https://api.deadlock-api.com/v1";
 // язык сайта -> язык Valve в Deadlock (как в api/news.js)
 const LNG = { ru: "russian", uk: "ukrainian", en: "english", es: "spanish", pt: "brazilian", de: "german", pl: "polish", tr: "turkish",
   fr: "french", it: "italian", kk: "russian", be: "russian", nl: "english", zh: "schinese", ja: "japanese", ko: "koreana" };
-const TTL = { csTeams: 21600, csTeam: 21600, csMatches: 120, csMatch: 86400, img: 604800, csTeamM: 600, dlMatches: 120, dlMatch: 86400, dlHeroes: 21600, dlHero: 21600, dlOrder: 43200, dlItems: 86400, csMarket: 3600, market: 3600, lots: 1800 };
+const TTL = { csTeams: 21600, csTeam: 21600, csMatches: 120, csMatch: 86400, img: 604800, csTeamM: 600, dlMatches: 120, dlMatch: 86400, dlHeroes: 21600, dlHero: 21600, dlOrder: 43200, dlItems: 86400, csMarket: 60, market: 60, lots: 1800 };
 
 async function get(url, type = "json") {
   const r = await fetch(url, { headers: UA, signal: AbortSignal.timeout(20000) });
@@ -73,20 +73,25 @@ async function csMatches() {
 // Живые прайсы: Steam (поиск), Lis-skins, Skinport, Market.CSGO / Market.Dota2; раз в сутки — CS.money и CSFloat (сборник csgotrader.app).
 const MEM = {};
 const memo = (k, ttl, fn) => { const m = MEM[k]; if (m && Date.now() - m.t < ttl) return m.p; const p = fn(); MEM[k] = { t: Date.now(), p }; p.catch(() => { delete MEM[k]; }); return p; };
+// то же, но устаревшее значение отдаётся сразу, а свежее грузится в фоне; если источник упал — остаётся последнее удачное
+const fresh = (k, ttl, fn) => { const m = MEM[k];
+  if (m && m.ok === undefined) return m.p;
+  if (m) { if (Date.now() - m.t >= ttl && !m.busy) { m.busy = true; fn().then(v => { MEM[k] = { t: Date.now(), ok: v, p: Promise.resolve(v) }; }).catch(() => { m.busy = false; m.t = Date.now() - ttl + 15e3; }); } return m.p; }
+  const p = fn(); MEM[k] = { t: Date.now(), p }; p.then(v => { MEM[k] = { t: Date.now(), ok: v, p: Promise.resolve(v) }; }).catch(() => { delete MEM[k]; }); return p; };
 const num = v => { const x = parseFloat(v); return x > 0 ? x : null; };
 const rates = () => memo("fx", 6 * 3600e3, async () => { const j = await get("https://open.er-api.com/v6/latest/USD"); return { usd: 1, uah: j.rates.UAH, rub: j.rates.RUB, eur: j.rates.EUR, t: j.time_last_update_unix }; });
 const APP = { cs: 730, dota: 570 };
 // каждая площадка: прайс (название -> {v: цена $, n: лотов, u: ссылка}) и ссылка поиска, если вещи в прайсе нет
 const SRC = {
-  lis: { name: "Lis-skins", d: "lis-skins.com", ttl: 30,
+  lis: { name: "Lis-skins", d: "lis-skins.com", ttl: 1,
     load: g => get(`https://lis-skins.com/market_export_json/${g === "cs" ? "csgo" : "dota2"}.json`).then(a => new Map(a.map(x => [x.name, { v: num(x.price), n: x.count || 0, u: x.url }]))),
     search: (g, n) => `https://lis-skins.com/market/${g === "cs" ? "csgo" : "dota2"}/?query=${encodeURIComponent(n)}` },
-  skinport: { name: "Skinport", d: "skinport.com", ttl: 30,
+  skinport: { name: "Skinport", d: "skinport.com", ttl: 5,
     load: g => fetch(`https://api.skinport.com/v1/items?app_id=${APP[g]}&currency=USD&tradable=0`, { headers: { ...UA, "Accept-Encoding": "br" }, signal: AbortSignal.timeout(20000) })
       .then(r => { if (!r.ok) throw new Error("skinport " + r.status); return r.json(); })
       .then(a => new Map(a.filter(x => x.min_price).map(x => [x.market_hash_name, { v: num(x.min_price), n: x.quantity || 0, u: x.market_page || x.item_page }]))),
     search: (g, n) => `https://skinport.com/${g === "cs" ? "market" : "dota2"}?search=${encodeURIComponent(n)}` },
-  tm: { name: g => g === "cs" ? "Market.CSGO" : "Market.Dota2", d: g => g === "cs" ? "market.csgo.com" : "market.dota2.net", ttl: 30,
+  tm: { name: g => g === "cs" ? "Market.CSGO" : "Market.Dota2", d: g => g === "cs" ? "market.csgo.com" : "market.dota2.net", ttl: 1,
     load: g => get(`https://${g === "cs" ? "market.csgo.com" : "market.dota2.net"}/api/v2/prices/USD.json`).then(j => new Map((j.items || []).map(x => [x.market_hash_name, { v: num(x.price), n: +x.volume || 0 }]))),
     search: (g, n) => `https://${g === "cs" ? "market.csgo.com" : "market.dota2.net"}/en/?search=${encodeURIComponent(n)}` },
   csm: { name: "CS.money", d: "cs.money", ttl: 360, only: "cs", daily: true,
@@ -96,7 +101,8 @@ const SRC = {
     load: () => get("https://prices.csgotrader.app/latest/csfloat.json").then(j => new Map(Object.entries(j).map(([k, x]) => [k, { v: num(x && (x.price || (x.starting_at && x.starting_at.price))) }]))),
     search: (g, n) => `https://csfloat.com/search?market_hash_name=${encodeURIComponent(n)}` },
 };
-const price = (k, g) => memo(k + g, SRC[k].ttl * 60e3, () => SRC[k].load(g));
+// цены площадок: Lis-skins и Market — раз в минуту, Skinport — раз в 5 минут (лимит их API), CS.money и CSFloat — раз в сутки (так обновляется источник)
+const price = (k, g) => fresh(k + g, SRC[k].ttl * 60e3, () => SRC[k].load(g));
 const CAT = {
   cs: { all: null, rifle: ["Type", "tag_CSGO_Type_Rifle"], sniper: ["Type", "tag_CSGO_Type_SniperRifle"], pistol: ["Type", "tag_CSGO_Type_Pistol"], knife: ["Type", "tag_CSGO_Type_Knife"],
     gloves: ["Type", "tag_Type_Hands"], agent: ["Type", "tag_Type_CustomPlayer"], smg: ["Type", "tag_CSGO_Type_SMG"], case: ["Type", "tag_CSGO_Type_WeaponCase"], sticker: ["Type", "tag_CSGO_Tool_Sticker"] },
@@ -142,7 +148,7 @@ async function market(g, cat, query, start, sort, ql, side) {
   const steamList = bySide ? allAgents(ql).then(all => { const l = all.filter(r => agSide(r.hash_name) === side);
     if (sort === "cheap" || sort === "exp") l.sort((a, b) => (sort === "cheap" ? 1 : -1) * ((a.sell_price || 1e9) - (b.sell_price || 1e9)));
     else if (sort === "name") l.sort((a, b) => a.hash_name.localeCompare(b.hash_name));
-    return { total_count: l.length, results: l.slice(start, start + 10) }; }) : get(u.href);
+    return { total_count: l.length, results: l.slice(start, start + 10) }; }) : fresh("st|" + u.href, 60e3, () => get(u.href));
   const keys = Object.keys(SRC).filter(k => !SRC[k].only || SRC[k].only === g);
   // площадка, которая не ответила, просто не показывается — остальные работают
   const [st, fx, ...maps] = await Promise.all([steamList, rates().catch(() => null), ...keys.map(k => price(k, g).catch(() => null))]);

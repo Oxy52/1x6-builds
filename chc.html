@@ -6885,7 +6885,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=23").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=24").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
@@ -7399,7 +7399,7 @@ const GAMES = (() => {
         <label class="mk-sort"><span>Сортировка</span><select class="mkSort" aria-label="Сортировка">${MSORT.map(([k, t]) => `<option value="${k}"${m.sort === k ? " selected" : ""}>${t}</option>`).join("")}</select></label></div>
       <div class="mk-legend"></div>
       <div class="mk-list">${sk(4)}</div>
-      <p class="db-note"><span>Цены — самый дешёвый лот на каждой площадке, в валюте сайта по текущему курсу.</span> <span>Steam, Lis-skins, Skinport и Market обновляются раз в час.</span>${g === "cs" ? ` <span>CS.money и CSFloat — раз в сутки (отмечены ⏱).</span>` : ""} <span>Зелёная — самая выгодная.</span> <span>Нажми на площадку — откроется эта вещь на её сайте.</span> <span>Мы ничего не продаём, только показываем цены.</span></p>`;
+      <p class="db-note"><span>Цены — самый дешёвый лот на каждой площадке, в валюте сайта по текущему курсу.</span> <span>Steam, Lis-skins и Market обновляются каждую минуту, Skinport — раз в 5 минут.</span>${g === "cs" ? ` <span>CS.money и CSFloat — раз в сутки (отмечены ⏱).</span>` : ""} <span>Зелёная — самая выгодная.</span> <span>Нажми на площадку — откроется эта вещь на её сайте.</span> <span>Мы ничего не продаём, только показываем цены.</span></p>`;
     if (!el._mkw){ el._mkw = 1; el.addEventListener("click", e => { if (el._mk && el.querySelector(".mk-bar")) el._mk(e); }); }
     el._mk = e => { const mp = e.target.closest("a.mk-p"); if (mp && curWarn(mp, e)) return;
       const fv = e.target.closest(".mk-fav");
@@ -7419,6 +7419,17 @@ const GAMES = (() => {
       el.querySelectorAll("[data-mc]").forEach(b => b.setAttribute("aria-pressed", !v && b.dataset.mc === m.cat)); mkLoad(m); }, 450); };
     if (m.items.length && !m.start) mkDraw(m); else { m.start = 0; mkLoad(m); }
   }
+  // цены сами обновляются раз в минуту, пока раздел скинов открыт и вкладка браузера активна
+  setInterval(() => { if (document.hidden) return; Object.values(MKS).forEach(m => { if (m.el && m.el.isConnected && m.el.offsetParent && m.items.length && !(m.cat === "fav" && !m.q)) mkRefresh(m); }); }, 60e3);
+  async function mkRefresh(m){
+    const side = !m.q && m.cat === "agent" ? m.side || "" : "", srv = m.sort === "rar" ? "pop" : m.sort, t = Math.floor(Date.now() / 60e3);
+    const pages = []; for (let s = 0; s <= m.start; s += 10) pages.push(s);
+    try { const res = await Promise.all(pages.map(s => fetch(`/api/games?q=market&g=${m.g}&${m.q ? "s=" + encodeURIComponent(m.q) : "cat=" + m.cat}&start=${s}${srv !== "pop" ? "&sort=" + srv : ""}${m.ql ? "&ql=" + m.ql : ""}${side ? "&side=" + side : ""}&t=${t}`).then(r => r.ok ? r.json() : null)));
+      const by = new Map(); res.forEach(d => d && d.items.forEach(i => by.set(i.n, i))); if (!by.size) return;
+      m.items = m.items.map(i => by.get(i.n) ? { ...i, p: by.get(i.n).p } : i); const f = res.find(d => d && d.fx); if (f) m.fx = f.fx;
+      m.upd = Date.now(); mkDraw(m);
+    } catch(e) {}
+  }
   async function mkLoad(m, more){
     const box = m.el.querySelector(".mk-list"); if (!box) return;
     if (!more) box.innerHTML = sk(4); else { const b = m.el.querySelector(".mk-more"); if (b) b.disabled = true; }
@@ -7426,7 +7437,7 @@ const GAMES = (() => {
     const side = !m.q && m.cat === "agent" ? m.side || "" : "", want = m.q + "|" + m.cat + "|" + m.sort + "|" + m.ql + "|" + side, srv = m.sort === "rar" ? "pop" : m.sort;
     try { const d = await once(`/api/games?q=market&g=${m.g}&${m.q ? "s=" + encodeURIComponent(m.q) : "cat=" + m.cat}&start=${m.start}${srv !== "pop" ? "&sort=" + srv : ""}${m.ql ? "&ql=" + m.ql : ""}${side ? "&side=" + side : ""}`);
       if (want !== m.q + "|" + m.cat + "|" + m.sort + "|" + m.ql + "|" + (!m.q && m.cat === "agent" ? m.side || "" : "")) return;
-      Object.assign(m, { items: more ? m.items.concat(d.items) : d.items, fx: d.fx || m.fx, total: d.total }); mkDraw(m);
+      Object.assign(m, { items: more ? m.items.concat(d.items) : d.items, fx: d.fx || m.fx, total: d.total, upd: Date.now() }); mkDraw(m);
     } catch(e) { if (!more) box.innerHTML = err; else { const b = m.el.querySelector(".mk-more"); if (b) b.disabled = false; } }
   }
   function mkDraw(m){
