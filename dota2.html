@@ -1780,6 +1780,22 @@
   [data-pane="cs"] .ncard { --nc: #f5a524; } [data-pane="deadlock"] .ncard { --nc: #4fd1b5; }
   .g-nimg { overflow: hidden; border-radius: 12px; } .g-nimg img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .cs-pts { flex: none; margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 800; color: var(--muted); }
+  /* сеты CS2 */
+  .set-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 520px), 1fr)); gap: 14px; }
+  .set-c { position: relative; padding: 14px; border-radius: 20px; border: 1px solid var(--line); overflow: hidden;
+    background: radial-gradient(120% 80% at 0% 0%, color-mix(in srgb, var(--s1) 22%, transparent), transparent 60%), radial-gradient(120% 90% at 100% 100%, color-mix(in srgb, var(--s2) 18%, transparent), transparent 60%), var(--bg-soft); }
+  .set-c::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: linear-gradient(90deg, var(--s1), var(--s2)); }
+  .set-c header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; } .set-c h3 { margin: 0; font-size: 19px; font-family: var(--display); } .set-c header small { color: var(--muted); font-size: 12.5px; }
+  .set-sum { text-align: right; flex: none; } .set-sum small { display: block; font-size: 11px; } .set-sum b { font-size: 18px; color: #4ade80; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .set-items { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+  .set-it { display: grid; gap: 2px; padding: 8px; border-radius: 14px; border: 1px solid var(--line); background: rgba(0,0,0,.22); color: var(--fg); text-decoration: none; transition: transform .2s, border-color .2s; min-width: 0; }
+  .set-it:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--rc) 70%, var(--line)); }
+  .set-img { height: 70px; display: grid; place-items: center; border-radius: 10px; background: radial-gradient(60% 70% at 50% 60%, color-mix(in srgb, var(--rc) 30%, transparent), transparent 70%); border-bottom: 2px solid color-mix(in srgb, var(--rc) 70%, transparent); }
+  .set-img img { max-width: 100%; max-height: 66px; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(0,0,0,.5)); }
+  .set-slot { font-size: 10.5px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; margin-top: 4px; }
+  .set-it b { font-size: 12.5px; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .set-p { display: flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; color: #4ade80; } .set-p img { width: 15px; height: 15px; border-radius: 4px; }
+  @media (max-width: 600px) { .set-items { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; } .set-img { height: 54px; } .set-img img { max-height: 50px; } .set-it { padding: 6px; } }
   /* матчи CS2 и Deadlock */
   .csx-h { margin: 18px 2px 8px; font-size: 15px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; } .csx-h:first-child { margin-top: 4px; }
   .csx-l, .dlx-l { display: grid; gap: 6px; }
@@ -2364,7 +2380,7 @@
   <div class="tabpane" data-pane="cs" role="tabpanel" hidden>
     <section class="section first">
       <div class="section-head"><h2>Counter-Strike 2</h2><p>Сравнение цен скинов на Steam, CS.money, Lis-skins, Skinport, Market.CSGO и CSFloat, официальные новости, рейтинг команд Valve и последние матчи про-сцены.</p></div>
-      <div class="rkchips g-sub" data-g="cs" role="group" aria-label="Раздел"><button type="button" class="rkc" data-v="market" aria-pressed="true">Скины</button><button type="button" class="rkc" data-v="news" aria-pressed="false">Новости</button><button type="button" class="rkc" data-v="teams" aria-pressed="false">Топ команд</button><button type="button" class="rkc" data-v="matches" aria-pressed="false">Матчи</button></div>
+      <div class="rkchips g-sub" data-g="cs" role="group" aria-label="Раздел"><button type="button" class="rkc" data-v="market" aria-pressed="true">Скины</button><button type="button" class="rkc" data-v="sets" aria-pressed="false">Сеты</button><button type="button" class="rkc" data-v="news" aria-pressed="false">Новости</button><button type="button" class="rkc" data-v="teams" aria-pressed="false">Топ команд</button><button type="button" class="rkc" data-v="matches" aria-pressed="false">Матчи</button></div>
       <div id="csBox" class="g-box"></div>
     </section>
   </div>
@@ -6885,7 +6901,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=24").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=25").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
@@ -7257,7 +7273,7 @@ const GAMES = (() => {
   const err = `<div class="gempty">Не удалось загрузить данные. Попробуй чуть позже.</div>`;
   const day = s => { try { return new Date(s).toLocaleDateString(L(), { day: "numeric", month: "short" }); } catch(e) { return String(s).slice(0, 10); } };
   const st = { cs: "market", deadlock: "heroes", sort: "name", hero: 0 };
-  const VIEWS = { cs: { market: el => market(el, "cs"), news: el => news(el, "cs"), teams: csTeams, matches: csMatches }, deadlock: { heroes: dlHeroes, matches: dlMatches, invite: dlInvite, news: el => news(el, "deadlock") } };
+  const VIEWS = { cs: { market: el => market(el, "cs"), sets: el => csSets(el), news: el => news(el, "cs"), teams: csTeams, matches: csMatches }, deadlock: { heroes: dlHeroes, matches: dlMatches, invite: dlInvite, news: el => news(el, "deadlock") } };
   let wired = false;
 
   function open(g){
@@ -7360,6 +7376,25 @@ const GAMES = (() => {
   const cur = () => typeof CURSEL !== "undefined" ? CURSEL.get() : "usd";
   const money = (m, v) => { if (v == null) return "—"; const c = m.fx ? cur() : "usd", x = v * (m.fx ? m.fx[c] || 1 : 1);
     return `${x.toLocaleString(L(), { maximumFractionDigits: x >= 100 ? 0 : 2, minimumFractionDigits: x >= 100 ? 0 : 2 })} ${SYM[c]}`; };
+  // ---------- сеты CS2: оружие, нож, перчатки и агент в одной гамме ----------
+  const SLOTN = { "AK-47": "AK-47", M4A4: "M4A4", "M4A1-S": "M4A1-S", AWP: "AWP", "Desert Eagle": "Deagle", knife: "Нож", gloves: "Перчатки", agent: "Агент" };
+  function csSets(el){
+    el.innerHTML = `<div class="set-grid">${sk(4)}</div>`;
+    const draw = d => { const m = { fx: d.fx };
+      el.innerHTML = `<div class="set-grid">${d.sets.map(s => { const sum = s.items.reduce((a, i) => a + (i.p[0] ? i.p[0].v : 0), 0), miss = s.items.some(i => !i.p[0]);
+        return `<article class="set-c" style="--s1:${esc(s.col[0])};--s2:${esc(s.col[1])}">
+          <header><div><h3>${esc(s.t)}</h3><small>${esc(s.sub)}</small></div><div class="set-sum"><small>${miss ? "без части предметов" : "весь сет"}</small><b>от ${money(m, sum)}</b></div></header>
+          <div class="set-items">${s.items.map(i => { const b = i.p[0];
+            return `<a class="set-it" href="${esc(b ? b.u : i.steam)}" target="_blank" rel="noopener nofollow" style="--rc:${esc(i.col || "#b0c3d9")}" title="${esc(i.mh)}">
+              <span class="set-img"><img alt="" loading="lazy" src="${esc(i.img)}"></span>
+              <span class="set-slot">${esc(SLOTN[i.slot] || i.slot)}${i.w ? ` · ${esc(i.w)}` : ""}</span><b translate="no">${esc(i.n.split(" | ").slice(i.slot === "agent" ? 0 : 1).join(" | "))}</b>
+              <span class="set-p">${b ? `<img alt="" src="${esc(logo(b))}">${money(m, b.v)}` : "нет в продаже"}</span></a>`; }).join("")}</div></article>`; }).join("")}</div>
+        <p class="db-note">Сеты подобраны по цвету: оружие, нож, перчатки и агент в одной гамме. Цена — самый дешёвый лот на Lis-skins, Skinport, Market.CSGO, CS.money или CSFloat, обновляется каждую минуту. Нажми на предмет — откроется самое выгодное предложение.</p>`; };
+    const load = () => fetch(`/api/games?q=csSets&t=${Math.floor(Date.now() / 60e3)}`).then(r => { if (!r.ok) throw 0; return r.json(); });
+    load().then(d => { draw(d);
+      clearInterval(el._setT); el._setT = setInterval(() => { if (!el.isConnected || !el.querySelector(".set-grid") || document.hidden) return; load().then(d2 => { if (el.querySelector(".set-grid")) draw(d2); }).catch(() => {}); }, 60e3);
+    }).catch(() => { el.innerHTML = err; });
+  }
   // избранные скины: хранятся в браузере вместе с последними ценами, при открытии цены обновляются
   const FKEY = g => "ub-skinfav-" + g;
   const favs = g => { try { const v = JSON.parse(localStorage.getItem(FKEY(g)) || "[]"); return Array.isArray(v) ? v : []; } catch(e) { return []; } };

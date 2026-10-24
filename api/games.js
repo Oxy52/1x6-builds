@@ -4,6 +4,7 @@
 //   GET /api/games?q=csMatches               -> матчи про-сцены (bo3.gg, тиры S и A): идут сейчас, скоро, прошедшие
 //   GET /api/games?q=csMatch&s=<slug>        -> матч: карты, раунды, статистика игроков по картам
 //   GET /api/games?q=csTeamM&n=<команда>     -> последние и ближайшие матчи команды (bo3.gg)
+//   GET /api/games?q=csSets                  -> готовые сеты CS2 (AK, M4, AWP, нож, перчатки, агент в одной гамме) с ценами площадок
 //   GET /api/games?q=dlMatches               -> Deadlock: матчи, которые идут сейчас, и недавние матчи высокого ранга
 //   GET /api/games?q=dlMatch&id=<match id>   -> матч Deadlock: игроки, герои, K/D/A, души, урон, предметы, души по ходу игры
 //   GET /api/games?q=dlHeroes&lang=ru        -> герои Deadlock: имя, картинки, винрейт, пикрейт
@@ -19,7 +20,7 @@ const DL = "https://api.deadlock-api.com/v1";
 // язык сайта -> язык Valve в Deadlock (как в api/news.js)
 const LNG = { ru: "russian", uk: "ukrainian", en: "english", es: "spanish", pt: "brazilian", de: "german", pl: "polish", tr: "turkish",
   fr: "french", it: "italian", kk: "russian", be: "russian", nl: "english", zh: "schinese", ja: "japanese", ko: "koreana" };
-const TTL = { csTeams: 21600, csTeam: 21600, csMatches: 120, csMatch: 86400, img: 604800, csTeamM: 600, dlMatches: 120, dlMatch: 86400, dlHeroes: 21600, dlHero: 21600, dlOrder: 43200, dlItems: 86400, csMarket: 60, market: 60, lots: 1800 };
+const TTL = { csTeams: 21600, csTeam: 21600, csMatches: 120, csMatch: 86400, img: 604800, csTeamM: 600, dlMatches: 120, dlMatch: 86400, dlHeroes: 21600, dlHero: 21600, dlOrder: 43200, dlItems: 86400, csMarket: 60, market: 60, csSets: 60, lots: 1800 };
 
 async function get(url, type = "json") {
   const r = await fetch(url, { headers: UA, signal: AbortSignal.timeout(20000) });
@@ -292,6 +293,17 @@ async function dlMatch(id, lang) {
     obj: [0, 1].map(t => (m.objectives || []).filter(o => o.team !== t && o.destroyed_time_s > 0).length), adv: adv.length > 1 ? adv : [], players, H: pickH(all, players.map(p => p.hero)) };
 }
 
+// ---------- сеты CS2: список собран вручную (data/cs-sets.json, картинки из базы ByMykel/CSGO-API) ----------
+async function csSets() {
+  const SETS = require("../data/cs-sets.json");
+  const keys = Object.keys(SRC).filter(k => !SRC[k].only || SRC[k].only === "cs");
+  const [fx, ...maps] = await Promise.all([rates().catch(() => null), ...keys.map(k => price(k, "cs").catch(() => null))]);
+  const val = x => typeof x === "function" ? x("cs") : x;
+  return { fx, sets: SETS.map(s => ({ ...s, items: s.items.map(i => {
+    const p = keys.map((k, j) => { const x = maps[j] && maps[j].get(i.mh); return x && x.v ? { k, name: val(SRC[k].name), d: val(SRC[k].d), v: x.v, u: x.u || SRC[k].search("cs", i.mh), daily: !!SRC[k].daily } : null; }).filter(Boolean).sort((a, b) => a.v - b.v);
+    return { ...i, p, steam: `https://steamcommunity.com/market/listings/730/${encodeURIComponent(i.mh)}` }; }) })) };
+}
+
 async function dlHeroes(lang) {
   const [hs, st] = await Promise.all([get(`${DL}/assets/heroes?only_active=true&language=${lang}`), get(`${DL}/analytics/hero-stats`)]);
   const tot = st.reduce((a, x) => a + x.matches, 0) || 1, S = new Map(st.map(x => [x.hero_id, x]));
@@ -345,6 +357,7 @@ module.exports = async (req, res) => {
     else if (q === "csMatches") out = await csMatches();
     else if (q === "csTeam") out = await csTeam(String(req.query.p || ""));
     else if (q === "csMatch") out = await csMatch(String(req.query.s || ""));
+    else if (q === "csSets") out = await csSets();
     else if (q === "csTeamM") out = await csTeamM(String(req.query.n || ""));
     else if (q === "dlMatches") out = await dlMatches(lang);
     else if (q === "dlMatch") { const id = +req.query.id; if (!(id > 0 && id < 1e10)) return fail(400, "bad_id"); out = await dlMatch(id, lang); }
