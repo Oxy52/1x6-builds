@@ -1781,12 +1781,34 @@
   .g-nimg { overflow: hidden; border-radius: 12px; } .g-nimg img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .cs-pts { flex: none; margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 800; color: var(--muted); }
   /* сеты CS2 */
+  .set-hero { position: relative; overflow: hidden; padding: 26px 24px 20px; margin-bottom: 14px; border-radius: 24px; border: 1px solid var(--line);
+    background: linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.01)), var(--bg-soft); }
+  .set-glow { position: absolute; inset: -40% -10% auto; height: 260px; pointer-events: none; filter: blur(50px); opacity: .55;
+    background: radial-gradient(40% 60% at 15% 50%, #ff3ea5, transparent 70%), radial-gradient(35% 60% at 50% 40%, #f5a524, transparent 70%), radial-gradient(40% 60% at 85% 50%, #3ec5ff, transparent 70%);
+    animation: setGlow 12s ease-in-out infinite alternate; }
+  @keyframes setGlow { to { transform: translateX(6%) scale(1.08); filter: blur(60px) hue-rotate(40deg); } }
+  .set-kicker { position: relative; display: inline-block; font-size: 11.5px; font-weight: 800; letter-spacing: 1.6px; text-transform: uppercase; color: #f5a524; padding: 4px 10px; border-radius: 999px; background: rgba(245,165,36,.12); border: 1px solid rgba(245,165,36,.3); }
+  .set-title { position: relative; margin: 10px 0 6px; font-family: var(--display); font-weight: 900; font-size: clamp(42px, 7vw, 72px); line-height: 1; letter-spacing: -2px; }
+  .set-title span { background: linear-gradient(90deg, #fff 0%, #ffd27a 25%, #ff7ab8 50%, #7ad7ff 75%, #fff 100%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+    animation: nsMove 6s linear infinite; filter: drop-shadow(0 6px 24px rgba(255,122,184,.25)); }
+  .set-lead { position: relative; margin: 0; max-width: 620px; color: var(--muted); font-size: 14.5px; line-height: 1.5; }
+  .set-stats { position: relative; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; } .set-stats span { padding: 6px 12px; border-radius: 999px; background: rgba(0,0,0,.25); border: 1px solid var(--line); font-size: 13px; color: var(--muted); } .set-stats b { color: var(--fg); font-variant-numeric: tabular-nums; }
+  .set-bar { display: grid; gap: 10px; padding: 12px; margin-bottom: 14px; border-radius: 18px; border: 1px solid var(--line); background: var(--bg-soft); }
+  .set-chips { display: flex; flex-wrap: wrap; gap: 6px; } .set-chips .rkc { margin: 0; }
+  .set-sch[aria-pressed="true"] { border-color: #f5a524; color: #f5a524; } .set-bud small { opacity: .6; font-size: 11px; }
+  .set-budget { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; } .set-budget > span { font-size: 12px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+  .set-rng { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+  .set-rng input { width: 96px; height: 36px; padding: 0 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .set-rng em { font-style: normal; font-weight: 800; color: var(--fg); } .set-reset { height: 36px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line); background: none; color: var(--muted); cursor: pointer; font-weight: 700; }
+  .set-reset:hover { color: var(--fg); border-color: var(--t1); }
   .set-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 520px), 1fr)); gap: 14px; }
-  .set-c { position: relative; padding: 14px; border-radius: 20px; border: 1px solid var(--line); overflow: hidden;
+  .set-c { position: relative; padding: 14px; border-radius: 20px; border: 1px solid var(--line); overflow: hidden; animation: setIn .5s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i) * 40ms);
     background: radial-gradient(120% 80% at 0% 0%, color-mix(in srgb, var(--s1) 22%, transparent), transparent 60%), radial-gradient(120% 90% at 100% 100%, color-mix(in srgb, var(--s2) 18%, transparent), transparent 60%), var(--bg-soft); }
+  @keyframes setIn { from { opacity: 0; transform: translateY(10px); } }
   .set-c::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: linear-gradient(90deg, var(--s1), var(--s2)); }
   .set-c header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; } .set-c h3 { margin: 0; font-size: 19px; font-family: var(--display); } .set-c header small { color: var(--muted); font-size: 12.5px; }
-  .set-sum { text-align: right; flex: none; } .set-sum small { display: block; font-size: 11px; } .set-sum b { font-size: 18px; color: #4ade80; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .set-tag { font-style: normal; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 6px; vertical-align: .25em; background: rgba(245,165,36,.14); color: #f5a524; font-family: var(--body); }
+  .set-sum { text-align: right; flex: none; } .set-sum small { display: block; font-size: 11px; color: var(--muted); } .set-sum b { font-size: 18px; color: #4ade80; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .set-items { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
   .set-it { display: grid; gap: 2px; padding: 8px; border-radius: 14px; border: 1px solid var(--line); background: rgba(0,0,0,.22); color: var(--fg); text-decoration: none; transition: transform .2s, border-color .2s; min-width: 0; }
   .set-it:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--rc) 70%, var(--line)); }
@@ -1795,7 +1817,8 @@
   .set-slot { font-size: 10.5px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; margin-top: 4px; }
   .set-it b { font-size: 12.5px; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .set-p { display: flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; color: #4ade80; } .set-p img { width: 15px; height: 15px; border-radius: 4px; }
-  @media (max-width: 600px) { .set-items { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; } .set-img { height: 54px; } .set-img img { max-height: 50px; } .set-it { padding: 6px; } }
+  @media (max-width: 600px) { .set-hero { padding: 20px 16px 16px; } .set-items { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; } .set-img { height: 54px; } .set-img img { max-height: 50px; } .set-it { padding: 6px; } .set-rng input { width: 80px; } }
+  @media (prefers-reduced-motion: reduce) { .set-glow, .set-title span, .set-c { animation: none; } }
   /* матчи CS2 и Deadlock */
   .csx-h { margin: 18px 2px 8px; font-size: 15px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; } .csx-h:first-child { margin-top: 4px; }
   .csx-l, .dlx-l { display: grid; gap: 6px; }
@@ -6901,7 +6924,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=25").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=26").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
@@ -7378,22 +7401,67 @@ const GAMES = (() => {
     return `${x.toLocaleString(L(), { maximumFractionDigits: x >= 100 ? 0 : 2, minimumFractionDigits: x >= 100 ? 0 : 2 })} ${SYM[c]}`; };
   // ---------- сеты CS2: оружие, нож, перчатки и агент в одной гамме ----------
   const SLOTN = { "AK-47": "AK-47", M4A4: "M4A4", "M4A1-S": "M4A1-S", AWP: "AWP", "Desert Eagle": "Deagle", knife: "Нож", gloves: "Перчатки", agent: "Агент" };
+  // фильтры сетов: сортировка, без ножа/перчаток/агента, школьные, бюджет и диапазон цены (в валюте сайта)
+  const SETF = [["knife", "🔪 Без ножа"], ["gloves", "🧤 Без перчаток"], ["agent", "🕵️ Без агента"]];
+  const SETB = [500, 1000, 2000, 5000]; // бюджеты в гривнах — в кнопках показываем в валюте сайта
   function csSets(el){
-    el.innerHTML = `<div class="set-grid">${sk(4)}</div>`;
-    const draw = d => { const m = { fx: d.fx };
-      el.innerHTML = `<div class="set-grid">${d.sets.map(s => { const sum = s.items.reduce((a, i) => a + (i.p[0] ? i.p[0].v : 0), 0), miss = s.items.some(i => !i.p[0]);
-        return `<article class="set-c" style="--s1:${esc(s.col[0])};--s2:${esc(s.col[1])}">
-          <header><div><h3>${esc(s.t)}</h3><small>${esc(s.sub)}</small></div><div class="set-sum"><small>${miss ? "без части предметов" : "весь сет"}</small><b>от ${money(m, sum)}</b></div></header>
+    const f = el._sf || (el._sf = { sort: "", no: {}, school: false, min: "", max: "", b: 0 });
+    let D = null;
+    const rate = () => D && D.fx ? D.fx[cur()] || 1 : 1, sym = () => SYM[D && D.fx ? cur() : "usd"];
+    const round = v => v >= 1000 ? Math.round(v / 100) * 100 : v >= 100 ? Math.round(v / 10) * 10 : Math.round(v);
+    const shell = () => { el.innerHTML = `<section class="set-hero"><div class="set-glow"></div>
+        <span class="set-kicker">Counter-Strike 2 · готовые образы</span>
+        <h2 class="set-title"><span>Сеты</span></h2>
+        <p class="set-lead">Оружие, нож, перчатки и агент в одной гамме. Есть дорогие для красоты и школьные — от пары сотен гривен.</p>
+        <div class="set-stats"></div></section>
+      <div class="set-bar">
+        <label class="mk-sort"><span>Сортировка</span><select class="setSort"><option value="">По подборке</option><option value="exp">Дороже → дешевле</option><option value="cheap">Дешевле → дороже</option></select></label>
+        <div class="set-chips">${SETF.map(([k, t]) => `<button type="button" class="rkc" data-sf="${k}" aria-pressed="${!!f.no[k]}">${t}</button>`).join("")}<button type="button" class="rkc set-sch" data-ss aria-pressed="${f.school}">🎒 Школьные</button></div>
+        <div class="set-budget"><span>Бюджет</span><div class="set-chips set-bud"></div>
+          <label class="set-rng"><span>от</span><input type="number" min="0" inputmode="numeric" class="setMin" value="${esc(f.min)}"><span>до</span><input type="number" min="0" inputmode="numeric" class="setMax" value="${esc(f.max)}"><em class="set-sym"></em></label>
+          <button type="button" class="set-reset" hidden>Сбросить</button></div></div>
+      <div class="set-grid">${sk(4)}</div>
+      <p class="db-note">Сеты подобраны по цвету. Цена — самый дешёвый лот на Lis-skins, Skinport, Market.CSGO, CS.money или CSFloat, обновляется каждую минуту; «без ножа» и другие фильтры убирают предмет из сета и пересчитывают сумму. Нажми на предмет — откроется самое выгодное предложение.</p>`;
+      el.querySelector(".setSort").value = f.sort;
+      el.querySelector(".setSort").onchange = e => { f.sort = e.target.value; draw(); };
+      el.querySelector(".set-bar").addEventListener("click", e => { const c = e.target.closest("[data-sf]"), sc = e.target.closest("[data-ss]"), bu = e.target.closest("[data-sb]");
+        if (c){ f.no[c.dataset.sf] = !f.no[c.dataset.sf]; c.setAttribute("aria-pressed", f.no[c.dataset.sf]); draw(); }
+        else if (sc){ f.school = !f.school; sc.setAttribute("aria-pressed", f.school); draw(); }
+        else if (bu){ const v = +bu.dataset.sb; f.b = f.b === v ? 0 : v; f.min = ""; f.max = f.b ? String(round(v / (D.fx ? D.fx.uah : 45) * rate())) : ""; el.querySelector(".setMin").value = ""; el.querySelector(".setMax").value = f.max; draw(); }
+        else if (e.target.closest(".set-reset")){ Object.assign(f, { sort: "", no: {}, school: false, min: "", max: "", b: 0 }); shell(); draw(); } });
+      const rng = () => { f.min = el.querySelector(".setMin").value; f.max = el.querySelector(".setMax").value; f.b = 0; draw(); };
+      el.querySelector(".setMin").oninput = el.querySelector(".setMax").oninput = () => { clearTimeout(el._sfT); el._sfT = setTimeout(rng, 350); };
+    };
+    const total = s => s.items.reduce((a, i) => a + (i.p[0] ? i.p[0].v : 0), 0);
+    function draw(){
+      const grid = el.querySelector(".set-grid"); if (!grid || !D) return;
+      const m = { fx: D.fx }, r = rate();
+      el.querySelector(".set-sym").textContent = sym();
+      el.querySelector(".set-bud").innerHTML = SETB.map(v => `<button type="button" class="rkc" data-sb="${v}" aria-pressed="${f.b === v}">до ${round(v / (D.fx ? D.fx.uah : 45) * r).toLocaleString(L())} ${sym()}${D.fx && cur() !== "uah" ? ` <small>· ${v} ₴</small>` : ""}</button>`).join("");
+      const lo = +f.min > 0 ? +f.min / r : 0, hi = +f.max > 0 ? +f.max / r : Infinity;
+      let list = D.sets.map((s, idx) => { const items = s.items.filter(i => !f.no[i.slot === "knife" ? "knife" : i.slot === "gloves" ? "gloves" : i.slot === "agent" ? "agent" : "-"]); return { ...s, idx, items, sum: total({ items }) }; })
+        .filter(s => s.items.length && (!f.school || s.tag === "school") && s.sum >= lo && s.sum <= hi);
+      if (f.sort === "exp") list.sort((a, b) => b.sum - a.sum); else if (f.sort === "cheap") list.sort((a, b) => a.sum - b.sum);
+      const all = D.sets.map(total), mn = Math.min(...all), mx = Math.max(...all);
+      el.querySelector(".set-stats").innerHTML = `<span><b>${D.sets.length}</b> сетов</span><span><b>${D.sets.filter(s => s.tag === "school").length}</b> школьных</span><span>от <b>${money(m, mn)}</b> до <b>${money(m, mx)}</b></span>`;
+      el.querySelector(".set-reset").hidden = !(f.sort || f.school || f.min || f.max || Object.values(f.no).some(Boolean));
+      grid.innerHTML = list.length ? list.map(s => { const miss = s.items.some(i => !i.p[0]);
+        return `<article class="set-c" style="--s1:${esc(s.col[0])};--s2:${esc(s.col[1])};--i:${Math.min(s.idx, 12)}">
+          <header><div><h3>${esc(s.t)}${s.tag === "school" ? ` <em class="set-tag">🎒 Школьный</em>` : ""}</h3><small>${esc(s.sub)}</small></div><div class="set-sum"><small>${miss ? "без части предметов" : "весь сет"}</small><b>${money(m, s.sum)}</b></div></header>
           <div class="set-items">${s.items.map(i => { const b = i.p[0];
             return `<a class="set-it" href="${esc(b ? b.u : i.steam)}" target="_blank" rel="noopener nofollow" style="--rc:${esc(i.col || "#b0c3d9")}" title="${esc(i.mh)}">
               <span class="set-img"><img alt="" loading="lazy" src="${esc(i.img)}"></span>
               <span class="set-slot">${esc(SLOTN[i.slot] || i.slot)}${i.w ? ` · ${esc(i.w)}` : ""}</span><b translate="no">${esc(i.n.split(" | ").slice(i.slot === "agent" ? 0 : 1).join(" | "))}</b>
-              <span class="set-p">${b ? `<img alt="" src="${esc(logo(b))}">${money(m, b.v)}` : "нет в продаже"}</span></a>`; }).join("")}</div></article>`; }).join("")}</div>
-        <p class="db-note">Сеты подобраны по цвету: оружие, нож, перчатки и агент в одной гамме. Цена — самый дешёвый лот на Lis-skins, Skinport, Market.CSGO, CS.money или CSFloat, обновляется каждую минуту. Нажми на предмет — откроется самое выгодное предложение.</p>`; };
+              <span class="set-p">${b ? `<img alt="" src="${esc(logo(b))}">${money(m, b.v)}` : "нет в продаже"}</span></a>`; }).join("")}</div></article>`; }).join("")
+        : `<div class="gempty">Под эти фильтры сетов нет — расширь бюджет или убери часть фильтров.</div>`;
+    }
+    shell();
+    // смена валюты — пересчитать бюджеты и суммы
+    if (!el._setCur){ el._setCur = 1; document.addEventListener("curchange", () => { if (el.isConnected && el.querySelector(".set-grid")){ Object.assign(el._sf, { min: "", max: "", b: 0 }); csSets(el); } }); }
     const load = () => fetch(`/api/games?q=csSets&t=${Math.floor(Date.now() / 60e3)}`).then(r => { if (!r.ok) throw 0; return r.json(); });
-    load().then(d => { draw(d);
-      clearInterval(el._setT); el._setT = setInterval(() => { if (!el.isConnected || !el.querySelector(".set-grid") || document.hidden) return; load().then(d2 => { if (el.querySelector(".set-grid")) draw(d2); }).catch(() => {}); }, 60e3);
-    }).catch(() => { el.innerHTML = err; });
+    load().then(d => { D = d; draw();
+      clearInterval(el._setT); el._setT = setInterval(() => { if (!el.isConnected || !el.querySelector(".set-grid") || document.hidden) return; load().then(d2 => { D = d2; draw(); }).catch(() => {}); }, 60e3);
+    }).catch(() => { const g = el.querySelector(".set-grid"); if (g) g.outerHTML = err; });
   }
   // избранные скины: хранятся в браузере вместе с последними ценами, при открытии цены обновляются
   const FKEY = g => "ub-skinfav-" + g;
