@@ -9,7 +9,7 @@ const GRIDS = (() => {
   let H = [], HB = {}, FILE = null, cur = 0, sel = -1, selG = null, view = "edit", built = false, pane, stage, s = 1, pf = { q: "", a: "" };
 
   /* ---------- хранение ---------- */
-  const blank = n => ({ config_name: n || "Моя сетка", categories: [] });
+  const blank = n => ({ config_name: n || (typeof I18N !== "undefined" ? I18N.t("Моя сетка") : "Моя сетка"), categories: [] });
   function load(){ load0(); snap0 = snapNow(); HIST = []; FUT = []; }
   function load0(){ try { const v = JSON.parse(localStorage.getItem(KEY) || "null"); if (v && Array.isArray(v.configs) && v.configs.length) { FILE = v; cur = Math.min(+v._cur || 0, v.configs.length - 1); return; } } catch(e) {} FILE = { version: 3, configs: [blank()] }; cur = 0; }
   // отмена/повтор: снимки файла после каждой паузы в правках (быстрые правки сливаются в один шаг)

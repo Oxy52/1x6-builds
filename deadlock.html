@@ -6926,7 +6926,7 @@ const I18N = (() => {
     RX[c] = keys.length ? new RegExp("(?<![А-Яа-яЁёІіЇїЄєҐґ])(" + keys.map(esc).join("|") + ")(?![А-Яа-яЁёІіЇїЄєҐґ])", "g") : null; }
   function load(c){
     if (c === "ru" || LOADED[c]) return LOADED[c] || Promise.resolve();
-    return LOADED[c] = fetch("/i18n/" + c + ".json?v=26").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
+    return LOADED[c] = fetch("/i18n/" + c + ".json?v=28").then(r => r.ok ? r.json() : {}).then(d => { for (const k in d) MAP[c].set(k, d[k]); buildRx(c); }).catch(() => buildRx(c));
   }
   function tr(c, key){ const m = MAP[c]; if (!m) return null; const x = m.get(key); if (x) return x;
     const rx = RX[c]; if (!rx) return null; rx.lastIndex = 0; if (!rx.test(key)) return null; rx.lastIndex = 0;
@@ -7103,6 +7103,8 @@ const NEWS = (() => {
   const tt = n => { const v = TRN && TRN.items && TRN.items[n.id]; return v ? { t: v[0], x: v[1] } : { t: n.t, x: n.x }; };
   const td = v => (TRN && TRN.dates && TRN.dates[v]) || v;
   const NT = () => TRN ? ' translate="no"' : "";
+  // посты из Telegram-каналов — на языке канала, переводчик сайта их не трогает
+  const NTn = n => n.src === "tg" ? ' translate="no"' : NT();
   const updTxt = () => { const d = new Date(UPDATED + "T12:00:00"); try { return d.toLocaleDateString(TL === "ru" ? "ru-RU" : TL, { day: "numeric", month: "long", year: "numeric" }); } catch(e) { return UPDATED; } };
 
   function dot(){ const fresh = TOP > seen || autoTop() > seenT; document.querySelectorAll('.tab[data-tab="news"]').forEach(tb => { let d = tb.querySelector(".ndot");
@@ -7122,7 +7124,7 @@ const NEWS = (() => {
     const list = ALL().slice().sort((a, b) => (b.auto ? b.ts : 0) - (a.auto ? a.ts : 0) || (a.auto || b.auto ? 0 : b.id - a.id)).slice(0, 10);
     const fresh = n => !firstVisit && (n.auto ? n.ts > seenT : n.id > seen);
     el.innerHTML = `<span class="ns-l" aria-hidden="true">Лента</span><div class="ns-s">${list.map(n => { const p = pic(n), T = tt(n);
-      return `<button type="button" class="ns-i${fresh(n) ? " new" : ""}" data-id="${n.id}">${p ? `<img alt="" loading="lazy" src="${p.src}">` : `<i class="ns-c">${cic(n.cat)}</i>`}<span${NT()}>${plain(T.t)}</span></button>`; }).join("")}</div><button type="button" class="ns-all">Все →</button>`;
+      return `<button type="button" class="ns-i${fresh(n) ? " new" : ""}" data-id="${n.id}">${p ? `<img alt="" loading="lazy" src="${p.src}">` : `<i class="ns-c">${cic(n.cat)}</i>`}<span${NTn(n)}>${plain(T.t)}</span></button>`; }).join("")}</div><button type="button" class="ns-all">Все →</button>`;
     el.hidden = false;
     el.onclick = e => { const b = e.target.closest(".ns-i"); if (b){ const v = b.dataset.id; show(isNaN(+v) ? v : +v); return; } if (e.target.closest(".ns-all")) go(); };
   }
@@ -7134,7 +7136,7 @@ const NEWS = (() => {
   function card(n, i){
     const fresh = !firstVisit && (n.auto ? n.ts > seenT : n.id > seen), T = tt(n);
     return `<article class="ncard ${n.cat}${n.auto ? " auto" : ""}" data-id="${n.id}" tabindex="0" style="--i:${Math.min(i, 10)}" aria-label="${plain(T.t)}">${icon(n)}<div><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span>${n.src === "tg" ? `<span class="nsrc" translate="no">✈ Dota2.exe</span>` : ""}<span${NT()}>${td(n.d)}</span>${fresh ? `<span class="nnew">NEW</span>` : ""}</div>
-      <h3${NT()}>${T.t}</h3><p${NT()}>${T.x}</p>${chips(n)}</div>${favBtn(n.id)}</article>`;
+      <h3${NTn(n)}>${T.t}</h3><p${NTn(n)}>${T.x}</p>${chips(n)}</div>${favBtn(n.id)}</article>`;
   }
   const favBtn = id => `<button type="button" class="fav nfav" data-id="${id}" aria-pressed="${NF.has(id)}" aria-label="Новость в избранное">${STAR}</button>`;
   let VIEW = [];
@@ -7168,11 +7170,11 @@ const NEWS = (() => {
     if (modal._cleanup){ try { modal._cleanup(); } catch(e) {} modal._cleanup = null; }
     modal.innerHTML = `<div class="sheet nsheet" role="dialog" aria-modal="true" aria-label="${plain(T.t)}" style="--nc:${NC[n.cat]};${h ? vars(h) : ""}">
       <div class="ncover k-${pb ? "pbg" : p ? p.k : "none"}">${pb ? `<img class="ncv-bg" alt="" aria-hidden="true" src="${p.src}"><div class="ncv-brand"><img alt="Dota 2" src="/games/dota.png"><span class="ncv-src">${n.src === "tg" ? "✈ Dota2.exe" : "Steam"}</span></div>` : p ? (p.anim && CAN_ANIM && !REDUCED && !NOFX ? `<video autoplay muted loop playsinline aria-hidden="true" poster="${p.src}" src="${p.anim}" onerror="this.outerHTML='<img alt=&quot;&quot; src=&quot;${p.src}&quot;>'"></video>` : `<img alt="" src="${p.src}" onerror="this.remove()">`) : ""}
-        <div class="ncv-t" aria-hidden="true">${cic(n.cat)}<span>${CATS[n.cat]}</span><b${NT()}>${plain(T.t)}</b></div>
+        <div class="ncv-t" aria-hidden="true">${cic(n.cat)}<span>${CATS[n.cat]}</span><b${NTn(n)}>${plain(T.t)}</b></div>
         <button type="button" class="navh prev" aria-label="Предыдущая новость">‹</button><button type="button" class="navh next" aria-label="Следующая новость">›</button>
         <button type="button" class="close" aria-label="Закрыть">✕</button></div>
       <div class="nbody"><div class="nmeta"><span class="ntag">${CATS[n.cat]}</span><span${NT()}>${td(n.d)}${n.w !== n.d ? ` · ${td(n.w)}` : ""}</span></div>
-        <h3${NT()}>${T.t}</h3><p${NT()}>${T.x}</p>${pb ? `<a class="nphoto" href="${p.src}" role="button" aria-label="Открыть фото"><img alt="" src="${p.src}" loading="lazy"></a>` : ""}${chips(n)}
+        <h3${NTn(n)}>${T.t}</h3><p${NTn(n)}>${T.x}</p>${pb ? `<a class="nphoto" href="${p.src}" role="button" aria-label="Открыть фото"><img alt="" src="${p.src}" loading="lazy"></a>` : ""}${chips(n)}
         <div class="nacts"><button type="button" class="btn btn-ghost nfavbig" data-id="${id}" aria-pressed="${NF.has(id)}">★ <span>${NF.has(id) ? "В избранном" : "В избранное"}</span></button><button type="button" class="btn btn-ghost" id="nShare">Поделиться</button>${n.url ? `<a class="btn btn-ghost" href="${n.url}" target="_blank" rel="noopener" translate="no">${n.src === "tg" ? "Telegram ↗" : "Steam ↗"}</a>` : ""}<span class="npos">${idx + 1} / ${pool.length}</span></div></div></div>`;
     modal.classList.toggle("swap", was); modal.hidden = false; lockScroll();
     const sh = modal.querySelector(".nsheet"); if (was) sh.scrollTop = 0;
@@ -7956,7 +7958,7 @@ drawRecent();
 render();
 </script>
 
-<script src="/grids.js?v=16" defer></script>
+<script src="/grids.js?v=17" defer></script>
 <script src="/ruin.js?v=5" defer></script>
 </body>
 </html>
