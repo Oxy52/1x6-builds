@@ -1917,6 +1917,8 @@
   .mk-img img { max-width: 100%; max-height: 72px; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(0,0,0,.5)); }
   .mk-n { min-width: 0; } .mk-n b { display: block; font-size: 15px; font-weight: 700; line-height: 1.3; } .mk-save { display: inline-block; margin-top: 5px; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #4ade80; background: rgba(74,222,128,.1); }
   .mk-ps { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 6px; }
+  .mk-pay { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: -2px 0 10px; } .mk-pay > span { font-size: 13px; color: var(--muted); margin-right: 2px; }
+  .mk-paynote { font-style: normal; font-size: 12px; color: #4ade80; padding: 3px 9px; border-radius: 999px; background: rgba(74,222,128,.1); border: 1px solid rgba(74,222,128,.3); }
   .mk-lots { display: block; width: 100%; margin-top: 10px; padding: 10px 14px; border-radius: 12px; border: 1px dashed color-mix(in srgb, var(--rc, #8fa3b8) 45%, var(--line)); background: color-mix(in srgb, var(--rc, #8fa3b8) 7%, transparent); color: var(--fg); font: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer; text-align: center; }
   .mk-lots:hover { background: color-mix(in srgb, var(--rc, #8fa3b8) 14%, transparent); }
   .lots-sheet { max-width: 640px; } .lots-h { position: sticky; top: 0; z-index: 2; display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; padding: 18px 18px 12px; background: var(--panel); border-bottom: 1px solid var(--line); }
@@ -7401,7 +7403,7 @@ const GAMES = (() => {
     return `${x.toLocaleString(L(), { maximumFractionDigits: x >= 100 ? 0 : 2, minimumFractionDigits: x >= 100 ? 0 : 2 })} ${SYM[c]}`; };
   // ---------- сеты CS2: оружие, нож, перчатки и агент в одной гамме ----------
   const SLOTN = { "AK-47": "AK-47", M4A4: "M4A4", "M4A1-S": "M4A1-S", AWP: "AWP", "Desert Eagle": "Deagle", knife: "Нож", gloves: "Перчатки", agent: "Агент" };
-  // фильтры сетов: сортировка, без ножа/перчаток/агента, школьные, бюджет и диапазон цены (в валюте сайта)
+  // фильтры сетов: сортировка, без ножа/перчаток/агента, бюджетные, бюджет и диапазон цены (в валюте сайта)
   const SETF = [["knife", "🔪 Без ножа"], ["gloves", "🧤 Без перчаток"], ["agent", "🕵️ Без агента"]];
   const SETB = [500, 1000, 2000, 5000]; // бюджеты в гривнах — в кнопках показываем в валюте сайта
   function csSets(el){
@@ -7412,11 +7414,11 @@ const GAMES = (() => {
     const shell = () => { el.innerHTML = `<section class="set-hero"><div class="set-glow"></div>
         <span class="set-kicker">Counter-Strike 2 · готовые образы</span>
         <h2 class="set-title"><span>Сеты</span></h2>
-        <p class="set-lead">Оружие, нож, перчатки и агент в одной гамме. Есть дорогие для красоты и школьные — от пары сотен гривен.</p>
+        <p class="set-lead">Оружие, нож, перчатки и агент в одной гамме. Есть дорогие для красоты и бюджетные — от пары сотен гривен.</p>
         <div class="set-stats"></div></section>
       <div class="set-bar">
         <label class="mk-sort"><span>Сортировка</span><select class="setSort"><option value="">По подборке</option><option value="exp">Дороже → дешевле</option><option value="cheap">Дешевле → дороже</option></select></label>
-        <div class="set-chips">${SETF.map(([k, t]) => `<button type="button" class="rkc" data-sf="${k}" aria-pressed="${!!f.no[k]}">${t}</button>`).join("")}<button type="button" class="rkc set-sch" data-ss aria-pressed="${f.school}">🎒 Школьные</button></div>
+        <div class="set-chips">${SETF.map(([k, t]) => `<button type="button" class="rkc" data-sf="${k}" aria-pressed="${!!f.no[k]}">${t}</button>`).join("")}<button type="button" class="rkc set-sch" data-ss aria-pressed="${f.school}">💸 Бюджетные</button></div>
         <div class="set-budget"><span>Бюджет</span><div class="set-chips set-bud"></div>
           <label class="set-rng"><span>от</span><input type="number" min="0" inputmode="numeric" class="setMin" value="${esc(f.min)}"><span>до</span><input type="number" min="0" inputmode="numeric" class="setMax" value="${esc(f.max)}"><em class="set-sym"></em></label>
           <button type="button" class="set-reset" hidden>Сбросить</button></div></div>
@@ -7443,11 +7445,11 @@ const GAMES = (() => {
         .filter(s => s.items.length && (!f.school || s.tag === "school") && s.sum >= lo && s.sum <= hi);
       if (f.sort === "exp") list.sort((a, b) => b.sum - a.sum); else if (f.sort === "cheap") list.sort((a, b) => a.sum - b.sum);
       const all = D.sets.map(total), mn = Math.min(...all), mx = Math.max(...all);
-      el.querySelector(".set-stats").innerHTML = `<span><b>${D.sets.length}</b> сетов</span><span><b>${D.sets.filter(s => s.tag === "school").length}</b> школьных</span><span>от <b>${money(m, mn)}</b> до <b>${money(m, mx)}</b></span>`;
+      el.querySelector(".set-stats").innerHTML = `<span><b>${D.sets.length}</b> сетов</span><span><b>${D.sets.filter(s => s.tag === "school").length}</b> бюджетных</span><span>от <b>${money(m, mn)}</b> до <b>${money(m, mx)}</b></span>`;
       el.querySelector(".set-reset").hidden = !(f.sort || f.school || f.min || f.max || Object.values(f.no).some(Boolean));
       grid.innerHTML = list.length ? list.map(s => { const miss = s.items.some(i => !i.p[0]);
         return `<article class="set-c" style="--s1:${esc(s.col[0])};--s2:${esc(s.col[1])};--i:${Math.min(s.idx, 12)}">
-          <header><div><h3>${esc(s.t)}${s.tag === "school" ? ` <em class="set-tag">🎒 Школьный</em>` : ""}</h3><small>${esc(s.sub)}</small></div><div class="set-sum"><small>${miss ? "без части предметов" : "весь сет"}</small><b>${money(m, s.sum)}</b></div></header>
+          <header><div><h3>${esc(s.t)}${s.tag === "school" ? ` <em class="set-tag">💸 Бюджетный</em>` : ""}</h3><small>${esc(s.sub)}</small></div><div class="set-sum"><small>${miss ? "без части предметов" : "весь сет"}</small><b>${money(m, s.sum)}</b></div></header>
           <div class="set-items">${s.items.map(i => { const b = i.p[0];
             return `<a class="set-it" href="${esc(b ? b.u : i.steam)}" target="_blank" rel="noopener nofollow" style="--rc:${esc(i.col || "#b0c3d9")}" title="${esc(i.mh)}">
               <span class="set-img"><img alt="" loading="lazy" src="${esc(i.img)}"></span>
@@ -7500,6 +7502,7 @@ const GAMES = (() => {
         ${ag ? `<label class="mk-sort"><span>Сторона</span><select class="mkSide" aria-label="Сторона">${SIDES.map(([k, t]) => `<option value="${k}"${(m.side || "") === k ? " selected" : ""}>${t}</option>`).join("")}</select></label>` : ""}
         <label class="mk-sort"><span>${ag ? "Редкость" : "Качество"}</span><select class="mkQl" aria-label="${ag ? "Редкость" : "Качество"}">${(ag ? QLA : QLS[g]).map(([k, t]) => `<option value="${k}"${m.ql === k ? " selected" : ""}>${t}</option>`).join("")}</select></label>
         <label class="mk-sort"><span>Сортировка</span><select class="mkSort" aria-label="Сортировка">${MSORT.map(([k, t]) => `<option value="${k}"${m.sort === k ? " selected" : ""}>${t}</option>`).join("")}</select></label></div>
+      <div class="mk-pay" role="group" aria-label="Чем платишь"><span>Чем платишь:</span>${[["", "Любая валюта"], ["rub", "₽ RUB"], ["usd", "$ USD"], ["eur", "€ EUR"], ["uah", "₴ UAH"]].map(([k, t]) => `<button type="button" class="rkc" data-pay="${k}" aria-pressed="${payC() === k}">${t}</button>`).join("")}</div>
       <div class="mk-legend"></div>
       <div class="mk-list">${sk(4)}</div>
       <p class="db-note"><span>Цены — самый дешёвый лот на каждой площадке, в валюте сайта по текущему курсу.</span> <span>Steam, Lis-skins и Market обновляются каждую минуту, Skinport — раз в 5 минут.</span>${g === "cs" ? ` <span>CS.money и CSFloat — раз в сутки (отмечены ⏱).</span>` : ""} <span>Зелёная — самая выгодная.</span> <span>Нажми на площадку — откроется эта вещь на её сайте.</span> <span>Мы ничего не продаём, только показываем цены.</span></p>`;
@@ -7512,6 +7515,7 @@ const GAMES = (() => {
         else { const on = list.some(x => x.n === n); fv.setAttribute("aria-pressed", on); fv.textContent = on ? "★" : "☆"; fv.setAttribute("aria-label", on ? "Убрать из избранного" : "В избранное"); } return; }
       const c = e.target.closest("[data-mc]"); if (c){ if ((c.dataset.mc === "agent") !== (m.cat === "agent")){ m.ql = ""; m.side = ""; } m.cat = c.dataset.mc; m.q = ""; m.start = 0; m.items = []; market(el, g); return; }
       const lt = e.target.closest(".mk-lots"); if (lt){ openLots(m, lt.dataset.n); return; }
+      const py = e.target.closest("[data-pay]"); if (py){ try { localStorage.setItem("ub-mkpay", py.dataset.pay); } catch(_) {} el.querySelectorAll("[data-pay]").forEach(b => b.setAttribute("aria-pressed", b === py)); if (py.dataset.pay && typeof CURSEL !== "undefined" && CURSEL.get() !== py.dataset.pay) CURSEL.set(py.dataset.pay); else mkDraw(m); return; }
       if (e.target.closest(".mk-more")){ m.start += 10; mkLoad(m, true); } };
     el.querySelector(".mkQl").onchange = e => { m.ql = e.target.value; if (m.cat === "fav" && !m.q){ m.cat = MC[g][0][0]; market(el, g); return; } m.start = 0; m.items = []; mkLoad(m); };
     { const sd = el.querySelector(".mkSide"); if (sd) sd.onchange = e => { m.side = e.target.value; m.start = 0; m.items = []; mkLoad(m); }; }
@@ -7543,19 +7547,24 @@ const GAMES = (() => {
       Object.assign(m, { items: more ? m.items.concat(d.items) : d.items, fx: d.fx || m.fx, total: d.total, upd: Date.now() }); mkDraw(m);
     } catch(e) { if (!more) box.innerHTML = err; else { const b = m.el.querySelector(".mk-more"); if (b) b.disabled = false; } }
   }
+  // «Чем платишь»: показываем только площадки, где есть эта валюта (Steam — в валюте кошелька, подходит любая)
+  const payC = () => { try { return localStorage.getItem("ub-mkpay") || ""; } catch(e) { return ""; } };
+  const payOk = (k, c) => !c || k === "steam" || (MCUR[k] || []).includes(c);
   function mkDraw(m){
     const box = m.el.querySelector(".mk-list"), leg = m.el.querySelector(".mk-legend"); if (!box) return;
     if (!m.items.length){ box.innerHTML = !m.q && m.cat === "fav" ? `<div class="gempty">В избранном пока пусто — жми ☆ на скине, чтобы сохранить его и следить за ценой.</div>` : `<div class="gempty">Ничего не нашли. Попробуй написать название по-английски, как в игре.</div>`; leg.innerHTML = ""; return; }
     const FV = new Set(favs(m.g).map(x => x.n));
-    const all = m.items[0].p; leg.innerHTML = all.map(p => `<span><img alt="" loading="lazy" src="${esc(logo(p))}">${esc(p.name)}</span>`).join("");
-    const lowP = i => { const v = i.p.filter(p => p.v != null).map(p => p.v); return v.length ? Math.min(...v) : Infinity; };
+    const pc = payC(), okp = p => payOk(p.k, pc);
+    const all = m.items[0].p.filter(okp); leg.innerHTML = all.map(p => `<span><img alt="" loading="lazy" src="${esc(logo(p))}">${esc(p.name)}</span>`).join("")
+      + (pc ? `<em class="mk-paynote">Только площадки с оплатой в ${SYM[pc]} ${pc.toUpperCase()}</em>` : "");
+    const lowP = i => { const v = i.p.filter(p => p.v != null && okp(p)).map(p => p.v); return v.length ? Math.min(...v) : Infinity; };
     // избранное сортируется целиком тут; в каталоге цена и название уже отсортированы Steam, редкость — тут
     const view = m.sort === "rar" ? m.items.slice().sort((a, b) => (b.r || 0) - (a.r || 0))
       // цена — по той «Дешевле всего», что видна на карточке (Steam сортирует только по своей цене)
       : m.sort === "cheap" ? m.items.slice().sort((a, b) => lowP(a) - lowP(b))
       : m.sort === "exp" ? m.items.slice().sort((a, b) => (lowP(b) === Infinity ? -1 : lowP(b)) - (lowP(a) === Infinity ? -1 : lowP(a)))
       : m.sort === "name" && m.cat === "fav" && !m.q ? m.items.slice().sort((a, b) => a.n.localeCompare(b.n)) : m.items;
-    box.innerHTML = view.map(i => { const ps = i.p.slice().sort((a, b) => (a.v == null) - (b.v == null) || a.v - b.v), has = ps.filter(p => p.v != null);
+    box.innerHTML = view.map(i => { const ps = i.p.filter(okp).sort((a, b) => (a.v == null) - (b.v == null) || a.v - b.v), has = ps.filter(p => p.v != null);
       const lo = has[0], hi = has[has.length - 1], save = lo && hi && hi.v > lo.v ? Math.round((1 - lo.v / hi.v) * 100) : 0;
       const fo = FV.has(i.n);
       return `<article class="mk-it"${i.col ? ` style="--rc:#${esc(i.col)}"` : ""}><button type="button" class="mk-fav" data-n="${esc(i.n)}" aria-pressed="${fo}" aria-label="${fo ? "Убрать из избранного" : "В избранное"}">${fo ? "★" : "☆"}</button><div class="mk-img">${i.img ? `<img alt="" loading="lazy" src="${esc(i.img)}">` : ""}</div>
